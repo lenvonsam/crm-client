@@ -1,0 +1,82 @@
+@charset "utf-8"
+@require "./basic"
+
+.crm
+  &.main
+    padding-top 50px
+    padding-left 188px
+  &-topbar,
+  &-sidebar
+    position fixed
+    z-index 2000
+    left 0
+  &-topbar
+    height 50px
+    display flex
+    background $color-background
+    top 0
+    width 100%
+    color $color-white
+    overflow hidden
+    .item
+      height 50px
+      line-height 50px
+      text-align center
+      flex 1
+      &.brand
+        flex 0 0 188px
+      &:hover
+       background $color-hover-black
+       cursor pointer
+  &-sidebar
+    top 50px
+    bottom 0px
+    width 188px
+    overflow-x hidden
+    overflow-y auto
+    background $color-background-l
+    color $color-white
+    .el-menu
+      border-right 0px
+      i
+        color #fff !important
+      .el-submenu.el-menu-item,
+      .el-submenu__title
+        height 48px
+        line-height 48px
+      .el-submenu__title,
+      .el-menu-item
+        font-size $fontsize-small
+      .el-submenu__title i
+        font-size $fontsize-medium-s
+      .el-menu-item.is-active,
+      .el-submenu__title:hover
+        background $color-main !important
+  &-content
+    padding 15px 15px
+    color $color-main-ll
+
+.el-submenu i.iconfont
+  vertical-align: middle;
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 18px;
+.el-breadcrumb
+  span.el-breadcrumb__inner
+    color $color-light-grey
+  i.el-breadcrumb__separator
+    font-size $fontsize-medium
+    font-weight bold
+    color $color-grey-l
+.el-input__inner
+  border-radius 0px !important
+
+.el-button
+  [class*=iconfont]+span
+    margin-left 5px
+  &.el-button--small
+    [class*=iconfont]
+      font-size $fontsize-small
+.crm-table-head-bg
+  background-color #f5f7fa !important
