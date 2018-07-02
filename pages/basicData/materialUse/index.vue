@@ -26,7 +26,7 @@
     },
     data () {
       return {
-        breadItems: ['基础数据', '业务关系'],
+        breadItems: ['基础数据', '物资用途'],
         btnGroups: [{
           lbl: '启用',
           type: 'start'
@@ -34,12 +34,12 @@
           lbl: '停用',
           type: 'stop'
         }, {
-          lbl: '新增所处行业',
+          lbl: '新增物资用途',
           type: 'add'
         }],
         searchFormItems: [
-          {label: '关系代码', model: 'id', type: 'text', placeholder: '请输入关系代码', val: ''},
-          {label: '关系名称', model: 'name', type: 'text', placeholder: '请输入关系名称', val: ''}
+          {label: '用途代码', model: 'id', type: 'text', placeholder: '请输入用途代码', val: ''},
+          {label: '用途名称', model: 'name', type: 'text', placeholder: '请输入用途名称', val: ''}
         ],
         tableValue: {
           tableData: [{
@@ -51,10 +51,10 @@
           }],
           hasCbx: true,
           tableHead: [{
-            lbl: '所处行业代码',
+            lbl: '物资用途代码',
             prop: 'id'
           }, {
-            lbl: '所处行业',
+            lbl: '物资用途',
             prop: 'name'
           }, {
             lbl: '状态',
@@ -74,8 +74,8 @@
           }]
         },
         prompt: {
-          title: '新增业务关系',
-          items: [{label: '业务关系', model: 'busiRelation', type: 'text', placeholder: '请输入业务关系', val: ''}]
+          title: '新增物资用途',
+          items: [{label: '物资用途', model: 'busiRelation', type: 'text', placeholder: '请输入物资用途', val: ''}]
         },
         promptShow: false
       }

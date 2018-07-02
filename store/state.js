@@ -83,10 +83,10 @@ export default {
     iconClass: 'iconfont icon-custom',
     subItems: [{
       title: '潜在客户',
-      url: '/customManager/potentialCustom'
+      url: '/customManager/potentialCustom/'
     }, {
       title: '正式客户',
-      url: '/customManager/formalCustom'
+      url: '/customManager/formalCustom/'
     }, {
       title: '公共客户',
       url: '#'
@@ -118,25 +118,28 @@ export default {
     }, {
       title: '组织架构',
       url: '#'
+    }, {
+      title: '分配业务员',
+      url: '#'
     }]
   }, {
     title: '基础数据',
     iconClass: 'iconfont icon-basic-data',
     subItems: [{
       title: '业务关系',
-      url: '#'
+      url: '/basicData/busiRelation'
     }, {
       title: '客户性质',
-      url: '#'
+      url: '/basicData/customerNature'
     }, {
       title: '物资品类',
-      url: '#'
+      url: '/basicData/materialCategory'
     }, {
       title: '物资用途',
-      url: '#'
+      url: '/basicData/materialUse'
     }, {
       title: '加工需求',
-      url: '#'
+      url: '/basicData/processRequirement'
     }]
   }]
 }
