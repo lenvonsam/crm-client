@@ -14,7 +14,7 @@
   import basicTable from '@/components/BasicTable.vue'
   import basicCodeSearch from '@/components/BasicCodeSearch.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
-  import basicCodePrompt from '@/components/basicCodePrompt.vue'
+  import basicCodePrompt from '@/components/BasicCodePrompt.vue'
   export default {
     layout: 'main',
     components: {
