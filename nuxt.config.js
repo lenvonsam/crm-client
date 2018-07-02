@@ -11,7 +11,7 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_717889_lur42t9l8l9.css' }
+      { rel: 'stylesheet', href: '//at.alicdn.com/t/font_717889_k9sy1qqcz6o.css' }
     ]
   },
   /*
@@ -24,6 +24,10 @@ module.exports = {
   plugins: [{
     src: '~/plugins/element-ui',
     ssr: true
+  }, {
+    src: '~/plugins/filter'
+  }, {
+    src: '~/plugins/mixins'
   }],
   build: {
     /*

@@ -4,7 +4,7 @@ el-menu(background-color="#42485b", text-color="#fff", active-text-color="#fff",
     template(v-if="menu.subItems")
       el-submenu(:index="menu.title")
         template(slot="title")
-          i.iconfont.icon-custom(v-if="menu.iconClass")
+          i(v-if="menu.iconClass", :class="menu.iconClass")
           span {{menu.title}}
         el-menu-item(:index="(idx + 1) + '-' + (subIdx + 1)", :route="itm.url ? itm.url : '#'", v-for="(itm, subIdx) in menu.subItems", :key="subIdx") {{itm.title}}
     el-menu-item(:index="menu.title", :route="menu.url ? menu.url : '#'", v-else) {{menu.title}}

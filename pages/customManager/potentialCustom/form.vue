@@ -60,11 +60,11 @@
                 el-option(v-for="item in form.fkCustomPropertyId", :key="item.value", :label="item.label", :value="item.value")
         el-row.pr-10
           el-col(:span="12")
-            el-form-item(label="业务部门：", prop="fkDptId")
-              el-input(v-model="form.fkDptId", placeholder="请输入业务部门", clearable)
+            el-form-item(label="业务部门：")
+              el-autocomplete.full-width(v-model="form.fkDptIdVal", :fetch-suggestions="fkDptSearchAsync", placeholder="请输入业务部门", @select="handleSelect")
           el-col(:span="12")
             el-form-item(label="业务员：", prop="fkAcctId")
-              el-input(v-model="form.fkAcctId", placeholder="请输入业务员", clearable)
+              el-autocomplete.full-width(v-model="form.fkAcctIdVal", :fetch-suggestions="fkAcctSearchAsync", placeholder="请输入业务员", @select="handleSelect")
         el-row.pr-10
           el-col(:span="12")
             el-form-item(label="工商证照编码：", prop="busiLicenseCode")
@@ -232,13 +232,13 @@
               el-radio-group(v-model="form.depositAmountVal")
                 el-radio(v-for="item in form.depositAmount", :name="item.value", :key="item.value", :value="item.value", :label="item.label")
                 //- el-input(v-model="form.annualSales")
-                el-input.ml-5(v-model="form.depositAmountOtherVal", style="width:100px;")
+                el-input.ml-10(v-model="form.depositAmountOtherVal", style="width:100px;")
                   template(slot="append") %
           el-col(:span="8")
             el-form-item(label="订金周期：")
               el-radio-group.full-width(v-model="form.depositCycleVal") 
                 el-radio(v-for="item in form.depositCycle", :name="item.value", :key="item.value", :value="item.value", :label="item.label")
-                el-input(v-model="form.depositCycleOtherVal", style="width:100px;")
+                el-input.ml-10(v-model="form.depositCycleOtherVal", style="width:100px;")
                   template(slot="append") 天
         el-row.pr-10
           el-col(:span="24")
@@ -257,7 +257,7 @@
         el-row.pr-10
           el-col(:span="24")
             el-form-item(label="备注信息：")
-              el-input(v-model="form.kaiping_size", placeholder="请输入备注信息", clearable)
+              el-input(v-model="form.remark", placeholder="请输入备注信息", clearable)
         el-row.pr-10
           el-col.text-center.ft-16.bg-gray.text-white.pt-15.pb-15.mb-20(:span="24") 附件信息
         el-row.text-center
@@ -291,8 +291,8 @@
               .el-upload__tip(slot="tip") 只能上传jpg/png文件，且不超过500kb
         el-row.mt-45.text-center
           el-form-item
-            el-button(type="primary", @click="onSubmit") 保存
-            el-button(type="info", @click="onCancel") 取消
+            el-button(type="primary", @click="onSubmit('save')") 保存
+            el-button(type="info", @click="onSubmit('cancel')") 取消
 </template>
 
 <script>
@@ -301,6 +301,7 @@
     data () {
       return {
         form: {
+          remark: '',
           processingRequirements: [{value:'001', label:'分条'}, {value:'002', label:'剪折'}, {value:'003', label:'折弯'}, {value:'004', label:'切割'}, {value:'005', label:'激光切割'}, {value:'006', label:'水刀切割'}, {value:'007', label:'等离子切割'}, {value:'008', label:'数控火焰切割'}, {value:'009', label:'焊接'}, {value:'010', label:'铆接'}, {value:'011', label:'锯床'}, {value:'012', label:'锻造'}, {value:'013', label:'定尺锯'}, {value:'014', label:'冲压'}, {value:'015', label:'机加工'}, {value:'016', label:'铣/刨/镗'}, {value:'017', label:'"车/钻/磨'}, {value:'018', label:'其他'}],
           processingRequirementsVal: [],
           processingRequirementsOtherVal: '',
@@ -347,8 +348,10 @@
           fkRelationVal: [],
           fkCustomPropertyId: [{value:'001', label:'经销商'}, {value:'002', label:'终端客户'}, {value:'003', label:'生产商'}],
           fkCustomPropertyIdVal: '',
-          fkAcctId: '',
-          fkDptId: '',
+          fkAcctId: [],
+          fkAcctIdVal: '',
+          fkDptId: [],
+          fkDptIdVal: '',
           busiLicenseCode: '',
           registerCapital: '',
           legalRept: '',
@@ -371,7 +374,8 @@
           wxNo: '',
           QQNo: '',
           wbName: '',
-          ortherLinkWay: ''
+          ortherLinkWay: '',
+          timeout: null
         },
         rules: {
           comp_name: [
@@ -385,16 +389,63 @@
             { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
           ],
           type: [
-            { type: 'array', required: true, message: '请至少选择一个活动性质', trigger: 'change' }
+            { type: 'array', required: true, message: '', trigger: 'change' }
           ],
           resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
+            { required: true, message: '', trigger: 'change' }
           ],
           desc: [
-            { required: true, message: '请填写活动形式', trigger: 'blur' }
+            { required: true, message: '', trigger: 'blur' }
           ]
         }
       }
+    },
+    methods: {
+      onSubmit (str) {
+        (str == 'save') ? console.log('保存') : console.log('取消')
+      },
+      fkDptLoadAll() {
+        return [
+          {'id':'001', 'value':'财务'},
+          {'id':'002', 'value':'销售'},
+          {'id':'003', 'value':'电商'}
+        ];
+      },
+      fkAcctLoadAll() {
+        return [
+          {'id':'001', 'value':'ZHJM'},
+          {'id':'002', 'value':'CZK'},
+          {'id':'003', 'value':'CTH'}
+        ];
+      },
+      fkDptSearchAsync(queryString, cb) {
+        var restaurants = this.fkDptId;
+        this.querySearch(queryString, cb, restaurants)
+      },
+      fkAcctSearchAsync(queryString, cb) {
+        var restaurants = this.fkAcctId;
+        this.querySearch(queryString, cb, restaurants)
+      },
+      querySearch(queryString, cb, restaurants) {
+        // var restaurants = this.fkDptId;
+        var results = queryString ? restaurants.filter(this.createStateFilter(queryString)) : restaurants;
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+          cb(results);
+        }, 3000 * Math.random());
+      },
+      createStateFilter(queryString) {
+        return (state) => {
+          return (state.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+      handleSelect (item) {
+        console.log(item)
+      }
+    },
+    mounted() {
+      this.fkDptId = this.fkDptLoadAll();
+      this.fkAcctId = this.fkAcctLoadAll();
     }
   }
 </script>
