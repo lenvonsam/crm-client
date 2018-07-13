@@ -2,81 +2,53 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .pt-15
-    button-group(:btns="btnGroups")
-  .mt-15.padding(style="border: 1px dashed #ddd")
-    .row.flex-center.text-center
-      .col.pr-15
-        .row.mb-15.flex-center
-          .col.flex-60
-            label 姓名
-          .col
-            el-input(size="small")
-        .row.flex-center
-          .col.flex-60
-            label 部门
-          .col
-            el-input(size="small")
-      .col.pr-15
-        .row.mb-15.flex-center
-          .col.flex-60
-            label 账号
-          .col
-            el-input(size="small")
-        .row.flex-center
-          .col.flex-60
-            label 职位
-          .col
-            el-input(size="small")
-      .col
-        .row.mb-15.flex-center
-          .col.flex-60
-            label 机构
-          .col
-            el-input(size="small")
-        .row.flex-center
-          .col.flex-60
-            label 手机号
-          .col
-            el-input(size="small")
-      .col.text-center(style="flex: 0 0 200px")
-        el-button(size="small", type="primary") 查询
-        el-button(size="small") 重置
+    button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
+  .pt-20
+    search-form(:searchFormItems="searchItems", @search="searchBtn")
   .pt-15
-    basic-table(:tableValue="tableValue")
+    basic-table(:tableValue="tableValue", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", @tableRowDelete="rowDelete")
 </template>
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
   import basicTable from '@/components/BasicTable.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
+  import searchForm from '@/components/SearchForm.vue'
+  import { mapState } from 'vuex'
   export default {
     layout: 'main',
+    computed: {
+      ...mapState({
+        pageSize: state => state.pageSize
+      })
+    },
     components: {
       breadcrumb,
       basicTable,
-      buttonGroup
+      buttonGroup,
+      searchForm
     },
     data () {
       return {
+        queryObject: {},
         breadItems: ['系统设置', '账号管理'],
         btnGroups: [{
-          lbl: '新增账号'
+          lbl: '新增账号',
+          type: 'add'
         }, {
-          lbl: '批量启用'
+          lbl: '批量启用',
+          type: 'start'
         }, {
-          lbl: '批量停用'
+          lbl: '批量停用',
+          type: 'stop'
         }],
+        currentPage: 1,
+        totalCount: 0,
+        searchItems: [[{label: '姓名', model: 'name', type: 'text', val: ''}, {label: '账号', model: 'loginAcct', type: 'text', val: ''}, {label: '机构', model: 'orgName', type: 'text', val: ''}],
+          [{label: '部门', model: 'dptName', type: 'text', val: ''}, {label: '职位', model: 'position', val: '', type: 'text'}, {label: '手机号', type: 'text', model: 'phone', val: ''}]
+        ],
         tableValue: {
-          tableData: [{
-            id: 1,
-            name: '测试',
-            loginAcct: 'admin',
-            org: '型云科技',
-            dpt: '平台',
-            jobTitle: '程序员',
-            phone: '无',
-            status: 1
-          }],
+          tableData: [],
           hasCbx: true,
           tableHead: [{
             lbl: '姓名',
@@ -87,14 +59,22 @@
             lbl: '账号',
             prop: 'loginAcct'
           }, {
+            type: 'object',
             lbl: '机构',
-            prop: 'org'
+            prop: 'fkDpt',
+            factValue (row) {
+              return row.fkOrg.name
+            }
           }, {
+            type: 'object',
             lbl: '部门',
-            prop: 'dpt'
+            prop: 'fkDpt',
+            factValue (row) {
+              return row.name
+            }
           }, {
             lbl: '职位',
-            prop: 'jobTitle'
+            prop: 'position'
           }, {
             lbl: '手机号',
             prop: 'phone'
@@ -111,6 +91,114 @@
               type: 'delete'
             }]
           }]
+        },
+        chooseArray: []
+      }
+    },
+    beforeMount () {
+      this.$nextTick(() => {
+        this.queryObject = {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize
+        }
+        this.loadData()
+      })
+    },
+    methods: {
+      groupBtnClick (type) {
+        if (type === 'add') {
+          this.jump('/setting/acctManager/form?type=new')
+        } else if (type === 'start') {
+          if (this.chooseArray.length === 0) {
+            this.msgShow(this, '请选择启用的行数', 'warning')
+            return
+          }
+          this.batchUpdate(1)
+        } else {
+          if (this.chooseArray.length === 0) {
+            this.msgShow(this, '请选择停用的行数', 'warning')
+            return
+          }
+          this.batchUpdate(0)
+        }
+      },
+      searchBtn (val) {
+        console.log(val)
+        let obj = Object.assign({}, val)
+        Object.keys(val).map(key => {
+          if (val[key].length === 0)
+            delete this.queryObject[key]
+          else
+            this.queryObject[key] = val[key]
+        })
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
+      },
+      tablePage (val) {
+        this.currentPage = val
+        this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
+      },
+      rowEdit (row) {
+        this.jump({path: '/setting/acctManager/form?type=edit&id=' + row.id})
+      },
+      selectData (val) {
+        this.chooseArray = val
+      },
+      rowDelete (obj) {
+        this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+          this.actionDelete(obj.id)
+        }, () => {
+          console.log('cancel')
+        })
+      },
+      async actionDelete (id) {
+        try {
+          let url = 'setting/acct/' + id
+          let { data } = await this.apiStreamPost('/proxy/common/del', {url: url})
+          if (data.returnCode === 0) {
+            this.currentPage = 1
+            this.queryObject.currentPage = this.currentPage - 1
+            this.loadData()
+            this.msgShow(this, '删除成功', 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async batchUpdate (status) {
+        try {
+          let url = 'setting/acct/batchUpdate'
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: {status: status, ids: this.chooseArray.map(itm => itm.id).join(',')}})
+          if (data.returnCode === 0) {
+            this.currentPage = 1
+            this.queryObject.currentPage = this.currentPage - 1
+            this.loadData()
+            this.msgShow(this, `批量${status === 1 ? '启用' : '停用'}成功`, 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async loadData () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct', params: this.queryObject})
+          if (data.returnCode === 0) {
+            this.tableValue.tableData = data.list
+            this.totalCount = data.total
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
         }
       }
     }

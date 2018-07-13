@@ -4,7 +4,7 @@
   .pt-15
     el-tabs(type="border-card")
       el-tab-pane(label="个人资料", style="padding-left: 5%")
-        el-form.pr-5(style="max-width: 1000px", status-icon, ref="profileForm", :model="currentUser", :rules="profileRules")
+        el-form.pr-5(style="max-width: 1000px", status-icon, ref="profileForm", :model="pageUser", :rules="profileRules", :validate-on-rule-change="false")
           template(v-for="itm in profileForm")
             el-form-item(:prop="itm.key")
               .row.flex-center
@@ -12,13 +12,14 @@
                   label {{itm.lbl}}
                 .col
                   img.profile-avatar(v-if="itm.key == 'avatar'")
-                  el-input(:readonly="!itm.edit", v-model="currentUser[itm.key]", style="max-width: 300px", v-else)
+                  el-input(:readonly="!itm.edit", :value="pageUser.fkDpt == undefined ? '' : pageUser.fkDpt.name", style="max-width: 300px", v-else-if="itm.key == 'dpt'")
+                  el-input(:readonly="!itm.edit", v-model="pageUser[itm.key]", style="max-width: 300px", v-else)
           el-button-group
-            el-upload.float-left(action="")
+            el-upload.float-left(:action="fileUploadUrl", name="upfile", :data="{'action': 'avatar'}", :on-success="uploadSuccess")
               el-button(type="primary", size="medium") 修改头像
             el-button(size="medium", @click="subForm('profileForm')") 更新信息
       el-tab-pane(label="修改密码", style="padding-left: 5%")
-        el-form(style="max-width: 1000px", status-icon, ref="pwdForm", :model="pwdForm", :rules="pwdRules")
+        el-form(style="max-width: 1000px", status-icon, ref="pwdForm", :model="pwdForm", :rules="pwdRules", :validate-on-rule-change="false")
           el-form-item(prop="oldPwd")
             .row.flex-center
               .col.flex-80
@@ -45,10 +46,22 @@
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
+  import { mapState } from 'vuex'
   export default {
     layout: 'main',
     components: {
       breadcrumb
+    },
+    computed: {
+      ...mapState({
+        currentUser: state => state.user.currentUser,
+        fileUploadUrl: state => state.fileUploadUrl
+      })
+    },
+    beforeMount () {
+      console.log(this.currentUser)
+      this.pageUser = Object.assign({}, this.currentUser)
+      console.log(this.pageUser)
     },
     data () {
       var confirmPwdValidate = (rule, value, cb) => {
@@ -61,18 +74,10 @@
         }
       }
       return {
+        url: '',
         breadItems: ['系统设置', '个人信息'],
         imageUrl: null,
-        currentUser: {
-          id: 1,
-          name: '王家豪',
-          loginAcct: 'admin',
-          phone: '1333',
-          dpt: '销售一部',
-          jobTitle: '业务员',
-          email: 'xxx@163.com',
-          avatar: ''
-        },
+        pageUser: {},
         profileRules: {
           name: [{required: true, message: '名称不能为空', trigger: 'blur'}, {min: 1, message: '名称请都不小于1个位', trigger: 'blur'}],
           phone: [{required: true, message: '手机号不能为空'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}]
@@ -127,6 +132,11 @@
             console.error('invalid')
           }
         })
+      },
+      uploadSuccess (resp, file, fileList) {
+        console.log(resp)
+        console.log(file)
+        console.log(fileList)
       }
     }
   }

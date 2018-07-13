@@ -4,10 +4,16 @@
       template(v-for="fitem in tableForm")
         tr
           td.title {{fitem[0].lbl}}
-          td {{tableValue[fitem[0].key] | rowData(fitem[0].key)}}
+          template(v-if="fitem[0].type == 'object'")
+            td {{fitem[0].factValue(tableValue[fitem[0].key])}}
+          template(v-else)
+            td {{tableValue[fitem[0].key] | rowData(fitem[0].key)}}
           template(v-if="fitem.length == 2")
             td.title {{fitem[1].lbl}}
-            td {{tableValue[fitem[1].key] | rowData(fitem[1].key)}}
+            template(v-if="fitem[1].type == 'object'")
+              td {{fitem[1].factValue(tableValue[fitem[1].key])}}
+            template(v-else)
+              td {{tableValue[fitem[1].key] | rowData(fitem[1].key)}}
           template(v-else)
             td.title
             td

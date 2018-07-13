@@ -3,6 +3,8 @@ export default function({
   route,
   store
 }) {
+  console.log(store.state.user)
+  if (!store.state.user.isLogin && route.path !== '/login') redirect('/login')
   let idx = store.state.currentMenus.findIndex(itm => itm.subItems.findIndex(subItem => subItem === route.path))
   if (idx >= 0) {
     store.state.currentMenus.map((itm, idx) => {

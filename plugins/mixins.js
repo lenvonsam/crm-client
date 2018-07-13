@@ -1,6 +1,6 @@
 import Vue from 'vue'
-// import httpUtil from '../utils/httpUtil'
-// import elementUtil from '../utils/elmtUtil'
+import httpUtil from '../utils/httpUtil'
+import elementUtil from '../utils/elmtUtil'
 // import { mapState } from 'vuex'
 
 function formatNumber (n) {
@@ -77,11 +77,11 @@ const minixs = {
         return ''
       }
     },
-    // apiGet: httpUtil.httpGet,
-    // apiPost: httpUtil.httpPost,
-    // apiStreamPost: httpUtil.httpStreamPost,
-    // msgShow: elementUtil.msgShow,
-    // confirmDialog: elementUtil.confirmDialog,
+    apiGet: httpUtil.httpGet,
+    apiPost: httpUtil.httpPost,
+    apiStreamPost: httpUtil.httpStreamPost,
+    msgShow: elementUtil.msgShow,
+    confirmDialog: elementUtil.confirmDialog,
     commonValidate (context, keyArr, errorInfo = '必填字段不能为空') {
       let result = true
       for (let i=0; i < keyArr.length; i++) {
@@ -92,6 +92,15 @@ const minixs = {
         }
       }
       return result
+    },
+    getValidateCode () {
+      const basicArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+      let basiCode = ['Z', 'H', '1', '8']
+      basiCode.map((itm, idx) => {
+        const rdmIdx = Math.floor(Math.random() * 100) % basicArray.length
+        basiCode[idx] = basicArray[rdmIdx]
+      })
+      return basiCode.join('')
     }
   }
 }

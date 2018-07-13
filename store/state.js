@@ -4,7 +4,7 @@ export default {
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
   qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
-  fileUploadUrl: '/backend/fileUpload',
+  fileUploadUrl: '/proxy/fileUpload',
   globalSuccessMsg: '',
   currentPathIdx: '1-1',
   // 数据权限等级
@@ -47,6 +47,162 @@ export default {
     value: '其他',
     label: '其他'
   }],
+  // 性别
+  sexOpts: [{
+    value: 1,
+    label: '男'
+  }, {
+    value: 2,
+    label: '女'
+  }],
+  // 公司规模
+  compSizeOpts: [{
+    value: '10人以下',
+    label: '10人以下'
+  },{
+    value: '10-50人',
+    label: '10-50人'
+  },{
+    value: '50-100人',
+    label: '50-100人'
+  },{
+    value: '100人以上',
+    label: '100人以上'
+  }],
+  // 公司类型
+  compTypeOpts: [{
+    value: '国有企业',
+    label: '国有企业'
+  }, {
+    value: '私营企业',
+    label: '私营企业'
+  }, {
+    value: '股份制企业',
+    label: '股份制企业'
+  }, {
+    value: '外资企业',
+    label: '外资企业'
+  }, {
+    value: '其他',
+    label: '其他'
+  }],
+  // 采购周期
+  purchaseCycleOpts: [{
+    value: '1周',
+    label: '1周'
+  }, {
+    value: '2周',
+    label: '2周'
+  }, {
+    value: '3周',
+    label: '3周'
+  }, {
+    value: '1个月',
+    label: '1个月'
+  }, {
+    value: '2个月',
+    label: '2个月'
+  }, {
+    value: '3个月',
+    label: '3个月'
+  }, {
+    value: '半年',
+    label: '半年'
+  }, {
+    value: '1年',
+    label: '1年'
+  }, {
+    value: '其他',
+    label: '其他'
+  }],
+  // 高卖情况
+  isSellHighOpts: [{
+    value: 0,
+    label: '无'
+  }, {
+    value: 1,
+    label: '有'
+  }],
+  // 信用情况
+  creditStatusOpts: [{
+    value: '良好',
+    label: '良好'
+  }, {
+    value: '一般',
+    label: '一般'
+  }, {
+    value: '较差',
+    label: '较差'
+  }, {
+    value: '极差',
+    label: '极差'
+  }],
+  // 订金需求
+  depositRequirementOpts: [{
+    value: '1周',
+    label: '1周'
+  }, {
+    value: '2周',
+    label: '2周'
+  }, {
+    value: '3周',
+    label: '3周'
+  }, {
+    value: '1个月',
+    label: '1个月'
+  }, {
+    value: '2个月',
+    label: '2个月'
+  }, {
+    value: '3个月',
+    label: '3个月'
+  }, {
+    value: '半年',
+    label: '半年'
+  }, {
+    value: '1年',
+    label: '1年'
+  }, {
+    value: '其他',
+    label: '其他'
+  }],
+  //客户渠道
+  customerChannelOpts: [{
+    value: '网络搜索',
+    label: '销售推荐'
+  }, {
+    value: '销售推荐',
+    label: '销售推荐'
+  }, {
+    value: '朋友介绍',
+    label: '朋友介绍'
+  }, {
+    value: '上门拜访',
+    label: '上门拜访'
+  }, {
+    value: '电话推广',
+    label: '电话推广'
+  }],
+  depositRateOpts: [{
+    value: '10',
+    label: '10'
+  }, {
+    value: '30',
+    label: '30'
+  }, {
+    value: '70',
+    label: '70'
+  }],
+  depositCycleOpts: [{
+    value: '1',
+    label: '1'
+  }, {
+    value: '3',
+    label: '3'
+  }, {
+    value: '5',
+    label: '5'
+  }],
   // 政治面貌
   politicalOpts: [{
     value: '民主党派',
@@ -83,22 +239,22 @@ export default {
     iconClass: 'iconfont icon-custom',
     subItems: [{
       title: '潜在客户',
-      url: '/customManager/potentialCustom/'
+      url: '/customManager/potentialCustom'
     }, {
       title: '正式客户',
-      url: '/customManager/formalCustom/'
+      url: '/customManager/formalCustom'
     }, {
       title: '公共客户',
-      url: '#'
+      url: '/customManager/publicCustom'
     }, {
       title: '联系人管理',
-      url: '#'
+      url: '/customManager/contactManager'
     }, {
       title: '客户拜访',
-      url: '#'
+      url: '/customManager/customerVisit'
     }, {
       title: '客户画像',
-      url: '#'
+      url: '/customManager/customerPortrait'
     }, {
       title: '客户分级',
       url: '#'
@@ -114,13 +270,10 @@ export default {
       url: '/setting/acctManager'
     }, {
       title: '权限设置',
-      url: '#'
+      url: '/setting/authManager'
     }, {
       title: '组织架构',
-      url: '#'
-    }, {
-      title: '分配业务员',
-      url: '#'
+      url: '/setting/orgStructure'
     }]
   }, {
     title: '基础数据',
@@ -130,16 +283,16 @@ export default {
       url: '/basicData/busiRelation'
     }, {
       title: '客户性质',
-      url: '/basicData/customerNature'
+      url: '/basicData/customProperty'
     }, {
       title: '物资品类',
-      url: '/basicData/materialCategory'
+      url: '/basicData/supplyCatalog'
     }, {
       title: '物资用途',
-      url: '/basicData/materialUse'
+      url: '/basicData/purpose'
     }, {
       title: '加工需求',
-      url: '/basicData/processRequirement'
+      url: '/basicData/processReq'
     }]
   }]
 }

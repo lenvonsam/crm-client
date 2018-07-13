@@ -5,25 +5,84 @@
     .content
       h1 型云CRM管理系统
       .box
-        el-form
-          el-form-item
-            el-input(placeholder="用户名")
-          el-form-item
-            el-input(placeholder="密码")
-          el-form-item.flex
+        el-form(:model="loginModel",:rules="loginRules", ref="loginForm", status-icon)
+          el-form-item(prop="acct")
+            el-input(placeholder="用户名", v-model="loginModel.acct")
+          el-form-item(prop="pwd")
+            el-input(placeholder="密码", v-model="loginModel.pwd", type="password")
+          el-form-item.flex(prop="codeConfirm")
             .col
-              el-input
+              el-input(placeholder="验证码", v-model="loginModel.codeConfirm")
             .col.code
-              graphic-code(identifyCode="1334") 验证码
-          el-button(type="primary", size="medium", style="border-radius: 0px; width: 100%") 登录
+              graphic-code(:identifyCode="code", @refresh="refreshCode") 验证码
+          el-button(type="primary", size="medium", style="border-radius: 0px; width: 100%", @click="submit('loginForm')") 登录
 
 </template>
 
 <script>
   import graphicCode from '@/components/GraphicCode.vue'
+  import sha1 from 'sha1'
+  import { mapActions } from 'vuex'
   export default {
     components: {
       graphicCode
+    },
+    data () {
+      var codeValidate = (rule, value, cb) => {
+        if (value.trim() === '') {
+          cb(new Error('不能为空'))
+        } else if (this.loginModel.codeConfirm.trim().toLocaleLowerCase() !== this.code.toLocaleLowerCase()) {
+          cb(new Error('验证码输入错误'))
+        } else {
+          cb()
+        }
+      }
+      return {
+        code: '',
+        loginModel: {
+          acct: '',
+          pwd: '',
+          codeConfirm: ''
+        },
+        loginRules: {
+          acct: [{required: true, message: '不能为空', trigger: 'blur'}],
+          pwd: [{required: true, message: '不能为空', trigger: 'blur'}],
+          codeConfirm: [{validator: codeValidate, trigger: 'blur'}]
+        }
+      }
+    },
+    beforeMount () {
+      this.code = this.getValidateCode()
+    },
+    methods: {
+      ...mapActions([
+        'configVal'
+      ]),
+      refreshCode () {
+        this.code = this.getValidateCode()
+      },
+      submit (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert('submit!');
+            this.login()
+          } else {
+            console.error('error submit!!')
+            return false
+          }
+        });
+      },
+      async login () {
+        let encodePwd = sha1(this.loginModel.pwd.trim())
+        let now = this.date2Str(new Date())
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'login', params: {code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now+this.code)}})
+        if (data.returnCode === 0) {
+          this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
+          this.jump('/')
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      }
     }
   }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="code-canvas">
+  <div class="code-canvas" @click="clickCode">
     <canvas id="codeCanvas" :width="contentWidth" :height="contentHeight"></canvas>
   </div>
 </template>
@@ -61,6 +61,9 @@
       }
     },
     methods: {
+      clickCode () {
+        this.$emit('refresh')
+      },
       // 生成一个随机数
       randomNum (min, max) {
         return Math.floor(Math.random() * (max - min) + min)

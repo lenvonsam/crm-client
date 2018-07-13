@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import state from './state'
+import user from './modules/user'
 
 const store = () => {
   return new Vuex.Store({
@@ -15,6 +16,7 @@ const store = () => {
       }
     },
     modules: {
+      user
     }
   })
 }

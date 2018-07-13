@@ -1,3 +1,5 @@
+const bodyParser = require('body-parser')
+const session = require('express-session')
 module.exports = {
   /*
   ** Headers of the page
@@ -33,7 +35,7 @@ module.exports = {
     /*
     ** Run ESLint on save
     */
-    vendor: ['axios', 'element-ui', 'sha1'],
+    vendor: ['axios', 'element-ui', 'sha1', 'lodash'],
     css: [{
       src: 'bulma',
       lang: 'stylus'
@@ -48,5 +50,17 @@ module.exports = {
         })
       }
     }
-  }
+  },
+  // server middleware
+  serverMiddleware: [
+    bodyParser.json(),
+    // session
+    session({
+      secret: 'zhd-crm-client',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {maxAge: 36000000}
+    }),
+    '~/server/proxy'
+  ]
 }

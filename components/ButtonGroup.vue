@@ -10,6 +10,10 @@
       btns: {
         type: Array,
         required: true
+      },
+      rIdx: {
+        type: Number,
+        default: 0
       }
     },
     methods: {
