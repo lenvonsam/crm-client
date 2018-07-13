@@ -30,7 +30,9 @@
     },
     data () {
       return {
-        queryObject: {},
+        queryObject: {
+          pageSize: this.pageSize
+        },
         breadItems: ['系统设置', '账号管理'],
         btnGroups: [{
           lbl: '新增账号',
