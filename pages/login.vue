@@ -16,7 +16,6 @@
             .col.code
               graphic-code(:identifyCode="code", @refresh="refreshCode") 验证码
           el-button(type="primary", size="medium", style="border-radius: 0px; width: 100%", @click="submit('loginForm')") 登录
-
 </template>
 
 <script>
@@ -52,11 +51,13 @@
       }
     },
     beforeMount () {
+      this.configVal({key: 'globalErrorMsg', val: ''})
       this.code = this.getValidateCode()
     },
     methods: {
       ...mapActions([
-        'configVal'
+        'configVal',
+        'setUser'
       ]),
       refreshCode () {
         this.code = this.getValidateCode()
@@ -64,7 +65,6 @@
       submit (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit!');
             this.login()
           } else {
             console.error('error submit!!')
@@ -77,11 +77,55 @@
         let now = this.date2Str(new Date())
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'login', params: {code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now+this.code)}})
         if (data.returnCode === 0) {
+          this.setUser(data.currentUser)
           this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
-          this.jump('/')
+          this.jump({path: data.currentUser.id !== 1 ? data.currentUser.auths[0].fkMenu.pageUrl : '/'})
+          setTimeout(() => {
+            this.visitDialogData(data.currentUser.id)
+          }, 6000);
         } else {
           this.msgShow(this, data.errMsg)
         }
+      },
+      async visitDialogData (uid) {
+        let params = {
+          currentPage: 0,
+          pageSize: 6,
+          mark: '1',
+          uid: uid,
+          startTime: this.date2Str(new Date()),
+          endTime: this.date2Str(new Date())
+        }
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall', params: params})
+          if (data.returnCode === 0) {
+            if(data.list.length>0){
+              let temp = ''
+              data.list.map(itm => {
+                itm[0].planVisitTime = this.datetime2Str(new Date(itm[0].planVisitTime))
+                itm[0].compName = itm[0].customer.compName
+                temp += '<div style="cursor: pointer;">'+ itm[0].compName + '  ' + itm[0].planVisitTime +'</div>'
+              })
+              this.visitNotify(temp)
+            }
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      visitNotify(temp) {
+        let me = this
+        this.$notify({
+          title: '温馨提示',
+          dangerouslyUseHTMLString: true,
+          message: temp,
+          onClick: function(){
+            me.jump({path: '/customManager/customerVisit'})
+          }
+        })
       }
     }
   }
@@ -124,7 +168,8 @@
         margin 0 auto
         width 400px
         background #fff
-        padding 30px 15px
+        box-sizing border-box
+        padding 30px 30px
         margin-top 15px
         .el-input__inner
           border-radius 0px !important

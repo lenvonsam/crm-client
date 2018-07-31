@@ -26,7 +26,7 @@ export default {
     },
     EXITUSER (state) {
       state.currentUser = {}
-      state.isLogin = true
+      state.isLogin = false
     }
   }
 }

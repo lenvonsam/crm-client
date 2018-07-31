@@ -3,17 +3,18 @@
   .row.flex-center.text-center
     .col.pt-20
       .row(v-for="(items, index) in copyItems")
-        .col(:class="index != 3 ? 'pr-15' : ''", v-for="(item, idx) in items")
-          .row.mb-15.flex-center
+        .col(v-for="(item, idx) in items")
+          .row.mb-15.flex-center(v-if="item.label")
             .col.flex-120.text-right.pr-5
-              label(v-if="item.label") {{item.label}}：
+              label {{item.label}}：
             .col
               el-date-picker.full-width(v-model="item.val", type="date",v-if="item.type == 'date'", :placeholder="item.placeholder",size="small", value-format="yyyy-MM-dd")
+              el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="daterange", v-else-if="item.type == 'timeLimit'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd")
               el-autocomplete.full-width(v-model="item.val", v-else-if="item.type == 'autocomplete'", @focus="selectIdx(index, idx)", :fetch-suggestions="querySearchAsync", :placeholder="item.placeholder", size="small")
               el-select.full-width(v-model="item.val", :placeholder="item.placeholder", v-else-if="item.type == 'select'", size="small")
                 el-option(v-for="itemIist in item.list", :key="itemIist.value", :label="itemIist.label", :value="itemIist.value")
                   span {{itemIist.label}}
-              el-input(v-model="item.val", v-else-if="item.label", :placeholder="item.placeholder", size="small")
+              el-input.full-width(v-model="item.val", v-else, :placeholder="item.placeholder", size="small")
     .text-center(style="flex: 0 0 200px")
       el-button(size="small", type="primary", @click="search('submit')") 查询
       el-button(size="small", @click="search('reset')") 重置
@@ -55,7 +56,9 @@
               }
             }
           }
-        this.$emit('search', searchParm)
+        if(type == 'submit'){
+          this.$emit('search', searchParm)
+        }
       },
       querySearchAsync(queryString, cb) {
         let copyItemsIdx = this.selectIdxArr[0]

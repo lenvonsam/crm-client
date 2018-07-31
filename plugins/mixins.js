@@ -8,20 +8,44 @@ function formatNumber (n) {
   return n[1] ? n : '0' + n
 }
 
+function generatePickerOpts () {
+  const end = new Date(new Date().getTime() - 3600 * 1000 * 24)
+  const days = [6, 29, 89]
+  const texts = ['最近一周', '最近一个月', '最近三个月']
+  let arr = []
+  texts.map((itm, idx) => {
+    arr.push({
+      text: itm,
+      onClick (picker) {
+        picker.$emit('pick', [new Date(end.getTime() - 3600 * 1000 * 24 * days[idx]), end])
+      }
+    })
+  })
+  return arr
+}
+
 const minixs = {
   data () {
     return {
       // bkProxyUrl: 'http://localhost:8668/api/'
     }
   },
-  // computed: {
+  computed: {
   //   ...mapState({
   //     globalSuccessMsg: state => state.globalSuccessMsg
   //   })
-  // },
+    datePickerOpts () {
+      return {
+        shortcuts: generatePickerOpts()
+      }
+    }
+  },
   watch: {
     '$store.state.globalSuccessMsg' (newVal, oldVal) {
-      if(newVal !== '') this.msgShow(this, newVal, 'success')
+      if (newVal !== '') this.msgShow(this, newVal, 'success')
+    },
+    '$store.state.globalErrorMsg' (newVal, oldVal) {
+      if (newVal !== '') this.msgShow(this, newVal)
     }
   },
   methods: {
@@ -80,6 +104,8 @@ const minixs = {
     apiGet: httpUtil.httpGet,
     apiPost: httpUtil.httpPost,
     apiStreamPost: httpUtil.httpStreamPost,
+    pageShow: elementUtil.pageShow,
+    pageHide: elementUtil.pageHide,
     msgShow: elementUtil.msgShow,
     confirmDialog: elementUtil.confirmDialog,
     commonValidate (context, keyArr, errorInfo = '必填字段不能为空') {
@@ -93,6 +119,23 @@ const minixs = {
       }
       return result
     },
+    arr2DoubleArr (array, full = true, cols = 3) {
+      let row = Math.ceil(array.length / cols)
+      let doubleArr = []
+      for (let i = 0; i < row; i++) {
+        let tempRow = []
+        for (let j = i * cols; j < (i + 1) * cols; j++) {
+          if (j < array.length) {
+            tempRow.push(array[j])
+          }
+          else {
+            if (full) tempRow.push('')
+          }
+        }
+        doubleArr.push(tempRow)
+      }
+      return doubleArr
+    },
     getValidateCode () {
       const basicArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       let basiCode = ['Z', 'H', '1', '8']
@@ -101,6 +144,37 @@ const minixs = {
         basiCode[idx] = basicArray[rdmIdx]
       })
       return basiCode.join('')
+    },
+    cstmListData(dataList) {
+      let arr = []
+      dataList.map(itm => {
+        let obj = {
+          id: itm[0],
+          compName: itm[1],
+          name: itm[2],
+          phone: itm[3],
+          createAt: itm[4],
+          billDate: itm[5],
+          dptName: itm[6],
+          acctName: itm[7],
+          createName: itm[8],
+          mark: itm[9],
+          orgId: itm[10],
+          dptId: itm[11],
+          acctId: itm[12],
+          visitCount: itm[13],
+          lockStatus: itm[14],
+          rownum: itm[15]
+        }
+        arr.push(obj)
+      })
+      return arr
+    },
+    loadingS(){
+      const loading = this.$loading({
+        lock: true
+      })
+      return loading
     }
   }
 }

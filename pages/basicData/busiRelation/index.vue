@@ -5,7 +5,7 @@
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     searchForm.mt-20(:searchFormItems="searchFormItems", @search="searchBtn")
     .mt-15
-      basic-table(:tableValue="tableValue", @tableRowEdit="rowEdit", @tableRowDelete="rowDel", @chooseData="chooseData", :pageSize="pageSize", :currentPage="currentPage", :total="totalPage", @pageChange="tablePageChange")
+      basic-table(:tableValue="tableValue", :loading="loading", @tableRowEdit="rowEdit", @tableRowDelete="rowDel", @chooseData="chooseData", :pageSize="pageSize", :currentPage="currentPage", :total="totalPage", @pageChange="tablePageChange")
     el-dialog(:title="dialogTitle", :visible.sync="dialogShow", width="30%")
       el-form(:model="dialogObj", ref="bsrlForm", :rules="dialogRules", status-icon)
         el-form-item(label="名称", prop="name")
@@ -84,7 +84,8 @@
             }]
           }]
         },
-        chooseArray: []
+        chooseArray: [],
+        loading: true,
       }
     },
     computed: {
@@ -123,6 +124,8 @@
       },
       searchBtn (data) {
         console.log(data)
+        this.loading = true
+        this.busiRelationSearch(data)
       },
       dialogCancel () {
         this.dialogShow = false
@@ -150,6 +153,7 @@
         this.loadData()
       },
       async loadData () {
+        this.loading = true
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'basicData/busiRelation', params: {currentPage: (this.currentPage - 1), pageSize: this.pageSize}})
           if (data.returnCode === 0) {
@@ -158,9 +162,27 @@
           } else {
             this.msgShow(this, data.errMsg)
           }
+          this.loading = false
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
+        }
+      },
+       async busiRelationSearch (params) {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'basicData/busiRelation', params: {id: params.id, name: params.name, currentPage: (this.currentPage - 1), pageSize: this.pageSize}})
+          if (data.returnCode === 0) {
+            this.tableValue.tableData = data.list
+            this.totalPage = data.total
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+          this.loading = false
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+          this.loading = false
         }
       },
       async busiRelationCreate () {

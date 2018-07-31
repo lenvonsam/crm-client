@@ -9,7 +9,9 @@ const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://deploy.thinkingsam.cn/syun-backend-dev/'
 // const proxyUrl = 'http://172.16.120.242:7786/'
 // const proxyUrl = 'http://172.16.16.193:7786/'
-const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+const proxyUrl = 'http://localhost:7786/'
+// const proxyUrl = 'http://172.16.120.225:7786/'
+// const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
 
 
 router.use((req, res, next) => {
@@ -40,7 +42,7 @@ router.post('/test', (req, res) => {
 
 router.post('/logout', (req, res) => {
   if (req.session.currentUser) delete req.session.currentUser
-  res.redirect('/login')
+  res.json({returnCode: 0})
 })
 
 const multipart = require('connect-multiparty')
@@ -78,6 +80,8 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
     action: action,
     upfile: fs.createReadStream(req.files.upfile.path)
   }
+  if (req.body.dataType) formData.dataType = req.body.dataType
+  if (req.body.sheetIdx) formData.sheetIdx = req.body.sheetIdx
   rqt.post({url: proxyUrl + 'file/uedit/upload', formData: formData, headers: {'zhdcrm-proxy-token': hptl.proxyToken('zhdcrm')}}, function (err, resp, body) {
     console.log('err:>>', err)
     console.log('body:>>', typeof body)
@@ -95,10 +99,8 @@ router.post('/common/post', (req, res) => {
   const body = req.body
   console.log(body)
   hptl.httpPost(proxyUrl + body.url, body.params).then(({data}) => {
-    if (body.url === 'login' && data.returnCode === 0) {
+    if ((body.url === 'login' || body.url === 'setting/acct/updateProfile') && data.returnCode === 0) {
       let currentUser = data.currentUser
-      // adminObj.buckets = data.buckets
-      // if (data.currentBucket) adminObj.currentBucket = data.currentBucket
       req.session.currentUser = currentUser
     }
     res.json(data)

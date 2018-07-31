@@ -1,3 +1,4 @@
+let load = null
 module.exports = {
   msgShow (context, text = '网络异常', type = 'error') {
     context.$message({
@@ -15,5 +16,20 @@ module.exports = {
       defaultConfig[k] = manConfig[k]
     }
     return context.$confirm(text, title, defaultConfig)
+  },
+  pageShow (context, loadText = '加载中...') {
+    if (load) this.pageHide()
+    load = context.$loading({
+      lock: true,
+      text: loadText,
+      spinner: 'el-icon-loading',
+      background: 'rgba(0,0,0,.7)'
+    })
+  },
+  pageHide () {
+    if (load) {
+      load.close()
+      load = null
+    }
   }
 }

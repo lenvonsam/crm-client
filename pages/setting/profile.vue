@@ -4,21 +4,22 @@
   .pt-15
     el-tabs(type="border-card")
       el-tab-pane(label="个人资料", style="padding-left: 5%")
-        el-form.pr-5(style="max-width: 1000px", status-icon, ref="profileForm", :model="pageUser", :rules="profileRules", :validate-on-rule-change="false")
+        el-form.pr-5(style="max-width: 1000px", status-icon, ref="profileForm", :model="pageUser", :rules="profileRules", :validate-on-rule-change="false", v-if="pageUser.id > 0")
           template(v-for="itm in profileForm")
             el-form-item(:prop="itm.key")
               .row.flex-center
                 .col.flex-80
                   label {{itm.lbl}}
                 .col
-                  img.profile-avatar(v-if="itm.key == 'avatar'")
+                  zoom-img.profile-avatar(v-if="itm.key == 'avatar'", :url="pageUser.avatar == undefined ? defaultAvatar : pageUser.avatar")
+                  //- img.profile-avatar(v-if="itm.key == 'avatar'", :src="pageUser.avatar == undefined ? '' : pageUser.avatar")
                   el-input(:readonly="!itm.edit", :value="pageUser.fkDpt == undefined ? '' : pageUser.fkDpt.name", style="max-width: 300px", v-else-if="itm.key == 'dpt'")
                   el-input(:readonly="!itm.edit", v-model="pageUser[itm.key]", style="max-width: 300px", v-else)
-          el-button-group
-            el-upload.float-left(:action="fileUploadUrl", name="upfile", :data="{'action': 'avatar'}", :on-success="uploadSuccess")
+          el-button-group(v-if="canShow")
+            simple-upload.float-left(v-model="pageUser.avatar")
               el-button(type="primary", size="medium") 修改头像
             el-button(size="medium", @click="subForm('profileForm')") 更新信息
-      el-tab-pane(label="修改密码", style="padding-left: 5%")
+      el-tab-pane(label="修改密码", style="padding-left: 5%", v-if="canShow")
         el-form(style="max-width: 1000px", status-icon, ref="pwdForm", :model="pwdForm", :rules="pwdRules", :validate-on-rule-change="false")
           el-form-item(prop="oldPwd")
             .row.flex-center
@@ -40,28 +41,44 @@
                 el-input.max-300(v-model="pwdForm.confirmPwd", type="password")
           el-button-group
             el-button(type="primary", size="medium", @click="subForm('pwdForm')") 保存
-            el-button(size="medium") 重置
+            el-button(size="medium", @click="$refs.pwdForm.resetFields()") 重置
 
 </template>
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
-  import { mapState } from 'vuex'
+  import simpleUpload from '@/components/SimpleUpload.vue'
+  import zoomImg from '@/components/ZoomImg.vue'
+  import { mapState, mapActions } from 'vuex'
+  import sha1 from 'sha1'
   export default {
     layout: 'main',
     components: {
-      breadcrumb
+      breadcrumb,
+      simpleUpload,
+      zoomImg
     },
     computed: {
       ...mapState({
         currentUser: state => state.user.currentUser,
-        fileUploadUrl: state => state.fileUploadUrl
-      })
+        fileUploadUrl: state => state.fileUploadUrl,
+        defaultAvatar: state => state.defaultAvatar
+      }),
+      canShow () {
+        let result = true
+        if (this.currentUser.id !== 1) {
+          let idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
+          const currentAuth = this.currentUser.auths[idx]
+          if (currentAuth.hasUpdate === 0) result = false
+        }
+        return result
+      }
     },
     beforeMount () {
-      console.log(this.currentUser)
-      this.pageUser = Object.assign({}, this.currentUser)
-      console.log(this.pageUser)
+      this.$nextTick(() => {
+        this.pageUser = Object.assign({}, this.currentUser)
+        // this.pageUser.avatar = 'http://pav6lmvyn.bkt.clouddn.com/avatar/dev_c44fd0fa7f'
+      })
     },
     data () {
       var confirmPwdValidate = (rule, value, cb) => {
@@ -79,8 +96,7 @@
         imageUrl: null,
         pageUser: {},
         profileRules: {
-          name: [{required: true, message: '名称不能为空', trigger: 'blur'}, {min: 1, message: '名称请都不小于1个位', trigger: 'blur'}],
-          phone: [{required: true, message: '手机号不能为空'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}]
+          phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}]
         },
         profileForm: [{
           lbl: '头像',
@@ -88,7 +104,7 @@
         }, {
           lbl: '姓名',
           key: 'name',
-          edit: true
+          edit: false
         }, {
           lbl: '账号',
           key: 'loginAcct',
@@ -123,20 +139,71 @@
       }
     },
     methods: {
+      ...mapActions([
+        'exitUser',
+        'setUser'
+      ]),
       subForm (formName) {
-        console.log(this.currentUser)
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('submit')
+            formName === 'pwdForm' ? this.userUpdatePwd() : this.updateProfile()
           } else {
             console.error('invalid')
           }
         })
       },
-      uploadSuccess (resp, file, fileList) {
-        console.log(resp)
-        console.log(file)
-        console.log(fileList)
+      async resetUserPwd () {
+        const me = this
+        let { data } = await this.apiStreamPost('/proxy/logout', {})
+        if (data.returnCode === 0) {
+          this.$alert('密码更新成功,需重新登录', '友情提示', {
+            confirmButtonText: '确定',
+            showClose: false,
+            callback: action => {
+              console.log(action)
+              me.exitUser()
+              me.jump({path: '/login'})
+            }
+          })
+        }
+      },
+      async userUpdatePwd () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/updatePwd', params: {
+            uid: this.currentUser.id,
+            newPwd: sha1(this.pwdForm.newPwd.trim())
+          }})
+          if (data.returnCode === 0) {
+            this.resetUserPwd()
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async updateProfile () {
+        try {
+          let params = {
+            uid: this.currentUser.id
+          }
+          if (this.pageUser.avatar !== '') params.avatar = this.pageUser.avatar
+          if (this.pageUser.phone !== '' && this.pageUser.phone !== null) params.phone = this.pageUser.phone.trim()
+          if (this.pageUser.email !== '' && this.pageUser.email !== null) params.email = this.pageUser.email.trim()
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/updateProfile', params: params})
+          if (data.returnCode === 0) {
+            this.setUser(data.currentUser)
+            this.pageUser = Object.assign({}, data.currentUser)
+            this.$forceUpdate()
+            this.msgShow(this, '更新成功', 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
       }
     }
   }
@@ -144,10 +211,11 @@
 
 <style lang="stylus", scoped>
 .profile-avatar
-  width 100px
-  height 100px
-  border-radius 50%
-  border 1px solid #ddd
+  img
+    width 100px
+    height 100px
+    border-radius 50% !important
+    border 1px solid #ddd
   &:hover
     cursor pointer
 .max-300

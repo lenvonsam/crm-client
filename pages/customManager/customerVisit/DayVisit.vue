@@ -19,7 +19,7 @@ export default {
     return {
       searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
           {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
-          {label: '计划拜访日期', model:'planAt', type: 'timeLimit', val: ''}]],
+          {label: '计划开单日期', model:'planAt', type: 'timeLimit', val: ''}]],
       tableValue: {
         tableData: [],
         hasCbx: false,
@@ -106,8 +106,11 @@ export default {
     this.queryObject = {
       currentPage: this.currentPage - 1,
       pageSize: this.pageSize,
-      mark: '1'
+      mark: '1',
+      startTime: this.date2Str(new Date()),
+      endTime: this.date2Str(new Date())
     }
+    // console.log(this.date2Str(new Date()))
     this.loadData()
   },
   methods: {
@@ -115,6 +118,7 @@ export default {
       this.loading = true
       this.currentPage = 1
       this.queryObject.currentPage = this.currentPage - 1
+      this.queryObject.mark = '2'
       Object.keys(paramsObj).map(key => {
         if(key == 'planAt'){
           if (paramsObj.planAt !== null && paramsObj.planAt !== undefined) {

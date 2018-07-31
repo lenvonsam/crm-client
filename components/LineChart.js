@@ -4,5 +4,10 @@ export default {
   extends: Line,
   mounted () {
     this.renderChart(this.data, this.options)
+  },
+  methods: {
+    update () {
+      this.renderChart(this.data, this.options)
+    }
   }
 }

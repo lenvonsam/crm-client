@@ -5,7 +5,7 @@
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     searchForm.mt-20(:searchFormItems="searchFormItems", @search="searchBtn")
     .mt-15
-      basic-table(:tableValue="tableValue", @tableRowEdit="rowEdit", @tableRowDelete="rowDel", @chooseData="chooseData", :pageSize="pageSize", :currentPage="currentPage", :total="totalPage", @pageChange="tablePageChange")
+      basic-table(:tableValue="tableValue", :loading="loading", @tableRowEdit="rowEdit", @tableRowDelete="rowDel", @chooseData="chooseData", :pageSize="pageSize", :currentPage="currentPage", :total="totalPage", @pageChange="tablePageChange")
     el-dialog(:title="dialogTitle", :visible.sync="dialogShow", width="30%")
       el-form(:model="dialogObj", ref="bsrlForm", :rules="dialogRules", status-icon)
         el-form-item(label="名称", prop="name")
@@ -84,7 +84,8 @@
             }]
           }]
         },
-        chooseArray: []
+        chooseArray: [],
+        loading: true
       }
     },
     computed: {
@@ -121,6 +122,7 @@
         this.promptShow = false
       },
       searchBtn (data) {
+        this.loading = true
         this.processReqSearch(data)
       },
       dialogCancel () {
@@ -149,6 +151,7 @@
         this.loadData()
       },
       async loadData () {
+        this.loading = true
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'basicData/processReq', params: {currentPage: (this.currentPage - 1), pageSize: this.pageSize}})
           if (data.returnCode === 0) {
@@ -157,9 +160,11 @@
           } else {
             this.msgShow(this, data.errMsg)
           }
+          this.loading = false
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
         }
       },
       async processReqSearch (params) {
@@ -171,9 +176,11 @@
           } else {
             this.msgShow(this, data.errMsg)
           }
+          this.loading = false
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
         }
       },
       async processReqCreate () {

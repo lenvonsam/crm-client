@@ -2,11 +2,11 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .pt-15
-    button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
+    button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick", @fileUploadSuccess="excelUploadSuccess")
   .pt-20
     search-form(:searchFormItems="searchItems", @search="searchBtn")
   .pt-15
-    basic-table(:tableValue="tableValue", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", @tableRowDelete="rowDelete")
+    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", @tableRowDelete="rowDelete", @tableRowResetPwd="rowResetPwd")
 </template>
 
 <script>
@@ -19,7 +19,8 @@
     layout: 'main',
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize
+        pageSize: state => state.pageSize,
+        currentUser: state => state.user.currentUser
       })
     },
     components: {
@@ -94,10 +95,31 @@
             }]
           }]
         },
-        chooseArray: []
+        chooseArray: [],
+        loading: true
       }
     },
     beforeMount () {
+      let idx = this.btnGroups.findIndex(itm => itm.lbl === '批量导入')
+      if (this.currentUser.id === 1 && idx < 0) {
+        this.btnGroups.push({lbl: '批量导入', dataType: 'acct', type: 'excel'})
+        this.$forceUpdate()
+      }
+      if (this.currentUser.id === 1) {
+        let idx = this.tableValue.tableHead.findIndex(th => th.type === 'action')
+        this.tableValue.tableHead[idx].width=180
+        this.tableValue.tableHead[idx].actionBtns =  [{
+          lbl: '编辑',
+          type: 'edit'
+        }, {
+          lbl: '删除',
+          type: 'delete'
+        }, {
+          lbl: '重置密码',
+          type: 'resetPwd'
+        }]
+        this.$forceUpdate()
+      }
       this.$nextTick(() => {
         this.queryObject = {
           currentPage: this.currentPage - 1,
@@ -107,6 +129,11 @@
       })
     },
     methods: {
+      excelUploadSuccess () {
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
+      },
       groupBtnClick (type) {
         if (type === 'add') {
           this.jump('/setting/acctManager/form?type=new')
@@ -149,11 +176,32 @@
         this.chooseArray = val
       },
       rowDelete (obj) {
-        this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+        this.confirmDialog(this, '您确定要删掉本行记录吗？').then(() => {
           this.actionDelete(obj.id)
         }, () => {
           console.log('cancel')
         })
+      },
+      rowResetPwd (obj) {
+        console.log(obj)
+        this.confirmDialog(this, '您确定要重置密码吗？').then(() => {
+          this.actionResetPwd(obj.id)
+        }, () => {
+          console.log('cancel')
+        })
+      },
+      async actionResetPwd (id) {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'admin/resetPwd', params: {id: id}})
+          if (data.returnCode === 0) {
+            this.msgShow(this, '重置成功', 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
       },
       async actionDelete (id) {
         try {
@@ -190,6 +238,7 @@
         }
       },
       async loadData () {
+        this.loading = true
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct', params: this.queryObject})
           if (data.returnCode === 0) {
@@ -198,9 +247,11 @@
           } else {
             this.msgShow(this, data.errMsg)
           }
+          this.loading = false
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
         }
       }
     }

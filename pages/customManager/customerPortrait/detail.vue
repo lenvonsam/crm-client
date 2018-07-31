@@ -2,12 +2,12 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .mt-15
-    button-group(:btns="btnGroups", @groupBtnClick="backPage")
+    el-button(size="small", @click="jump({path: '/customManager/customerPortrait'})") 返回列表
   .mt-15
-    el-tabs(type="border-card")
-      el-tab-pane(label="基础信息")
+    el-tabs(type="border-card", v-model="tabName")
+      el-tab-pane(label="基础信息", name="1")
         custom-detail(:disabled="true")
-      el-tab-pane(label="用户图表")
+      el-tab-pane(label="客户图表", name="2")
         .bg-f9
           custom-chart-table(:tableValue="dealTableValue", :search="dealSearch")
         .mt-15.bg-f9
@@ -16,52 +16,33 @@
           custom-chart-table(:tableValue="addCartNoTableValue", :search="addCartNoSearch")
         .mt-15.bg-f9
           custom-chart-table(:tableValue="successRateTableValue", :search="successRateSearch")
-        .row.mt-15.bg-f9.pt-20.pb-10
+        .row.mt-15.bg-f9.padding
           .col
-            .text-center.ml-10.mb-10(style="width:700px; background: #fff; padding: 10px")
-              line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions")
-            .row.flex-center
-              .col
-                .row.mt-10.flex-center
-                  .col.flex-100.text-right.pr-8 物资品类：
-                  .col.flex-280
-                    el-select.full-width(v-model="goodsTypeSearchForm.goodsTypeVal", size="small")
-                      el-option(v-for="item in goodsTypeSearchForm.goodsType", :key="item.value", :label="item.label", :value="item.value")
-                .row.mt-10.flex-center
-                  .col.flex-100.text-right.pr-8 快速查看：
-                  .col.flex-280
-                    el-radio-group.full-width(v-model="goodsTypeSearchForm.dateListVal", size="small")
-                      el-radio-button(:label="item.label", v-for="item in goodsTypeSearchForm.dateList", :key="item.value")
-                .row.mt-10.flex-center
-                  .col.flex-100.text-right.pr-8 日期：
-                  .col.flex-280
-                    el-date-picker.full-width(v-model="goodsTypeSearchForm.date", size="small")
-              .col.mt-10.ml-10
-                el-button(type="primary", size="small") 查询
-                .mt-10
-                  el-button(size="small") 重置
-          .col
-            .text-center.ml-10.mb-10(style="width:700px; background: #fff; padding: 10px")
-              line-chart(:data="weightChartData", :options="weightChartOptions")
-            .row.flex-center
-              .col
-                .row.mt-10.flex-center
-                  .col.flex-100.text-right.pr-8 快速查看：
-                  .col.flex-280
-                    el-radio-group.full-width(v-model="goodsTypeSearchForm.dateListVal", size="small")
-                      el-radio-button(:label="item.label", v-for="item in goodsTypeSearchForm.dateList", :key="item.value")
-                .row.mt-10.flex-center
-                  .col.flex-100.text-right.pr-8 日期：
-                  .col.flex-280
-                    el-date-picker.full-width(v-model="goodsTypeSearchForm.date", size="small")
-              .col.mt-10.ml-10
-                el-button(type="primary", size="small") 查询
-                .mt-10
-                  el-button(size="small") 重置
+            el-card(shadow="hover")
+              .clearfix(slot="header") 物资品类销售折线图
+              div
+                el-form.pt-15(:inline="true", :model="goodsForm" ref="goodsForm" label-width="90px")
+                  el-form-item(label="物资品类：", prop="goodsType")
+                    el-select(v-model="goodsForm.goodsType", size="small")
+                      el-option(label="全部品名", value="全部")
+                      el-option(label="H型钢", value="H型钢")
+                      el-option(label="槽钢", value="槽钢")
+                      el-option(label="角钢", value="角钢")
+                      el-option(label="工字钢", value="工字钢")
+                      el-option(label="圆钢", value="圆钢")
+                      el-option(label="扁钢", value="扁钢")
+                      el-option(label="开平板", value="开平板")
+                      el-option(label="其他", value="其他")
+                  el-form-item(label="日期：", prop="date")
+                    el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="goodsForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")
+                  el-form-item
+                    el-button(type="primary", @click="queryGoods", size="small") 查询
+                    el-button(@click="$refs['goodsForm'].resetFields()", size="small") 重置
+                line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart")
         .mt-15.bg-f9
-          goods-sales-pie(:pieVal="pieVal", :pieTableVal="pieTableVal")
-      el-tab-pane(label="行为记录")
-        behavior-rec
+          goods-sales-pie(:pieTableVal="pieTableVal", @search="pieSearch")
+      el-tab-pane(label="行为记录", name="3")
+        behavior-rec(:behaviorData="behaviorTableData", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount",@pgChange="tablePgChange", @search="behaviorSearch")
 </template>
 
 <script>
@@ -72,6 +53,7 @@ import customChartTable from '@/components/CustomChartTable.vue'
 import lineChart from '@/components/LineChart.js'
 import goodsSalesPie from '@/components/GoodsSalesPie.vue'
 import behaviorRec from '@/components/BehaviorRec.vue'
+import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
@@ -83,67 +65,87 @@ export default {
     goodsSalesPie,
     behaviorRec
   },
+  computed: {
+    ...mapState({
+      pageSize: state => state.pageSize
+    })
+  },
+  watch: {
+    tabName (newVal, oldVal) {
+      if (newVal === '3') {
+        // 用户行为
+        this.currentPage = 1
+        this.loadBehaviorData()
+      }
+    }
+  },
   data () {
     return {
-      breadItems: ['客户管理', '客户画像'],
+      breadItems: ['客户管理', '客户画像', '详情'],
+      tabName: '1',
       btnGroups: [{lbl: '返回', type: 'back'}],
+      goodsForm: {
+        goodsType: '全部',
+        date: ''
+      },
       dealTableValue: {
         title: '用户成交情况',
-        tableHead: [{label: '总重量(吨)', prop: 'totalWeight'}, 
-          {label: '总金额（元）', prop: 'totalAmount'}, 
-          {label: '线上重量(吨)', prop: 'onlineWeight'}, 
+        tableHead: [{label: '总重量(吨)', prop: 'totalWeight'},
+          {label: '总金额（元）', prop: 'totalAmount'},
+          {label: '线上重量(吨)', prop: 'onlineWeight'},
           {label: '线上金额（元）', prop: 'onlineAmount'},
-          {label: '线下重量(吨)', prop: 'offlineWeight'}, 
+          {label: '线下重量(吨)', prop: 'offlineWeight'},
           {label: '线下金额（元）', prop: 'offlineAmount'}],
         tableData: []
       },
       orderTableValue: {
         title: '用户订单情况',
-        tableHead: [{label: '订单总数', prop: 'orderTotal'}, 
-        {label: '进行中的订单', prop: 'processing'}, 
-        {label: '已完成', prop: 'completed'}, 
-        {label: '取消', prop: 'cancel'}, 
+        tableHead: [{label: '订单总数', prop: 'orderTotal'},
+        {label: '进行中的订单', prop: 'processing'},
+        {label: '已完成', prop: 'completed'},
+        {label: '取消', prop: 'cancel'},
         {label: '违约', prop: 'default'}],
         tableData: []
       },
       addCartNoTableValue: {
         title: '加入购物车品类次数',
-        tableHead: [{label: 'H型钢', prop: 'hBeam'}, 
-        {label: '槽钢', prop: 'channelSteel'}, 
-        {label: '工字钢', prop: 'iBeam'}, 
-        {label: '角钢', prop: 'angleSteel'}, 
+        tableHead: [{label: 'H型钢', prop: 'hBeam'},
+        {label: '槽钢', prop: 'channelSteel'},
+        {label: '工字钢', prop: 'iBeam'},
+        {label: '角钢', prop: 'angleSteel'},
         {label: '扁钢', prop: 'flatSteel'}],
         tableData: []
       },
       successRateTableValue: {
-        title: '加入购物车/生成订单百分比',
+        title: '生成订单/加入购物车百分比',
         tableHead: [{label: '加入购物车', prop: 'addCart'},
         {label: '生成订单', prop: 'ceartOrder'},
         {label: '百分比（%）', prop: 'rate'}],
         tableData: []
       },
       saleGoodsChartData: {
-        labels: ["5月20日", "5月21日", "5月22日", "5月23日", "5月24日", "5月25日", "5月26日"],
+        labels: [],
         datasets: [{
           label: "总计",
           borderColor: '#5b9bd5',
-          data: [0, 10, 5, 2, 20, 30, 45]
+          data: []
         }, {
           label: "线上",
           borderColor: '#ed7d31',
-          data: [1, 20, 3, 5, 1, 20, 35]
+          data: []
         }, {
           label: "线下",
           borderColor: '#a5a5a5',
-          data: [2, 5, 3, 3, 0, 10, 20]
+          data: []
         }]
       },
       saleGoodsChartOptions: {
+        maintainAspectRatio: false,
         title:{
-          display:true,
-          position: 'top',
-          fontSize: 14,
-          text:'H型钢销售量折线图'
+          display:false,
+          // position: 'top',
+          // fontSize: 14,
+          // text:'H型钢销售量折线图'
         },
         legend: {
           position: 'bottom'
@@ -153,113 +155,148 @@ export default {
             tension: 0,
             fill: false,
             borderWidth: 2
-          }
-        }
-      },
-      goodsTypeSearchForm: {
-        goodsType: [{label: 'H型钢', value: '001'}, {label: '槽钢', value: '002'}, {label: '角钢', value: '003'}],
-        goodsTypeVal: '',
-        dateList: [{label: '最近一周', value: '001'}, {label: '最近一月', value: '002'}, {label: '最近一年', value: '003'}],
-        dateListVal: '',
-        date: new Date()
-      },
-      weightChartData: {
-        labels: ["5月20日", "5月21日", "5月22日", "5月23日", "5月24日", "5月25日", "5月26日"],
-        datasets: [{
-          label: "总计",
-          borderColor: '#5b9bd5',
-          data: [0, 30, 2, 12, 10, 23, 35]
-        }, {
-          label: "线上",
-          borderColor: '#ed7d31',
-          data: [1, 20, 3, 5, 1, 20, 35]
-        }, {
-          label: "线下",
-          borderColor: '#a5a5a5',
-          data: [2, 5, 3, 3, 0, 10, 20]
-        }]
-      },
-      weightChartOptions: {
-        title:{
-          display:true,
-          position: 'top',
-          fontSize: 14,
-          text:'成交重量折线图'
-        },
-        legend: {
-          position: 'bottom'
-        },
-        elements: {
-          line: {
-            tension: 0,
-            fill: false,
-            borderWidth: 2
-          }
-        }
-      },
-      pieVal: {
-        title: '物资品类销量饼图',
-        pieData: {
-          datasets: [{
-            data: [70, 60, 50, 40, 30, 20, 10],
-            backgroundColor: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#3b64ad', '#62993e', '#97b9e0']
-          }],
-          labels: ['H型钢','槽钢','角钢','圆钢','扁钢','开平板','其他']
-        },
-        pieOptions: {
-          title:{
-            display:true,
-            position: 'top',
-            fontSize: 14,
-            text:'物资品类销量饼图'
-          },
-          legend: {
-            position: 'bottom',
-            labels: {
-              boxWidth: 10
-            }
           }
         }
       },
       pieTableVal: {
         tableHead: [
-          {label: '', prop: 'name'},
+          {label: '品名', prop: 'type'},
           {label: '总计', prop: 'total'},
-          {label: '线上', prop: 'onLine'},
+          {label: '线上', prop: 'online'},
           {label: '线下', prop: 'offline'}
         ],
         tableData: []
-      }
+      },
+      behaviorTableData: [],
+      currentPage: 1,
+      totalCount: 0,
+      behaviorQuery: {}
     }
-  },
-  mounted () {
-    this.dealTableValue.tableData = [{totalWeight: '1000', totalAmount: '4,500,000', onlineWeight: '500', onlineAmount: '2,250,000', offlineWeight: '500', offlineAmount: '2,250,000'}]
-    this.orderTableValue.tableData = [{orderTotal: '150', processing: '20', completed: '11', cancel: '30', default: '10'}]
-    this.addCartNoTableValue.tableData = [{hBeam: '150', channelSteel: '100', iBeam: '50', angleSteel: '65', flatSteel: '63'}]
-    this.successRateTableValue.tableData = [{addCart: '150', ceartOrder: '100', rate: '50'}]
-    this.pieTableVal.tableData = [
-          {name: 'H型钢', total: '150', onLine: '100', offline: '50'},
-          {name: '槽钢', total: '150', onLine: '100', offline: '50'},
-          {name: '角钢', total: '150', onLine: '100', offline: '50'},
-          {name: '圆钢', total: '150', onLine: '100', offline: '50'},
-          {name: '扁钢', total: '150', onLine: '100', offline: '50'},
-          {name: '开平板', total: '150', onLine: '100', offline: '50'},
-          {name: '其他', total: '150', onLine: '100', offline: '50'}
-        ]
   },
   methods: {
     backPage(type){},
-    dealSearch (parms) {
-      console.log(parms)
+    dealSearch (params) {
+      this.queryGoodsSalesList(params.date, 'dealSearch')
     },
-    orderSearch (parms) {
-      console.log(parms)
+    queryGoods () {
+      if (this.goodsForm.date == null || this.goodsForm.date == '') {
+        this.msgShow(this, '请选择日期')
+      } else {
+        this.queryGoodsSalesList([this.goodsForm.date[0], this.goodsForm.date[1], this.goodsForm.goodsType], 'queryGoods')
+      }
     },
-    addCartNoSearch (parms) {
-      console.log(parms)
+    pieSearch (params) {
+      this.queryGoodsSalesList(params, 'pieSearch')
     },
-    successRateSearch (parms) {
-      console.log(parms)
+    async queryGoodsSalesList (params, searchType) {
+      try {
+        let body = {
+          startDate: params[0],
+          endDate: params[1],
+          searchType: searchType
+        }
+        if (params.length === 3) body.category = params[2]
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmPortrait/sales/' + this.$route.query.id, params: body})
+        console.log(data)
+        if (data.returnCode === 0) {
+          if (searchType === 'dealSearch') {
+            this.dealTableValue.tableData = [{
+              totalWeight: data.totalWeight.toFixed(3),
+              totalAmount: data.totalAmount.toFixed(2),
+              onlineWeight: data.onlineWeight.toFixed(3),
+              onlineAmount: data.onlineAmount.toFixed(2),
+              offlineAmount: data.offlineAmount.toFixed(2),
+              offlineWeight: data.offlineWeight.toFixed(3)
+            }]
+          } else if (searchType === 'pieSearch') {
+            this.pieTableVal.tableData = data.goodsTypeTable
+          } else {
+            this.saleGoodsChartData.labels = data.dateRange
+            this.saleGoodsChartData.datasets[0].data = data.totalList.map(itm => Number(itm))
+            this.saleGoodsChartData.datasets[1].data = data.onlineList.map(itm => Number(itm))
+            this.saleGoodsChartData.datasets[2].data = data.offlineList.map(itm => Number(itm))
+            this.$refs.goodsLineChart.update()
+          }
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async loadBehaviorData () {
+      try {
+        this.behaviorQuery.currentPage = this.currentPage - 1
+        this.behaviorQuery.pageSize = this.pageSize
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmPortrait/list/' + this.$route.query.id, params: this.behaviorQuery})
+        if (data.returnCode === 0) {
+          this.behaviorTableData = data.list
+          this.totalCount = data.total
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    tablePgChange (val) {
+      this.currentPage = val
+      this.loadBehaviorData()
+    },
+    behaviorSearch (val) {
+      console.log(val)
+      let param = {}
+      Object.keys(val).map(k => {
+        if (val[k] && val[k] !== '') {
+          param[k] = val[k]
+        }
+      })
+      this.currentPage = 1
+      this.behaviorQuery = Object.assign({}, param)
+      this.loadBehaviorData()
+    },
+    async orderSearch (params) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/orderTypeCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
+        if (data.returnCode === 0) {
+          this.orderTableValue.tableData = [{orderTotal: data.total, processing: data.pending, completed: data.finish, cancel: data.cancel, default: data.violate}]
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async addCartNoSearch (params) {
+      console.log(params)
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/goodsCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
+        if (data.returnCode === 0) {
+          this.addCartNoTableValue.tableData = [{hBeam: data.hBeam, channelSteel: data.channelSteel, iBeam: data.iBeam, angleSteel: data.angleSteel, flatSteel: data.flatSteel}]
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async successRateSearch (params) {
+      console.log(params)
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/orderCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
+        if (data.returnCode === 0) {
+          this.successRateTableValue.tableData = [{addCart: data.cartCount, ceartOrder: data.orderCount, rate: data.percent.toFixed(2)}]
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
     }
   }
 }

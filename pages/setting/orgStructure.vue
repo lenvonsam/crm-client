@@ -9,18 +9,18 @@
           .pt-20
             search-form(:searchFormItems="orgSearchItems", @search="searchBtn")
           .pt-20
-            basic-table(:tableValue="orgTableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowQuery="orgRowQuery", @tableRowEdit="orgRowEdit", @tableRowDelete="rowDel", @chooseData="selectData", @pageChange="tablePgChange")
+            basic-table(:tableValue="orgTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowQuery="orgRowQuery", @tableRowEdit="orgRowEdit", @tableRowDelete="rowDel", @chooseData="selectData", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'orgFormDetail'")
           el-button(@click="tabModel = 'orgList'", size="small") 返回列表
           .pt-15
             detail-table(:tableForm="orgDetailItems", :tableValue="orgItems")
       el-tab-pane(label="部门设置", name="dpt")
         template(v-if="tabModel == 'dptList'")
-          button-group(:btns="dptBtnGroups", @groupBtnClick="btnsClick")
+          button-group(:btns="dptBtnGroups", @groupBtnClick="btnsClick", @fileUploadSuccess="excelUploadSuccess")
           .pt-20
             search-form(:searchFormItems="dptSearchItems", @search="searchBtn")
           .pt-20
-            basic-table(:tableValue="dptTableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @tableRowDelete="rowDel", @tableRowEdit="dptRowEdit", @tableRowQuery="dptRowQuery", @pageChange="tablePgChange")
+            basic-table(:tableValue="dptTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @tableRowDelete="rowDel", @tableRowEdit="dptRowEdit", @tableRowQuery="dptRowQuery", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'dptFormDetail'")
           el-button(@click="tabModel = 'dptList'", size="small") 返回列表
           .pt-15
@@ -234,12 +234,14 @@
         queryObj: {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize
-        }
+        },
+        loading: true
       }
     },
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize
+        pageSize: state => state.pageSize,
+        currentUser: state => state.user.currentUser
       })
     },
     components: {
@@ -262,6 +264,8 @@
           this.orgAll()
           this.tabModel = 'dptList'
           this.breadItems = ['系统设置', '组织架构', '部门设置']
+          let idx = this.dptBtnGroups.findIndex(itm => itm.lbl === '批量导入')
+          if (this.currentUser.id === 1 && idx < 0) this.dptBtnGroups.push({lbl: '批量导入', dataType: 'dpt', type: 'excel'})
           this.loadData()
         }
       }
@@ -296,6 +300,11 @@
           }
           this.batchUpdate(0)
         }
+      },
+      excelUploadSuccess () {
+        this.currentPage = 1
+        this.queryObj.currentPage = this.currentPage - 1
+        this.loadData()
       },
       searchBtn (val) {
         console.log(val)
@@ -425,6 +434,7 @@
         }
       },
       async loadData () {
+        this.loading = true
         try {
           let url = 'setting/org'
           if (this.activeName === 'dpt') url = 'setting/dpt'
@@ -438,9 +448,11 @@
           } else {
             this.msgShow(this, data.errMsg)
           }
+          this.loading = false
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
         }
       },
       async formAction () {
@@ -477,6 +489,7 @@
       tablePgChange (val) {
         this.currentPage = val
         this.queryObj.currentPage = this.currentPage - 1
+        this.loadData()
       }
     }
   }

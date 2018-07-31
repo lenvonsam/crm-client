@@ -6,7 +6,7 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowDelete="rowDel", @tableRowEdit="rowEdit", v-if="tableValue.tableData.length > 0")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowDelete="rowDel", @tableRowEdit="rowEdit")
     el-dialog(title="删除", :visible.sync="dialogFormVisible")
       .row.flex-center
         .col.flex-80 删除理由：
@@ -38,7 +38,8 @@
         totalCount: 0,
         queryObject: {
           currentPage: this.currentPage - 1,
-          pageSize: this.pageSize
+          pageSize: this.pageSize,
+          mark: '1'
         },
         btnGroups: [{
           lbl: '添加潜在客户',
@@ -55,45 +56,40 @@
         }],
         tableValue: {
           tableData: [],
-          hasCbx: false,
+          hasCbx: true,
+          rowClassName: false,
           tableHead: [{
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
-            linkUrl: '/customManager/potentialCustom/detail'
+            linkUrl: '/customManager/potentialCustom/detail'           
           }, {
             lbl: '主联系人',
-            prop: 'link',
-            type: 'object',
-            factValue (row) {
-              return row.name
-            }
+            prop: 'name',
+            width: 200
           }, {
             lbl: '联系方式',
-            type: 'object',
-            prop: 'link',
-            factValue (row) {
-              return row.phone
-            }
+            prop: 'phone',
+            width: 200
           }, {
             lbl: '添加日期',
-            prop: 'createAt'
+            prop: 'createAt',
+            width: 200
           }, {
             lbl: '业务部门',
-            prop: 'fkDpt',
-            type: 'object',
-            factValue (row) {
-              return row.name
-            }
+            prop: 'dptName',
+            width: 150
           }, {
             lbl: '业务员',
-            prop: 'fkAcct',
-            type: 'object',
-            factValue (row) {
-              return row.name
-            }
+            prop: 'acctName',
+            width: 150
+          }, {
+            lbl: '创建人',
+            prop: 'createName',
+            width: 100
           }, {
             type: 'action',
+            width: 100,
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'
@@ -107,54 +103,63 @@
           [{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
             {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
-          [{label: '添加日期', model: 'createAt', type: 'date', placeholder: '请选择转化日期', val: ''},
+          [{label: '添加日期', model: 'createAt', type: 'timeLimit', val: ''},
           {label: '业务部门', model: 'dptName', placeholder: '请选择业务部门', val: ''},
           {label: '业务员', model: 'acctName', placeholder: '请选择业务员', val: ''}]
         ],
         reason: '',
         dialogFormVisible: false,
-        rowDelObj: {}
+        rowDelObj: {},
+        chooseArray: [],
+        loading: true
       }
     },
     mounted () {
       this.queryObject = {
         currentPage: this.currentPage - 1,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        mark: '1'
       }
       this.loadData()
     },
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize
+        pageSize: state => state.pageSize,
+        currentUser: state => state.user.currentUser
       })
     },
     methods: {
       async loadData () {
+        this.queryObject.uid = this.currentUser.id
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer', params: this.queryObject})
           if (data.returnCode === 0) {
-            let arr = []
-            data.list.map(itm => {
-              itm[0].link = itm[1]
-              arr.push(itm[0])
-            })
-            console.log(arr)
-            this.tableValue.tableData = arr
+            this.tableValue.tableData = this.cstmListData(data.list)
             this.totalCount = data.total
+            this.loading = false
           } else {
             this.msgShow(this, data.errMsg)
           }
         } catch (e) {
           console.error(e)
           this.msgShow(this)
+          this.loading = false
         }
       },
       searchForm (paramsObj) {
-        console.log(paramsObj)
+        this.loading = true
         this.currentPage = 1
         this.queryObject.currentPage = this.currentPage - 1
         Object.keys(paramsObj).map(key => {
-          if (paramsObj[key] && paramsObj[key].length > 0) {
+          if(key == 'createAt'){
+            if (paramsObj.createAt !== null) {
+              this.queryObject.startTime = paramsObj.createAt[0]
+              this.queryObject.endTime = paramsObj.createAt[1]
+            } else {
+              delete this.queryObject.startTime
+              delete this.queryObject.endTime
+            }
+          } else if (paramsObj[key].length > 0) {
             this.queryObject[key] = paramsObj[key].trim()
           } else {
             delete this.queryObject[key]
@@ -162,11 +167,34 @@
         })
         this.loadData()
       },
+      selectData (val) {
+        this.chooseArray = val
+      },
       groupBtnClick (type) {
         if(type == 'add'){
           this.$router.push({path: '/customManager/potentialCustom/form?type=new'})
         }
-        if(type == 'conversion'){}
+        if(type == 'conversion'){
+          if (this.chooseArray.length === 0) {
+            this.msgShow(this, '请选择需要转换的行数', 'warning')
+            return
+          }
+          this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
+            let arr = []
+            this.chooseArray.map(item => {
+              arr.push(item.id)
+            })
+            let ids = arr.join(',')
+            let paramsObj = {
+              ids: ids,
+              uid: this.currentUser.id
+            }
+            console.log(ids)
+            this.customerBatchChange(paramsObj)
+          }, () => {
+            console.log('cancel')
+          })
+        }
         if(type == 'delRec'){
           this.$router.push({path: '/customManager/potentialCustom/delRec'})
         }
@@ -175,6 +203,7 @@
         }
       },
       tableChange (val) {
+        this.loading = true
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
@@ -182,11 +211,6 @@
       rowDel (obj) {
         this.dialogFormVisible = true
         this.rowDelObj = obj
-        // this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
-        //   this.actionDelete(obj.id)
-        // }, () => {
-        //   console.log('cancel')
-        // })
       },
       delSubmit (flg) {
         if (flg == 'ok') {
@@ -201,14 +225,30 @@
             id: this.rowDelObj.id,
             reason: this.reason,
             currentPage: this.currentPage - 1,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            uid: this.currentUser.id
           }
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: params})
           if (data.returnCode === 0) {
             this.currentPage = 1
             this.queryObject.currentPage = this.currentPage - 1
             this.loadData()
+            this.reason = ''
             this.msgShow(this, '删除成功', 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async customerBatchChange (paramsObj) {
+        try{
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customerBatchChange', params: paramsObj})
+          if (data.returnCode === 0) {
+            this.msgShow(this, '转换成功', 'success')
+            this.loadData()
           } else {
             this.msgShow(this, data.errMsg)
           }

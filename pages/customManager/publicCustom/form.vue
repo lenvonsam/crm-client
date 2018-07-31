@@ -16,7 +16,7 @@ export default {
   },
   data () {
     return {
-      breadItems: [],
+      breadItems: ['客户管理', '公共客户', '修改公共客户'],
       obj: null
     }
   },
@@ -31,17 +31,8 @@ export default {
     }
   },
   mounted() {
-    let me = this
-    this.$nextTick(function () {
-      if(me.$route.query.type === 'edit') {
-        this.loadingS()
-        me.breadItems = Object.assign([], ['客户管理', '潜在客户', '修改潜在客户'])
-        me.queryAcct()
-        me.$forceUpdate()
-      } else {
-        me.breadItems = Object.assign([], ['客户管理', '潜在客户', '增加潜在客户'])
-      }
-    })
+    this.loadingS()
+    this.queryAcct()
   }
 }
 </script>

@@ -73,21 +73,23 @@
         let r = this.randomNum(min, max)
         let g = this.randomNum(min, max)
         let b = this.randomNum(min, max)
-        return 'rgb(' + r + ',' + g + ',' + b + ')'
+        // return 'rgb(' + r + ',' + g + ',' + b + ')'
+        return 'rgb(0,0,0)'
       },
       drawPic () {
         let canvas = document.getElementById('codeCanvas')
         let ctx = canvas.getContext('2d')
         ctx.textBaseline = 'bottom'
         // 绘制背景
-        ctx.fillStyle = this.randomColor(this.backgroundColorMin, this.backgroundColorMax)
+        // ctx.fillStyle = this.randomColor(this.backgroundColorMin, this.backgroundColorMax)
+        ctx.fillStyle = 'rgb(255, 255, 255)'
         ctx.fillRect(0, 0, this.contentWidth, this.contentHeight)
         // 绘制文字
         for (let i = 0; i < this.identifyCode.length; i++) {
           this.drawText(ctx, this.identifyCode[i], i)
         }
         this.drawLine(ctx)
-        this.drawDot(ctx)
+        // this.drawDot(ctx)
       },
       drawText (ctx, txt, i) {
         ctx.fillStyle = this.randomColor(this.colorMin, this.colorMax)

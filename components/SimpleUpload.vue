@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess")
+    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess", :on-progress="uploadProgress", :on-error="uploadError")
       slot
 </template>
 
@@ -35,13 +35,21 @@
       },
       uploadSuccess (resp, file, fileList) {
         this.$emit('input', file.response.url)
+        this.pageHide()
         this.$message.success('图片上传成功')
+      },
+      uploadProgress () {
+        this.pageShow(this)
+      },
+      uploadError () {
+        this.pageHide()
+        this.$message.error('图片上传失败')
       }
     }
 
   }
 </script>
 
-<style style="stylus" scoped>
+<style lang="stylus" scoped>
 
 </style>

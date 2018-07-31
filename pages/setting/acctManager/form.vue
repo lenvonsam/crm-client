@@ -103,7 +103,7 @@
           loginAcct: [{required: true, message: '不能为空', trigger: 'blur'}],
           name: [{required: true, message: '不能为空', trigger: 'blur'}],
           dptId: [{required: true, message: '不能为空', trigger: 'blur'}],
-          phone: [{required: true, message: '不能为空', trigger: 'blur'}],
+          phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
           dataAuth: [{required: true, message: '不能为空', trigger: 'change'}],
           roleId: [{required: true, message: '不能为空', trigger: 'change'}],
           sex: [{required: true, message: '不能为空', trigger: 'blur'}]
@@ -198,6 +198,7 @@
             delete param.updateAt
             delete param.fkDpt
             delete param.fkRole
+            delete param.auths
           }
           if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
           if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))

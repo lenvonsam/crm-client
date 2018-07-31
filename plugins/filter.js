@@ -31,7 +31,6 @@ const datetime2Str = (date) => {
   }
 }
 const rowData = (value, key) => {
-  console.log(key)
   switch (key) {
     case 'sellHighStatus':
       return value === 1 ? '有' : '无'
@@ -40,16 +39,18 @@ const rowData = (value, key) => {
     case 'status':
       return value === 1 ? '启用' : '停用'
     case 'sex':
-      return value === 1 ? '男' : '女'
+      return value === 1 ? '男' : value === 2 ? '女' : ''
     case 'linkDate':
       return date2Str(value)
     case 'updateAt':
     case 'createAt':
     case 'setUpDate':
-      return datetime2Str(new Date(value))
+    case 'planVisitTime':
+    case 'delDate':
+    case 'time':
+      return (value) ? datetime2Str(new Date(value)) : ''
     default:
       return value
   }
 }
-
 Vue.filter('rowData', rowData)

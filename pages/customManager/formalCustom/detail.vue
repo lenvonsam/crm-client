@@ -2,19 +2,19 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .mt-15
-    button-group(:btns="btnGroups", @groupBtnClick="backPage")
+    el-button(size="small", @click="back()") 返回列表
   .mt-15
-    el-tabs(type="border-card")
-      el-tab-pane(label="基础信息")
-        custom-detail(:disabled="true")
-      el-tab-pane(label="沟通信息") 
-        communication-info
-      el-tab-pane(label="联系人信息") 
-        linker-info
-      el-tab-pane(label="客户信息修改")
-        custom-info
-      el-tab-pane(label="账户信息")
-        account-info
+    el-tabs(type="border-card", value="1", @tab-click="handleClick")
+      el-tab-pane(label="基础信息", name="1")
+        custom-detail(:url="'/customManager/formalCustom/'", v-if="tabName == '1'")
+      el-tab-pane(label="沟通信息", name="2") 
+        communication-info(v-if="tabName == '2'")
+      el-tab-pane(label="联系人信息", name="3") 
+        linker-info(v-if="tabName == '3'")
+      el-tab-pane(label="客户信息修改", name="4")
+        custom-info(v-if="tabName == '4'")
+      el-tab-pane(label="账户信息", name="5")
+        account-info(v-if="tabName == '5'")
 </template>
 
 <script>
@@ -39,11 +39,13 @@ export default {
   data () {
     return {
       breadItems: ['客户管理', '正式客户', '正式客户详情'],
-      btnGroups: [{lbl: '返回', type: 'back'}]
+      tabName: '1'
     }
   },
   methods: {
-    backPage(type){}
+    handleClick(tab, event) {
+      this.tabName = tab.name
+    }
   }
 }
 </script>

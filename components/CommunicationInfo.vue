@@ -2,31 +2,36 @@
 div
   button-group(:btns="btnGroupsAddInfo", @groupBtnClick="groupBtnClick")
   .mt-15
-    basic-table(:tableValue="tableValue", @tableRowEdit="tableRowEdit", @tableRowSave="tableRowSave", @tableRowCancel="tableRowCancel", @tableRowDelete="tableRowDelete")
+    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowEdit="tableRowEdit", @tableRowSave="rowSave", @tableRowCancel="tableRowCancel", @tableRowDelete="tableRowDelete")
 </template>
 <script>
 import basicTable from '@/components/BasicTable.vue'
 import buttonGroup from '@/components/ButtonGroup.vue'
+import { mapState } from 'vuex'
 export default{
   components: {
     basicTable,
     buttonGroup
   },
+  computed: {
+    ...mapState({
+      pageSize: state => state.pageSize,
+      contactTypeOpts: state => state.contactTypeOpts,
+      currentUser: state => state.user.currentUser
+    })
+  },
   data () {
     return {
-      btnGroupsAddInfo: [{lbl: '新增沟通信息', type: 'addInfo'}],
+      btnGroupsAddInfo: [{lbl: '新增沟通信息', type: 'add'}],
       tableValue: {
         tableHead: [
-          {lbl: '添加时间', prop: 'date', type: 'text'},
-          {lbl: '添加人', prop: 'name', type: 'text'},
-          {lbl: '沟通类型', prop: 'linkWay', type: 'edit', editType: 'select', selectList: [{ value: '电话', label: '电话'}, {value: '短信', label: '短信'}, {value: '见面拜访', label: '见面拜访'}, {value: '其他', label: '其他'}]},
-          {lbl: '沟通日期', prop: 'linkDate', type: 'edit', editType: 'date'},
-          {lbl: '内容', prop: 'remark', type: 'edit', editType: 'text'},
+          {lbl: '添加时间', prop: 'createAt', type: 'text', sort: true},
+          {lbl: '添加人', prop: 'fkAcctName', type: 'text'},
+          {lbl: '沟通类型', prop: 'contactType', type: 'edit', editType: 'select', selectList: []},
+          {lbl: '沟通日期', prop: 'contactDate', type: 'edit', editType: 'date', sort: true},
+          {lbl: '内容', prop: 'content', type: 'edit', editType: 'text'},
           {type: 'action',
             actionBtns: [{
-              lbl: '编辑',
-              type: 'edit'
-            },{
               lbl: '删除',
               type: 'delete'
             }]
@@ -35,27 +40,33 @@ export default{
         edit: true,
         tableData: []
       },
-      snapData: []
+      currentPage: 1,
+      totalCount: 0,
+      snapData: [],
+      isEdit: false,
+      loading: true
     }
   },
   mounted () {
-    this.tableValue.tableData = [
-      {id: 1, date: '2018-05-21  18:32:22',
-        name: '王佳浩',
-        linkWay: '电话',
-        linkDate: new Date('2018-05-21'),
-        remark: '嘘寒问暖，询问客户经营状况',
-        edit: false
-        }
-    ]
+    this.tableValue.tableHead.map(item => {
+      if(item.prop == 'contactType') item.selectList = this.contactTypeOpts
+    })
+    this.loadData()
   },
   methods: {
     groupBtnClick (type) {
-      if(type == 'back'){}
-      if(type == 'addInfo'){
+      if(type == 'back'){
+        this.back()
+      }
+      if(type == 'add'){
+        if(this.isEdit){
+          this.msgShow(this, '请先保存新增')
+          return
+        }
         this.linkDateFilter()
-        let addData = {id:2, date: '2018-05-21  18:32:22', name: '王佳浩', linkDate: new Date(), linkWay: '', remark: '', edit: true}
+        let addData = {id:'', createAt: new Date(), fkAcctName: this.currentUser.name, contactType: [], contactDate: null, content: '', edit: true}
         this.tableValue.tableData.push(addData)
+        this.isEdit = true
       }
     },
     linkDateFilter () {
@@ -72,12 +83,22 @@ export default{
       this.tableHandler(row)
       this.linkDateFilter()
     },
-    tableRowSave (row) {
+    rowSave (row) {
       this.tableHandler(row)
+      let params = {
+        fkAcctId: Number(this.currentUser.id),
+        contactType: row.contactType,
+        fkContactDate: row.contactDate,
+        content: row.content,
+        fkCstmId: Number(this.$route.query.id)
+      }
+      this.communicateCreate(params)
+      this.isEdit = false
     },
     tableRowDelete (obj) {
       this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
-        // this.busiRelationDel(obj.id)
+        this.isEdit = false
+        this.communicateDelete(obj.id)
       }, () => {
         console.log('cancel')
       })
@@ -87,6 +108,57 @@ export default{
       this.tableValue.tableData = this.snapData
       if(this.tableValue.tableData.length > idx + 1 || this.tableValue.tableData.length == idx + 1)
         this.tableValue.tableData[idx].edit = false
+      this.isEdit = false
+    },
+    async loadData () {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/communicate/queryCombo', params: {cstmId: this.$route.query.id}})
+          if (data.returnCode === 0) {
+            data.list.map(item => {
+              if(item.contactDate != null){
+                item.contactDate = this.date2Str(new Date(item.contactDate))
+              }
+              item.fkAcctName = item.fkAcct.name
+            })
+            this.tableValue.tableData = data.list
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+          this.loading = false
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+        this.loading = false
+      }
+    },
+    async communicateCreate (params) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/communicate/create', params: params})
+          if (data.returnCode === 0) {
+            this.msgShow(this, '保存成功', 'success')
+            this.loadData()
+            this.isEdit = false
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async communicateDelete (id) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/del', {url: 'customerManage/communicate/' + id})
+          if (data.returnCode === 0) {
+            this.msgShow(this, '删除成功', 'success')
+            this.loadData()
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
     }
   }
 }

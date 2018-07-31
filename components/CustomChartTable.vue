@@ -4,10 +4,10 @@
     .ft-16.border-bottom-line.pb-10 {{tableValue.title}}
     el-form.pt-15(:inline="true", :model="searchForm" ref="searchForm" label-width="60px")
       el-form-item(label="日期：", prop="date")
-        el-date-picker(type="date", placeholder="选择日期", v-model="searchForm.date" style="width: 200px;", size="small")
+        el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="searchForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")
       el-form-item
         el-button(type="primary", @click="submitForm('searchForm')", size="small") 查询
-        el-button(type="primary", @click="resetForm('searchForm')", size="small") 重置
+        el-button(@click="resetForm('searchForm')", size="small") 重置
     el-table(:data="tableValue.tableData", border)
       template(v-for="head in tableValue.tableHead")
         el-table-column(:prop="head.prop", :label="head.label")
@@ -33,20 +33,17 @@
     data () {
       return {
         searchForm: {
-          date: new Date()
+          date: ''
         }
       }
     },
     methods: {
       submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.search(this.searchForm)
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+        if (this.searchForm.date == '' || this.searchForm.date == null) {
+          this.msgShow(this, '请选择日期')
+        }  else {
+          this.search(this.searchForm)
+        }
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();

@@ -1,12 +1,15 @@
 export default {
-  pageSize: 6,
+  pageSize: 8,
   // http://wechat.xingyun361.com/
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
   qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
   fileUploadUrl: '/proxy/fileUpload',
   globalSuccessMsg: '',
+  globalErrorMsg: '',
   currentPathIdx: '1-1',
+  // 默认头像
+  defaultAvatar: require('../static/defaultAvatar.png'),
   // 数据权限等级
   dataAuthOpts: [{
     value: '业务员',
@@ -233,8 +236,34 @@ export default {
   }, {
     value: '丧偶',
     label: '丧偶'
+  }, {
+    value: '保密',
+    label: '保密'
   }],
-  currentMenus: [{
+  //沟通类型
+  contactTypeOpts: [{
+    value: '电话',
+    label: '电话'
+  }, {
+    value: '短信',
+    label: '短信'
+  }, {
+    value: '见面拜访',
+    label: '见面拜访'
+  }, {
+    value: '其他',
+    label: '其他'
+  }],
+  //是否是主联系人
+  mainStatusOpts: [{
+    value: 0,
+    label: '否'
+  },{
+    value: 1,
+    label: '是'
+  }],
+  currentMenus: [],
+  allMenus: [{
     title: '客户管理',
     iconClass: 'iconfont icon-custom',
     subItems: [{
@@ -255,10 +284,12 @@ export default {
     }, {
       title: '客户画像',
       url: '/customManager/customerPortrait'
-    }, {
-      title: '客户分级',
-      url: '#'
-    }]
+    }
+    // , {
+    //   title: '客户分级',
+    //   url: '#'
+    // }
+    ]
   }, {
     title: '系统设置',
     iconClass: 'iconfont icon-setting',
