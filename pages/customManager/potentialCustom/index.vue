@@ -62,34 +62,37 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
+            minWidth: '340px',
             linkUrl: '/customManager/potentialCustom/detail'           
           }, {
             lbl: '主联系人',
             prop: 'name',
-            width: 200
+            width: '200px'
           }, {
             lbl: '联系方式',
             prop: 'phone',
-            width: 200
+            width: '200px'
           }, {
             lbl: '添加日期',
             prop: 'createAt',
-            width: 200
+            width: '200px'
           }, {
             lbl: '业务部门',
             prop: 'dptName',
-            width: 150
+            width: '150px'
           }, {
             lbl: '业务员',
             prop: 'acctName',
-            width: 150
+            width: '150px'
           }, {
             lbl: '创建人',
             prop: 'createName',
-            width: 100
+            width: '100px'
           }, {
             type: 'action',
-            width: 100,
+            width: '100px',
+            // minWidth: '100px',
+            fixed: 'right',
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'

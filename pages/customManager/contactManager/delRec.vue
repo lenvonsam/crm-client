@@ -54,7 +54,7 @@
           tableHead: [{
             lbl: '所属客户',
             prop: 'cstmName',
-            width: '340px',
+            minWidth: '340px',
           }, {
             lbl: '联系人',
             prop: 'name',

@@ -58,29 +58,37 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
+            width: 340,
             linkUrl: '/customManager/publicCustom/detail'
           }, {
             lbl: '主联系人',
+            width: 200,
             prop: 'name'
           }, {
             lbl: '联系方式',
+            width: 250,
             prop: 'phone'
           }, {
             lbl: '流失时间',
             prop: 'createAt',
+            width: 200,
             sort: true
           }, {
             lbl: '业务部门',
+            width: 200,
             prop: 'dptName'
           }, {
             lbl: '业务员',
+            width: 200,
             prop: 'acctName'
           }, {
             lbl: '未开单天数',
+            width: 120,
             prop: 'billDateDays',
             sort: true
           }, {
             lbl: '拜访次数',
+            width: 120,
             prop: 'visitCount',
             sort: true
           }]

@@ -37,6 +37,7 @@ export default {
             linkUrl: '/customManager/potentialCustom/detail',
             prop: 'fkCustom',
             type: 'object',
+            minWidth: '340px',
             factValue: (row) => {
               return row.compName
             }
@@ -103,7 +104,7 @@ export default {
           }, {
             lbl: '删除理由',
             prop: 'reason',
-            width: 150
+            minWidth: 150
           }]
         },
       searchFormItems: [

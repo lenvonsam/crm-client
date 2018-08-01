@@ -103,6 +103,7 @@
         if (type === 'add') {
           this.dialogModel = 'create'
           this.dialogTitle = '新增客户性质'
+          this.dialogObj.name = ''
           this.dialogShow = true
         } else if (type === 'start') {
           if (this.chooseArray.length === 0) {

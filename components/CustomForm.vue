@@ -85,8 +85,10 @@ div
           el-input(v-model="form.legalRept", placeholder="请输入法人代表", clearable)
       el-col(:span="12")
         el-form-item(label="公司logo：")
-          simple-upload.float-left(v-model="form.compLogoUrl")
+          simple-upload.float-left(v-model="form.compLogoUrl", @fileObj="fileLogo")
             el-button(type="primary", size="small") 上传logo
+            span.pl-10(v-if="fileObj.name") {{fileObj.name}}
+              i.pl-5.el-icon-circle-check
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司地址：", prop="compAddr")
@@ -279,22 +281,22 @@ div
         //-   simple-upload.simple-upload(v-model="form.busiLicenseUrl")
         //-     i.el-icon-plus(v-if="form.busiLicenseUrl == undefined")
         //-     el-button(type="primary", size="mini") 选择图片
-        zoom-img.zoomImg(:url="form.busiLicenseUrl == undefined ? '' : form.busiLicenseUrl", :width='200', :height='200')
+        zoom-img.zoomImg(:url="form.busiLicenseUrl == undefined ? defaultAvatar : form.busiLicenseUrl", :width='200', :height='200')
         simple-upload(v-model="form.busiLicenseUrl")
           el-button(type="primary", size="mini") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 税务登记证
-        zoom-img.zoomImg(:url="form.taxRegisterUrl == undefined ? '' : form.taxRegisterUrl", :width='200', :height='200')
+        zoom-img.zoomImg(:url="form.taxRegisterUrl == undefined ? defaultAvatar : form.taxRegisterUrl", :width='200', :height='200')
         simple-upload(v-model="form.taxRegisterUrl")
           el-button(type="primary", size="mini") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 组织结构代码证
-        zoom-img.zoomImg(:url="form.orgCertificateUrl == undefined ? '' : form.orgCertificateUrl", :width='200', :height='200')
+        zoom-img.zoomImg(:url="form.orgCertificateUrl == undefined ? defaultAvatar : form.orgCertificateUrl", :width='200', :height='200')
         simple-upload(v-model="form.orgCertificateUrl")
           el-button(type="primary", size="mini") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 开票资料
-        zoom-img.zoomImg(:url="form.invoiceInfoUrl == undefined ? '' : form.invoiceInfoUrl", :width='200', :height='200')
+        zoom-img.zoomImg(:url="form.invoiceInfoUrl == undefined ? defaultAvatar : form.invoiceInfoUrl", :width='200', :height='200')
         simple-upload(v-model="form.invoiceInfoUrl")
           el-button(type="primary", size="mini") 选择图片
     el-row.mt-25.text-center
@@ -352,7 +354,8 @@ export default {
         openAcct: [{ required: true, message: '不能为空', trigger: 'blur' }],
         billAddr: [{ required: true, message: '不能为空', trigger: 'blur' }]
       },
-      timeout: null
+      timeout: null,
+      fileObj: {}
     }
   },
   computed: {
@@ -368,7 +371,8 @@ export default {
       depositRequirementOpts: state => state.depositRequirementOpts,
       depositRateOpts: state => state.depositRateOpts,
       depositCycleOpts: state => state.depositCycleOpts,
-      currentUser: state => state.user.currentUser
+      currentUser: state => state.user.currentUser,
+      defaultAvatar: state => state.defaultAvatar
     })
   },
   methods: {
@@ -541,6 +545,11 @@ export default {
         this.msgShow(this)
       }
     },
+    fileLogo (file) {
+      console.log('-----------')
+      console.log(file)
+      this.fileObj = file
+    }
   },
   mounted() {
     this.fkRelationCreate()
@@ -654,5 +663,8 @@ export default {
   }
   .simple-upload .el-upload.el-upload--text{
     text-align: center;
+  }
+  .el-icon-circle-check{
+    color: #67c23a;
   }
 </style>

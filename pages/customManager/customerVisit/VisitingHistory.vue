@@ -41,7 +41,8 @@ export default {
           lbl: '公司名称',
           prop: 'customer',
           type: 'linkObject',
-          linkUrl: '/customManager/contactManager/detail',
+          minWidth: '340px',
+          linkUrl: '/customManager/publicCustom/detail',
           factValue(row){
             let arr = {
               id: row.id,
@@ -52,6 +53,7 @@ export default {
         }, {
           lbl: '主联系人',
           prop: 'link',
+          width: '200px',
           type: 'object',
           factValue(row){
             return row.name
@@ -60,12 +62,14 @@ export default {
           lbl: '联系方式',
           prop: 'link',
           type: 'object',
+          width: '250px',
           factValue(row){
             return row.phone
           }
         }, {
           lbl: '流失日期',
           prop: 'customer',
+          width: '180px',
           type: 'object',
           factValue (row) {
             return row.createAt
@@ -74,17 +78,21 @@ export default {
           lbl: '添加人',
           prop: 'creator',
           type: 'object',
+          width: '200px',
           factValue (row) {
             return row.name
           }
         }, {
           lbl: '添加时间',
+          width: '150px',
           prop: 'createAtDate2'
         }, {
           lbl: '计划拜访时间',
+          width: '150px',
           prop: 'planVisitTimeDate2'
         }, {
           lbl: '结果',
+          width: '110px',
           prop: 'status',
           type: 'object',
           factValue(row){
@@ -191,7 +199,7 @@ export default {
           data.list.map(itm => {
             itm[0].createAtDate2 = this.date2Str(new Date(itm[0].createAt))
             itm[0].planVisitTimeDate2 = this.date2Str(new Date(itm[0].planVisitTime))
-            itm[0].customer.createAt = this.date2Str(new Date(itm[0].customer.createAt))
+            itm[0].customer.createAt = this.datetime2Str(new Date(itm[0].customer.createAt))
             itm[0].link = itm[1]
             arr.push(itm[0])
           })

@@ -45,7 +45,7 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
-            width: '300px',
+            minWidth: '340px',
             linkUrl: '/customManager/formalCustom/detail'
           }, {
             lbl: '主联系人',
@@ -79,6 +79,7 @@
             sort: true
           }, {
             type: 'action',
+            fixed: 'right',
             width: '100px',
             actionBtns: [{
               lbl: '编辑',

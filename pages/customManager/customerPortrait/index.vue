@@ -42,27 +42,35 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
+            minWidth: '340px',
             linkUrl: '/customManager/customerPortrait/detail'
           }, {
             lbl: '主联系人',
+            width: 200,
             prop: 'name'
           }, {
             lbl: '联系方式',
+            width: 250,
             prop: 'phone'
           }, {
             lbl: '转化时间',
+            width: 200,
             prop: 'createAtDate2'
           }, {
             lbl: '业务部门',
+            width: 200,
             prop: 'dptName'
           }, {
             lbl: '业务员',
+            width: 150,
             prop: 'acctName'
           }, {
             lbl: '创建人',
+            width: 185,
             prop: 'createName'
           }, {
             lbl: '未开单天数',
+            width: 160,
             align: 'center',
             prop: 'billDate',
             sort: true

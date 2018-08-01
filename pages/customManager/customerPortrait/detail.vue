@@ -6,7 +6,7 @@
   .mt-15
     el-tabs(type="border-card", v-model="tabName")
       el-tab-pane(label="基础信息", name="1")
-        custom-detail(:disabled="true")
+        custom-detail(:isEdit="false")
       el-tab-pane(label="客户图表", name="2")
         .bg-f9
           custom-chart-table(:tableValue="dealTableValue", :search="dealSearch")

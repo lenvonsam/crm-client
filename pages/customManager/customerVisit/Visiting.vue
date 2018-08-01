@@ -29,7 +29,8 @@ export default {
           lbl: '公司名称',
           prop: 'customer',
           type: 'linkObject',
-          linkUrl: '/customManager/contactManager/detail',
+          minWidth: '340px',
+          linkUrl: '/customManager/publicCustom/detail',
           factValue(row){
             let arr = {
               id: row.id,
@@ -40,6 +41,7 @@ export default {
         }, {
           lbl: '主联系人',
           prop: 'link',
+          width: '200px',
           type: 'object',
           factValue(row){
             return row.name
@@ -48,28 +50,38 @@ export default {
           lbl: '联系方式',
           prop: 'link',
           type: 'object',
+          width: '250px',
           factValue(row){
             return row.phone
           }
         }, {
           lbl: '流失日期',
-          prop: 'planDate'
+          prop: 'customer',
+          type: 'object',
+          width: '180px',
+          factValue (row) {
+            return row.createAt
+          }
         }, {
           lbl: '添加人',
           prop: 'creator',
+          width: '150px',
           type: 'object',
           factValue (row) {
             return row.name
           }
         }, {
           lbl: '计划拜访时间',
+          width: '180px',
           prop: 'planVisitTime'
         }, {
           lbl: '计划开单日期',
+          width: '150px',
           prop: 'planDate'
         }, {
           lbl: '状态',
           prop: 'status',
+          width: '100px',
           type: 'object',
           factValue(row){
             return (row==0) ? '未拜访' : (row==1) ? '已拜访' : (row==2) ? '拜访成功' : (row == 3) ? '拜访失败' : '拜访超时'
@@ -77,6 +89,7 @@ export default {
         }, {
           type: 'action',
           width: '100',
+          fixed: 'right',
           actionBtns: [{
             lbl: '设为已拜访',
             type: 'setVisit'
@@ -154,6 +167,7 @@ export default {
           let arr = []
           data.list.map(itm => {
             itm[0].planDate = this.date2Str(new Date(itm[0].planDate))
+            itm[0].customer.createAt = this.datetime2Str(new Date(itm[0].customer.createAt))
             itm[0].link = itm[1]
             arr.push(itm[0])
           })

@@ -11,6 +11,8 @@
           .pt-10
             basic-table(:tableValue="roleTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowEdit="rowEdit", @tableRowDelete="rowDelete", @chooseData="selectData", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'roleFormNew' || tabModel == 'roleFormUpdate'")
+          .padding
+            el-button(size="small", @click="tabModel = 'roleList'") 返回列表
           el-form.mt-15(label-width="85px", style="max-width: 40%", ref="roleForm", :model="formObj", :rules="formRules", status-icon, :validate-on-rule-change="false")
             el-form-item(label="角色名称", prop="name")
               el-input(size="medium", v-model="formObj.name")
@@ -26,14 +28,11 @@
               el-step(title="提交")
           .padding.pt-0.pb-0.text-right.max-60
             template(v-if="stepIdx == 1")
-              el-button(size="small", @click="tabModel = 'roleList'") 返回列表
               el-button(size="small", @click="nextStep") 下一步
             template(v-else-if="stepIdx == 2")
-              el-button(size="small", @click="tabModel = 'roleList'") 返回列表
               el-button(size="small", @click="stepIdx = 1") 上一步
               el-button(size="small", @click="stepFinish") 提交
             template(v-else)
-              el-button(size="small", @click="tabModel = 'roleList'") 返回列表
               el-button(size="small", @click="stepIdx = 2") 上一步
           .padding(style="max-width: 60%", v-if="stepIdx == 1")
             el-transfer(filterable, :titles="['未分配菜单', '已分配菜单']", style="margin: 0 auto", :data="originMenuData", :props="{key: 'id', label: 'name'}", v-model="chooseData", :render-content="renderFunc")
@@ -51,6 +50,8 @@
           .pt-20
             basic-table(:tableValue="authTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tablePgChange", @tableRowAuthManage="rowEdit")
         template(v-else)
+          .padding
+            el-button(size="small", @click="tabModel = 'authList'") 返回列表
           .row.padding
             .col.flex-80 姓名：
             .col {{formObj.name}}
@@ -78,14 +79,11 @@
               el-step(title="提交")
           .padding.pt-0.pb-0.text-right.max-60
             template(v-if="stepIdx == 1")
-              el-button(size="small", @click="tabModel = 'authList'") 返回列表
               el-button(size="small", @click="nextStep") 下一步
             template(v-else-if="stepIdx == 2")
-              el-button(size="small", @click="tabModel = 'authList'") 返回列表
               el-button(size="small", @click="stepIdx = 1") 上一步
               el-button(size="small", @click="stepFinish") 提交
             template(v-else)
-              el-button(size="small", @click="tabModel = 'authList'") 返回列表
               el-button(size="small", @click="stepIdx = 2") 上一步
           .padding(style="max-width: 60%", v-if="stepIdx == 1")
             el-transfer(filterable, :titles="['未分配菜单', '已分配菜单']", style="margin: 0 auto", :data="originMenuData", :props="{key: 'id', label: 'name'}", v-model="chooseData", :render-content="renderFunc")
@@ -299,6 +297,8 @@
       },
       btnsClick (type) {
         if (type === 'add') {
+          this.formObj.name = ''
+          this.formObj.status = '1'
           this.tabModel = this.activeName === 'role' ? 'roleFormNew' : 'authFormNew'
         } else if (type === 'start') {
           if (this.chooseArray.length === 0) {

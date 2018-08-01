@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  button-group(:btns="btns", @groupBtnClick="editForm")
+  button-group(:btns="btns", @groupBtnClick="editForm", v-if="isEdit")
   detail-table.mt-15(:tableForm="formItems", :tableValue="obj", v-if="obj.id")
   el-row.mt-15(v-if="obj.compLogoUrl || obj.busiLicenseUrl || obj.taxRegisterUrl || obj.orgCertificateUrl || obj.invoiceInfoUrl")
     el-col.text-center.ft-16.bg-gray.text-white.pt-15.pb-15.mb-20(:span="24") 附件信息
@@ -109,6 +109,10 @@ export default {
     url: {
       type: String,
       default: ''
+    },
+    isEdit: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

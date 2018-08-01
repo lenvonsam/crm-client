@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess", :on-progress="uploadProgress", :on-error="uploadError")
+    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess", :on-progress="uploadProgress", :on-error="uploadError", :file-list="fileList")
       slot
 </template>
 
@@ -14,12 +14,21 @@
       action: {
         type: String,
         default: 'avatar'
+      },
+      type: {
+        type: String,
+        default: ''
       }
     },
     computed: {
       ...mapState({
         fileUploadUrl: state => state.fileUploadUrl
       })
+    },
+    data () {
+      return {
+        fileList: []
+      }
     },
     methods: {
       beforePicUpload (file) {
@@ -35,6 +44,9 @@
       },
       uploadSuccess (resp, file, fileList) {
         this.$emit('input', file.response.url)
+        this.$emit('fileObj', file)
+        // if(this.type == 'logo') this.fileList[0] = [file]
+        console.log(this.fileList)
         this.pageHide()
         this.$message.success('图片上传成功')
       },

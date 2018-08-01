@@ -285,6 +285,24 @@
       btnsClick (type) {
         if (type === 'add') {
           this.dialogTitle = this.activeName === 'org' ? '机构新增' : '部门新增'
+          if (this.activeName === 'org') {
+            this.orgItems = {
+              name: '',
+              simpleName: '',
+              status: '1',
+              legalRept: '',
+              remark: ''
+            }
+          } else {
+            this.dptItems = {
+              name: '',
+              leader: '',
+              status: '1',
+              orgId: '',
+              orgShortName: '',
+              remark: ''
+            }
+          }
           this.dialogShow = true
           this.formType = 'create'
         } else if (type === 'start') {

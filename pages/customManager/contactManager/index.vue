@@ -54,7 +54,7 @@
               el-input.full-width(v-model="linker.remark")
       .dialog-footer.text-right(slot="footer")
         el-button(size="medium", @click="subForm('cancel')") 取消
-        el-button(type="primary", size="medium", @click="subForm('ok')") 创建
+        el-button(type="primary", size="medium", @click="subForm('ok')") {{btnStr}}
     el-dialog(title="删除", :visible.sync="dialogDel", @close="delSubmit('cancel')")
       .row.flex-center
         .col.flex-80 删除理由:
@@ -161,7 +161,7 @@
             lbl: '所属客户',
             prop: 'fkCustom',
             type: 'linkObject',
-            width: '340px',
+            minWidth: '340px',
             linkUrl: '/customManager/contactManager/detail',
             factValue (row) {
               let arr = {
@@ -173,8 +173,6 @@
           }, {
             lbl: '联系人',
             prop: 'name',
-            // type: 'link',
-            // linkUrl: '/customManager/contactManager/linkDetail',
             width: '200px'
           }, {
             lbl: '联系方式',
@@ -219,6 +217,7 @@
           }, {
             type: 'action',
             width: '150px',
+            fixed: 'right',
             actionBtns: [{
               lbl: '详情',
               type: 'detail'
@@ -232,6 +231,7 @@
           }]
         },
         dialogTitle: '新增联系人信息',
+        btnStr: '创建',
         linker: {
           id: null,
           name: '',
@@ -354,6 +354,7 @@
             this.disabledMainStatus = false
           }
           this.dialogTitle = '新增联系人信息'
+          this.btnStr = '创建'
         } else if (type == 'delRec') {
           this.jump({path: '/customManager/contactManager/delRec'})
         }
@@ -437,6 +438,7 @@
           this.disabledMainStatus = true
         }
         this.dialogTitle = '编辑联系人信息'
+        this.btnStr = '更新'
         this.dialogShow = true
       },
       async customerGet (query) {

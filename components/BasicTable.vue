@@ -5,14 +5,14 @@ div
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
         template(slot-scope="scope") {{scope.row[head.prop]}}
-      el-table-column(v-if="head.type == 'link'", :label="head.lbl", width="head.width ? head.width : 'auto'")
+      el-table-column(v-if="head.type == 'link'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           a(:href="head.linkUrl + '?id=' + scope.row.id") {{scope.row[head.prop]}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-      el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'")
+      el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
-      el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'",  :prop="head.prop", :sortable="head.sort ? head.sort : false")
+      el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="(scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && head.prop == 'name'")
@@ -21,20 +21,20 @@ div
             el-date-picker.full-width(v-else-if="head.editType == 'date'", type="date", v-model="scope.row[head.prop]", size="small", format="yyyy-MM-dd", value-format="yyyy-MM-dd")
             el-select(v-else-if="head.editType == 'select'", v-model="scope.row[head.prop]", size="mini")
               el-option(v-for="item in head.selectList", :key="item.value", :label="item.label", :value="item.value")
-      el-table-column(v-else-if="head.type == 'action'", label="操作", :width="head.width ? head.width : 'auto'")
+      el-table-column(v-else-if="head.type == 'action'", :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
-              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.row, btn.type)") {{btn.lbl}}
+              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{btn.lbl}}
           template(v-else)
-            el-button(type="text", class="default", @click="handerRowBtn(scope.row, 'save')") 保存
-            el-button(type="text", class="default", @click="handerRowBtn(scope.row, 'cancel')") 取消
-      el-table-column(v-else-if="head.type == 'object'", :label="head.lbl", :width="head.width? head.width : 'auto'",  :prop="head.prop", :sortable="head.sort")
+            el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
+            el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
+      el-table-column(v-else-if="head.type == 'object'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort")
         template(slot-scope="scope") {{head.factValue(scope.row[head.prop])}}
-      el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
+      el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") {{scope.row[head.prop] | rowData(head.prop)}}
           el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-          span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.row, 'lock')") / 90
+          span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
             i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
             i.iconfont.icon-locka(v-else)
   .padding.text-right
@@ -129,7 +129,8 @@ div
         }
         return result && condition
       },
-      handerRowBtn (row, btnType) {
+      handerRowBtn (idx, row, btnType) {
+        row.idx = idx
         this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
       },
       handleSelectionChange (rows) {

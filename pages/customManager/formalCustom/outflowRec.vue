@@ -33,6 +33,7 @@ export default {
             lbl: '公司名称',
             linkUrl: '/customManager/potentialCustom/detail',
             prop: 'fkCustom',
+            minWidth: 340,
             type: 'linkObject',
             factValue: (row) => {
               let arr = {
@@ -44,6 +45,7 @@ export default {
           }, {
             lbl: '主联系人',
             prop: 'link',
+            width: 200,
             type: 'object',
             factValue: (row) => {
               return row.name
@@ -52,12 +54,14 @@ export default {
             lbl: '联系方式',
             prop: 'link',
             type: 'object',
+            width: 250,
             factValue: (row) => {
               return row.phone
             }
           }, {
             lbl: '添加日期',
             prop: 'fkCustom',
+            width: 110,
             type: 'object',
             factValue: (row) => {
               return row.createAt
@@ -65,6 +69,7 @@ export default {
           }, {
             lbl: '业务部门',
             prop: 'fkCustom',
+            width: 200,
             type: 'object',
             factValue: (row) => {
               return row.fkDpt.name
@@ -72,6 +77,7 @@ export default {
           }, {
             lbl: '业务员',
             prop: 'fkCustom',
+            width: 200,
             type: 'object',
             factValue: (row) => {
               return row.fkAcct.name
@@ -79,12 +85,14 @@ export default {
           }, {
             lbl: '创建人',
             prop: 'fkCustom',
+            width: 180,
             type: 'object',
             factValue: (row) => {
               return row.createAcct.name
             }
           }, {
             lbl: '流失时间',
+            width: 200,
             prop: 'createAt'
           }]
         },

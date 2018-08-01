@@ -35,6 +35,7 @@ export default {
             lbl: '公司名称',
             linkUrl: '/customManager/potentialCustom/detail',
             prop: 'fkCustom',
+            minWidth: '340px',
             type: 'linkObject',
             factValue: (row) => {
               let arr = {
@@ -46,6 +47,7 @@ export default {
           }, {
             lbl: '主联系人',
             prop: 'link',
+            width: '200px',
             type: 'object',
             factValue: (row) => {
               return row.name
@@ -53,6 +55,7 @@ export default {
           }, {
             lbl: '联系方式',
             prop: 'link',
+            width: '200px',
             type: 'object',
             factValue: (row) => {
               return row.phone
@@ -60,6 +63,7 @@ export default {
           }, {
             lbl: '添加日期',
             prop: 'fkCustom',
+            width: '120px',
             type: 'object',
             factValue: (row) => {
               return row.createAt
@@ -67,6 +71,7 @@ export default {
           }, {
             lbl: '业务部门',
             prop: 'fkCustom',
+            width: '200px',
             type: 'object',
             factValue: (row) => {
               return row.fkDpt.name
@@ -74,6 +79,7 @@ export default {
           }, {
             lbl: '业务员',
             prop: 'fkCustom',
+            width: '150px',
             type: 'object',
             factValue: (row) => {
               return row.fkAcct.name
@@ -81,6 +87,7 @@ export default {
           }, {
             lbl: '创建人',
             prop: 'fkCustom',
+            width: '150px',
             type: 'object',
             factValue: (row) => {
               return row.createAcct.name
@@ -88,12 +95,14 @@ export default {
           }, {
             lbl: '转化人',
             prop: 'fkAcct',
+            width: '150px',
             type: 'object',
             factValue: (row) => {
               return row.name
             }
           }, {
             lbl: '转化时间',
+            width: '180px',
             prop: 'createAt'
           }]
         },

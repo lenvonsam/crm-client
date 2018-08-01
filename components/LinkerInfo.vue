@@ -90,18 +90,19 @@ export default{
         item.linkDate = new Date(item.linkDate)
       })
     },
-    tableHandler (row) {
-      let idx = this.tableValue.tableData.indexOf(row)
+    tableHandler (obj) {
+      let idx = obj.idx
       this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
+      console.log(this.tableValue.tableData[idx].edit)
     },
-    rowEdit (row) {
+    rowEdit (obj) {
       if(this.isEdit){
         this.msgShow(this, '请先完成操作')
         return
       }
-      this.isEdit = true
-      this.tableHandler(row)
+      this.tableHandler(obj)
       this.linkDateFilter()
+      this.isEdit = true
     },
     delSubmit (flg) {
       if(flg == 'ok'){
@@ -110,9 +111,9 @@ export default{
           return
         }
         this.linkerDelete()
-      } else {
-        this.dialogDel = false
       }
+      this.isEdit = false
+      this.dialogDel = false
     },
     rowDelete (obj) {
       this.dialogDel = true
