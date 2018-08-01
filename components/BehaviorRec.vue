@@ -6,7 +6,7 @@
         template(slot-scope="props")
           .row(v-for="(r,idx) in filterExpandData(props.row)", :class="{'pb-15': idx < (filterExpandData(props.row).length - 1)}")
             .col(v-for="c in r")
-              label.mr-15 {{behaviorMap[c.key]}}:
+              label(v-if="c.key").mr-15 {{behaviorMap[c.key]}}:
               label {{c.val}}
       el-table-column(v-for="head in behaviorRecVal.tableHead", :key="head.prop", :label="head.label")
         template(slot-scope="scope") {{scope.row[head.prop] | rowData(head.prop)}}
