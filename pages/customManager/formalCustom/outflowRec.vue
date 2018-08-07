@@ -92,7 +92,7 @@ export default {
             }
           }, {
             lbl: '流失时间',
-            width: 200,
+            width: 160,
             prop: 'createAt'
           }]
         },

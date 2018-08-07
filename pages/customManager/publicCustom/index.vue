@@ -1,27 +1,11 @@
 <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    .pt-15
-      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .mt-5
-      basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowLock="rowLock")
-    el-dialog(title="提示", :visible.sync="dialogFormVisible", width="450px", height="100px")
-      .row.flex-center
-        .col.flex-100 计划拜访日期
-          sup.text-red *
-        .col
-          el-date-picker.full-width(v-model="planVisitTime", type="datetime", placeholder="选择日期")
-      .row.flex-center.mt-10
-        .col.flex-100 计划开单日期
-          sup.text-red *
-        .col
-          el-date-picker.full-width(v-model="planDate", type="date", placeholder="选择日期")
-        .ft-13.text-red.mt-10 请选择计划完成日期，设置完成后不能修改。在日期前客户开单视为转化成功。
-      .dialog-footer.text-right(slot="footer")
-        el-button(size="medium", @click="subForm('cancel')") 取消
-        el-button(type="primary", size="medium", @click="subForm('ok')") 确认
+      basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowLock="rowLock", @tableRowMap = "rowMap")
+    baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
 <script>
@@ -29,6 +13,7 @@
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
+  import baiduMap from '@/components/BaiduMap.vue'
   import { mapState } from 'vuex'
   export default {
     layout: 'main',
@@ -36,12 +21,13 @@
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup
+      buttonGroup,
+      baiduMap
     },
     data () {
       return {
         breadItems: ['客户管理', '公共客户'],
-        btnGroups: [{lbl: '添加到客户拜访', type: 'add'}],
+        // btnGroups: [{lbl: '添加到客户拜访', type: 'add'}],
         searchFormItems: [
           [{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
             {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
@@ -52,13 +38,13 @@
         ],
         tableValue: {
           tableData: [],
-          hasCbx: true,
+          hasCbx: false,
           rowClassName: false,
           tableHead: [{
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
-            width: 340,
+            minWidth: 340,
             linkUrl: '/customManager/publicCustom/detail'
           }, {
             lbl: '主联系人',
@@ -87,10 +73,13 @@
             prop: 'billDateDays',
             sort: true
           }, {
-            lbl: '拜访次数',
-            width: 120,
-            prop: 'visitCount',
-            sort: true
+            type: 'action',
+            width: '60px',
+            fixed: 'right',
+            actionBtns: [{
+              lbl: '地图',
+              type: 'map'
+            }]
           }]
         },
         currentPage: 1,
@@ -101,10 +90,17 @@
           mark: '3'
         },
         chooseArray: [],
-        planDate: '',
-        planVisitTime: '',
-        dialogFormVisible: false,
-        loading: true
+        // planDate: '',
+        // planVisitTime: '',
+        // dialogFormVisible: false,
+        loading: true,
+        dialogMap: false,
+        baiduMapData: {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '中国',
+          keyWord: ''
+        }
       }
     },
     computed: {
@@ -122,6 +118,9 @@
       this.loadData()
     },
     methods: {
+      baiduMapCb() {
+        this.dialogMap = false
+      },
       searchForm (paramsObj) {
         this.loading = true
         this.currentPage = 1
@@ -143,49 +142,60 @@
         })
         this.loadData()
       },
-      subForm (flg) {
-        if(flg == 'ok'){
-          let toDay = new Date()
-          if(typeof(this.planDate) == 'string' || this.planDate == null){
-            this.msgShow(this, '请选择计划完成日期', 'warning')
-            return
-          }
-          if(typeof(this.planVisitTime) == 'string' || this.planVisitTime == null){
-            this.msgShow(this, '请选择计划开单日期', 'warning')
-            return
-          }
-          if(this.planVisitTime < toDay){
-            this.msgShow(this, '拜访时间不能小于今天', 'warning')
-            return
-          }
-          if(this.planDate < this.planVisitTime){
-            this.msgShow(this, '开单日期不能小于拜访日期', 'warning')
-            return
-          }
-          let arr = []
-          this.chooseArray.map(item => {
-            arr.push(item.id)
-          })
-          let ids = arr.join(',')
-          let paramsObj = {
-            cstmIds: ids,
-            uid: this.currentUser.id,
-            planDate: this.date2Str(this.planDate),
-            planVisitTime: this.datetime2Str(this.planVisitTime)
-          }
-          this.cstmCallCreate(paramsObj)
+      rowMap (obj) {
+        this.baiduMapData.keyWord = obj.compName
+        this.baiduMapData = {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '',
+          keyWord: obj.compName
         }
-        this.dialogFormVisible = false
+        // console.log(obj.compName)
+        this.dialogMap = true
       },
-      groupBtnClick (type) {
-        if(type == 'add'){
-          if (this.chooseArray.length === 0) {
-            this.msgShow(this, '请选择需要操作的数据', 'warning')
-            return
-          }
-          this.dialogFormVisible = true
-        }
-      },
+      // subForm (flg) {
+      //   if(flg == 'ok'){
+      //     let toDay = new Date()
+      //     if(typeof(this.planDate) == 'string' || this.planDate == null){
+      //       this.msgShow(this, '请选择计划完成日期', 'warning')
+      //       return
+      //     }
+      //     if(typeof(this.planVisitTime) == 'string' || this.planVisitTime == null){
+      //       this.msgShow(this, '请选择计划开单日期', 'warning')
+      //       return
+      //     }
+      //     if(this.planVisitTime < toDay){
+      //       this.msgShow(this, '拜访时间不能小于当前时间', 'warning')
+      //       return
+      //     }
+      //     if(this.planDate < this.planVisitTime){
+      //       this.msgShow(this, '开单日期不能小于拜访日期', 'warning')
+      //       return
+      //     }
+      //     let arr = []
+      //     this.chooseArray.map(item => {
+      //       arr.push(item.id)
+      //     })
+      //     let ids = arr.join(',')
+      //     let paramsObj = {
+      //       cstmIds: ids,
+      //       uid: this.currentUser.id,
+      //       planDate: this.date2Str(this.planDate),
+      //       planVisitTime: this.datetime2Str(this.planVisitTime)
+      //     }
+      //     this.cstmCallCreate(paramsObj)
+      //   }
+      //   this.dialogFormVisible = false
+      // },
+      // groupBtnClick (type) {
+      //   if(type == 'add'){
+      //     if (this.chooseArray.length === 0) {
+      //       this.msgShow(this, '请选择需要操作的数据', 'warning')
+      //       return
+      //     }
+      //     this.dialogFormVisible = true
+      //   }
+      // },
       selectData (val) {
         this.chooseArray = val
       },
@@ -237,20 +247,20 @@
           this.loading = false
         }
       },
-      async cstmCallCreate (paramsObj) {
-        try{
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall/batchCreate', params: paramsObj})
-          if (data.returnCode === 0) {
-            this.msgShow(this, '添加成功', 'success')
-            this.loadData()
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
-        }
-      },
+      // async cstmCallCreate (paramsObj) {
+      //   try{
+      //     let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall/batchCreate', params: paramsObj})
+      //     if (data.returnCode === 0) {
+      //       this.msgShow(this, '添加成功', 'success')
+      //       this.loadData()
+      //     } else {
+      //       this.msgShow(this, data.errMsg)
+      //     }
+      //   } catch (e) {
+      //     console.error(e)
+      //     this.msgShow(this)
+      //   }
+      // },
       async updateLock (params) {
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/updateLock', params: params})

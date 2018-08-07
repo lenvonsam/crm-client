@@ -57,13 +57,16 @@
             lbl: '姓名',
             type: 'link',
             prop: 'name',
+            width: '150px',
             linkUrl: '/setting/acctManager/detail'
           }, {
             lbl: '账号',
+            width: '150px',
             prop: 'loginAcct'
           }, {
             type: 'object',
             lbl: '机构',
+            minWidth: '250px',
             prop: 'fkDpt',
             factValue (row) {
               return row.fkOrg.name
@@ -71,21 +74,28 @@
           }, {
             type: 'object',
             lbl: '部门',
+            width: '200px',
             prop: 'fkDpt',
             factValue (row) {
               return row.name
             }
           }, {
             lbl: '职位',
+            width: '200px',
             prop: 'position'
           }, {
             lbl: '手机号',
+            width: '200px',
             prop: 'phone'
           }, {
             lbl: '状态',
+            width: '100px',
+            align: 'center',
             prop: 'status'
           }, {
             type: 'action',
+            width: '100px',
+            fixed: 'right',
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'

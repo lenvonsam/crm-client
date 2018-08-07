@@ -8,7 +8,8 @@
     .mt-15
       .text-red.ft-15 *橙色代表快流失客户，绿色代表建议沟通客户，白色为正常客户
     .mt-5
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", @tableRowLock="rowLock")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", @tableRowLock="rowLock", @tableRowMap = "rowMap")
+    baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
 <script>
@@ -17,13 +18,15 @@
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
   import { mapState } from 'vuex'
+  import baiduMap from '@/components/BaiduMap.vue'
   export default {
     layout: 'main',
     components: {
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup
+      buttonGroup,
+      baiduMap
     },
     data () {
       return {
@@ -84,6 +87,9 @@
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'
+            }, {
+              lbl: '地图',
+              type: 'map'
             }]
           }]
         },
@@ -94,7 +100,14 @@
           pageSize: this.pageSize,
           mark: '2'
         },
-        loading: true
+        loading: true,
+        dialogMap: false,
+        baiduMapData: {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '中国',
+          keyWord: ''
+        }
       }
     },
     computed: {
@@ -120,6 +133,9 @@
       })
     },
     methods: {
+      baiduMapCb() {
+        this.dialogMap = false
+      },
       searchForm (paramsObj) {
         this.loading = true
         this.currentPage = 1
@@ -166,6 +182,17 @@
         if (this.updateLock(paramsObj)) {
           obj.lockStatus = (obj.lockStatus === 0) ? 1 : 0
         }
+      },
+      rowMap (obj) {
+        // this.baiduMapData.keyWord = obj.compName
+        this.baiduMapData = {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '',
+          keyWord: obj.compName
+        }
+        console.log(obj.compName)
+        this.dialogMap = true
       },
       async loadData () {
         this.queryObject.uid = this.currentUser.id
@@ -216,3 +243,11 @@
     }
   }
 </script>
+<style>
+  .baidu-map{
+    width: 100%;
+    height: 550px;
+  }
+  .bm-serch{
+  }
+</style>

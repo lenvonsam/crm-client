@@ -4,12 +4,12 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="客户类型：")
-          el-radio-group(v-model="form.customerType")
+          el-radio-group(v-model="form.customerType", :disabled="true")
             el-radio(label= 1) 公司客户
             el-radio(label= 2) 个人客户
       el-col(:span="12")
         el-form-item(label="状态：")
-          el-radio-group(v-model="form.status")
+          el-radio-group(v-model="form.status", :disabled="true")
             el-radio(label= 1) 启用
             el-radio(label= 0) 停用
     el-row.pr-10
@@ -65,23 +65,21 @@ div
 
       el-col(:span="12")
         el-form-item(label="业务员：", prop="fkAcctName")
-          //- el-select.full-width(v-model="form.fkAcctId" filterable placeholder="请选择业务员")
-          //-   el-option(v-for="item in form.fkAcctIdVal",:key="item.id", :label="item.name", :value="item.id")
           el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate")
             el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="工商证照编码：", prop="busiLicenseCode")
+        el-form-item(label="工商证照编码：")
           el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable)
       el-col(:span="10")
         .row
           .col
-            el-form-item(label="注册资本：", prop="registerCapital")
+            el-form-item(label="注册资本：")
               el-input-number.full-width(v-model="form.registerCapital", :precision="1", :controls="false")
           .col.flex-10.mt-10.ml-5 万
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="法人代表：", prop="legalRept")
+        el-form-item(label="法人代表：")
           el-input(v-model="form.legalRept", placeholder="请输入法人代表", clearable)
       el-col(:span="12")
         el-form-item(label="公司logo：")
@@ -91,33 +89,38 @@ div
               i.pl-5.el-icon-circle-check
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="公司地址：", prop="compAddr")
-          el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
+        el-form-item(label="公司地址：")
+          //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
+          .row
+            .col
+              el-cascader.full-width(v-model="form.compAddrArr", clearable, placeholder="请选择公司地址", separator=" ", :options="addr", filterable, change-on-select)
+            .col
+              el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
       el-col(:span="12")
-        el-form-item(label="传真号码：", prop="faxNum")
+        el-form-item(label="传真号码：")
           el-input(v-model="form.faxNum", placeholder="请输入传真号码", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="公司规模：", prop="compSize")
+        el-form-item(label="公司规模：")
           el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模")
             el-option(v-for="item in compSizeOpts", :key="item.value", :label="item.label", :value="item.value")
       el-col(:span="12")
-        el-form-item(label="公司类型：", prop="compType")
+        el-form-item(label="公司类型：")
           el-select.full-width(v-model="form.compType", placeholder="请选择公司类型")
             el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="地区：", prop="region")
+        el-form-item(label="地区：")
           el-input(v-model="form.region", placeholder="请输入地区", clearable)
       el-col(:span="12")
         el-form-item(label="成立日期：")
           el-date-picker.full-width(v-model="form.fkSetUpDate", type="date", placeholder="选择日期", value-format="yyyy-MM-dd", format="yyyy-MM-dd")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="实际控制人：", prop="compAddr")
+        el-form-item(label="实际控制人：")
           el-input(v-model="form.factController", placeholder="请输入实际控制人", clearable)
       el-col(:span="12")
-        el-form-item(label="实际控制人身份证：", prop="factControllerIdno")
+        el-form-item(label="实际控制人身份证：")
           el-input(v-model="form.factControllerIdno", placeholder="请输入实际控制人身份证", clearable)
     el-row.pr-10
       el-col(:span="12")
@@ -128,7 +131,7 @@ div
           el-input(v-model="form.phone", placeholder="请输入联系电话", clearable)
     el-row.pr-10
       el-col(:span="6")
-        el-form-item(label="性别：", prop="")
+        el-form-item(label="性别：")
           el-select.full-width(v-model="form.sex", placeholder="请选择性别")
             el-option(v-for="item in sexOpts", :key="item.value", :label="item.label", :value="item.value")
       el-col(:span="6")
@@ -143,46 +146,52 @@ div
           el-input(v-model="form.nativePlace", placeholder="请输入籍贯", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="微信：", prop="wxNo")
+        el-form-item(label="微信：")
           el-input(v-model="form.wxNo", placeholder="请输入微信号", clearable)
       el-col(:span="12")
         el-form-item(label="QQ：")
           el-input(v-model="form.qqNo", placeholder="请输入QQ", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="新浪微博：", prop="wbName")
+        el-form-item(label="新浪微博：")
           el-input(v-model="form.wbName", placeholder="请输入新浪微博昵称", clearable)
       el-col(:span="12")
         el-form-item(label="其他联系方式：")
           el-input(v-model="form.otherLinkWay", placeholder="请输入其他联系方式", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="税号：", prop="tfn")
+        el-form-item(label="税号：")
           el-input(v-model="form.tfn", placeholder="请输入税号", clearable)
       el-col(:span="12")
-        el-form-item(label="开户名称：", prop="openAcctName")
+        el-form-item(label="开户名称：")
           el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="开户银行：", prop="openBank")
+        el-form-item(label="开户银行：")
           el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
       el-col(:span="12")
-        el-form-item(label="开户账号：", prop="openAcct")
+        el-form-item(label="开户账号：")
           el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
     el-row.pr-10
       el-col(:span="24")
-        el-form-item(label="开票地址：", prop="billAddr")
-          el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
+        el-form-item(label="开票地址：")
+          //- el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
+          //- el-cascader.full-width(v-model="form.billAddr", placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
+          .row
+            .col
+              el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
+            .col
+              el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="所处行业：", prop="industry")
+        el-form-item(label="所处行业：")
           el-input(v-model="form.industry", placeholder="请输入所处行业", clearable)
       el-col(:span="12")
         el-form-item(label="经营范围：")
           el-input(v-model="form.busiScope", placeholder="请输入经营范围", clearable)
     el-row.pr-10
       el-col(:span="6")
-        el-form-item(label="采购周期：", prop="")
+        el-form-item(label="采购周期：")
           el-select.full-width(v-model="form.purchaseCycle", placeholder="请选择采购周期")
             el-option(v-for="item in purchaseCycleOpts", :key="item.value", :label="item.label", :value="item.value")
       el-col(:span="5")
@@ -203,7 +212,7 @@ div
       el-col(:span="11")
         .row
           .col
-            el-form-item(label="年销售额：", prop="annualSales")
+            el-form-item(label="年销售额：")
               el-input-number.full-width(v-model="form.annualSales", :precision="1", placeholder="请输入所处行业", clearable, :controls="false")
           .col.flex-10.mt-10.ml-5 万
       el-col(:span="11")
@@ -215,25 +224,25 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="采购物资品类：")
-          el-select.full-width(v-model="form.fkPurchaseGoods", multiple, filterable, allow-create, default-first-option, placeholder="请选择采购周期")
+          el-select.full-width(v-model="form.fkPurchaseGoods", multiple, filterable, default-first-option, placeholder="请选择采购周期")
             el-option(v-for="item in form.fkPurchaseGoodsVal", :key="item.id", :label="item.name", :value="item.name")
       el-col(:span="12")
         el-form-item(label="采购用途：")
-          el-select.full-width(v-model="form.fkPurchaseUse", multiple, filterable, allow-create, default-first-option, placeholder="请输入采购用途")
+          el-select.full-width(v-model="form.fkPurchaseUse", multiple, filterable, default-first-option, placeholder="请输入采购用途")
             el-option(v-for="item in form.fkPurchaseUseVal", :key="item.id", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="24")
         el-form-item(label="希望我们增加提供采购的物资品类（可详细填写）:",  label-width="350px")
-          el-select.full-width(v-model="form.fkHopeAddGoods", multiple, filterable, allow-create, default-first-option, placeholder="请输入采购用途")
+          el-select.full-width(v-model="form.fkHopeAddGoods", multiple, filterable, default-first-option, placeholder="请输入采购用途")
             el-option(v-for="item in form.fkHopeAddGoodsVal", :key="item.id", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="经营物资品类：")
-          el-select.full-width(v-model="form.fkDealGoods", multiple, filterable, allow-create, default-first-option, placeholder="请选择经营物资品类")
+          el-select.full-width(v-model="form.fkDealGoods", multiple, filterable, default-first-option, placeholder="请选择经营物资品类")
             el-option(v-for="item in form.fkDealGoodsVal", :key="item.id", :label="item.name", :value="item.name")
       el-col(:span="12")
         el-form-item(label="经营用途：")
-          el-select.full-width(v-model="form.fkDealPurposeUse", multiple, filterable, allow-create, default-first-option, placeholder="请选择经营用途")
+          el-select.full-width(v-model="form.fkDealPurposeUse", multiple, filterable, default-first-option, placeholder="请选择经营用途")
             el-option(v-for="item in form.fkDealPurposeUseVal", :key="item.id", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="8")
@@ -257,7 +266,7 @@ div
     el-row.pr-10
       el-col(:span="24")
         el-form-item(label="加工需求：")
-          el-select.full-width(v-model="form.fkProcessingRequirements", multiple, filterable, allow-create, default-first-option, placeholder="请选择加工需求")
+          el-select.full-width(v-model="form.fkProcessingRequirements", multiple, filterable, default-first-option, placeholder="请选择加工需求")
             el-option(v-for="item in form.fkProcessingRequirementsVal", :key="item.id", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="24")
@@ -309,6 +318,7 @@ import breadcrumb from '@/components/Breadcrumb.vue'
 import singlePicUpload from '@/components/SinglePicUpload.vue'
 import simpleUpload from '@/components/SimpleUpload.vue'
 import zoomImg from '@/components/ZoomImg.vue'
+import areaJson from '@/components/AreaJson.js'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
@@ -331,7 +341,7 @@ export default {
   data () {
     return {
       form: {
-        compName: '', compNameAb: null,  memberCode: null, customerSource: '型云移动端注册', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddr: null, faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, openAcctName: null, openBank: null, openAcct: null, billAddr: null, industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(),
+        compName: '', compNameAb: null,  memberCode: null, customerSource: '型云移动端注册', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date()
       },
       rules: {
         compName: [
@@ -343,19 +353,11 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
-        busiLicenseCode: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        compSize: [{ required: true, message: '不能为空', trigger: 'change' }],
-        compType: [{ required: true, message: '不能为空', trigger: 'change' }],
-        region: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        tfn: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        openAcctName: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        openBank: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        openAcct: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        billAddr: [{ required: true, message: '不能为空', trigger: 'blur' }]
+        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}]
       },
       timeout: null,
-      fileObj: {}
+      fileObj: {},
+      addr: areaJson
     }
   },
   computed: {
@@ -382,6 +384,9 @@ export default {
           if (valid) {
             console.log(valid)
             this.customDetailCreate()
+          } else {
+            document.body.scrollTop = 150
+            this.msgShow(this, '请规范输入必填项')
           }
         })
       } else {
@@ -390,6 +395,15 @@ export default {
     },
     async customDetailCreate () {
       try {
+        // this.form.compAddrArr.push(this.form.compAddrDetail)
+        // this.form.billAddr.push(this.form.billAddrDetail)
+
+        this.form.compProv = this.form.compAddrArr[0]
+        this.form.compCity = this.form.compAddrArr[1]
+        this.form.compArea = this.form.compAddrArr[2]
+        this.form.billProv = this.form.billAddrArr[0]
+        this.form.billCity = this.form.billAddrArr[1]
+        this.form.billArea = this.form.billAddrArr[2]
         let url = 'customerManage/customer/create'
         if (this.$route.query.type === 'edit') {
           url = 'customerManage/customer/update'
@@ -409,6 +423,9 @@ export default {
           delete this.form.dealPurpose
           this.form.cstmId = this.$route.query.id
         }
+        delete this.form.compAddrArr
+        delete this.form.billAddrArr
+        // delete this.form.billAddrDetail
         delete this.form.createAt
         delete this.form.fkRelationVal
         delete this.form.fkCustomPropertyIdVal
@@ -537,6 +554,7 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/queryCombo', params: params})
           if (data.returnCode === 0) {
             me.form.fkAcctIdVal = data.list
+
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -546,8 +564,6 @@ export default {
       }
     },
     fileLogo (file) {
-      console.log('-----------')
-      console.log(file)
       this.fileObj = file
     }
   },
@@ -560,6 +576,28 @@ export default {
     this.purposeCreate()
     this.processReqCreate()
     if (this.originObj) this.form = this.originObj
+    if (this.$route.query.type == 'new') {
+      this.form.fkDptId = this.currentUser.fkDpt.id
+      this.form.fkAcctId = this.currentUser.id
+      this.form.fkAcctName = this.currentUser.name
+    }
+    // this.addr.map((item) => {
+    //   item.value = item.label
+    //   if(item.hasOwnProperty('children')){
+    //     let city = item.children
+    //     for(let i = 0; i < city.length; i++){
+    //       city[i].value = city[i].label
+    //       if(city[i].hasOwnProperty('children')){
+    //         let county = city[i].children
+    //         for(let n = 0; n < county.length; n++){
+    //           county[n].value = county[n].label
+    //         }
+    //       }
+    //     }
+    //   }
+    // })
+    // JSON.parse(JSON.stringify(this.tableValue.tableData))
+    // console.log(JSON.stringify(this.addr))
   },
   watch: {
     originObj (newVal, oldVal) {
@@ -590,6 +628,15 @@ export default {
       this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
+      this.form.compAddrArr.push(newVal.compProv)
+      this.form.compAddrArr.push(newVal.compCity)
+      this.form.compAddrArr.push(newVal.compArea)
+      this.form.compAddr = newVal.compAddr
+      this.form.billAddrArr.push(newVal.billProv)
+      this.form.billAddrArr.push(newVal.billCity)
+      this.form.billAddrArr.push(newVal.billArea)
+      this.form.billAddr = newVal.billAddr
+      console.log(this.form.compAddr)
       if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
       this.$forceUpdate()
       this.loadingS().close()

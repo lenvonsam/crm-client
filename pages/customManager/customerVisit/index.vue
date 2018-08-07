@@ -15,19 +15,29 @@ import breadcrumb from '@/components/Breadcrumb.vue'
 import visiting from '@/pages/customManager/customerVisit/Visiting.vue'
 import visitingHistory from '@/pages/customManager/customerVisit/VisitingHistory.vue'
 import dayVisit from '@/pages/customManager/customerVisit/DayVisit.vue'
+import buttonGroup from '@/components/ButtonGroup.vue'
+import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
     breadcrumb,
     visiting,
     visitingHistory,
-    dayVisit
+    dayVisit,
+    buttonGroup
   },
   data () {
     return {
       breadItems: ['客户管理', '客户拜访'],
+      btnGroups: [{lbl: '增加客户拜访', type: 'add'}],
       tabName: '1'
     }
+  },
+  computed: {
+    ...mapState({
+      pageSize: state => state.pageSize,
+      currentUser: state => state.user.currentUser
+    })
   },
   methods: {
     handleClick(tab, event) {

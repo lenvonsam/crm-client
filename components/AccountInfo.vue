@@ -123,7 +123,12 @@ export default{
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/bankInfo/queryCombo', params: {cstmId: this.$route.query.id}})
           if (data.returnCode === 0) {
-            this.tableValue.tableData = data.list
+            var arr = []
+            data.list.map(itm => {
+              itm.edit = false
+              arr.push(itm)
+            })
+            this.tableValue.tableData = arr
             this.isEdit = false
           } else {
             this.msgShow(this, data.errMsg)

@@ -195,10 +195,12 @@
           }, {
             lbl: 'qq',
             prop: 'qqNo',
+            align: 'center',
             width: '150px'
           }, {
             lbl: '微信',
             prop: 'wxNo',
+            align: 'center',
             width: '150px'
           }, {
             lbl: '添加时间',

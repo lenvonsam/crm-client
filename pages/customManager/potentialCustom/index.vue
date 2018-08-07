@@ -6,15 +6,8 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowDelete="rowDel", @tableRowEdit="rowEdit")
-    el-dialog(title="删除", :visible.sync="dialogFormVisible")
-      .row.flex-center
-        .col.flex-80 删除理由：
-        .col
-          el-input.full-width(v-model="reason", auto-complete="off")
-      .dialog-footer(slot="footer")
-        el-button(@click="delSubmit('cancel')") 取消
-        el-button(type="primary", @click="delSubmit('ok')") 确定
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap")
+    baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
 <script>
@@ -23,13 +16,15 @@
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
   import { mapState } from 'vuex'
+  import baiduMap from '@/components/BaiduMap.vue'
   export default {
     layout: 'main',
     components: {
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup
+      buttonGroup,
+      baiduMap
     },
     data() {
       return {
@@ -48,15 +43,12 @@
           lbl: '转化为正式客户',
           type: 'conversion'
         }, {
-          lbl: '删除记录',
-          type: 'delRec'
-        }, {
           lbl: '转化记录',
           type: 'conversionRec'
         }],
         tableValue: {
           tableData: [],
-          hasCbx: true,
+          hasCbx: false,
           rowClassName: false,
           tableHead: [{
             lbl: '公司名称',
@@ -71,7 +63,7 @@
           }, {
             lbl: '联系方式',
             prop: 'phone',
-            width: '200px'
+            width: '120px'
           }, {
             lbl: '添加日期',
             prop: 'createAt',
@@ -91,14 +83,13 @@
           }, {
             type: 'action',
             width: '100px',
-            // minWidth: '100px',
             fixed: 'right',
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'
             }, {
-              lbl: '删除',
-              type: 'delete'
+              lbl: '地图',
+              type: 'map'
             }]
           }]
         },
@@ -111,10 +102,17 @@
           {label: '业务员', model: 'acctName', placeholder: '请选择业务员', val: ''}]
         ],
         reason: '',
-        dialogFormVisible: false,
+        // dialogFormVisible: false,
         rowDelObj: {},
         chooseArray: [],
-        loading: true
+        loading: true,
+        dialogMap: false,
+        baiduMapData: {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '中国',
+          keyWord: ''
+        }
       }
     },
     mounted () {
@@ -132,6 +130,20 @@
       })
     },
     methods: {
+      baiduMapCb() {
+        this.dialogMap = false
+      },
+      rowMap (obj) {
+        this.baiduMapData.keyWord = obj.compName
+        this.baiduMapData = {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 6,
+          location: '',
+          keyWord: obj.compName
+        }
+        // console.log(obj.compName)
+        this.dialogMap = true
+      },
       async loadData () {
         this.queryObject.uid = this.currentUser.id
         try {
@@ -171,6 +183,7 @@
         this.loadData()
       },
       selectData (val) {
+        console.log(val)
         this.chooseArray = val
       },
       groupBtnClick (type) {
@@ -184,23 +197,19 @@
           }
           this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
             let arr = []
-            this.chooseArray.map(item => {
-              arr.push(item.id)
-            })
-            let ids = arr.join(',')
             let paramsObj = {
-              ids: ids,
+              cstmId: this.chooseArray.id,
               uid: this.currentUser.id
             }
-            console.log(ids)
-            this.customerBatchChange(paramsObj)
+            // console.log(ids)
+            this.customerTransform(paramsObj)
           }, () => {
             console.log('cancel')
           })
         }
-        if(type == 'delRec'){
-          this.$router.push({path: '/customManager/potentialCustom/delRec'})
-        }
+        // if(type == 'delRec'){
+        //   this.$router.push({path: '/customManager/potentialCustom/delRec'})
+        // }
         if(type == 'conversionRec'){
           this.$router.push({path: '/customManager/potentialCustom/conversionRec'})
         }
@@ -211,16 +220,16 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      rowDel (obj) {
-        this.dialogFormVisible = true
-        this.rowDelObj = obj
-      },
-      delSubmit (flg) {
-        if (flg == 'ok') {
-          this.actionDelete()
-        }
-        this.dialogFormVisible = false
-      },
+      // rowDel (obj) {
+      //   this.dialogFormVisible = true
+      //   this.rowDelObj = obj
+      // },
+      // delSubmit (flg) {
+      //   if (flg == 'ok') {
+      //     this.actionDelete()
+      //   }
+      //   this.dialogFormVisible = false
+      // },
       async actionDelete () {
         try {
           let url = 'customerManage/customerDel/'
@@ -246,9 +255,9 @@
           this.msgShow(this)
         }
       },
-      async customerBatchChange (paramsObj) {
+      async customerTransform (paramsObj) {
         try{
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customerBatchChange', params: paramsObj})
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customerTransform', params: paramsObj})
           if (data.returnCode === 0) {
             this.msgShow(this, '转换成功', 'success')
             this.loadData()

@@ -112,22 +112,28 @@
           tableData: [],
           tableHead: [{
             lbl: '机构代码',
+            width: '100px',
             prop: 'id'
           }, {
             lbl: '机构全称',
+            minWidth: '250px',
             prop: 'name'
           }, {
             lbl: '机构简称',
+            width: '150px',
             prop: 'simpleName'
           }, {
             lbl: '机构状态',
             prop: 'status',
-            width: '80'
+            width: '80px',
+            align: 'center'
           }, {
             lbl: '机构备注',
+            minWidth: '150px',
             prop: 'remark'
           }, {
             type: 'action',
+            width: '150px',
             actionBtns: [{
               lbl: '查看',
               type: 'query'
@@ -172,17 +178,22 @@
         dptTableValue: {
           hasCbx: true,
           tableHead: [{
-            lbl: '部门代码',
+            lbl: '部门代码1',
+            width: '100px',
             prop: 'id'
           }, {
             lbl: '部门名称',
+            minWidth: '150px',
             prop: 'name'
           }, {
             lbl: '状态',
+            width: '100px',
+            align: 'center',
             prop: 'status'
           }, {
             type: 'object',
             lbl: '所属机构',
+            minWidth: '250px',
             prop: 'fkOrg',
             factValue (row) {
               return row.name
@@ -190,15 +201,18 @@
           }, {
             type: 'object',
             lbl: '机构简称',
+            width: '150px',
             prop: 'fkOrg',
             factValue (row) {
               return row.simpleName
             }
           }, {
             lbl: '部门备注',
+            minWidth: '100px',
             prop: 'remark'
           }, {
             type: 'action',
+            width: '150px',
             actionBtns: [{
               lbl: '查看',
               type: 'query'

@@ -1,25 +1,34 @@
 <template lang="pug">
 .content
-  search-form(:searchFormItems="searchFormItems", @search="searchForm")
+  .mt-15
+    button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
+  //- .mt-15
+  //-   search-form(:searchFormItems="searchFormItems", @search="searchForm")
   .mt-15.ft-13.text-red (*拜访中、已拜访客户不能重复拜访，需等待本次拜访完成后，才能再次拜访）
   .mt-15
     basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowSetVisit="tableRowStatus")
+  add-custom-visit(:cb="addCustomVisitBack", :uid="currentUser.id", :dialogShow="dialogShow")
 </template>
 <script>
-import searchForm from '@/components/SearchForm.vue'
+// import searchForm from '@/components/SearchForm.vue'
 import basicTable from '@/components/BasicTable.vue'
+import buttonGroup from '@/components/ButtonGroup.vue'
+import addCustomVisit from '@/components/AddCustomVisit'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
     basicTable,
-    searchForm
+    // searchForm,
+    buttonGroup,
+    addCustomVisit
   },
   data () {
     return {
-      searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
-          {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
-          {label: '计划开单日期', model:'planAt', type: 'timeLimit', val: ''}]],
+      btnGroups: [{lbl: '增加客户拜访', type: 'add'}],
+      // searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
+      //     {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
+      //     {label: '计划开单日期', model:'planAt', type: 'timeLimit', val: ''}]],
       tableValue: {
         tableData: [],
         hasCbx: false,
@@ -76,7 +85,7 @@ export default {
           prop: 'planVisitTime'
         }, {
           lbl: '计划开单日期',
-          width: '150px',
+          width: '120px',
           prop: 'planDate'
         }, {
           lbl: '状态',
@@ -93,10 +102,12 @@ export default {
           actionBtns: [{
             lbl: '设为已拜访',
             type: 'setVisit'
-          }, {
-            lbl: '设为失败',
-            type: 'setVisit'
-          }]
+          }
+          // , {
+          //   lbl: '设为失败',
+          //   type: 'setVisit'
+          // }
+          ]
         }]
       },
       currentPage: 1,
@@ -106,7 +117,8 @@ export default {
         pageSize: this.pageSize,
         mark: '1'
       },
-      loading: true
+      loading: true,
+      dialogShow: false
     }
   },
   computed: {
@@ -123,36 +135,42 @@ export default {
       startTime: this.date2Str(new Date()),
       endTime: this.date2Str(new Date())
     }
-    // console.log(this.date2Str(new Date()))
     this.loadData()
   },
   methods: {
-    searchForm (paramsObj) {
-      this.loading = true
-      this.currentPage = 1
-      this.queryObject.currentPage = this.currentPage - 1
-      this.queryObject.mark = '2'
-      Object.keys(paramsObj).map(key => {
-        if(key == 'planAt'){
-          if (paramsObj.planAt !== null && paramsObj.planAt !== undefined) {
-            this.queryObject.startTime = paramsObj.planAt[0]
-            this.queryObject.endTime = paramsObj.planAt[1]
-          } else {
-            delete this.queryObject.startTime
-            delete this.queryObject.endTime
-          }
-        } else if (paramsObj[key].length > 0) {
-          this.queryObject[key] = paramsObj[key].trim()
-        } else {
-          delete this.queryObject[key]
-        }
-      })
-      this.loadData()
+    groupBtnClick() {
+      this.dialogShow = true
     },
+    addCustomVisitBack() {
+      this.loadData()
+      this.dialogShow = false
+    },
+    // searchForm (paramsObj) {
+    //   this.loading = true
+    //   this.currentPage = 1
+    //   this.queryObject.currentPage = this.currentPage - 1
+    //   this.queryObject.mark = '2'
+    //   Object.keys(paramsObj).map(key => {
+    //     if(key == 'planAt'){
+    //       if (paramsObj.planAt !== null && paramsObj.planAt !== undefined) {
+    //         this.queryObject.startTime = paramsObj.planAt[0]
+    //         this.queryObject.endTime = paramsObj.planAt[1]
+    //       } else {
+    //         delete this.queryObject.startTime
+    //         delete this.queryObject.endTime
+    //       }
+    //     } else if (paramsObj[key].length > 0) {
+    //       this.queryObject[key] = paramsObj[key].trim()
+    //     } else {
+    //       delete this.queryObject[key]
+    //     }
+    //   })
+    //   this.loadData()
+    // },
     tableRowStatus (row) {
       let cstmCall = {
         id: row.id,
-        status: (row.status == 0)? 1 : 3
+        status: 2
       }
       console.log(cstmCall)
       this.cstmCallUpdateStatus(cstmCall)

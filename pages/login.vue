@@ -2,6 +2,19 @@
 .login-container
   .login-box
     .logo
+    .text-content
+      .one
+        .txt
+          span 客户
+        .txt
+          span 商机
+        .txt
+          span 销售
+      .two 尽在型云CRM
+      .three
+        span 推动业务进展
+        span 提高工作效率
+        span 管理大数据
     .content
       h1 型云CRM管理系统
       .box
@@ -88,15 +101,15 @@
         }
       },
       async visitDialogData (uid) {
-        let params = {
-          currentPage: 0,
-          pageSize: 6,
-          mark: '1',
-          uid: uid,
-          startTime: this.date2Str(new Date()),
-          endTime: this.date2Str(new Date())
-        }
         try {
+          let params = {
+            currentPage: 0,
+            pageSize: 3,
+            mark: '1',
+            uid: uid
+            // startTime: this.date2Str(new Date()),
+            // endTime: this.date2Str(new Date())
+          }
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall', params: params})
           if (data.returnCode === 0) {
             if(data.list.length>0){
@@ -104,7 +117,7 @@
               data.list.map(itm => {
                 itm[0].planVisitTime = this.datetime2Str(new Date(itm[0].planVisitTime))
                 itm[0].compName = itm[0].customer.compName
-                temp += '<div style="cursor: pointer;">'+ itm[0].compName + '  ' + itm[0].planVisitTime +'</div>'
+                temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>' + itm[0].planVisitTime + '</div>'+ itm[0].compName + '</div>'
               })
               this.visitNotify(temp)
             }
@@ -140,7 +153,10 @@
   right 0
   margin 0 auto
   padding 0 auto
-  background-image url('http://pav6lmvyn.bkt.clouddn.com/login_bg.jpg')
+  background linear-gradient(to bottom, #163069, #082940)
+  background -prefix-linear-zgradient(top, #163069, #082940)
+  // background #173068
+  // background-image url('http://pav6lmvyn.bkt.clouddn.com/login_bg.jpg')
   background-size cover
   background-position center
   overflow hidden
@@ -149,18 +165,56 @@
     overflow hidden
     margin 0 auto
     position relative
-    width 1200px
+    width 1400px
     height 600px
     top calc((100% - 600px) / 2)
     align-items center
     .logo
-      flex 0 0 600px
+      flex 0 0 450px
       height 600px
-      background-image url('http://pav6lmvyn.bkt.clouddn.com/login_logo.png?imageView2/2/w/600/h/600')
-      background-size cover
+      background-image url('http://pav6lmvyn.bkt.clouddn.com/login_logo_new.png?imageView2/2/w/450/h/465')
+      background-repeat no-repeat
+      // background-size cover
       background-position center
+    .text-content
+      flex 0 0 500px
+      color #fff
+      font-family 'Microsoft Yahei'
+      // padding-left 15px
+      .one
+        display flex
+        line-height 36px
+        font-size 36px
+        text-align center
+        .txt
+          flex 1
+          span
+            display inline-block
+            position relative
+            &:before
+              position absolute
+              content ''
+              border-radius 50%
+              width 8px
+              height 8px
+              background #fff
+              left -18px
+              top 14px
+
+      .two
+        padding-top 30px
+        font-size 54px
+        text-align center
+      .three
+        padding-top 30px
+        font-size 20px
+        text-align center
+        span
+          margin-right 15px
+          &:last-child
+            margin-right 0px
     .content
-      flex 0 0 600px
+      flex 0 0 450px
       padding-left 15px
       text-align center
       color #fff

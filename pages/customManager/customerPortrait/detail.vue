@@ -24,15 +24,7 @@
                 el-form.pt-15(:inline="true", :model="goodsForm" ref="goodsForm" label-width="90px")
                   el-form-item(label="物资品类：", prop="goodsType")
                     el-select(v-model="goodsForm.goodsType", size="small")
-                      el-option(label="全部品名", value="全部")
-                      el-option(label="H型钢", value="H型钢")
-                      el-option(label="槽钢", value="槽钢")
-                      el-option(label="角钢", value="角钢")
-                      el-option(label="工字钢", value="工字钢")
-                      el-option(label="圆钢", value="圆钢")
-                      el-option(label="扁钢", value="扁钢")
-                      el-option(label="开平板", value="开平板")
-                      el-option(label="其他", value="其他")
+                      el-option(v-for="(gtype, idx) in goodsTypeOpts", :key="idx", :value="gtype", :label="gtype")
                   el-form-item(label="日期：", prop="date")
                     el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="goodsForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")
                   el-form-item
@@ -81,6 +73,7 @@ export default {
   },
   data () {
     return {
+      goodsTypeOpts: [],
       breadItems: ['客户管理', '客户画像', '详情'],
       tabName: '1',
       btnGroups: [{lbl: '返回', type: 'back'}],
@@ -173,8 +166,25 @@ export default {
       behaviorQuery: {}
     }
   },
+  beforeMount () {
+    this.loadGoodsType()
+  },
   methods: {
-    backPage(type){},
+    async loadGoodsType () {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/salesType/' + this.$route.query.id, params: {}})
+        console.log(data)
+        if (data.returnCode === 0 && data.goodsType.length > 0) {
+          this.goodsTypeOpts = data.goodsType
+          this.goodsTypeOpts.unshift('全部')
+        } else {
+          this.goodsTypeOpts = ['全部']
+        }
+      } catch (e) {
+        console.error(e)
+        this.goodsTypeOpts = ['全部']
+      }
+    },
     dealSearch (params) {
       this.queryGoodsSalesList(params.date, 'dealSearch')
     },

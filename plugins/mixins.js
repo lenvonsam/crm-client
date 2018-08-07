@@ -101,6 +101,9 @@ const minixs = {
         return ''
       }
     },
+    getRandomColor () {
+      return '#'+(Math.random()*0xffffff<<0).toString(16)
+    },
     apiGet: httpUtil.httpGet,
     apiPost: httpUtil.httpPost,
     apiStreamPost: httpUtil.httpStreamPost,

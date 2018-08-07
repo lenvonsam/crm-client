@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  el-table(:data="currentData", :row-class-name="tableRowClassName",  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler")
+  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler")
     el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
@@ -122,8 +122,8 @@ div
           if (type === 'edit' && currentAuth.hasUpdate === 0) result = false
           if (type === 'delete' && currentAuth.hasDelete === 0) result = false
         }
-        if(type === 'setVisit'){
-          condition = !(scope.row.status == 0 && lbl == '设为失败') && !(scope.row.status == 1 && lbl == '设为已拜访')
+        if(type === 'mapVisit'){
+          condition = (scope.row.status == 2 && lbl == '地图')
         } else {
           condition = !((scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && lbl == '删除')
         }
@@ -135,6 +135,9 @@ div
       },
       handleSelectionChange (rows) {
         this.$emit('chooseData', rows)
+      },
+      handleCurrentChange (row) {
+        this.$emit('chooseData', row)
       },
       pgCurrentChange (val) {
         // console.log(val)

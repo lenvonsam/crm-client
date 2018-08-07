@@ -4,6 +4,7 @@ export default {
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
   qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
+  bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   globalSuccessMsg: '',
   globalErrorMsg: '',
@@ -263,7 +264,16 @@ export default {
     label: '是'
   }],
   currentMenus: [],
-  allMenus: [{
+  allMenus: [
+  // {
+  //   title: '首页',
+  //   iconClass: 'el-icon-menu',
+  //   subItems: [{
+  //     title: '基本情况',
+  //     url: '/dashboard'
+  //   }]
+  // },
+  {
     title: '客户管理',
     iconClass: 'iconfont icon-custom',
     subItems: [{

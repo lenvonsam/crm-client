@@ -95,15 +95,6 @@ export default{
       this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
       console.log(this.tableValue.tableData[idx].edit)
     },
-    rowEdit (obj) {
-      if(this.isEdit){
-        this.msgShow(this, '请先完成操作')
-        return
-      }
-      this.tableHandler(obj)
-      this.linkDateFilter()
-      this.isEdit = true
-    },
     delSubmit (flg) {
       if(flg == 'ok'){
         if(this.reason.trim() == ''){
@@ -112,18 +103,32 @@ export default{
         }
         this.linkerDelete()
       }
-      this.isEdit = false
       this.dialogDel = false
     },
     rowDelete (obj) {
       this.dialogDel = true
       this.rowObj = obj
     },
+    rowEdit (obj) {
+      console.log(obj)
+      if(this.isEdit){
+        this.msgShow(this, '请先完成操作')
+        return
+      }
+      this.tableHandler(obj)
+      this.linkDateFilter()
+      this.isEdit = true
+    },
     async loadData () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/linker/queryCombo', params: {cstmId: this.$route.query.id}})
           if (data.returnCode === 0) {
-            this.tableValue.tableData = data.list
+            var arr = []
+            data.list.map(itm => {
+              itm.edit = false
+              arr.push(itm)
+            })
+            this.tableValue.tableData = arr
           } else {
             this.msgShow(this, data.errMsg)
           }

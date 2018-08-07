@@ -47,47 +47,51 @@ export default {
         [{lbl: '业务关系', key: 'busiRelation', type:'object', factValue: (row) => {return row.map(itm => itm.name).join(',')}}, {lbl: '客户性质', key: 'fkCustomProperty', type:'object', factValue: (row) => {return row.name}}],
         [{lbl: '业务部门', key: 'fkDpt', type:'object', factValue: (row) => {return row.name}}, {lbl: '业务员', key: 'fkAcct', type:'object', factValue: (row) => {return row.name}}],
         [{lbl: '工商证照编码', key: 'busiLicenseCode'}, {lbl: '注册资本', key: 'registerCapital'}],
-        [{lbl: '法人代表', key: 'legalRept'}, {lbl: '公司地址', key: 'compAddr'}],
+        [{lbl: '法人代表', key: 'legalRept'}, {lbl: '公司地址', type: 'self', factValue: (row) => {
+          return `${row.compProv == null ? '' : row.compProv} ${row.compCity == null ? '' : row.compCity} ${row.compArea == null ? '' : row.compArea} ${row.compAddr == null ? '' : row.compAddr}`
+        }}],
         [{lbl: '传真号码', key: 'faxNum'}, {lbl: '公司规模', key: 'compSize'}],
         [{lbl: '公司类型', key: 'compType'}, {lbl: '地区', key: 'region'}],
         [{lbl: '成立日期', key: 'setUpDateStr'}, {lbl: '实际控制人', key: 'factController'}],
         [{lbl: '实际控制人身份证', key: 'factControllerIdno'}, {lbl: '主联系人', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].name 
+          return row[idx].name
         }}],
         [{lbl: '联系电话', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].phone 
+          return row[idx].phone
         }}, {lbl: '性别', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].sex == 1 ? '男' : '女' 
+          return row[idx].sex == 1 ? '男' : '女'
         }}],
         [{lbl: '年龄', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].age 
+          return row[idx].age
         }}, {lbl: '学历', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].edu 
+          return row[idx].edu
         }}],
         [{lbl: '籍贯', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].nativePlace 
+          return row[idx].nativePlace
         }}, {lbl: '微信', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].wxNo 
+          return row[idx].wxNo
         }}],
         [{lbl: 'QQ', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].qqNo 
+          return row[idx].qqNo
         }}, {lbl: '新浪微博', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].wbName 
+          return row[idx].wbName
         }}],
         [{lbl: '其他联系方式', key: 'linkers', type:'object', factValue: (row) => {
           let idx = row.findIndex(itm => itm.mainStatus === 1)
-          return row[idx].otherLinkWay 
+          return row[idx].otherLinkWay
         }}, {lbl: '税号', key: 'tfn'}],
-        [{lbl: '开户名称', key: 'openAcctName'}, {lbl: '开票地址', key: 'billAddr'}],
+        [{lbl: '开户名称', key: 'openAcctName'}, {lbl: '开票地址', type: 'self', factValue: (row) => {
+          return `${row.billProv == null ? '' : row.billProv} ${row.billCity == null ? '' : row.billCity} ${row.billArea == null ? '' : row.billArea} ${row.billAddr == null ? '' : row.billAddr}`
+        }}],
         [{lbl: '开户账号', key: 'openAcct'}, {lbl: '开户银行', key: 'openBank'}],
         [{lbl: '所处行业', key: 'industry'}, {lbl: '经营范围', key: 'busiScope'}],
         [{lbl: '采购周期', key: 'purchaseCycle'}, {lbl: '月采吨位', key: 'weightPerMonth', type: 'object', factValue: (row) => { return (row)? row + '吨' : ''}}],

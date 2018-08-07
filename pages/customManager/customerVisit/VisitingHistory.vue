@@ -4,7 +4,7 @@
   .mt-15
     search-form(:searchFormItems="searchFormItems", @search="searchForm")
   .mt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange")
+    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowMapVisit="RowMap")
   el-dialog(title="统计结果", :visible.sync="dialogTableVisible", width="500px", center)
     .barChartBox
       el-tag.ft-13.text-left 成功率：{{successRate}}%
@@ -12,19 +12,26 @@
         bar-chart(:data="barVal.barData", :options="barVal.barOptions")
     .mt-10.text-center
       el-button(type="primary", size="small", @click="onSubmit('ok')") 确认
+  el-dialog(title="地图", :visible.sync="dialogMap", width="900", @close="baiduMapCb")
+    baidu-map.baidu-map(:ak="bdMapAk", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="true")
+      bm-marker.baidu-map(:position="baiduMapData.center", :dragging="true", animation="BMAP_ANIMATION_BOUNCE")
 </template>
 <script>
 import buttonGroup from '@/components/ButtonGroup.vue'
 import searchForm from '@/components/SearchForm.vue'
 import basicTable from '@/components/BasicTable.vue'
 import barChart from '@/components/BarChart.js'
+import baiduMap from 'vue-baidu-map/components/map/Map.vue'
+import bmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
 import { mapState } from 'vuex'
 export default {
   components: {
     basicTable,
     searchForm,
     buttonGroup,
-    barChart
+    barChart,
+    baiduMap,
+    bmMarker
   },
   data () {
     return {
@@ -69,7 +76,7 @@ export default {
         }, {
           lbl: '流失日期',
           prop: 'customer',
-          width: '180px',
+          width: '160px',
           type: 'object',
           factValue (row) {
             return row.createAt
@@ -84,11 +91,11 @@ export default {
           }
         }, {
           lbl: '添加时间',
-          width: '150px',
+          width: '120px',
           prop: 'createAtDate2'
         }, {
           lbl: '计划拜访时间',
-          width: '150px',
+          width: '130px',
           prop: 'planVisitTimeDate2'
         }, {
           lbl: '结果',
@@ -98,6 +105,14 @@ export default {
           factValue(row){
             return (row==0) ? '未拜访' : (row==1) ? '已拜访' : (row==2) ? '拜访成功' : (row == 3) ? '拜访失败' : '拜访超时'
           }
+        }, {
+          type: 'action',
+          width: '60',
+          fixed: 'right',
+          actionBtns: [{
+            lbl: '地图',
+            type: 'mapVisit'
+          }]
         }]
       },
       currentPage: 1,
@@ -110,13 +125,11 @@ export default {
       dialogTableVisible: false,
       barVal: {
         barData: {
-          labels: ["计划拜访", "实际拜访", "拜访成功", "未交易", "未拜访"],
+          labels: ["计划拜访", "拜访成功", "拜访失败"],
           datasets: [{
             data: [],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
               'rgba(75, 192, 192, 0.2)',
               'rgba(153, 102, 255, 0.2)'
             ],
@@ -139,13 +152,19 @@ export default {
         }
       },
       successRate: '',
-      loading: true
+      loading: true,
+      dialogMap: false,
+      baiduMapData: {
+        zoom: 12,
+        center: {lng: 31.47, lat: 119.58}
+      }
     }
   },
   computed: {
     ...mapState({
       pageSize: state => state.pageSize,
-      currentUser: state => state.user.currentUser
+      currentUser: state => state.user.currentUser,
+      bdMapAk: state => state.bdMapAk
     })
   },
   mounted () {
@@ -157,6 +176,16 @@ export default {
     this.loadData()
   },
   methods: {
+    baiduMapCb() {
+      this.dialogMap = false
+    },
+    RowMap() {
+      this.baiduMapData = {
+        zoom: 20,
+        center: {lng: 119.9995 , lat: 31.8177}
+      }
+      this.dialogMap = true
+    },
     searchForm (paramsObj) {
       this.loading = true
       this.currentPage = 1
@@ -220,7 +249,7 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmCall/' + this.currentUser.id})
         if (data.returnCode === 0) {
           this.barVal.barData.datasets[0].data = data.list[0]
-          this.successRate = (data.list[0][2] / data.list[0][0]).toFixed(3)
+          this.successRate = (data.list[0][1] / data.list[0][0]).toFixed(3)
           this.dialogTableVisible = true
         } else {
           this.msgShow(this, data.errMsg)
@@ -237,5 +266,9 @@ export default {
   .barChartBox{
     width:400px; 
     margin: 0 auto;
+  }
+  .baidu-map{
+    width: 100%;
+    height: 550px;
   }
 </style>

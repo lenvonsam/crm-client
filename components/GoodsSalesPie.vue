@@ -4,7 +4,7 @@
     .ft-16.border-bottom-line.pb-15 物资品类销量饼图
     .mt-20
       .row.flex.flex-center
-        .col.pr-20
+        .col
           el-tabs(tab-position="bottom", type="border-card", style="max-width: 620px", v-model="pieTab")
             el-tab-pane(label="全部", name="全部")
               pie-chart.cust-sales-pie(:data="pieVal.pieData", :options="pieVal.pieOptions", ref="pieAll")
@@ -12,7 +12,7 @@
               pie-chart.cust-sales-pie(:data="pieVal.pieData", :options="pieVal.pieOptions", ref="pieOnline")
             el-tab-pane(label="线下", name="线下")
               pie-chart.cust-sales-pie(:data="pieVal.pieData", :options="pieVal.pieOptions", ref="pieOffline")
-        .col.flex-150
+        .col.pr-20
           .row.flex-center.text-left
             .col.text-right.pr-8.flex-50 日期：
             .col
@@ -42,9 +42,9 @@ export default {
       pieData: {
         datasets: [{
           data: [],
-          backgroundColor: ['#5b9bd5', '#ed7d31', '#a5a5a5', '#ffc000', '#3b64ad', '#62993e', '#97b9e0']
+          backgroundColor: []
         }],
-        labels: ['H型钢','槽钢','角钢','圆钢','扁钢','开平板','其他']
+        labels: []
       },
       pieOptions: {
         responsive: false,
@@ -76,6 +76,12 @@ export default {
       this.totalPie = newVal.map(s => Number(s.total))
       this.onlinePie = newVal.map(s => Number(s.online))
       this.offlinePie = newVal.map(s => Number(s.offline))
+      const labels = newVal.map(s => s.type)
+      const bgColors = newVal.map(s => this.getRandomColor())
+      this.pieVal.pieData.labels = labels
+      this.pieVal.pieData.datasets[0].backgroundColor = bgColors
+      console.log(labels)
+      console.log(bgColors)
       this.changePieData()
     },
     pieTab (newVal) {
