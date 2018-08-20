@@ -9,9 +9,9 @@ const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://deploy.thinkingsam.cn/syun-backend-dev/'
 // const proxyUrl = 'http://172.16.120.242:7786/'
 // const proxyUrl = 'http://172.16.16.193:7786/'
-const proxyUrl = 'http://localhost:7786/'
+// const proxyUrl = 'http://localhost:7786/'
 // const proxyUrl = 'http://172.16.120.225:7786/'
-// const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
 
 
 router.use((req, res, next) => {
