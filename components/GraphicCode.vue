@@ -88,7 +88,7 @@
         for (let i = 0; i < this.identifyCode.length; i++) {
           this.drawText(ctx, this.identifyCode[i], i)
         }
-        this.drawLine(ctx)
+        // this.drawLine(ctx)
         // this.drawDot(ctx)
       },
       drawText (ctx, txt, i) {

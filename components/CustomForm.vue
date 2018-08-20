@@ -83,8 +83,8 @@ div
           el-input(v-model="form.legalRept", placeholder="请输入法人代表", clearable)
       el-col(:span="12")
         el-form-item(label="公司logo：")
-          simple-upload.float-left(v-model="form.compLogoUrl", @fileObj="fileLogo")
-            el-button(type="primary", size="small") 上传logo
+          simple-upload.float-left(v-model="form.compLogoUrl", @fileObj="fileLogo", :disabled="customerSourceDisabled")
+            el-button(type="primary", size="small", :disabled="customerSourceDisabled") 上传logo
             span.pl-10(v-if="fileObj.name") {{fileObj.name}}
               i.pl-5.el-icon-circle-check
     el-row.pr-10
@@ -291,23 +291,23 @@ div
         //-     i.el-icon-plus(v-if="form.busiLicenseUrl == undefined")
         //-     el-button(type="primary", size="mini") 选择图片
         zoom-img.zoomImg(:url="form.busiLicenseUrl == undefined ? defaultAvatar : form.busiLicenseUrl", :width='200', :height='200')
-        simple-upload(v-model="form.busiLicenseUrl")
-          el-button(type="primary", size="mini") 选择图片
+        simple-upload(v-model="form.busiLicenseUrl", :disabled="customerSourceDisabled")
+          el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 税务登记证
         zoom-img.zoomImg(:url="form.taxRegisterUrl == undefined ? defaultAvatar : form.taxRegisterUrl", :width='200', :height='200')
-        simple-upload(v-model="form.taxRegisterUrl")
-          el-button(type="primary", size="mini") 选择图片
+        simple-upload(v-model="form.taxRegisterUrl", :disabled="customerSourceDisabled")
+          el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 组织结构代码证
         zoom-img.zoomImg(:url="form.orgCertificateUrl == undefined ? defaultAvatar : form.orgCertificateUrl", :width='200', :height='200')
-        simple-upload(v-model="form.orgCertificateUrl")
-          el-button(type="primary", size="mini") 选择图片
+        simple-upload(v-model="form.orgCertificateUrl", :disabled="customerSourceDisabled")
+          el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 开票资料
         zoom-img.zoomImg(:url="form.invoiceInfoUrl == undefined ? defaultAvatar : form.invoiceInfoUrl", :width='200', :height='200')
-        simple-upload(v-model="form.invoiceInfoUrl")
-          el-button(type="primary", size="mini") 选择图片
+        simple-upload(v-model="form.invoiceInfoUrl", :disabled="customerSourceDisabled")
+          el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
     el-row.mt-25.text-center
       el-button(type="primary", @click="onSubmit('form')") {{$route.query.type == 'new' ? '保存' : '更新'}}
       el-button(@click="onSubmit('cancel')") 取消
@@ -341,7 +341,7 @@ export default {
   data () {
     return {
       form: {
-        compName: '', compNameAb: null,  memberCode: null, customerSource: '型云移动端注册', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date()
+        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date()
       },
       rules: {
         compName: [
@@ -357,7 +357,8 @@ export default {
       },
       timeout: null,
       fileObj: {},
-      addr: areaJson
+      addr: areaJson,
+      customerSourceDisabled: false
     }
   },
   computed: {
@@ -575,29 +576,22 @@ export default {
     this.supplyCatalogCreate()
     this.purposeCreate()
     this.processReqCreate()
-    if (this.originObj) this.form = this.originObj
+    // if (this.originObj) this.form = this.originObj
     if (this.$route.query.type == 'new') {
       this.form.fkDptId = this.currentUser.fkDpt.id
       this.form.fkAcctId = this.currentUser.id
       this.form.fkAcctName = this.currentUser.name
     }
-    // this.addr.map((item) => {
-    //   item.value = item.label
-    //   if(item.hasOwnProperty('children')){
-    //     let city = item.children
-    //     for(let i = 0; i < city.length; i++){
-    //       city[i].value = city[i].label
-    //       if(city[i].hasOwnProperty('children')){
-    //         let county = city[i].children
-    //         for(let n = 0; n < county.length; n++){
-    //           county[n].value = county[n].label
-    //         }
-    //       }
-    //     }
+    // this.$nexttick(function () {
+    //   if (this.form.customerSource === '型云') {
+    //     this.customerSourceDisabled = true
     //   }
+    //   console.log('-------------')
+    //   console.log(this.form.customerSource)
     // })
-    // JSON.parse(JSON.stringify(this.tableValue.tableData))
-    // console.log(JSON.stringify(this.addr))
+    // console.log('-------------')
+    // console.log(this.originObj)
+    // console.log(this.form.customerSource)
   },
   watch: {
     originObj (newVal, oldVal) {
@@ -636,10 +630,14 @@ export default {
       this.form.billAddrArr.push(newVal.billCity)
       this.form.billAddrArr.push(newVal.billArea)
       this.form.billAddr = newVal.billAddr
-      console.log(this.form.compAddr)
       if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      this.$forceUpdate()
-      this.loadingS().close()
+      // this.$forceUpdate()
+      console.log(this.form.customerSource)
+      if (this.form.customerSource === '型云') {
+        this.customerSourceDisabled = true
+      }
+      // this.loadingS().close()
+      this.pageHide(this)
     }
   }
 }

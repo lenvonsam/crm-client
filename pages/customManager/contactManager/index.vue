@@ -12,15 +12,15 @@
         .row
           .col
             el-form-item(label="所属客户", prop="compName")
-              el-select.full-width(v-model="linker.compName", :disabled="disabledMainStatus",  value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet")
+              el-select.full-width(v-model="linker.compName", :loading="cstmLoading", :disabled="disabledMainStatus", clearable, value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet")
                 el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
           .col
             el-form-item(prop="name", label="联系人姓名")
-              el-input(v-model="linker.name")
+              el-input(v-model="linker.name", clearable)
         .row
           .col
             el-form-item(label="是否主联系人")
-              el-select.full-width(v-model="linker.mainStatus", :disabled="disabled")
+              el-select.full-width(v-model="linker.mainStatus", :disabled="disabled", clearable)
                 el-option(v-for="item in mainStatusOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(prop="phone", label="联系方式")
@@ -28,30 +28,30 @@
         .row
           .col
             el-form-item(label="性别", prop="sex")
-              el-select.full-width(v-model="linker.sex")
+              el-select.full-width(v-model="linker.sex", clearable)
                 el-option(v-for="item in sexOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(label="年龄")
-              el-input(v-model="linker.age", type="number")
+              el-input(v-model="linker.age", type="number", clearable)
         .row
           .col
             el-form-item(label="学历")
-              el-select.full-width(v-model="linker.edu")
+              el-select.full-width(v-model="linker.edu", clearable)
                 el-option(v-for="item in eduOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(label="职位")
-              el-input(v-model="linker.position")
+              el-input(v-model="linker.position",  clearable)
         .row
           .col
             el-form-item(label="微信")
-              el-input.full-width(v-model="linker.wxNo")
+              el-input.full-width(v-model="linker.wxNo", clearable)
           .col
             el-form-item(label="QQ")
-              el-input(v-model="linker.qqNo")
+              el-input(v-model="linker.qqNo",  clearable)
         .row
           .col
             el-form-item(label="备注")
-              el-input.full-width(v-model="linker.remark")
+              el-input.full-width(v-model="linker.remark", clearable)
       .dialog-footer.text-right(slot="footer")
         el-button(size="medium", @click="subForm('cancel')") 取消
         el-button(type="primary", size="medium", @click="subForm('ok')") {{btnStr}}
@@ -303,7 +303,8 @@
         linkerModifyObj: {
           currentPage: this.currentPageDetail - 1,
           pageSize: this.pageSize
-        }
+        },
+        cstmLoading: false
       }
     },
     mounted () {
@@ -377,7 +378,6 @@
                 delete this.linker.createAt
                 delete this.linker.updateAt
               }
-              console.log(this.linker.cstmId)
               this.createOrUpdate(this.linker)
             }
           })
@@ -444,11 +444,12 @@
         this.dialogShow = true
       },
       async customerGet (query) {
+        this.cstmLoading = true
         let params = {
+          uid: this.currentUser.id,
           pageSize: 10,
           compName: query
         }
-        console.log(params)
         if(query !== ''){
           try {
             let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/queryCombo', params: params})
@@ -457,9 +458,11 @@
               } else {
                 this.msgShow(this, data.errMsg)
               }
+              this.cstmLoading = false
           } catch (e) {
             console.error(e)
             this.msgShow(this)
+            this.cstmLoading = false
           }
         }
       },

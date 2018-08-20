@@ -126,6 +126,9 @@ export default{
             var arr = []
             data.list.map(itm => {
               itm.edit = false
+              if(itm.name == null) itm.name = '无'
+              if(itm.openBank == null) itm.openBank = '无'
+              if(itm.bankAcct == null) itm.bankAcct = '无'                
               arr.push(itm)
             })
             this.tableValue.tableData = arr

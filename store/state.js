@@ -264,16 +264,14 @@ export default {
     label: '是'
   }],
   currentMenus: [],
-  allMenus: [
-  // {
-  //   title: '首页',
-  //   iconClass: 'el-icon-menu',
-  //   subItems: [{
-  //     title: '基本情况',
-  //     url: '/dashboard'
-  //   }]
-  // },
-  {
+  allMenus: [{
+    title: '首页',
+    iconClass: 'el-icon-menu',
+    subItems: [{
+      title: '基本情况',
+      url: '/dashboard'
+    }]
+  },{
     title: '客户管理',
     iconClass: 'iconfont icon-custom',
     subItems: [{
@@ -295,10 +293,10 @@ export default {
       title: '客户画像',
       url: '/customManager/customerPortrait'
     }
-    // , {
-    //   title: '客户分级',
-    //   url: '#'
-    // }
+    , {
+      title: '客户分级',
+      url: '/customManager/customerRating'
+    }
     ]
   }, {
     title: '系统设置',
@@ -315,6 +313,12 @@ export default {
     }, {
       title: '组织架构',
       url: '/setting/orgStructure'
+    }, {
+      title: '分级系数',
+      url: '/setting/gradingFactor'
+    }, {
+      title: '任务设置',
+      url: '/setting/taskSetting'
     }]
   }, {
     title: '基础数据',

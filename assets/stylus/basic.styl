@@ -45,6 +45,8 @@ for num in (0..count)
     padding-left prefix !important
   .pr-{prefix}
     padding-right prefix !important
+  .p-{prefix}
+    padding prefix prefix prefix prefix
   .flex-{prefix}
     -webkit-box-flex: 0 0 prefix !important
     -webkit-flex 0 0 prefix !important
@@ -86,6 +88,8 @@ for num in (0..count)
   flex 0 0 130px !important
 .flex-150
   flex 0 0 150px !important
+.flex-420
+  flex 0 0 420px !important
 input, textarea
   border: 0px
 
@@ -236,6 +240,14 @@ input.placeholder-white::-webkit-input-placeholder
   color $color-grey
 .text-red
   color $color-red
+.text-green
+  color $color-green
+.text-blue
+  color $color-blue
+.text-warning
+  color: #E6A23C
+.text-primary
+  color: $color-main !important
 .bg-gray
   background $color-background
 .bg-primary
@@ -245,7 +257,7 @@ input.placeholder-white::-webkit-input-placeholder
 .bg-f9
   background: #f9f9f9
 .bg-success
-  background: #67C23A
+  background: $color-green !important
 .bg-warning
   background: #E6A23C
 .bg-danger

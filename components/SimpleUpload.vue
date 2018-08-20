@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess", :on-progress="uploadProgress", :on-error="uploadError", :file-list="fileList")
+    el-upload.crm-simple-upload(:action="fileUploadUrl", :before-upload="beforePicUpload",name="upfile", :data="{'action': action}", :on-success="uploadSuccess", :on-progress="uploadProgress", :on-error="uploadError", :file-list="fileList", :disabled="disabled")
       slot
 </template>
 
@@ -18,6 +18,10 @@
       type: {
         type: String,
         default: ''
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     computed: {

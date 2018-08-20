@@ -111,7 +111,8 @@ export default {
         tolerance: '公差搜索内容',
         dateRange: '日期范围',
         status: '状态',
-        measure: '计量方式'
+        measure: '计量方式',
+        deplay: '延迟时间'
       },
       behaviorSearchItems: generateSearchItems(),
       behaviorRecVal: {
@@ -135,6 +136,7 @@ export default {
       delete currentRow.source
       delete currentRow.id
       delete currentRow.rowkey
+      delete currentRow.eventEn
       let tableArray = []
       Object.keys(currentRow).map(k => {
         if (currentRow[k] != null) tableArray.push({key: k, val: currentRow[k]})

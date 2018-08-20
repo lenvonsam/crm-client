@@ -56,7 +56,7 @@
             prop: 'phone'
           }, {
             lbl: '流失时间',
-            prop: 'createAt',
+            prop: 'billDate',
             width: 200,
             sort: true
           }, {

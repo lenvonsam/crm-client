@@ -48,8 +48,7 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
-            minWidth: '340px',
-            linkUrl: '/customManager/formalCustom/detail'
+            minWidth: '340px'
           }, {
             lbl: '主联系人',
             prop: 'name',
@@ -211,7 +210,7 @@
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date / (24*3600*1000))
               obj.billDate = days
-              obj.createAtDate2 = this.date2Str(new Date(itm[4]))
+              obj.createAtDate2 = this.date2Str(new Date(itm[5]))
               arr.push(obj)
             })
             this.tableValue.tableData = arr

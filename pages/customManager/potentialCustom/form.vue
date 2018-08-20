@@ -34,7 +34,7 @@ export default {
     let me = this
     this.$nextTick(function () {
       if(me.$route.query.type === 'edit') {
-        this.loadingS()
+        this.pageShow(this)
         me.breadItems = Object.assign([], ['客户管理', '潜在客户', '修改潜在客户'])
         me.queryAcct()
         me.$forceUpdate()

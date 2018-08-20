@@ -55,7 +55,7 @@ export default {
           }, {
             lbl: '联系方式',
             prop: 'link',
-            width: '200px',
+            width: '130px',
             type: 'object',
             factValue: (row) => {
               return row.phone

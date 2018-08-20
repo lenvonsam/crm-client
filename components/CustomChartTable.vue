@@ -1,7 +1,7 @@
 <template lang="pug">
 .content
   .box( v-if="tableValue")
-    .ft-16.border-bottom-line.pb-10 {{tableValue.title}}
+    .ft-16.border-bottom-line.pb-10(v-if="tableValue.title") {{tableValue.title}}
     el-form.pt-15(:inline="true", :model="searchForm" ref="searchForm" label-width="60px")
       el-form-item(label="日期：", prop="date")
         el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="searchForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")

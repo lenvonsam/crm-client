@@ -26,9 +26,6 @@ export default {
   data () {
     return {
       btnGroups: [{lbl: '增加客户拜访', type: 'add'}],
-      // searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
-      //     {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
-      //     {label: '计划开单日期', model:'planAt', type: 'timeLimit', val: ''}]],
       tableValue: {
         tableData: [],
         hasCbx: false,
@@ -145,28 +142,6 @@ export default {
       this.loadData()
       this.dialogShow = false
     },
-    // searchForm (paramsObj) {
-    //   this.loading = true
-    //   this.currentPage = 1
-    //   this.queryObject.currentPage = this.currentPage - 1
-    //   this.queryObject.mark = '2'
-    //   Object.keys(paramsObj).map(key => {
-    //     if(key == 'planAt'){
-    //       if (paramsObj.planAt !== null && paramsObj.planAt !== undefined) {
-    //         this.queryObject.startTime = paramsObj.planAt[0]
-    //         this.queryObject.endTime = paramsObj.planAt[1]
-    //       } else {
-    //         delete this.queryObject.startTime
-    //         delete this.queryObject.endTime
-    //       }
-    //     } else if (paramsObj[key].length > 0) {
-    //       this.queryObject[key] = paramsObj[key].trim()
-    //     } else {
-    //       delete this.queryObject[key]
-    //     }
-    //   })
-    //   this.loadData()
-    // },
     tableRowStatus (row) {
       let cstmCall = {
         id: row.id,

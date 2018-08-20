@@ -2,7 +2,7 @@
 el-dialog(title="地图", :visible.sync="dialShow", width="900", @close="cb")
   .ft-16.mb-10 {{baiduMapData.keyWord}}  
     a.text-red.ft-14(:href="search.mapUrl", target="_black") 查看更多地图信息
-  baidu-map.baidu-map(ak="IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="scrollWheelZoom")
+  baidu-map.baidu-map(:ak="bdMapAk", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="scrollWheelZoom")
     bm-local-search.bm-serch(:location="baiduMapData.location", :keyword= 'baiduMapData.keyWord', :auto-viewport= "search.autoViewport", :panel= "search.panel", @searchcomplete="searchcomplete", :selectFirstResult="search.selectFirstResult")
     bm-navigation(anchor="BMAP_ANCHOR_TOP_RIGHT", :enableGeolocation= "enableGeolocation")
 </template>
@@ -29,6 +29,11 @@ el-dialog(title="地图", :visible.sync="dialShow", width="900", @close="cb")
         type: Function,
         required: true
       }
+    },
+    computed: {
+      ...mapState({
+        bdMapAk: state => state.bdMapAk
+      })
     },
     data () {
       return {

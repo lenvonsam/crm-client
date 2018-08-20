@@ -6,7 +6,7 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap", @tableRowConversion="rowConversion")
     baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
@@ -39,9 +39,6 @@
         btnGroups: [{
           lbl: '添加潜在客户',
           type: 'add'
-        }, {
-          lbl: '转化为正式客户',
-          type: 'conversion'
         }, {
           lbl: '转化记录',
           type: 'conversionRec'
@@ -82,11 +79,14 @@
             width: '100px'
           }, {
             type: 'action',
-            width: '100px',
+            width: '200px',
             fixed: 'right',
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'
+            }, {
+              lbl: '转化正式客户',
+              type: 'conversion'
             }, {
               lbl: '地图',
               type: 'map'
@@ -141,7 +141,6 @@
           location: '',
           keyWord: obj.compName
         }
-        // console.log(obj.compName)
         this.dialogMap = true
       },
       async loadData () {
@@ -190,25 +189,21 @@
         if(type == 'add'){
           this.$router.push({path: '/customManager/potentialCustom/form?type=new'})
         }
-        if(type == 'conversion'){
-          if (this.chooseArray.length === 0) {
-            this.msgShow(this, '请选择需要转换的行数', 'warning')
-            return
-          }
-          this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
-            let arr = []
-            let paramsObj = {
-              cstmId: this.chooseArray.id,
-              uid: this.currentUser.id
-            }
-            // console.log(ids)
-            this.customerTransform(paramsObj)
-          }, () => {
-            console.log('cancel')
-          })
-        }
-        // if(type == 'delRec'){
-        //   this.$router.push({path: '/customManager/potentialCustom/delRec'})
+        // if(type == 'conversion'){
+        //   if (this.chooseArray.length === 0) {
+        //     this.msgShow(this, '请选择需要转换的行数', 'warning')
+        //     return
+        //   }
+        //   this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
+        //     let arr = []
+        //     let paramsObj = {
+        //       cstmId: this.chooseArray.id,
+        //       uid: this.currentUser.id
+        //     }
+        //     this.customerTransform(paramsObj)
+        //   }, () => {
+        //     console.log('cancel')
+        //   })
         // }
         if(type == 'conversionRec'){
           this.$router.push({path: '/customManager/potentialCustom/conversionRec'})
@@ -220,16 +215,18 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      // rowDel (obj) {
-      //   this.dialogFormVisible = true
-      //   this.rowDelObj = obj
-      // },
-      // delSubmit (flg) {
-      //   if (flg == 'ok') {
-      //     this.actionDelete()
-      //   }
-      //   this.dialogFormVisible = false
-      // },
+      rowConversion (obj) {
+        this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
+          let arr = []
+          let paramsObj = {
+            cstmId: obj.id,
+            uid: this.currentUser.id
+          }
+          this.customerTransform(paramsObj)
+        }, () => {
+          console.log('cancel')
+        })
+      },
       async actionDelete () {
         try {
           let url = 'customerManage/customerDel/'

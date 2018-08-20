@@ -393,6 +393,7 @@
       tablePgChange (val) {
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
       },
       async actionDelete (id) {
         try {

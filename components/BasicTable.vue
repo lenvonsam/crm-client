@@ -21,7 +21,17 @@ div
             el-date-picker.full-width(v-else-if="head.editType == 'date'", type="date", v-model="scope.row[head.prop]", size="small", format="yyyy-MM-dd", value-format="yyyy-MM-dd")
             el-select(v-else-if="head.editType == 'select'", v-model="scope.row[head.prop]", size="mini")
               el-option(v-for="item in head.selectList", :key="item.value", :label="item.label", :value="item.value")
-      el-table-column(v-else-if="head.type == 'action'", :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+            el-select.full-width(v-else-if="head.editType == 'gradingRegion'", v-model="scope.row[head.prop]", value-key, filterable, remote, multiple,  @focus="queryRegion", :remote-method="queryRegion", size="mini")
+              el-option(v-for="(item, idx) in regionOptions", :key="idx", :label="item", :value="item")            
+            el-select.full-width(v-else-if="head.editType == 'gradingCategory'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="querySupplyCatalog", size="mini")
+              el-option(v-for="(item, idx) in supplyCatalogOptions", :key="idx", :label="item", :value="item")
+            el-select.full-width(v-else-if="head.editType == 'dpt'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryDptCombo", size="mini")
+              el-option(v-for="(item, idx) in comboOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
+            el-select.full-width(v-else-if="head.editType == 'acct'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryAcctCombo", :remote-method="queryAcctCombo", size="mini")
+              el-option(v-for="(item, idx) in acctOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
+            el-select.full-width(v-else-if="head.editType == 'org'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryOrgCombo", size="mini")
+              el-option(v-for="(item, idx) in orgOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
+      el-table-column(v-else-if="head.type == 'action'", :align="head.align ? head.align : 'left'" :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
@@ -38,7 +48,7 @@ div
             i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
             i.iconfont.icon-locka(v-else)
   .padding.text-right
-    el-pagination(:current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
+    el-pagination(v-if="!tableValue.page", :current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
 
 </template>
 
@@ -47,7 +57,12 @@ div
   export default {
     data () {
       return {
-        currentData: []
+        currentData: [],
+        regionOptions: [],
+        supplyCatalogOptions: [],
+        comboOptions: [],
+        acctOptions: [],
+        orgOptions: []
       }
     },
     computed: {
@@ -125,7 +140,7 @@ div
         if(type === 'mapVisit'){
           condition = (scope.row.status == 2 && lbl == '地图')
         } else {
-          condition = !((scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && lbl == '删除')
+          condition = !((scope.row.mainStatus == 1 || scope.row.mainAcct == 1 || scope.row.del == false) && lbl == '删除')
         }
         return result && condition
       },
@@ -148,6 +163,80 @@ div
         // console.log(row)
         // console.log('col')
         // console.log(col)
+      },
+      async queryRegion (query) {
+        let params = {
+          pageSize: 10,
+          region: query
+        }
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/queryRegion', params: params})
+            if (data.returnCode === 0) {
+              this.regionOptions = data.list
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async querySupplyCatalog () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/customer/querySupplyCatalog'})
+            if (data.returnCode === 0) {
+              this.supplyCatalogOptions = data.list
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async queryDptCombo () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/dpt/queryCombo'})
+            if (data.returnCode === 0) {
+              this.comboOptions = data.list
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async queryAcctCombo (query) {
+        try {
+          console.log(query)
+          let params = {
+          pageSize: 10,
+          acctName: query
+        }
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/queryCombo', params: params})
+            if (data.returnCode === 0) {
+              this.acctOptions = data.list
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      async queryOrgCombo () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/org/queryCombo'})
+            if (data.returnCode === 0) {
+              this.orgOptions = data.list
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
       }
     }
   }

@@ -4,17 +4,17 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
     .col.flex-100 公司名称
       sup.text-red *
     .col
-      el-select.full-width(v-model="cstmId",  value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet")
+      el-select.full-width(v-model="cstmId", :loading="loading", value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet", clearable)
         el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
   .row.flex-center.mt-10
     .col.flex-100 计划拜访日期
       sup.text-red *
     .col
-      el-date-picker.full-width(v-model="planVisitTime", type="datetime", placeholder="选择日期")
+      el-date-picker.full-width(v-model="planVisitTime", type="datetime", placeholder="选择日期", clearable)
   .row.flex-center.mt-10
     .col.flex-100 计划开单日期
     .col
-      el-date-picker.full-width(v-model="planDate", type="date", placeholder="选择日期")
+      el-date-picker.full-width(v-model="planDate", type="date", placeholder="选择日期", clearable)
     .ft-13.text-red.mt-10 请选择计划完成日期，设置完成后不能修改。在日期前客户开单视为转化成功。
   .dialog-footer.text-right(slot="footer")
     el-button(size="medium", @click="subForm('cancel')") 取消
@@ -27,7 +27,8 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
         planVisitTime: '',
         planDate: '',
         cstmId: '',
-        cstmIdList: []
+        cstmIdList: [],
+        loading: false
       }
     },
     props: {
@@ -43,6 +44,10 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
         type: Boolean,
         default: false
       }
+    },
+    mounted () {
+      this.init()
+      this.customerGet()
     },
     methods: {
       init () {
@@ -69,8 +74,9 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
         }
       },
       async customerGet (query) {
-        console.log(query)
+        this.loading = true
         let params = {
+          uid: this.uid,
           pageSize: 10,
           compName: query
         }
@@ -82,9 +88,11 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
               } else {
                 this.msgShow(this, data.errMsg)
               }
+              this.loading = false
           } catch (e) {
             console.error(e)
             this.msgShow(this)
+            this.loading = false
           }
         }
       },

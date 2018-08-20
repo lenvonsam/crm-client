@@ -31,7 +31,7 @@ export default {
     }
   },
   mounted() {
-    this.loadingS()
+    this.pageShow(this)
     this.queryAcct()
   }
 }
