@@ -90,6 +90,18 @@
           cb()
         }
       }
+      var verifyPw = (rule, value, cb) => {
+        if (value.trim().length === 0) {
+          cb(new Error('不能为空'))
+        } else {
+          let regex = /^([A-Z])(?=.*[a-z])(?!\d+$)(?![\W_]+$)\S{6,}$/
+          if (!regex.test(value)) {
+            cb(new Error('密码最少6位必须包含大写字母开头并且包含小写字母和数字'))
+            return
+          }
+          cb()
+        }
+      }
       return {
         url: '',
         breadItems: ['系统设置', '个人信息'],
@@ -133,7 +145,8 @@
         },
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
-          newPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
+          // newPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
+          newPwd: [{validator: verifyPw, trigger: 'blur'}],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
       }

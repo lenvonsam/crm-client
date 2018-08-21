@@ -153,7 +153,6 @@ export default{
             this.msgShow(this, data.errMsg)
           }
       } catch (e) {
-        console.log('12313132')
         console.error(e)
         this.msgShow(this)
       }

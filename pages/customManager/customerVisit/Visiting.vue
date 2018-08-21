@@ -2,9 +2,9 @@
 .content
   .mt-15
     button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
-  .mt-15      
+  .mt-15
     search-form(:searchFormItems="searchFormItems", @search="searchForm")
-  .mt-15.ft-13.text-red (*拜访中、已拜访客户不能重复拜访，需等待本次拜访完成后，才能再次拜访）
+  //- .mt-15.ft-13.text-red (*拜访中、已拜访客户不能重复拜访，需等待本次拜访完成后，才能再次拜访）
   .mt-15
     basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowSetVisit="tableRowStatus")
   add-custom-visit(:cb="addCustomVisitBack", :uid="currentUser.id", :dialogShow="dialogShow")

@@ -24,7 +24,7 @@
                   el-button(type="primary", @click="submitForm('searchForm')", size="small") 查询
                   el-button(@click="resetForm('searchForm')", size="small") 重置
               basic-table(:tableValue="dealTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange")
-    el-dialog(title="七天折线图", :visible.sync="dialShow", center)
+    el-dialog(title="最近七天折线图", :visible.sync="dialShow", center)
       .barChartBox
         line-chart(:data="chartData", :options="chartOptions", style="width: 100%")
 </template>

@@ -61,7 +61,6 @@ export default {
       })
       return searchItems
     }
-    console.log(generateSearchItems())
     return {
       behaviorMap: {
         ip: 'IP地址',

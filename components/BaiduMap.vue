@@ -55,7 +55,6 @@ el-dialog(title="地图", :visible.sync="dialShow", width="900", @close="cb")
     },
     methods: {
       searchcomplete (res) {
-        console.log(res)
         this.search.mapUrl = res.moreResultsUrl
         if(res.xQ.length > 0){
           this.baiduMapData.location = res.xQ[0].city

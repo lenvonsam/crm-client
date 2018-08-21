@@ -35,6 +35,7 @@
   import graphicCode from '@/components/GraphicCode.vue'
   import sha1 from 'sha1'
   import { mapActions } from 'vuex'
+  import _ from 'lodash'
   export default {
     components: {
       graphicCode
@@ -92,7 +93,15 @@
         if (data.returnCode === 0) {
           this.setUser(data.currentUser)
           this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
-          this.jump({path: data.currentUser.id !== 1 ? data.currentUser.auths[0].fkMenu.pageUrl : '/'})
+          let pageUrl = '/'
+          if (data.currentUser.id !== 1) {
+            const userAuthGroup = _.groupBy(data.currentUser.auths, (itm) => {
+              return itm.fkMenu.parent.factOrder
+            })
+            const firstKey = Object.keys(userAuthGroup)[0]
+            pageUrl = (userAuthGroup[firstKey][0]).fkMenu.pageUrl
+          }
+          this.jump({path: data.currentUser.id !== 1 ? pageUrl : '/'})
           setTimeout(() => {
             this.visitDialogData(data.currentUser.id)
           }, 6000);

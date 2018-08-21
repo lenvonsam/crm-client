@@ -101,6 +101,7 @@ router.post('/common/post', (req, res) => {
   hptl.httpPost(proxyUrl + body.url, body.params).then(({data}) => {
     if ((body.url === 'login' || body.url === 'setting/acct/updateProfile') && data.returnCode === 0) {
       let currentUser = data.currentUser
+      currentUser.loginTime = new Date().getTime()
       req.session.currentUser = currentUser
     }
     res.json(data)

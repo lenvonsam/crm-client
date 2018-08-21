@@ -2,7 +2,7 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .mt-15      
-    search-form(:searchFormItems="searchFormItems", @search="searchForm")
+    search-form(:searchFormItems="searchFormItems", @search="searchForm", v-if="searchShow")
   .mt-15
     basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowGrading = "gradingHandler")
   el-dialog(title="最近七天折线图", :visible.sync="dialShow", center, @close="dialogClose")
@@ -36,6 +36,7 @@ export default {
           {label: '客户得分', model: 'cstmScore', type: 'range', minPlaceholder: '最小值', maxPlaceholder: '最大值', min: '', max: ''},
           {label: '客户等级', model: 'level', type: 'select', placeholder: '请选择客户等级', val: '', list: [{label:'A', value:'A'}, {label:'B', value:'B'},{label:'C', value:'C'}]}]
         ],
+      searchShow: false,
       tableValue: {
         tableData: [],
         hasCbx: false,
@@ -299,6 +300,7 @@ export default {
               arr.push(obj)
             })
             this.searchFormItems[1][2].list = arr
+            this.searchShow = true
             this.chartData.yLabels = data.list
             this.chartData.yLabels.unshift('等级')
           } else {

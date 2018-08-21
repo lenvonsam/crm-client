@@ -13,7 +13,7 @@ export default function({
     // 设置用户的菜单
     const userAuths = store.state.user.currentUser.auths
     const userAuthGroup = _.groupBy(userAuths, (itm) => {
-      return itm.fkMenu.parent.id
+      return itm.fkMenu.parent.factOrder
     })
     let currentMenus = []
     Object.keys(userAuthGroup).map(k => {

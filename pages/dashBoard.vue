@@ -7,7 +7,7 @@
           img(:src="defaultAvatar")
         .col.pl-15
           .mt-5.ft-20 {{currentUser.fkDpt.name}}
-          .ft-13.text-gray.mt-5(v-if="loginTime !== ''") 最近登录时间：{{loginTime}}
+          .ft-13.text-gray.mt-5 登录时间：{{currentUser.loginTime}}
           .mt-5.ft-14
             i.icon-custom.iconfont
             span.pl-5 {{currentUser.name}}
@@ -34,7 +34,7 @@
         span.text-red *
         span 您今日有 {{totalCount}} 位客户待拜访，请注意及时拜访并签到。
       .col.text-right
-        a.ft-666(href="/customManager/customerVisit") 管理拜访计划
+        router-link.ft-666(to="/customManager/customerVisit") 管理拜访计划
     .mt-15
       //- el-table(:data="tableValue.tableData", border)
       //-   template(v-for="head in tableValue.tableHead")
@@ -52,7 +52,7 @@
           .row
             .col
               el-button.el-tag-btn.mr-5(:type="tagHave == btnItm.name ? 'success' : '' ", :key="btnItm.name", v-for="btnItm in elButton", @click="tagHandler(btnItm.name)", size="mini") {{ btnItm.lbl }}
-            .col.text-right.text-red *本月已经过去了 {{schedule}} %
+            .col.text-right.text-red(v-if="schedule !== ''") *本月已经过去了 {{schedule}} %
           dash-task-completion(v-if="taskData.length > 0", :taskData='taskData')
   .full-width.bg-f9.mt-20.p-15
     .ft-16.border-bottom-line.pb-10 产品销售情况
@@ -75,7 +75,6 @@
     data () {
       return {
         avatar: '',
-        loginTime: '',
         cstmNum: 0,
         salesNum: 0,
         sales: 0,
@@ -91,7 +90,6 @@
             minWidth: '340px',
             type: 'object',
             factValue (row) {
-              console.log(row)
               return row.compName
             }
           },{
@@ -107,17 +105,16 @@
             factValue (row) {
               return `${row.compProv == null ? '' : row.compProv} ${row.compCity == null ? '' : row.compCity} ${row.compArea == null ? '' : row.compArea} ${row.compAddr == null ? '' : row.compAddr}`
             }
+          }, {
+            type: 'action',
+            fixed: 'right',
+            align: 'center',
+            width: '80px',
+            actionBtns: [{
+              lbl: '地图',
+              type: 'map'
+            }]
           }
-          // , {
-          //   type: 'action',
-          //   fixed: 'right',
-          //   align: 'center',
-          //   width: '80px',
-          //   actionBtns: [{
-          //     lbl: '地图',
-          //     type: 'map'
-          //   }]
-          // }
           ]
         },
         currentPage: 1,
@@ -130,8 +127,13 @@
         },
         queryTaskObject: {
           acctId: '',
-          dateType: '3',
-          type: ''
+          dateType: '0',
+          type: 3
+        },
+        querySalesObject: {
+          acctId: '',
+          dateType: '0',
+          type: 3
         },
         loading: false,
         elButton: [{lbl: '个人', name: 3}, {lbl: '部门', name: 2}, {lbl: '机构', name: 1}, {lbl: '公司', name: 0}],
@@ -143,7 +145,7 @@
         tagSalesHave: 3,
         taskData: [],
         taskSalesData: [],
-        schedule: 0,
+        schedule: '',
         dialogMap: false,
         baiduMapData: {
           center: {lng: 116.404, lat: 39.915},
@@ -167,9 +169,11 @@
       })
     },
     mounted () {
-      this.loginTime = this.datetime2Str(new Date())
-      let d = new Date().getDate()
-      this.schedule = Number(d/30*100).toFixed(0)
+      this.currentUser.loginTime = this.datetime2Str(new Date(this.currentUser.loginTime))
+      this.$nextTick(function () {
+        let d = new Date().getDate()
+        this.schedule = Number(d/30*100).toFixed(0)
+      })
       this.queryObject = {
         currentPage: 0,
         pageSize: 100,
@@ -192,12 +196,11 @@
         this.chooseArray = val
       },
       rowMap (obj) {
-        console.log(obj.compName)
         this.baiduMapData = {
           center: {lng: 116.404, lat: 39.915},
           zoom: 6,
           location: '',
-          keyWord: obj.compName
+          keyWord: obj.customer.compName
         }
         this.dialogMap = true
       },
@@ -209,7 +212,6 @@
           this.queryObject.uid = this.currentUser.id
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall', params: this.queryObject})
           if (data.returnCode === 0) {
-            console.log(data)
             let arr = []
             data.list.map(itm => {
               itm[0].link = itm[1]
@@ -227,8 +229,7 @@
       },
       tackHandler (tab, event) {
         this.queryTaskObject.dateType = Number(tab.name)
-        this.queryTaskObject.type = 0
-        this.queryTaskObject.acctId = this.currentUser.id
+        // this.queryTaskObject.type = 0
         this.getTaskCompletion()
       },
       tagHandler (val) {
@@ -237,20 +238,20 @@
         this.getTaskCompletion()
       },
       saleHandler (tab, event) {
-        this.queryTaskObject.acctId = this.currentUser.id
-        this.queryTaskObject.type = 0
+        // this.querySalesObject.type = 0
         this.saleTabName = tab.name
-        this.queryTaskObject.dateType = Number(this.saleTabName)
+        this.querySalesObject.dateType = Number(this.saleTabName)
         this.getProductSales()
       },
       tagSalesHandler (val) {
         this.tagSalesHave = val
-        this.queryTaskObject.type = val
+        this.querySalesObject.type = val
         this.getProductSales()
       },
       async getTaskCompletion () {
         try {
           this.taskData = []
+          this.queryTaskObject.acctId = this.currentUser.id
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/home/taskCompletion', params: this.queryTaskObject})
           if (data.returnCode === 0) {
             let arr = []
@@ -269,7 +270,8 @@
       async getProductSales () {
         try {
           this.taskSalesData = []
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/home/productSales', params: this.queryTaskObject})
+          this.querySalesObject.acctId = this.currentUser.id
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/home/productSales', params: this.querySalesObject})
           if (data.returnCode === 0) {
             let arr = []
             data.list.map(itm => {
