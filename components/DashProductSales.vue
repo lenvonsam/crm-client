@@ -159,7 +159,6 @@ div
             tableNam[0].rate = (Number(tableNam[0].data_1) == 0) ? '0%' : ((Number(tableNam[0].data_1) - Number(tableNam[0].data_2)) / Number(tableNam[0].data_1) *100).toFixed(2) + '%'
           } else {
             // tableNam[0].rate = (Number(tableNam[0].data_2) == 0) ? '0%' :  ((1-(Number(tableNam[0].data_1) / prevNumDays) / (Number(tableNam[0].data_2) / numDays)) * 100).toFixed(2) + '%'
-            debugger
             const lastAvrg = Number(tableNam[0].data_1) / prevNumDays
               // 本月
             const currtAvrg = Number(tableNam[0].data_2) / numDays
@@ -174,9 +173,6 @@ div
             } else {
               // 非今日
               // 上月
-              console.log(tableNam[i].data_1)
-              console.log(prevNumDays)
-              debugger
               const lastAvrg = Number(tableNam[i].data_1) / prevNumDays
               // 本月
               const currtAvrg = Number(tableNam[i].data_2) / numDays

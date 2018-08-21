@@ -177,7 +177,6 @@
       tablePage (val) {
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1
-        debugger
         this.loadData()
       },
       rowEdit (row) {
