@@ -48,6 +48,7 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'link',
+            linkUrl: '/customManager/formalCustom/detail',
             minWidth: '340px'
           }, {
             lbl: '主联系人',
