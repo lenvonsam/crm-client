@@ -319,6 +319,9 @@ export default {
     }, {
       title: '任务设置',
       url: '/setting/taskSetting'
+    }, {
+      title: '异常管理',
+      url: '/setting/errLog'
     }]
   }, {
     title: '基础数据',
