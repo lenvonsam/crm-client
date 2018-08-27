@@ -154,7 +154,7 @@ export default {
     tableRowStatus (row) {
       let cstmCall = {
         id: row.id,
-        status: 2
+        status: 1
       }
       this.cstmCallUpdateStatus(cstmCall)
     },

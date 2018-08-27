@@ -14,7 +14,7 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
   .row.flex-center.mt-10
     .col.flex-100 计划开单日期
     .col
-      el-date-picker.full-width(v-model="planDate", type="date", placeholder="选择日期", clearable)
+      el-date-picker.full-width(v-model="planDate", type="date", placeholder="选择日期", clearable, value-format="yyyy-MM-dd")
     .ft-13.text-red.mt-10 请选择计划完成日期，设置完成后不能修改。在日期前客户开单视为转化成功。
   .dialog-footer.text-right(slot="footer")
     el-button(size="medium", @click="subForm('cancel')") 取消
@@ -51,12 +51,10 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
     },
     methods: {
       init () {
-        this.planDate = ''
+        this.planVisitTime = ''
         this.cstmId = ''
         let date = new Date()
-        let month = ((date.getMonth() + 1)<9)? '0'+ (date.getMonth() + 1) : (date.getMonth() + 1)
-        let day = ((date.getDate() + 7) < 9)? '0' + (date.getDate() + 7) : (date.getDate() + 7)
-        this.planDate = new Date(date.getFullYear()+ '-' + month + '-' + day)
+        this.planDate = new Date(date.getTime() + 86400000 * 7)
       },
       async cstmCallCreate (paramsObj) {
         try{

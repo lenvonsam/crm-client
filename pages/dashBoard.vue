@@ -255,9 +255,15 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/home/taskCompletion', params: this.queryTaskObject})
           if (data.returnCode === 0) {
             let arr = []
-            data.list.map(itm => {
-              arr.push(Number(itm.toFixed(2)))
-            })
+            for (let i = 0; i < 14; i++) {
+              if (i < 4 || (i > 6 && i < 11)) {
+                arr.push(Number(data.list[i].toFixed(3)))
+              } else if (i == 5 || i == 11) {
+                arr.push(Number(data.list[i].toFixed(2)))
+              } else {
+                arr.push(Number(data.list[i].toFixed(0)))
+              }
+            }
             this.taskData = arr
           } else {
             this.msgShow(this, data.errMsg)
@@ -274,10 +280,17 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/home/productSales', params: this.querySalesObject})
           if (data.returnCode === 0) {
             let arr = []
-            data.list.map(itm => {
-              arr.push(Number(itm.toFixed(2)))
-            })
+            for (let i=0; i<30; i++) {
+              if (i <=2 || (i>=15 && i<=17)) {
+                arr.push(Number(data.list[i].toFixed(3)))
+              } else if ((i>=3 && i <=5) || (i>=18 && i<=20)) {
+                arr.push(Number(data.list[i].toFixed(2)))
+              } else {
+                arr.push(Number(data.list[i].toFixed(0)))
+              }
+            }
             this.taskSalesData = arr
+            console.log(this.taskSalesData)
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -293,8 +306,8 @@
           if (data.returnCode === 0) {
             this.acctName = data.list[0]
             this.cstmNum = data.list[1]
-            this.salesNum = data.list[2]
-            this.sales = data.list[3]
+            this.salesNum = Number(data.list[2])
+            this.sales = Number(data.list[3])
           } else {
             this.msgShow(this, data.errMsg)
           }

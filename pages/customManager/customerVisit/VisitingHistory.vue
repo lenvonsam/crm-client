@@ -37,7 +37,7 @@ export default {
     return {
       btnGroups: [{lbl: '生成统计结果', type: 'statistics'}],
       searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
-          {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '2', label: '拜访成功'}, {value: '3', label: '拜访失败'}, {value: '4', label: '拜访超时'}]},
+          {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '1', label: '拜访成功'}, {value: '2', label: '拜访失败'}]},
           {label: '计划拜访日期', model:'planAt', type: 'timeLimit', val: ''}]],
       tableValue: {
         tableData: [],
@@ -103,7 +103,7 @@ export default {
           prop: 'status',
           type: 'object',
           factValue(row){
-            return (row==0) ? '未拜访' : (row==1) ? '已拜访' : (row==2) ? '拜访成功' : (row == 3) ? '拜访失败' : '拜访超时'
+            return (row==0) ? '未拜访' : (row==1) ? '拜访成功' : '拜访失败'
           }
         }, {
           type: 'action',

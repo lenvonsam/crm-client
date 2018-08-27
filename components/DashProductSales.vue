@@ -1,7 +1,7 @@
 <template lang="pug">
 div
   el-table.mt-15(border, :data="salesTableValue_1", :row-class-name="rowClassName")
-    el-table-column(:label="tableHead[0].lbl", prop="type", align="center")
+    el-table-column(:label="tableHead[0].lbl", prop="type", align="center", :width="table_width_1")
     el-table-column(:label="tableHead[1].lbl", prop="data_1", align="center")
       template(slot-scope="scope")
         .relative
@@ -12,10 +12,10 @@ div
         .relative
           span {{scope.row.data_2}}
           span.absolute(v-if="scope.row.data_2Rate > -1", :class="scope.row.data_2Rate < scope.row.data_1Rate ? 'text-green' : scope.row.data_2Rate > scope.row.data_1Rate ? 'text-red' : 'text-blue'") 占比： {{scope.row.data_2Rate}}%
-    el-table-column(:label="tableHead[3].lbl", prop="rate", align="center")
+    el-table-column(:label="tableHead[3].lbl", prop="rate", align="center", :width="table_width_4")
   //- 销售额
   el-table.mt-15(border, :show-header="showHeader", :data="salesTableValue_2", :row-class-name="rowClassName")
-    el-table-column(prop="type", align="center")
+    el-table-column(prop="type", align="center", :width="table_width_1")
     el-table-column(prop="data_1", align="center")
       template(slot-scope="scope")
         .relative
@@ -26,10 +26,10 @@ div
         .relative
           span {{scope.row.data_2}}
           span.absolute(v-if="scope.row.data_2Rate > -1", :class="scope.row.data_2Rate < scope.row.data_1Rate ? 'text-green' : scope.row.data_2Rate > scope.row.data_1Rate ? 'text-red' : 'text-blue'") 占比： {{scope.row.data_2Rate}}%
-    el-table-column(prop="rate", align="center")
+    el-table-column(prop="rate", align="center", :width="table_width_4")
   //- 型云订单
   el-table.mt-15(border, :show-header="showHeader", :data="salesTableValue_3", :row-class-name="rowClassName")
-    el-table-column(prop="type", align="center")
+    el-table-column(prop="type", align="center", :width="table_width_1")
     el-table-column(prop="data_1", align="center")
       template(slot-scope="scope")
         .relative
@@ -40,10 +40,10 @@ div
         .relative
           span {{scope.row.data_2}}
           span.absolute(v-if="scope.row.data_2Rate > -1", :class="scope.row.data_2Rate < scope.row.data_1Rate ? 'text-green' : scope.row.data_2Rate > scope.row.data_1Rate ? 'text-red' : 'text-blue'") 占比： {{scope.row.data_2Rate}}%
-    el-table-column(prop="rate", align="center")
+    el-table-column(prop="rate", align="center", :width="table_width_4")
   //- 新增客户
   el-table.mt-15(border, :show-header="showHeader", :data="salesTableValue_4", :row-class-name="rowClassName")
-    el-table-column(prop="type", align="center")
+    el-table-column(prop="type", align="center", :width="table_width_1")
     el-table-column(prop="data_1", align="center")
       template(slot-scope="scope")
         .relative
@@ -54,7 +54,7 @@ div
         .relative
           span {{scope.row.data_2}}
           span.absolute(v-if="scope.row.data_2Rate > -1", :class="scope.row.data_2Rate < scope.row.data_1Rate ? 'text-green' : scope.row.data_2Rate > scope.row.data_1Rate ? 'text-red' : 'text-blue'") 占比： {{scope.row.data_2Rate}}%
-    el-table-column(prop="rate", align="center")
+    el-table-column(prop="rate", align="center", :width="table_width_4")
 </template>
 <script>
   export default {
@@ -101,7 +101,9 @@ div
         tableHead_5: [{lbl: '类别', prop: 'type'}, {lbl: '上年度', prop: 'data_1'}, {lbl: '本年度', prop: 'data_2'}, {lbl: '日均同比增长', prop: 'rate'}],
         tableHead: [{lbl: '类别', prop: 'type'}, {lbl: '前日', prop: 'data_1'}, {lbl: '昨日', prop: 'data_2'}, {lbl: '日均同比增长', prop: 'rate'}],
         showHeader: false,
-        tagHave: 0
+        tagHave: 0,
+        table_width_1: '200px',
+        table_width_4: '150px'
       }
     },
     mounted () {

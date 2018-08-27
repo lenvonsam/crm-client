@@ -31,7 +31,8 @@ div
           tableHead: [{
             lbl: '类别',
             prop: 'type',
-            align: 'center'
+            align: 'center',
+            width: '150px'
           }, {
             lbl: '销量（吨）',
             prop: 'salesVolume',
@@ -43,7 +44,8 @@ div
           }, {
             lbl: '完成率',
             prop: 'completionRate',
-            align: 'center'
+            align: 'center',
+            width: '200px'
           }]
         },
         taskTableValue_2: {
@@ -55,7 +57,8 @@ div
           tableHead: [{
             lbl: '类别',
             prop: 'type',
-            align: 'center'
+            align: 'center',
+            width: '150px'
           }, {
             lbl: '实际高卖（元）',
             prop: 'actuallyHighSelling',
@@ -67,7 +70,8 @@ div
           }, {
             lbl: '完成率',
             prop: 'completionRate',
-            align: 'center'
+            align: 'center',
+            width: '200px'
           }]
         },
         taskTableValue_3: {
@@ -79,7 +83,8 @@ div
           tableHead: [{
             lbl: '类别',
             prop: 'type',
-            align: 'center'
+            align: 'center',
+            width: '150px'
           }, {
             lbl: '数量（个）',
             prop: 'num',
@@ -91,11 +96,14 @@ div
           }, {
             lbl: '完成率',
             prop: 'completionRate',
-            align: 'center'
+            align: 'center',
+            width: '200px'
           }]
         },
         loading: false,
-        lend: 2
+        lend: 2,
+        table_width_1: '200px',
+        table_width_4: '150px'
       }
     },
     mounted () {

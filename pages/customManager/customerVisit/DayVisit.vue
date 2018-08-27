@@ -90,7 +90,7 @@ export default {
           width: '100px',
           type: 'object',
           factValue(row){
-            return (row==0) ? '未拜访' : (row==1) ? '已拜访' : (row==2) ? '拜访成功' : (row == 3) ? '拜访失败' : '拜访超时'
+            return (row==0) ? '未拜访' : (row==1) ? '拜访成功' : '拜访失败'
           }
         }, {
           type: 'action',
@@ -145,9 +145,8 @@ export default {
     tableRowStatus (row) {
       let cstmCall = {
         id: row.id,
-        status: 2
+        status: 1
       }
-      console.log(cstmCall)
       this.cstmCallUpdateStatus(cstmCall)
     },
     tableChange (val) {
