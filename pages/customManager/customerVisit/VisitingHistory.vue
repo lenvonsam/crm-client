@@ -249,7 +249,7 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmCall/' + this.currentUser.id})
         if (data.returnCode === 0) {
           this.barVal.barData.datasets[0].data = data.list[0]
-          this.successRate = (data.list[0][1] / data.list[0][0]).toFixed(3)
+          this.successRate = (data.list[0][1] / data.list[0][0] * 100).toFixed(3)
           this.dialogTableVisible = true
         } else {
           this.msgShow(this, data.errMsg)

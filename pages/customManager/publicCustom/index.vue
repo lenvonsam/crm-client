@@ -113,6 +113,7 @@
       this.queryObject = {
         currentPage: this.currentPage - 1,
         pageSize: this.pageSize,
+        orderType: '0',
         mark: '3'
       }
       this.loadData()

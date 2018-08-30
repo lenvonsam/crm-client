@@ -70,7 +70,7 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="工商证照编码：")
-          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable)
+          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
       el-col(:span="10")
         .row
           .col
@@ -161,7 +161,7 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="税号：")
-          el-input(v-model="form.tfn", placeholder="请输入税号", clearable)
+          el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
       el-col(:span="12")
         el-form-item(label="开户名称：")
           el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
@@ -381,9 +381,23 @@ export default {
   methods: {
     onSubmit (form) {
       if(form == 'form') {
+        debugger
+        if (typeof(this.form.busiLicenseCode) == 'string') {
+          if (this.form.busiLicenseCode.length < 15 && this.form.busiLicenseCode.length > 0) {
+            document.body.scrollTop = 200
+            this.msgShow(this, '证照编码不能少于15位')
+            return
+          }          
+        }
+        if (typeof(this.form.tfn) == 'string') {
+          if (this.form.busiLicenseCode.length > 0 && this.form.tfn.length < 15) {
+            document.body.scrollTop = 300
+            this.msgShow(this, '税号不能少于15位')
+            return 
+          }
+        }
         this.$refs[form].validate((valid) => {
           if (valid) {
-            console.log(valid)
             this.customDetailCreate()
           } else {
             document.body.scrollTop = 150
@@ -447,7 +461,7 @@ export default {
         // delete this.form.fkAcctName
         this.form.uid = this.currentUser.id
         this.form.sex = Number(this.form.sex)
-        this.form.status = Number(this.form.status)
+        this.form.status = 1
         this.form.fkDptId = Number(this.form.fkDptId)
         this.form.fkAcctId = Number(this.form.fkAcctId)
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
@@ -582,16 +596,6 @@ export default {
       this.form.fkAcctId = this.currentUser.id
       this.form.fkAcctName = this.currentUser.name
     }
-    // this.$nexttick(function () {
-    //   if (this.form.customerSource === '型云') {
-    //     this.customerSourceDisabled = true
-    //   }
-    //   console.log('-------------')
-    //   console.log(this.form.customerSource)
-    // })
-    // console.log('-------------')
-    // console.log(this.originObj)
-    // console.log(this.form.customerSource)
   },
   watch: {
     originObj (newVal, oldVal) {

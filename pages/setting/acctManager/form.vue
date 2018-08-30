@@ -26,12 +26,12 @@
           el-form-item(:prop="fm[1].key", :label="fm[1].lbl")
             template(v-if="fm[1].type == 'select'")
               .w-250
-                el-select(v-model="obj[fm[1].key]", style="width: 100%", size="small")
+                el-select(v-model="obj[fm[1].key]", style="width: 100%", size="small", @change="selectChange")
                   el-option(v-for="(opt,idx) in getPageObj(fm[1].selectKey)", :key="idx", :label="opt.label", :value="opt.value")
             template(v-else-if="fm[1].type == 'remoteSelect'")
               .w-250
-                el-select(v-model="obj[fm[1].key]", style="width: 100%", size="small")
-                  el-option(v-for="opt in getPageObj(fm[1].selectKey)", :key="opt.id", :value="opt.id", :label="opt.name")
+                el-select(v-model="obj[fm[1].key]", style="width: 100%", size="small", @change="selectChange")
+                  el-option(v-for="(opt,idx) in getPageObj(fm[1].selectKey)", :key="idx", :label="opt.name", :value="opt.id")
             template(v-else-if="fm[1].type == 'radio'")
               el-radio(v-for="(r,idx) in fm[1].radios", v-model="obj[fm[1].key]", :label="r.val", :key="idx") {{r.lbl}}
             template(v-else-if="fm[1].type == 'date'")
@@ -41,7 +41,6 @@
     .text-center.pt-25.pb-15
       el-button(type="primary", size="medium", @click="subForm('acctForm')") {{$route.query.type == 'new' ? '保存' : '更新'}}
       el-button.ml-60(size="medium", @click="back") 取消
-
 </template>
 
 <script>
@@ -138,6 +137,9 @@
       }
     },
     methods: {
+      selectChange (val) {
+        this.$forceUpdate()
+      },
       async queryObj (id) {
         try {
           let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/acct/' + Number(id)})
@@ -155,6 +157,7 @@
         }
       },
       getPageObj (key) {
+        console.log('-------------')
         console.log(key)
         console.log(this[key])
         return this[key]

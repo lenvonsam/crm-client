@@ -2,9 +2,9 @@
 .content
   breadcrumb(:breadItems="breadItems")
   .mt-15  
-    el-tabs(type="border-card", value="1", @tab-click="handleClick")
+    el-tabs(type="border-card", v-model="tabName", @tab-click="handleClick")
       el-tab-pane(label="今日拜访", name="1")
-        day-visit(v-if="tabName == '1'")
+        day-visit(v-if="tabName == '1'", @cb="dayVisitCb")
       el-tab-pane(label="拜访中", name="2")
         visiting(v-if="tabName == '2'")
       el-tab-pane(label="拜访历史", name="3")
@@ -42,6 +42,11 @@ export default {
   methods: {
     handleClick(tab, event) {
       this.tabName = tab.name
+    },
+    dayVisitCb(data) {
+      if (data == 'addCustm') {
+        this.tabName = '2'
+      }
     }
   }
 }

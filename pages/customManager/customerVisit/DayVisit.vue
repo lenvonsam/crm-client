@@ -139,7 +139,8 @@ export default {
       this.dialogShow = true
     },
     addCustomVisitBack() {
-      this.loadData()
+      this.$emit('cb', 'addCustm')
+      // this.loadData()
       this.dialogShow = false
     },
     tableRowStatus (row) {

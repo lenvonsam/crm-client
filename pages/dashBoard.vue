@@ -4,7 +4,7 @@
     .col.bg-f9.p-15.ft-16
       .row.flex-center(style="width:400px;")
         .col.flex-120.avatar
-          img(:src="defaultAvatar")
+          img(:src="currentUser.avatar == undefined ? defaultAvatar : currentUser.avatar")
         .col.pl-15
           .mt-5.ft-20 {{currentUser.fkDpt.name}}
           .ft-13.text-gray.mt-5 登录时间：{{currentUser.loginTime}}
@@ -93,6 +93,24 @@
               return row.compName
             }
           },{
+            lbl: '联系人',
+            prop: 'link',
+            width: '180px',
+            align: 'center',
+            type: 'object',
+            factValue (row) {
+              return row.name
+            },
+          },{
+            lbl: '联系方式',
+            prop: 'link',
+            width: '180px',
+            align: 'center',
+            type: 'object',
+            factValue (row) {
+              return row.phone
+            }
+          },{
             lbl: '计划拜访时间',
             prop: 'planVisitTime',
             width: '180px',
@@ -169,6 +187,7 @@
       })
     },
     mounted () {
+      console.log(this.currentUser.avatar)
       this.currentUser.loginTime = this.datetime2Str(new Date(this.currentUser.loginTime))
       this.$nextTick(function () {
         let d = new Date().getDate()

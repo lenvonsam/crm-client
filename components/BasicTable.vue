@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler")
+  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @header-click="headerClick")
     el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
@@ -27,8 +27,8 @@ div
               el-option(v-for="(item, idx) in supplyCatalogOptions", :key="idx", :label="item", :value="item")
             el-select.full-width(v-else-if="head.editType == 'dpt'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryDptCombo", size="mini")
               el-option(v-for="(item, idx) in comboOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
-            el-select.full-width(v-else-if="head.editType == 'acct'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryAcctCombo", :remote-method="queryAcctCombo", size="mini")
-              el-option(v-for="(item, idx) in acctOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
+            el-select.full-width(v-else-if="head.editType == 'acct'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryAcctCombo", :remote-method="queryAcctCombo", size="mini", @change="selectChange")
+              el-option(v-for="(item, idx) in acctOptions", :key="idx", :label="item.name", :value="item.platformCode + '&' + item.name + '&' + item.fkDpt.id + '&' + item.fkDpt.name")
             el-select.full-width(v-else-if="head.editType == 'org'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryOrgCombo", size="mini")
               el-option(v-for="(item, idx) in orgOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
       el-table-column(v-else-if="head.type == 'action'", :align="head.align ? head.align : 'left'" :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
@@ -44,9 +44,10 @@ div
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") {{scope.row[head.prop] | rowData(head.prop)}}
           el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-          span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
-            i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
-            i.iconfont.icon-locka(v-else)
+          span(v-if="head.prop == 'billDate'") / 90
+          //- span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
+          //-   i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
+          //-   i.iconfont.icon-locka(v-else)
   .padding.text-right
     el-pagination(v-if="!tableValue.page", :current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
 
@@ -237,6 +238,17 @@ div
           console.error(e)
           this.msgShow(this)
         }
+      },
+      selectChange (val) {
+        console.log(val)
+      },
+      headerClick (column, event) {
+        console.log('----------')
+        console.log(column.sortable)
+        console.log(column.order)
+        console.log(column.property)
+        console.log(column)
+        console.log(event)
       }
     }
   }

@@ -121,18 +121,31 @@ export default {
       this.loadData()
     },
     saveHandler (row) {
+      console.log(row)
       let arr = ['dpt', 'acct', 'org']
       let strArr = []
       let acctArr = []
       let orgArr = []
       arr.map(itm => {
         let str = row[itm + 'Name']
-        if (str !== undefined && str !== null && str !== '') {
-          if(str.indexOf('&') > -1){
-            strArr = str.split('&')
-            row[itm + 'Code'] = strArr[0]
-            row[itm + 'Name'] = strArr[1]
-          }        
+        if (typeof(str) == 'string' && str.indexOf('&') > -1) {
+          strArr = str.split('&')
+          row[itm + 'Code'] = strArr[0]
+          row[itm + 'Name'] = strArr[1]
+          if(this.typeTablName == '3'){
+            row['dptCode'] = strArr[2]
+            delete row['orgCode']
+            delete row['orgName']
+          } else if (this.typeTablName == '2') {
+            row['orgCode'] = strArr[2]
+            delete row['acctCode']
+            delete row['acctName']
+          } else {
+            delete row['acctCode']
+            delete row['acctName']
+            delete row['dptCode']
+            delete row['dptName']
+          }
         }
       })
       row.year = Number(this.tabsVal)

@@ -4,17 +4,17 @@
   .mt-15
     search-form(:searchFormItems="searchFormItems", @search="searchCb")
   .mt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="total", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="delCb", @pageChange="tableChange")
+    task-basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="total", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="delCb", @pageChange="tableChange")
 </template>
 
 <script>
-import basicTable from '@/components/BasicTable.vue'
+import taskBasicTable from '@/components/TaskBasicTable.vue'
 import searchForm from '@/components/SearchForm.vue'
 import buttonGroup from '@/components/ButtonGroup.vue'
 import { mapState } from 'vuex'
 export default{
   components: {
-    basicTable,
+    taskBasicTable,
     searchForm,
     buttonGroup
   },
@@ -75,7 +75,7 @@ export default{
         tableHead: [{
             lbl: '部门', 
             prop: 'dptName', 
-            type: 'edit', 
+            // type: 'edit', 
             editType: 'dpt'
           },
           {lbl: '业务员', prop: 'acctName', type: 'edit', editType: 'acct'},
@@ -106,8 +106,6 @@ export default{
   },
   mounted () {
     this.tableValue.tableData = this.tabPaneData
-    console.log('-------')
-    console.log(this.tabPaneData)
   },
   methods: {
     groupBtnClick (type) {

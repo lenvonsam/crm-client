@@ -45,7 +45,8 @@ export default{
   },
   computed: {
     ...mapState({
-      pageSize: state => state.pageSize
+      pageSize: state => state.pageSize,
+      currentUser: state => state.user.currentUser
     })
   },
   mounted () {
@@ -145,6 +146,7 @@ export default{
     },
     async createOrUpdate (params) {
       try {
+        params.uid = this.currentUser.id
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/bankInfo/createOrUpdate', params: params})
           if (data.returnCode === 0) {
             this.msgShow(this, '保存成功', 'success')

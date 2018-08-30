@@ -4,16 +4,16 @@
   .mt-15
     search-form(:searchFormItems="searchFormItems", @search="searchCb")
   .mt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="total", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="delCb", @pageChange="tableChange")
+    task-basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="total", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="delCb", @pageChange="tableChange")
 </template>
 
 <script>
-import basicTable from '@/components/BasicTable.vue'
+import taskBasicTable from '@/components/TaskBasicTable.vue'
 import searchForm from '@/components/SearchForm.vue'
 import buttonGroup from '@/components/ButtonGroup.vue'
 export default{
   components: {
-    basicTable,
+    taskBasicTable,
     searchForm,
     buttonGroup
   },
@@ -72,7 +72,7 @@ export default{
       ],
       tableValue: {
         tableHead: [
-          {lbl: '机构', prop: 'orgName', type: 'edit', editType: 'org', minWidth: '300px'},
+          {lbl: '机构', prop: 'orgName', minWidth: '300px'},
           {lbl: '部门', prop: 'dptName', type: 'edit', editType: 'dpt'},
           {lbl: '线上(吨)', prop: 'onlineTask', type: 'edit', editType: 'text'},
           {lbl: '线下(吨)', prop: 'offlineTask', type: 'edit', editType: 'text'},

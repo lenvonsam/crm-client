@@ -73,7 +73,7 @@ export default{
       ],
       tableValue: {
         tableHead: [
-          {lbl: '业务员', prop: 'acctName', type: 'edit', editType: 'acct'},
+          {lbl: '机构', prop: 'orgName', type: 'edit', editType: 'org'},
           {lbl: '线上(吨)', prop: 'onlineTask', type: 'edit', editType: 'text'},
           {lbl: '线下(吨)', prop: 'offlineTask', type: 'edit', editType: 'text'},
           {lbl: '板材(吨)', prop: 'boardTask', type: 'edit', editType: 'text'},

@@ -27,7 +27,7 @@ export default {
     return {
       btnGroups: [{lbl: '增加客户拜访', type: 'add'}],
       searchFormItems: [[{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
-          {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
+          // {label: '拜访结果', model: 'callResult', type: 'select', val: '', list: [{value: '', label: '全部'}, {value: '0', label: '未拜访'}, {value: '1', label: '已拜访'}]},
           {label: '计划拜访日期', model:'planAt', type: 'timeLimit', val: ''}]],
       tableValue: {
         tableData: [],

@@ -4,7 +4,7 @@
     .item.brand CRM管理系统
     .item
     .item.flex-50(@click="jump({path: '/setting/profile'})")
-      img(style="width: 36px; height: 36px; margin-top: 7px", :src="currentUser.avatar == undefined ? defaultAvatar : currentUser.avatar")
+      img.header-img(:src="currentUser.avatar == undefined ? defaultAvatar : currentUser.avatar")
     .item.flex-50.ellps(@click="jump({path: '/setting/profile'})") {{currentUser.name}}
     .item.flex-50(@click="exitAction") 退出
   .crm-sidebar
@@ -56,4 +56,10 @@
 
 <style lang="stylus">
 @import "../assets/stylus/common"
+.header-img{
+  border-radius: 50%;
+  width: 36px; 
+  height: 36px; 
+  margin-top: 7px;
+}
 </style>

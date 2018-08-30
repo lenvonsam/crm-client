@@ -112,7 +112,7 @@ el-dialog(title="提示", :visible="dialogShow", width="450px", height="100px",@
           let paramsObj = {
             cstmId: this.cstmId,
             uid: this.uid,
-            planDate: this.date2Str(this.planDate),
+            planDate: this.planDate,
             planVisitTime: this.datetime2Str(this.planVisitTime)
           }
           this.cstmCallCreate(paramsObj)

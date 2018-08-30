@@ -173,7 +173,7 @@ export default {
   //客户渠道
   customerChannelOpts: [{
     value: '网络搜索',
-    label: '销售推荐'
+    label: '网络搜索'
   }, {
     value: '销售推荐',
     label: '销售推荐'

@@ -82,7 +82,11 @@ export default{
     }
   },
   mounted () {
-    this.tableValue.tableData = this.tabPaneData
+    if (this.tabPaneData.length == 0) {
+      this.tableValue.tableData = [{compName: '江苏智恒达投资集团', onlineTask: 0, offlineTask: 0, boardTask: 0, amountTask: 0, highValueTask: 0, firstCustNum: 0, secondCustNum: 0}]
+    } else {
+      this.tableValue.tableData = this.tabPaneData
+    }    
   },
   methods: {
     dataFilter () {
