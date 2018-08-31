@@ -8,7 +8,7 @@
     .mt-15
       .text-red.ft-15 *橙色代表快流失客户，绿色代表建议沟通客户，白色为正常客户
     .mt-5
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", @tableRowLock="rowLock", @tableRowMap = "rowMap")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", @tableRowLock="rowLock", @tableRowMap = "rowMap", @sort="sortHandler")
     baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
@@ -61,7 +61,8 @@
           }, {
             lbl: '转化时间',
             width: '150px',
-            prop: 'createAtDate2'
+            prop: 'createAtDate2',
+            sort: 'custom'
           }, {
             lbl: '业务部门',
             prop: 'dptName',
@@ -77,9 +78,9 @@
           }, {
             lbl: '未开单天数',
             align: 'center',
-            prop: 'billDate',
+            prop: 'billDateDays',
             width: '150px',
-            sort: true
+            sort: 'custom'
           }, {
             type: 'action',
             fixed: 'right',
@@ -211,7 +212,7 @@
               let startDate = new Date(itm[5])
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date / (24*3600*1000))
-              obj.billDate = days
+              obj.billDateDays = days
               obj.createAtDate2 = this.date2Str(new Date(itm[5]))
               arr.push(obj)
             })
@@ -239,6 +240,17 @@
           console.error(e)
           this.msgShow(this)
           this.loading = false
+        }
+      },
+      sortHandler (obj) {
+        if (obj.property =='createAtDate2' || obj.property =='billDateDays') {
+          this.loading = true
+          let dateAsc = (obj.order =='ascending' && obj.property =='createAtDate2')
+          let dateDesc = (obj.order =='descending' && obj.property =='createAtDate2')
+          let billDateDaysAsc = (obj.order =='ascending' && obj.property =='billDateDays')
+          let billDateDaysDesc = (obj.order =='descending' && obj.property =='billDateDays')
+          this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDateDaysAsc) ? '3' : (billDateDaysDesc)? '4' : '0'
+          this.loadData()
         }
       }
     }

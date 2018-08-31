@@ -4,7 +4,7 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .mt-5
-      basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowLock="rowLock", @tableRowMap = "rowMap")
+      basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowLock="rowLock", @tableRowMap = "rowMap", @sort="sortHandler")
     baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
@@ -58,7 +58,7 @@
             lbl: '流失时间',
             prop: 'billDate',
             width: 200,
-            sort: true
+            sort: 'custom'
           }, {
             lbl: '业务部门',
             width: 200,
@@ -71,7 +71,7 @@
             lbl: '未开单天数',
             width: 120,
             prop: 'billDateDays',
-            sort: true
+            sort: 'custom'
           }, {
             type: 'action',
             width: '60px',
@@ -274,6 +274,17 @@
           console.error(e)
           this.msgShow(this)
           this.loading = false
+        }
+      },
+      sortHandler (obj) {
+        if (obj.property =='billDate' || obj.property =='billDateDays') {
+          this.loading = true
+          let dateAsc = (obj.order =='ascending' && obj.property =='billDate')
+          let dateDesc = (obj.order =='descending' && obj.property =='billDate')
+          let billDateDaysAsc = (obj.order =='ascending' && obj.property =='billDateDays')
+          let billDateDaysDesc = (obj.order =='descending' && obj.property =='billDateDays')
+          this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDateDaysAsc) ? '3' : (billDateDaysDesc)? '4' : '0'
+          this.loadData()
         }
       }
     }

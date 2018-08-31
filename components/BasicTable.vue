@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @header-click="headerClick")
+  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @sort-change="sortChange")
     el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
@@ -44,7 +44,7 @@ div
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") {{scope.row[head.prop] | rowData(head.prop)}}
           el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-          span(v-if="head.prop == 'billDate'") / 90
+          span(v-if="head.prop == 'billDateDays'") / 90
           //- span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
           //-   i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
           //-   i.iconfont.icon-locka(v-else)
@@ -242,13 +242,23 @@ div
       selectChange (val) {
         console.log(val)
       },
-      headerClick (column, event) {
-        console.log('----------')
-        console.log(column.sortable)
-        console.log(column.order)
-        console.log(column.property)
-        console.log(column)
-        console.log(event)
+      // headerClick (column, event) {
+      //   console.log('---------')
+      //   let obj = {
+      //     sortable: column.sortable,
+      //     order: column.order,
+      //     property: column.property
+      //   }
+      //   this.$emit('sort', obj)
+      // },
+      sortChange (column, prop, order) {
+        // console.log('**********')
+        let obj = {
+          sortable: column.sortable,
+          order: column.order,
+          property: column.prop
+        }
+        this.$emit('sort', obj)
       }
     }
   }

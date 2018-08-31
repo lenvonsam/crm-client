@@ -1,5 +1,8 @@
 <template lang="pug">
 div
+  .mb-5.bg-f9.head-title.pl-15
+    span.text-blue *
+    span 标记为客户转化必填项
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
       el-col(:span="12")
@@ -69,7 +72,7 @@ div
             el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="工商证照编码：")
+        el-form-item(label="工商证照编码：", prop="busiLicenseCode")
           el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
       el-col(:span="10")
         .row
@@ -97,7 +100,7 @@ div
             .col
               el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
       el-col(:span="12")
-        el-form-item(label="传真号码：")
+        el-form-item(label="传真号码：", prop="faxNum")
           el-input(v-model="form.faxNum", placeholder="请输入传真号码", clearable)
     el-row.pr-10
       el-col(:span="12")
@@ -160,21 +163,22 @@ div
           el-input(v-model="form.otherLinkWay", placeholder="请输入其他联系方式", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="税号：")
+        el-form-item.validFormal(label="税号：", prop="tfn")
           el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
       el-col(:span="12")
-        el-form-item(label="开户名称：")
+        el-form-item.validFormal(label="开户名称：", prop="openAcctName")
+          //- el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable, @blur="isValid('openAcctName')")
           el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="开户银行：")
+        el-form-item.validFormal(label="开户银行：")
           el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
       el-col(:span="12")
-        el-form-item(label="开户账号：")
+        el-form-item.validFormal(label="开户账号：")
           el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
     el-row.pr-10
       el-col(:span="24")
-        el-form-item(label="开票地址：")
+        el-form-item.validFormal(label="开票地址：")
           //- el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
           //- el-cascader.full-width(v-model="form.billAddr", placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
           .row
@@ -285,6 +289,7 @@ div
     el-row.text-center
       el-col(:span="6")
         .ft-18.mb-15 营业执照(三证合一)
+          sup.text-blue *
         //- .simple-upload-img
         //-   zoom-img.zoomImg(:url="form.busiLicenseUrl == undefined ? '' : form.busiLicenseUrl", :width='200', :height='200')
         //-   simple-upload.simple-upload(v-model="form.busiLicenseUrl")
@@ -339,6 +344,22 @@ export default {
     }
   },
   data () {
+    var openAcctNameValid = (rule, value, callback) => {
+      let reg = /^[\u4e00-\u9fa5]+$/g;
+      if (reg.test(value.trim()) || value.trim() == '') {
+        callback()
+      } else {
+        callback(new Error('开户名称只能为中文'))
+      }
+    }
+    var faxNumValid = (rule, value, callback) => {
+        let reg = /^(\d{3,4}-)?\d{7,8}$/;
+        if (reg.test(value.trim()) || value.trim() == '') {
+          callback()
+        } else {
+          callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
+        }
+    }
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date()
@@ -353,7 +374,11 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}]
+        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
+        openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
+        faxNum: [{validator: faxNumValid, trigger: 'blur'}],
+        busiLicenseCode: [{min: 15, message: '公司证照编号不能小于15位', trigger: 'blur'}],
+        tfn: [{min: 15, message: '税号不能小于15位', trigger: 'blur'}]
       },
       timeout: null,
       fileObj: {},
@@ -381,29 +406,44 @@ export default {
   methods: {
     onSubmit (form) {
       if(form == 'form') {
-        debugger
-        if (typeof(this.form.busiLicenseCode) == 'string') {
-          if (this.form.busiLicenseCode.length < 15 && this.form.busiLicenseCode.length > 0) {
-            document.body.scrollTop = 200
-            this.msgShow(this, '证照编码不能少于15位')
-            return
-          }          
-        }
-        if (typeof(this.form.tfn) == 'string') {
-          if (this.form.busiLicenseCode.length > 0 && this.form.tfn.length < 15) {
-            document.body.scrollTop = 300
-            this.msgShow(this, '税号不能少于15位')
-            return 
-          }
-        }
-        this.$refs[form].validate((valid) => {
-          if (valid) {
-            this.customDetailCreate()
-          } else {
-            document.body.scrollTop = 150
-            this.msgShow(this, '请规范输入必填项')
-          }
+        // if (typeof(this.form.busiLicenseCode) == 'string') {
+        //   if (this.form.busiLicenseCode.length < 15 && this.form.busiLicenseCode.length > 0) {
+        //     document.body.scrollTop = 200
+        //     this.msgShow(this, '证照编码不能少于15位')
+        //     return
+        //   }          
+        // }
+        // if (typeof(this.form.tfn) == 'string') {
+        //   if (this.form.busiLicenseCode.length > 0 && this.form.tfn.length < 15) {
+        //     document.body.scrollTop = 300
+        //     this.msgShow(this, '税号不能少于15位')
+        //     return 
+        //   }
+        // }
+        // this.$refs[form].validate((valid) => {
+        //   if (valid) {
+        //     this.customDetailCreate()
+        //   } else {
+        //     document.body.scrollTop = 150
+        //     this.msgShow(this, '请规范输入必填项')
+        //   }
+        // })
+        // let validateStr = 'compName,fkRelation,fkCustomPropertyId'
+        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone']
+        let isValid = true
+        valiArr.map(itm => {
+          this.$refs[form].validateField(itm, function(msg){
+            if (msg !== '') {
+              isValid = false
+            }
+          })
         })
+        if (isValid) {
+          this.customDetailCreate()
+        } else {
+          document.body.scrollTop = 150
+          this.msgShow(this, '请规范输入必填项')
+        }
       } else {
         this.back()
       }
@@ -715,5 +755,8 @@ export default {
   }
   .el-icon-circle-check{
     color: #67c23a;
+  }
+  .head-title{
+    line-height: 30px;
   }
 </style>

@@ -4,37 +4,39 @@
   .mt-15
     el-button(size="small", @click="jump({path: '/customManager/customerPortrait'})") 返回列表
   .mt-15
-    el-tabs(type="border-card", v-model="tabName")
+    el-tabs(type="border-card", v-model="tabName", @tab-click="elTabsHandler")
       el-tab-pane(label="基础信息", name="1")
-        custom-detail(:isEdit="false")
+        custom-detail(:isEdit="false", v-if="tabName == '1'", @cb="cstmDetail")
       el-tab-pane(label="客户图表", name="2")
-        .bg-f9
-          custom-chart-table(:tableValue="dealTableValue", :search="dealSearch")
-        .mt-15.bg-f9
-          custom-chart-table(:tableValue="orderTableValue", :search="orderSearch")
-        .mt-15.bg-f9
-          custom-chart-table(:tableValue="addCartNoTableValue", :search="addCartNoSearch")
-        .mt-15.bg-f9
-          custom-chart-table(:tableValue="successRateTableValue", :search="successRateSearch")
-        .row.mt-15.bg-f9.padding
-          .col
-            el-card(shadow="hover")
-              .clearfix(slot="header") 物资品类销售折线图
-              div
-                el-form.pt-15(:inline="true", :model="goodsForm" ref="goodsForm" label-width="90px")
-                  el-form-item(label="物资品类：", prop="goodsType")
-                    el-select(v-model="goodsForm.goodsType", size="small")
-                      el-option(v-for="(gtype, idx) in goodsTypeOpts", :key="idx", :value="gtype", :label="gtype")
-                  el-form-item(label="日期：", prop="date")
-                    el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="goodsForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")
-                  el-form-item
-                    el-button(type="primary", @click="queryGoods", size="small") 查询
-                    el-button(@click="$refs['goodsForm'].resetFields()", size="small") 重置
-                line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart")
-        .mt-15.bg-f9
-          goods-sales-pie(:pieTableVal="pieTableVal", @search="pieSearch")
+        template(v-if="tabName == '2'")
+          .bg-f9
+            custom-chart-table(:tableValue="dealTableValue", :search="dealSearch")
+          .mt-15.bg-f9
+            custom-chart-table(:tableValue="orderTableValue", :search="orderSearch", v-if="isOnLine")
+          .mt-15.bg-f9
+            custom-chart-table(:tableValue="addCartNoTableValue", :search="addCartNoSearch", v-if="isOnLine")
+          .mt-15.bg-f9
+            custom-chart-table(:tableValue="successRateTableValue", :search="successRateSearch", v-if="isOnLine")
+          .row.mt-15.bg-f9.padding
+            .col
+              el-card(shadow="hover")
+                .clearfix(slot="header") 物资品类销售折线图
+                div
+                  el-form.pt-15(:inline="true", :model="goodsForm" ref="goodsForm" label-width="90px")
+                    el-form-item(label="物资品类：", prop="goodsType")
+                      el-select(v-model="goodsForm.goodsType", size="small")
+                        el-option(v-for="(gtype, idx) in goodsTypeOpts", :key="idx", :value="gtype", :label="gtype")
+                    el-form-item(label="日期：", prop="date")
+                      el-date-picker(type="daterange", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期",v-model="goodsForm.date" style="width: 250px;", size="small", :picker-options="datePickerOpts", value-format="yyyy-MM-dd")
+                    el-form-item
+                      el-button(type="primary", @click="queryGoods", size="small") 查询
+                      el-button(@click="$refs['goodsForm'].resetFields()", size="small") 重置
+                  line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart")
+          .mt-15.bg-f9
+            goods-sales-pie(:pieTableVal="pieTableVal", @search="pieSearch")
       el-tab-pane(label="行为记录", name="3")
-        behavior-rec(:behaviorData="behaviorTableData", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount",@pgChange="tablePgChange", @search="behaviorSearch")
+        template(v-if="tabName == '3'")
+          behavior-rec(:behaviorData="behaviorTableData", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount",@pgChange="tablePgChange", @search="behaviorSearch")
 </template>
 
 <script>
@@ -163,17 +165,45 @@ export default {
       behaviorTableData: [],
       currentPage: 1,
       totalCount: 0,
-      behaviorQuery: {}
+      behaviorQuery: {},
+      isOnLine: true
     }
   },
   beforeMount () {
     this.loadGoodsType()
   },
   methods: {
+    cstmDetail (obj) {
+      console.log('------------')
+      console.log(obj.ebusiMemberCode)
+      this.isOnLine = (obj.ebusiMemberCode == null) ? false : true
+    },
+    elTabsHandler (tab) {
+      this.tabName = tab.name
+      if (this.tabName == '2') {
+        this.initSearchData()
+      }
+    },
+    initSearchData () {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+      end.setTime(end.getTime() - 3600 * 1000 * 24)
+      this.goodsForm.date = [new Date(start), new Date(end)]
+      let recentWeek = [this.date2Str(start), this.date2Str(end)]
+      this.queryGoodsSalesList(recentWeek, 'dealSearch')
+      this.queryGoodsSalesList(recentWeek, 'queryGoods')
+      this.queryGoodsSalesList(recentWeek, 'pieSearch')
+      let params = {
+        date: recentWeek
+      }
+      this.orderSearch(params)
+      this.addCartNoSearch(params)
+      this.successRateSearch(params)
+    },
     async loadGoodsType () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/salesType/' + this.$route.query.id, params: {}})
-        console.log(data)
         if (data.returnCode === 0 && data.goodsType.length > 0) {
           this.goodsTypeOpts = data.goodsType
           this.goodsTypeOpts.unshift('全部')
@@ -185,17 +215,29 @@ export default {
         this.goodsTypeOpts = ['全部']
       }
     },
+    initSearch (arr) {
+      if (typeof(arr[0]) == 'object') {
+        arr[0] = this.date2Str(arr[0])
+        arr[1] = this.date2Str(arr[1])
+      }
+      return arr
+    },
     dealSearch (params) {
+      params.date = this.initSearch(params.date)
       this.queryGoodsSalesList(params.date, 'dealSearch')
     },
     queryGoods () {
       if (this.goodsForm.date == null || this.goodsForm.date == '') {
         this.msgShow(this, '请选择日期')
       } else {
+        this.goodsForm.date = this.initSearch(this.goodsForm.date)
         this.queryGoodsSalesList([this.goodsForm.date[0], this.goodsForm.date[1], this.goodsForm.goodsType], 'queryGoods')
       }
     },
     pieSearch (params) {
+      // debugger
+      // console.log(params)
+      params = this.initSearch(params)
       this.queryGoodsSalesList(params, 'pieSearch')
     },
     async queryGoodsSalesList (params, searchType) {
@@ -268,6 +310,7 @@ export default {
       this.loadBehaviorData()
     },
     async orderSearch (params) {
+      params.date = this.initSearch(params.date)
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/orderTypeCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
         if (data.returnCode === 0) {
@@ -281,7 +324,7 @@ export default {
       }
     },
     async addCartNoSearch (params) {
-      console.log(params)
+      params.date = this.initSearch(params.date)
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/goodsCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
         if (data.returnCode === 0) {
@@ -295,7 +338,7 @@ export default {
       }
     },
     async successRateSearch (params) {
-      console.log(params)
+      params.date = this.initSearch(params.date)
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/cstmPortrait/orderCount/' + this.$route.query.id + '?startDate=' + params.date[0] + '&endDate=' + params.date[1], params: {}})
         if (data.returnCode === 0) {

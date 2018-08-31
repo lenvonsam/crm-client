@@ -48,6 +48,7 @@ const rowData = (value, key) => {
     case 'planVisitTime':
     case 'delDate':
     case 'time':
+    case 'billDate':
       return (value) ? datetime2Str(new Date(value)) : ''
     default:
       return value

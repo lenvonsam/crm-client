@@ -88,6 +88,13 @@ export default {
       this.changePieData()
     }
   },
+  mounted () {
+    const end = new Date()
+    const start = new Date()
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+    end.setTime(end.getTime() - 3600 * 1000 * 24)
+    this.date = [new Date(start), new Date(end)]
+  },
   methods: {
     pieSearch () {
       if (this.date === '' || this.date === null) {

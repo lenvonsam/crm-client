@@ -129,6 +129,7 @@ export default {
         if (data.returnCode === 0) {
           this.obj = data.obj
           this.obj.setUpDateStr = (data.obj.setUpDate) ? this.date2Str(new Date(data.obj.setUpDate)) : ''
+          this.$emit('cb', this.obj)
         } else {
           this.msgShow(this, data.errMsg)
         }

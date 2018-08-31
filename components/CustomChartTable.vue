@@ -37,6 +37,13 @@
         }
       }
     },
+    mounted () {
+      const end = new Date()
+      const start = new Date()
+      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+      end.setTime(end.getTime() - 3600 * 1000 * 24)
+      this.searchForm.date = [new Date(start), new Date(end)]
+    },
     methods: {
       submitForm(formName) {
         if (this.searchForm.date == '' || this.searchForm.date == null) {
@@ -47,6 +54,9 @@
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      dateChange (val) {
+        console.log(val)
       }
     }
   }
