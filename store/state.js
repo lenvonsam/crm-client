@@ -9,6 +9,8 @@ export default {
   globalSuccessMsg: '',
   globalErrorMsg: '',
   currentPathIdx: '1-1',
+  // 客户查询返回数据字段
+  cstmArr: ['id', 'compName', 'linkName', 'linkPhone', 'createAt', 'billDate', 'dptName', 'acctName', 'creatorName', 'mark', 'orgId', 'dptId', 'acctId', 'empCode', 'visitCount', 'lockStatus', 'updateAt', 'convertDate'],
   // 默认头像
   defaultAvatar: require('../static/defaultAvatar.png'),
   // 数据权限等级

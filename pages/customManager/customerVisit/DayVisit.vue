@@ -66,7 +66,7 @@ export default {
           width: '180px',
           type: 'object',
           factValue (row) {
-            return row.createAt
+            return row.convertDate
           }
         }, {
           lbl: '添加人',
@@ -164,7 +164,7 @@ export default {
           let arr = []
           data.list.map(itm => {
             itm[0].planDate = this.date2Str(new Date(itm[0].planDate))
-            itm[0].customer.createAt = this.datetime2Str(new Date(itm[0].customer.createAt))
+            itm[0].customer.convertDate = this.datetime2Str(new Date(itm[0].customer.convertDate))
             itm[0].link = itm[1]
             arr.push(itm[0])
           })

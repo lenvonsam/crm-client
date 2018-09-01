@@ -47,11 +47,11 @@
           }, {
             lbl: '主联系人',
             width: 200,
-            prop: 'name'
+            prop: 'linkName'
           }, {
             lbl: '联系方式',
             width: 250,
-            prop: 'phone'
+            prop: 'linkPhone'
           }, {
             lbl: '转化时间',
             width: 200,
@@ -67,8 +67,8 @@
             prop: 'acctName'
           }, {
             lbl: '创建人',
-            width: 185,
-            prop: 'createName'
+            width: 160,
+            prop: 'creatorName'
           }, {
             lbl: '未开单天数',
             width: 160,
@@ -82,6 +82,7 @@
         queryObject: {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
+          orderType: '0',
           mark: '2'
         },
         loading: true
@@ -90,7 +91,8 @@
     computed: {
       ...mapState({
         pageSize: state => state.pageSize,
-        currentUser: state => state.user.currentUser
+        currentUser: state => state.user.currentUser,
+        cstmArr: state => state.cstmArr
       })
     },
     beforeMount () {
@@ -150,7 +152,7 @@
           if (data.returnCode === 0) {
             let arr = []
             let endDate = new Date()
-            let arrList = ['id', 'compName', 'name', 'phone', 'createAt', 'billDate', 'dptName', 'acctName', 'createName', 'mark', 'orgId', 'dptId', 'acctId', 'visitCount', 'lockStatus']
+            let arrList = this.cstmArr
             data.list.map(itm => {
               let obj = {}
               for(let i=0; i<arrList.length; i++){
@@ -159,8 +161,9 @@
               let startDate = new Date(itm[5])
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date/(24*3600*1000))
+              console.log('客户画像--' + days)
               obj.billDateDays = days
-              obj.createAtDate2 = this.date2Str(startDate)
+              obj.createAtDate2 = this.datetime2Str(new Date(itm[17]))
               arr.push(obj)
             })
             this.tableValue.tableData = arr
@@ -183,6 +186,8 @@
           let billDateDaysAsc = (obj.order =='ascending' && obj.property =='billDateDays')
           let billDateDaysDesc = (obj.order =='descending' && obj.property =='billDateDays')
           this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDateDaysAsc) ? '3' : (billDateDaysDesc)? '4' : '0'
+          this.currentPage = 1
+          this.queryObject.currentPage = this.currentPage - 1
           this.loadData()
         }
       }

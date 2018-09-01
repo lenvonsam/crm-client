@@ -49,14 +49,14 @@
           }, {
             lbl: '主联系人',
             width: 200,
-            prop: 'name'
+            prop: 'linkName'
           }, {
             lbl: '联系方式',
             width: 250,
-            prop: 'phone'
+            prop: 'linkPhone'
           }, {
             lbl: '流失时间',
-            prop: 'billDate',
+            prop: 'convertDate',
             width: 200,
             sort: 'custom'
           }, {
@@ -70,7 +70,8 @@
           }, {
             lbl: '未开单天数',
             width: 120,
-            prop: 'billDateDays',
+            prop: 'publicBillDays',
+            align: 'center',
             sort: 'custom'
           }, {
             type: 'action',
@@ -87,6 +88,7 @@
         queryObject: {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
+          orderType: '0',
           mark: '3'
         },
         chooseArray: [],
@@ -106,7 +108,8 @@
     computed: {
       ...mapState({
         pageSize: state => state.pageSize,
-        currentUser: state => state.user.currentUser
+        currentUser: state => state.user.currentUser,
+        cstmArr: state => state.cstmArr
       })
     },
     mounted () {
@@ -224,16 +227,18 @@
           if (data.returnCode === 0) {
             let arr = []
             let endDate = new Date()
-            let arrList = ['id', 'compName', 'name', 'phone', 'createAt', 'billDate', 'dptName', 'acctName', 'createName', 'mark', 'orgId', 'dptId', 'acctId', 'visitCount', 'rownum']
+            let arrList = this.cstmArr
+            console.log(arrList.length)
             data.list.map(itm => {
               let obj = {}
-              for(let i=0; i<arrList.length; i++){
+              for(let i=0; i < arrList.length; i++){
                 obj[arrList[i]] = itm[i]
               }
               let startDate = new Date(itm[5])
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date/(24*3600*1000))
-              obj.billDateDays = days
+              obj.publicBillDays = days
+              console.log(obj.convertDate)
               arr.push(obj)
             })
             this.tableValue.tableData = arr
@@ -277,13 +282,15 @@
         }
       },
       sortHandler (obj) {
-        if (obj.property =='billDate' || obj.property =='billDateDays') {
+        if (obj.property =='convertDate' || obj.property =='publicBillDays') {
           this.loading = true
-          let dateAsc = (obj.order =='ascending' && obj.property =='billDate')
-          let dateDesc = (obj.order =='descending' && obj.property =='billDate')
-          let billDateDaysAsc = (obj.order =='ascending' && obj.property =='billDateDays')
-          let billDateDaysDesc = (obj.order =='descending' && obj.property =='billDateDays')
-          this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDateDaysAsc) ? '3' : (billDateDaysDesc)? '4' : '0'
+          let dateAsc = (obj.order =='ascending' && obj.property =='convertDate')
+          let dateDesc = (obj.order =='descending' && obj.property =='convertDate')
+          let billDaysAsc = (obj.order =='ascending' && obj.property =='publicBillDays')
+          let billDaysDesc = (obj.order =='descending' && obj.property =='publicBillDays')
+          this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDaysAsc) ? '3' : (billDaysDesc)? '4' : '0'
+          this.currentPage = 1
+          this.queryObject.currentPage = this.currentPage - 1
           this.loadData()
         }
       }

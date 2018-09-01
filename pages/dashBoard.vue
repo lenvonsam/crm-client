@@ -156,7 +156,7 @@
         loading: false,
         elButton: [{lbl: '个人', name: 3}, {lbl: '部门', name: 2}, {lbl: '机构', name: 1}, {lbl: '公司', name: 0}],
         tabPaneDateType: [{lbl: '本月度', name: '0'}, {lbl: '本季度', name: '1'}, {lbl: '本年度', name: '2'}],
-        productSalesVal: [{lbl: '今日', name: '0'}, {lbl: '本周', name: '1'}, {lbl: '本月', name: '2'}, {lbl: '本季度', name: '3'}, {lbl: '本年度', name: '4'}],
+        productSalesVal: [{lbl: '昨日', name: '0'}, {lbl: '本周', name: '1'}, {lbl: '本月', name: '2'}, {lbl: '本季度', name: '3'}, {lbl: '本年度', name: '4'}],
         tackTabName: '0',
         saleTabName: '0',
         tagHave: 3,
@@ -190,8 +190,9 @@
       console.log(this.currentUser.avatar)
       this.currentUser.loginTime = this.datetime2Str(new Date(this.currentUser.loginTime))
       this.$nextTick(function () {
-        let d = new Date().getDate()
-        this.schedule = Number(d/30*100).toFixed(0)
+        let d = new Date()
+        let monthDay = this.getDaysInOneMonth(d.getFullYear(), d.getMonth() + 1)
+        this.schedule = Number(d.getDate()/monthDay*100).toFixed(0)
       })
       this.queryObject = {
         currentPage: 0,
@@ -213,6 +214,11 @@
     methods: {
       selectData (val) {
         this.chooseArray = val
+      },
+      getDaysInOneMonth(year, month){
+        let d = new Date(year, month, 0)
+        month = parseInt(month, 10)
+        return d.getDate()
       },
       rowMap (obj) {
         this.baiduMapData = {

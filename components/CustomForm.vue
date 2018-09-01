@@ -1,8 +1,10 @@
 <template lang="pug">
 div
   .mb-5.bg-f9.head-title.pl-15
-    span.text-blue *
-    span 标记为客户转化必填项
+    span.text-blue.ft-14 *
+    span.ml-5 标记为客户转化必填项
+    span.ml-10.text-red.ft-14 *
+    span.ml-5 标记为客户必填项
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
       el-col(:span="12")
@@ -72,7 +74,7 @@ div
             el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="工商证照编码：", prop="busiLicenseCode")
+        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
           el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
       el-col(:span="10")
         .row
@@ -92,7 +94,7 @@ div
               i.pl-5.el-icon-circle-check
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="公司地址：")
+        el-form-item.validFormal(label="公司地址：")
           //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
           .row
             .col
@@ -104,11 +106,11 @@ div
           el-input(v-model="form.faxNum", placeholder="请输入传真号码", clearable)
     el-row.pr-10
       el-col(:span="12")
-        el-form-item(label="公司规模：")
+        el-form-item.validFormal(label="公司规模：")
           el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模")
             el-option(v-for="item in compSizeOpts", :key="item.value", :label="item.label", :value="item.value")
       el-col(:span="12")
-        el-form-item(label="公司类型：")
+        el-form-item.validFormal(label="公司类型：")
           el-select.full-width(v-model="form.compType", placeholder="请选择公司类型")
             el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
     el-row.pr-10
@@ -174,7 +176,7 @@ div
         el-form-item.validFormal(label="开户银行：")
           el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
       el-col(:span="12")
-        el-form-item.validFormal(label="开户账号：")
+        el-form-item.validFormal(label="开户账号：", prop="openAcct")
           el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
     el-row.pr-10
       el-col(:span="24")
@@ -310,6 +312,7 @@ div
           el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
       el-col(:span="6")
         .ft-18.mb-15 开票资料
+          sup.text-blue *
         zoom-img.zoomImg(:url="form.invoiceInfoUrl == undefined ? defaultAvatar : form.invoiceInfoUrl", :width='200', :height='200')
         simple-upload(v-model="form.invoiceInfoUrl", :disabled="customerSourceDisabled")
           el-button(type="primary", size="mini", :disabled="customerSourceDisabled") 选择图片
@@ -345,24 +348,30 @@ export default {
   },
   data () {
     var openAcctNameValid = (rule, value, callback) => {
-      let reg = /^[\u4e00-\u9fa5]+$/g;
-      if (reg.test(value.trim()) || value.trim() == '') {
+      if (this.chineseReg(value.trim()) || value.trim() == '') {
         callback()
       } else {
         callback(new Error('开户名称只能为中文'))
       }
     }
     var faxNumValid = (rule, value, callback) => {
-        let reg = /^(\d{3,4}-)?\d{7,8}$/;
-        if (reg.test(value.trim()) || value.trim() == '') {
+        if (this.faxNumReg(value.trim()) || value.trim() == '') {
           callback()
         } else {
           callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
         }
     }
+    var openAcctValid = (rule, value, callback) => {
+      let reg = /[\u4E00-\u9FA5]/
+      if (!reg.test(value) || value.trim() == '') {
+        callback()
+      } else {
+        callback(new Error('开户账号不能有中文'))
+      }
+    }
     return {
       form: {
-        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date()
+        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
       },
       rules: {
         compName: [
@@ -378,7 +387,8 @@ export default {
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, message: '公司证照编号不能小于15位', trigger: 'blur'}],
-        tfn: [{min: 15, message: '税号不能小于15位', trigger: 'blur'}]
+        tfn: [{min: 15, message: '税号不能小于15位', trigger: 'blur'}],
+        openAcct: [{validator: openAcctValid, trigger: 'blur'}]
       },
       timeout: null,
       fileObj: {},
@@ -404,35 +414,20 @@ export default {
     })
   },
   methods: {
-    onSubmit (form) {
-      if(form == 'form') {
-        // if (typeof(this.form.busiLicenseCode) == 'string') {
-        //   if (this.form.busiLicenseCode.length < 15 && this.form.busiLicenseCode.length > 0) {
-        //     document.body.scrollTop = 200
-        //     this.msgShow(this, '证照编码不能少于15位')
-        //     return
-        //   }          
-        // }
-        // if (typeof(this.form.tfn) == 'string') {
-        //   if (this.form.busiLicenseCode.length > 0 && this.form.tfn.length < 15) {
-        //     document.body.scrollTop = 300
-        //     this.msgShow(this, '税号不能少于15位')
-        //     return 
-        //   }
-        // }
-        // this.$refs[form].validate((valid) => {
-        //   if (valid) {
-        //     this.customDetailCreate()
-        //   } else {
-        //     document.body.scrollTop = 150
-        //     this.msgShow(this, '请规范输入必填项')
-        //   }
-        // })
-        // let validateStr = 'compName,fkRelation,fkCustomPropertyId'
+    onSubmit (formStr) {
+      if(formStr == 'form') {
         let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone']
+        let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
+        let that = this
+        formalArr.map(itm => {
+          if (that.form[itm] !== '' && that.form[itm] !== null) {
+            console.log(itm + ':' + that.form[itm])
+            valiArr.push(itm)
+          }
+        })
         let isValid = true
         valiArr.map(itm => {
-          this.$refs[form].validateField(itm, function(msg){
+          this.$refs[formStr].validateField(itm, function(msg){
             if (msg !== '') {
               isValid = false
             }
@@ -495,6 +490,7 @@ export default {
         delete this.form.depositRateVal
         delete this.form.depositCycleVal
         delete this.form.billDate
+        delete this.form.convertDate
         if (typeof(this.form.fkAcctName) == 'number') {
           this.form.fkAcctId = this.form.fkAcctName
         }

@@ -8,6 +8,12 @@
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap", @tableRowConversion="rowConversion")
     baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
+    el-dialog(title="提示", :visible="dialogShow", @close="dialogShow=false")
+      span.ft-16 转为正式客户请确认以下内容是否完善：
+      .mt-5 工商证照编码， 公司地址， 公司规模， 公司类型， 税号， 开户名称， 开户银行， 开户账号， 开票地址， 营业执照（附件）， 开票资料（附件）
+      span(slot="footer" class="dialog-footer")
+        el-button(@click="rowEdit(rowObj)", size="small") 编 辑
+        el-button(type="primary" @click="conversionSure", size="small") 确 定
 </template>
 
 <script>
@@ -34,6 +40,7 @@
         queryObject: {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
+          orderType: '0',
           mark: '1'
         },
         btnGroups: [{
@@ -55,11 +62,11 @@
             linkUrl: '/customManager/potentialCustom/detail'           
           }, {
             lbl: '主联系人',
-            prop: 'name',
+            prop: 'linkName',
             width: '200px'
           }, {
             lbl: '联系方式',
-            prop: 'phone',
+            prop: 'linkPhone',
             width: '120px'
           }, {
             lbl: '添加日期',
@@ -75,7 +82,7 @@
             width: '150px'
           }, {
             lbl: '创建人',
-            prop: 'createName',
+            prop: 'creatorName',
             width: '100px'
           }, {
             type: 'action',
@@ -112,7 +119,9 @@
           zoom: 6,
           location: '中国',
           keyWord: ''
-        }
+        },
+        dialogShow: false,
+        rowObj: {}
       }
     },
     mounted () {
@@ -127,7 +136,8 @@
     computed: {
       ...mapState({
         pageSize: state => state.pageSize,
-        currentUser: state => state.user.currentUser
+        currentUser: state => state.user.currentUser,
+        cstmArr: state => state.cstmArr
       })
     },
     methods: {
@@ -149,7 +159,7 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer', params: this.queryObject})
           if (data.returnCode === 0) {
-            this.tableValue.tableData = this.cstmListData(data.list)
+            this.tableValue.tableData = this.cstmListData(data.list, this.cstmArr)
             this.totalCount = data.total
             this.loading = false
           } else {
@@ -190,22 +200,6 @@
         if(type == 'add'){
           this.$router.push({path: '/customManager/potentialCustom/form?type=new'})
         }
-        // if(type == 'conversion'){
-        //   if (this.chooseArray.length === 0) {
-        //     this.msgShow(this, '请选择需要转换的行数', 'warning')
-        //     return
-        //   }
-        //   this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
-        //     let arr = []
-        //     let paramsObj = {
-        //       cstmId: this.chooseArray.id,
-        //       uid: this.currentUser.id
-        //     }
-        //     this.customerTransform(paramsObj)
-        //   }, () => {
-        //     console.log('cancel')
-        //   })
-        // }
         if(type == 'conversionRec'){
           this.$router.push({path: '/customManager/potentialCustom/conversionRec'})
         }
@@ -214,19 +208,31 @@
         this.loading = true
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1
+        console.log(this.queryObject.orderType)
         this.loadData()
       },
       rowConversion (obj) {
-        this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
-          let arr = []
-          let paramsObj = {
-            cstmId: obj.id,
-            uid: this.currentUser.id
-          }
-          this.customerTransform(paramsObj)
-        }, () => {
-          console.log('cancel')
-        })
+        // this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
+        //   let arr = []
+        //   let paramsObj = {
+        //     cstmId: obj.id,
+        //     uid: this.currentUser.id,
+        //     orderType: 0
+        //   }
+        //   this.customerTransform(paramsObj)
+        // }, () => {
+        //   console.log('cancel')
+        // })
+        this.rowObj = obj
+        this.dialogShow = true
+      },
+      conversionSure () {
+        let paramsObj = {
+          cstmId: this.rowObj.id,
+          uid: this.currentUser.id,
+          orderType: 0
+        }
+        this.customerTransform(paramsObj)
       },
       async actionDelete () {
         try {
@@ -258,6 +264,7 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customerTransform', params: paramsObj})
           if (data.returnCode === 0) {
             this.msgShow(this, '转换成功', 'success')
+            this.dialogShow = false
             this.loadData()
           } else {
             this.msgShow(this, data.errMsg)

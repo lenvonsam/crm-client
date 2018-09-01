@@ -49,6 +49,7 @@ const rowData = (value, key) => {
     case 'delDate':
     case 'time':
     case 'billDate':
+    case 'convertDate':
       return (value) ? datetime2Str(new Date(value)) : ''
     default:
       return value

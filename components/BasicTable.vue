@@ -17,7 +17,7 @@ div
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="(scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && head.prop == 'name'")
           template(v-else)
-            el-input(size="mini", v-if="head.editType == 'text'", v-model="scope.row[head.prop]")
+            el-input(size="mini", v-if="head.editType == 'text'", v-model="scope.row[head.prop]", @blur="verifyInput(head.prop, scope.row[head.prop], head.lbl)")
             el-date-picker.full-width(v-else-if="head.editType == 'date'", type="date", v-model="scope.row[head.prop]", size="small", format="yyyy-MM-dd", value-format="yyyy-MM-dd")
             el-select(v-else-if="head.editType == 'select'", v-model="scope.row[head.prop]", size="mini")
               el-option(v-for="item in head.selectList", :key="item.value", :label="item.label", :value="item.value")
@@ -63,7 +63,8 @@ div
         supplyCatalogOptions: [],
         comboOptions: [],
         acctOptions: [],
-        orgOptions: []
+        orgOptions: [],
+        isVerify: true
       }
     },
     computed: {
@@ -113,9 +114,10 @@ div
     methods: {
       tableRowClassName ({row, rowIndex}) {
         if(this.tableValue.rowClassName){
-          if (row.billDate > 60) {
+          console.log(row.billDateDays)
+          if (row.billDateDays >= 60) {
             return 'loss-cstm'
-          } else if (row.billDate > 30) {
+          } else if (row.billDateDays > 30 && row.billDateDays < 60) {
             return 'communicate-cstm'
           }
         }
@@ -147,7 +149,23 @@ div
       },
       handerRowBtn (idx, row, btnType) {
         row.idx = idx
-        this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
+        this.isVerify = true
+        if (btnType =='save') {
+          let lblStr = ''
+          for (let key in row){
+            if (key == 'name') {
+              this.tableValue.tableHead.map(itm => {
+                if (itm.prop == 'name') {
+                  lblStr = itm.lbl
+                }
+              })
+            }
+            this.verifyInput(key, row[key], lblStr)
+          }
+        }
+        if (this.isVerify) {
+          this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)  
+        }        
       },
       handleSelectionChange (rows) {
         this.$emit('chooseData', rows)
@@ -259,6 +277,42 @@ div
           property: column.prop
         }
         this.$emit('sort', obj)
+      },
+      verifyInput (prop, val, lbl) {
+        debugger
+        if (prop == 'phone') {
+          if (!this.mobileReg(val)) {
+            this.msgShow(this, '手机号码格式错误')
+            this.isVerify = false
+          }
+        }
+        if (prop == 'qqNo') {
+          var reg = /^[0-9]{0,20}$/
+          if (!reg.test(val)) {
+            this.msgShow(this, 'QQ号必须为数字且不能超过20位数字')
+            this.isVerify = false
+          }
+        }
+        if (prop == 'age') {
+          var reg = /^[0-9]{0,3}$/
+          if (!reg.test(val)) {
+            this.msgShow(this, '年龄必须为数字且不能超过3位数字')
+            this.isVerify = false
+          }
+        }
+        if (prop == 'name' && lbl == '开户名称') {
+          if (!this.chineseReg(val)) {
+            this.msgShow(this, '开户名称只能为中文')
+            this.isVerify = false
+          }
+        }
+        if (prop == 'bankAcct') {
+          let reg = /[\u4E00-\u9FA5]/
+          if (reg.test(val)) {
+            this.msgShow(this, '开户账号不能有中文')
+            this.isVerify = false
+          }
+        }
       }
     }
   }

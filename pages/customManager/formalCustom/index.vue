@@ -52,16 +52,16 @@
             minWidth: '340px'
           }, {
             lbl: '主联系人',
-            prop: 'name',
+            prop: 'linkName',
             width: '150px'
           }, {
             lbl: '联系方式',
-            prop: 'phone',
+            prop: 'linkPhone',
             width: '150px'
           }, {
             lbl: '转化时间',
-            width: '150px',
-            prop: 'createAtDate2',
+            width: '180px',
+            prop: 'convertDate',
             sort: 'custom'
           }, {
             lbl: '业务部门',
@@ -73,7 +73,7 @@
             width: '150px'
           }, {
             lbl: '创建人',
-            prop: 'createName',
+            prop: 'creatorName',
             width: '100px'
           }, {
             lbl: '未开单天数',
@@ -99,6 +99,7 @@
         queryObject: {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
+          orderType: '0',
           mark: '2'
         },
         loading: true,
@@ -114,7 +115,8 @@
     computed: {
       ...mapState({
       	pageSize: state => state.pageSize,
-        currentUser: state => state.user.currentUser
+        currentUser: state => state.user.currentUser,
+        cstmArr: state => state.cstmArr
       })
     },
     beforeMount () {
@@ -193,7 +195,6 @@
           location: '',
           keyWord: obj.compName
         }
-        console.log(obj.compName)
         this.dialogMap = true
       },
       async loadData () {
@@ -203,7 +204,7 @@
           if (data.returnCode === 0) {
             let arr = []
             let endDate = new Date()
-            let arrList = ['id', 'compName', 'name', 'phone', 'createAt', 'billDate', 'dptName', 'acctName', 'createName', 'mark', 'orgId', 'dptId', 'acctId', 'visitCount', 'lockStatus']
+            let arrList = this.cstmArr
             data.list.map(itm => {
               let obj = {}
               for(let i=0; i<arrList.length; i++){
@@ -212,8 +213,8 @@
               let startDate = new Date(itm[5])
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date / (24*3600*1000))
-              obj.billDateDays = days
-              obj.createAtDate2 = this.date2Str(new Date(itm[5]))
+              obj.billDateDays = (days < 0)? 0 : days
+              // obj.createAtDate2 = this.datetime2Str(new Date(itm[17]))
               arr.push(obj)
             })
             this.tableValue.tableData = arr
@@ -243,13 +244,15 @@
         }
       },
       sortHandler (obj) {
-        if (obj.property =='createAtDate2' || obj.property =='billDateDays') {
+        if (obj.property =='convertDate' || obj.property =='billDateDays') {
           this.loading = true
-          let dateAsc = (obj.order =='ascending' && obj.property =='createAtDate2')
-          let dateDesc = (obj.order =='descending' && obj.property =='createAtDate2')
+          let dateAsc = (obj.order =='ascending' && obj.property =='convertDate')
+          let dateDesc = (obj.order =='descending' && obj.property =='convertDate')
           let billDateDaysAsc = (obj.order =='ascending' && obj.property =='billDateDays')
           let billDateDaysDesc = (obj.order =='descending' && obj.property =='billDateDays')
           this.queryObject.orderType = (dateAsc) ? '1' : (dateDesc) ? '2' : (billDateDaysAsc) ? '3' : (billDateDaysDesc)? '4' : '0'
+          this.currentPage = 1
+          this.queryObject.currentPage = this.currentPage - 1
           this.loadData()
         }
       }

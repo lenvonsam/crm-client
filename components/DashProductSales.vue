@@ -157,38 +157,49 @@ div
             numDays = this.getDaysYear(year) - 1
             prevNumDays = (this.isLeapYear(year)) ? 366 : 365
           }
-          if (this.dateType == '0') { // 今日总量日均同比增长计算
-            tableNam[0].rate = (Number(tableNam[0].data_1) == 0) ? '0%' : ((Number(tableNam[0].data_1) - Number(tableNam[0].data_2)) / Number(tableNam[0].data_1) *100).toFixed(2) + '%'
+
+          // 总量日均同比增长计算
+          if (this.dateType == '0') { 
+            // const lastAvrg = Number(tableNam[i].data_1)
+            // const currtAvrg = Number(tableNam[i].data_2)
+            // tableNam[0].rate = (Number(tableNam[0].data_1) == 0) ? '' : ((Number(tableNam[0].data_2) - Number(tableNam[0].data_1)) / Number(tableNam[0].data_1) *100).toFixed(2) + '%'
+            const lastAvrg = Number(tableNam[0].data_1)
+            const yesterAvrg = Number(tableNam[0].data_2)
+            tableNam[0].rate = (lastAvrg == 0) ? (yesterAvrg*100).toFixed(2) + '%' : ((yesterAvrg - lastAvrg) / lastAvrg *100).toFixed(2) + '%'
           } else {
-            // tableNam[0].rate = (Number(tableNam[0].data_2) == 0) ? '0%' :  ((1-(Number(tableNam[0].data_1) / prevNumDays) / (Number(tableNam[0].data_2) / numDays)) * 100).toFixed(2) + '%'
-            const lastAvrg = Number(tableNam[0].data_1) / prevNumDays
-              // 本月
-            const currtAvrg = Number(tableNam[0].data_2) / numDays
-            tableNam[0].rate = (Number(tableNam[0].data_2) == 0) ? '0%' :  (((currtAvrg - lastAvrg) / currtAvrg) * 100).toFixed(2) + '%'
+            const lastAvrg = Number(tableNam[0].data_1) / prevNumDays // 上月              
+            const currtAvrg = Number(tableNam[0].data_2) / (numDays == 0) ? 1 : numDays // 本月
+            tableNam[0].rate = (lastAvrg == 0) ? (currtAvrg*100).toFixed(2) + '%' :  (((currtAvrg - lastAvrg) / lastAvrg) * 100).toFixed(2) + '%'
           }
+
+          // 日均同比增长计算
           for (let i=1; i<tableNam.length; i++) {
             tableNam[i].data_1Rate = ((Number(tableNam[i].data_1) / Number(tableNam[0].data_1)) * 100).toFixed(2)
-            tableNam[i].data_2Rate = ((Number(tableNam[i].data_2) / Number(tableNam[0].data_2)) *100).toFixed(2)
+            tableNam[i].data_2Rate = ((Number(tableNam[i].data_2) / Number(tableNam[0].data_2)) * 100).toFixed(2)
             if (this.dateType == '0') {
-              // 今日
-              tableNam[i].rate = (Number(tableNam[i].data_2) == 0) ? '0%' : ((Number(tableNam[i].data_1) - Number(tableNam[i].data_2)) / Number(tableNam[i].data_2) *100).toFixed(2) + '%'
+              // 昨日 tableNam[i].data_2 
+              // 前日 tableNam[i].data_1
+              const lastAvrg = Number(tableNam[i].data_1)
+              const yesterAvrg = Number(tableNam[i].data_2)
+              tableNam[i].rate = (lastAvrg == 0) ? (yesterAvrg*100).toFixed(2) + '%' : ((yesterAvrg - lastAvrg) / lastAvrg *100).toFixed(2) + '%'
             } else {
               // 非今日
               // 上月
+              debugger
               const lastAvrg = Number(tableNam[i].data_1) / prevNumDays
               // 本月
-              const currtAvrg = Number(tableNam[i].data_2) / numDays
-              tableNam[i].rate = (Number(tableNam[i].data_2) == 0) ? '0%' :  (((lastAvrg - currtAvrg) / currtAvrg) * 100).toFixed(2) + '%'
+              const currtAvrg = Number(tableNam[i].data_2) / (numDays == 0) ? 1 : numDays
+              tableNam[i].rate =  (lastAvrg == 0) ? (currtAvrg*100).toFixed(2) + '%' :  (((currtAvrg - lastAvrg) / lastAvrg) * 100).toFixed(2) + '%'
             }
           }
         }
       },
-      getDaysInOneMonth(year, month){
+      getDaysInOneMonth(year, month){ // 获取月份天数
         let d = new Date(year, month, 0)
         month = parseInt(month, 10)
         return d.getDate()
       },
-      getDaysInOneQuarter (year, quarter) {
+      getDaysInOneQuarter (year, quarter) { //获取季度天数
         let days = 0
         quarter.map(itm => {
           days += this.getDaysInOneMonth(year, itm)
@@ -196,7 +207,7 @@ div
         })
         return days
       },
-      getDaysYear (year) {
+      getDaysYear (year) { // 获取某年 到当前日 已过天数
         let days = 0
         let d = new Date()
         for (let i=0; i < d.getMonth(); i++) {
@@ -208,7 +219,7 @@ div
       isLeapYear(year) {
         return (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
       },
-      getDaysQuarter (year, quarter, month) {
+      getDaysQuarter (year, quarter, month) { // 获取当前季度 已过到今日多少日 2018, [7,8,9], 8
         let days = 0
         let d = new Date()
         quarter.map(itm => {

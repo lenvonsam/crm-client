@@ -148,36 +148,28 @@ const minixs = {
       })
       return basiCode.join('')
     },
-    cstmListData(dataList) {
+    cstmListData(dataList, arrList) {
       let arr = []
       dataList.map(itm => {
-        let obj = {
-          id: itm[0],
-          compName: itm[1],
-          name: itm[2],
-          phone: itm[3],
-          createAt: itm[4],
-          billDate: itm[5],
-          dptName: itm[6],
-          acctName: itm[7],
-          createName: itm[8],
-          mark: itm[9],
-          orgId: itm[10],
-          dptId: itm[11],
-          acctId: itm[12],
-          visitCount: itm[13],
-          lockStatus: itm[14],
-          rownum: itm[15]
+        let obj = {}
+        for(let i=0; i<arrList.length; i++){
+          obj[arrList[i]] = itm[i]
         }
         arr.push(obj)
       })
       return arr
     },
-    loadingS(){
-      const loading = this.$loading({
-        lock: true
-      })
-      return loading
+    chineseReg (val) {
+      let reg = /^[\u4e00-\u9fa5]+$/g
+      return reg.test(val)
+    },
+    faxNumReg (val) {
+      let reg = /^(\d{3,4}-)?\d{7,8}$/
+      return reg.test(val)
+    },
+    mobileReg (mobile) {
+      var reg = /^1[3|4|5|8|9][0-9]\d{4,8}$/
+      return reg.test(mobile)
     }
   }
 }
