@@ -154,52 +154,8 @@
           location: '',
           keyWord: obj.compName
         }
-        // console.log(obj.compName)
         this.dialogMap = true
       },
-      // subForm (flg) {
-      //   if(flg == 'ok'){
-      //     let toDay = new Date()
-      //     if(typeof(this.planDate) == 'string' || this.planDate == null){
-      //       this.msgShow(this, '请选择计划完成日期', 'warning')
-      //       return
-      //     }
-      //     if(typeof(this.planVisitTime) == 'string' || this.planVisitTime == null){
-      //       this.msgShow(this, '请选择计划开单日期', 'warning')
-      //       return
-      //     }
-      //     if(this.planVisitTime < toDay){
-      //       this.msgShow(this, '拜访时间不能小于当前时间', 'warning')
-      //       return
-      //     }
-      //     if(this.planDate < this.planVisitTime){
-      //       this.msgShow(this, '开单日期不能小于拜访日期', 'warning')
-      //       return
-      //     }
-      //     let arr = []
-      //     this.chooseArray.map(item => {
-      //       arr.push(item.id)
-      //     })
-      //     let ids = arr.join(',')
-      //     let paramsObj = {
-      //       cstmIds: ids,
-      //       uid: this.currentUser.id,
-      //       planDate: this.date2Str(this.planDate),
-      //       planVisitTime: this.datetime2Str(this.planVisitTime)
-      //     }
-      //     this.cstmCallCreate(paramsObj)
-      //   }
-      //   this.dialogFormVisible = false
-      // },
-      // groupBtnClick (type) {
-      //   if(type == 'add'){
-      //     if (this.chooseArray.length === 0) {
-      //       this.msgShow(this, '请选择需要操作的数据', 'warning')
-      //       return
-      //     }
-      //     this.dialogFormVisible = true
-      //   }
-      // },
       selectData (val) {
         this.chooseArray = val
       },
