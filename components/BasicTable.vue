@@ -141,7 +141,7 @@ div
           if (type === 'delete' && currentAuth.hasDelete === 0) result = false
         }
         if(type === 'mapVisit'){
-          condition = (scope.row.status == 2 && lbl == '地图')
+          condition = (scope.row.status == 1 && lbl == '地图')
         } else {
           condition = !((scope.row.mainStatus == 1 || scope.row.mainAcct == 1 || scope.row.del == false) && lbl == '删除')
         }
@@ -279,7 +279,6 @@ div
         this.$emit('sort', obj)
       },
       verifyInput (prop, val, lbl) {
-        debugger
         if (prop == 'phone') {
           if (!this.mobileReg(val)) {
             this.msgShow(this, '手机号码格式错误')

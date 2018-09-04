@@ -270,7 +270,9 @@ export default {
             this.$refs.goodsLineChart.update()
           }
         } else {
-          this.msgShow(this, data.errMsg)
+          if (data.errMsg !== '无效客户') {
+            this.msgShow(this, data.errMsg)  
+          }          
         }
       } catch (e) {
         console.error(e)
@@ -286,7 +288,9 @@ export default {
           this.behaviorTableData = data.list
           this.totalCount = data.total
         } else {
-          this.msgShow(this, data.errMsg)
+          if (data.errMsg !== '无效客户') {
+            this.msgShow(this, data.errMsg)  
+          }
         }
       } catch (e) {
         console.error(e)
@@ -316,7 +320,9 @@ export default {
         if (data.returnCode === 0) {
           this.orderTableValue.tableData = [{orderTotal: data.total, processing: data.pending, completed: data.finish, cancel: data.cancel, default: data.violate}]
         } else {
-          this.msgShow(this, data.errMsg)
+          if (data.errMsg !== '无效客户') {
+            this.msgShow(this, data.errMsg)  
+          }
         }
       } catch (e) {
         console.error(e)
@@ -330,7 +336,9 @@ export default {
         if (data.returnCode === 0) {
           this.addCartNoTableValue.tableData = [{hBeam: data.hBeam, channelSteel: data.channelSteel, iBeam: data.iBeam, angleSteel: data.angleSteel, flatSteel: data.flatSteel}]
         } else {
-          this.msgShow(this, data.errMsg)
+          if (data.errMsg !== '无效客户') {
+            this.msgShow(this, data.errMsg)  
+          }
         }
       } catch (e) {
         console.error(e)
@@ -344,7 +352,9 @@ export default {
         if (data.returnCode === 0) {
           this.successRateTableValue.tableData = [{addCart: data.cartCount, ceartOrder: data.orderCount, rate: data.percent.toFixed(2)}]
         } else {
-          this.msgShow(this, data.errMsg)
+          if (data.errMsg !== '无效客户') {
+            this.msgShow(this, data.errMsg)  
+          }
         }
       } catch (e) {
         console.error(e)

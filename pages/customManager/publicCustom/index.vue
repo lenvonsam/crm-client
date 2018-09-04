@@ -182,7 +182,7 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer', params: this.queryObject})
           if (data.returnCode === 0) {
             let arr = []
-            let endDate = new Date()
+            let endDate = new Date(this.date2Str(new Date()) + ' 02:00:00')
             let arrList = this.cstmArr
             console.log(arrList.length)
             data.list.map(itm => {
@@ -190,10 +190,10 @@
               for(let i=0; i < arrList.length; i++){
                 obj[arrList[i]] = itm[i]
               }
-              let startDate = new Date(itm[5])
+              let startDate = new Date(this.date2Str(new Date(itm[5])) + ' 02:00:00')
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date/(24*3600*1000))
-              obj.publicBillDays = days
+              obj.publicBillDays = (days < 0)? 0 : days
               console.log(obj.convertDate)
               arr.push(obj)
             })

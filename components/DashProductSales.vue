@@ -150,9 +150,12 @@ div
             prevNumDays = this.getDaysInOneMonth(year, myDate.getMonth())
           } else if (this.dateType == '3') {// 本季度 上季度时间
             let month = myDate.getMonth() + 1
-            let quarter = (month <= 3) ? [1, 2, 3] : (month <= 6) ? [4, 5, 6] : (month <= 9) ? [7, 8, 9] : [10, 11, 12]
-            numDays = this.getDaysQuarter(year, quarter, month) - 1
-            prevNumDays = this.getDaysInOneQuarter(year, quarter)
+            let monthArr=[[1, 2, 3], [4, 5, 6], [7,8,9], [10,11,12]]
+            let monthIdx = 0
+            monthIdx = (month <= 3) ? 0 : (month <= 6) ? 1 : (month <= 9) ? 2 : 3
+            numDays = this.getDaysQuarter(year, monthArr[monthIdx], month) - 1
+            let prevIdx = (monthIdx == 0) ? 3 : (monthIdx - 1)
+            prevNumDays = this.getDaysInOneQuarter(year,  monthArr[prevIdx])
           } else if (this.dateType == '4') {// 本年度 上年度实际
             numDays = this.getDaysYear(year) - 1
             prevNumDays = (this.isLeapYear(year)) ? 366 : 365
@@ -167,8 +170,9 @@ div
             const yesterAvrg = Number(tableNam[0].data_2)
             tableNam[0].rate = (lastAvrg == 0) ? (yesterAvrg*100).toFixed(2) + '%' : ((yesterAvrg - lastAvrg) / lastAvrg *100).toFixed(2) + '%'
           } else {
-            const lastAvrg = Number(tableNam[0].data_1) / prevNumDays // 上月              
-            const currtAvrg = Number(tableNam[0].data_2) / (numDays == 0) ? 1 : numDays // 本月
+            const lastAvrg = Number(tableNam[0].data_1) / prevNumDays // 上月             
+            numDays = (numDays == 0) ? 1 : numDays
+            const currtAvrg = Number(tableNam[0].data_2) / numDays // 本月
             tableNam[0].rate = (lastAvrg == 0) ? (currtAvrg*100).toFixed(2) + '%' :  (((currtAvrg - lastAvrg) / lastAvrg) * 100).toFixed(2) + '%'
           }
 
@@ -185,10 +189,10 @@ div
             } else {
               // 非今日
               // 上月
-              debugger
               const lastAvrg = Number(tableNam[i].data_1) / prevNumDays
               // 本月
-              const currtAvrg = Number(tableNam[i].data_2) / (numDays == 0) ? 1 : numDays
+              numDays = (numDays == 0) ? 1 : numDays
+              const currtAvrg = Number(tableNam[i].data_2) / numDays
               tableNam[i].rate =  (lastAvrg == 0) ? (currtAvrg*100).toFixed(2) + '%' :  (((currtAvrg - lastAvrg) / lastAvrg) * 100).toFixed(2) + '%'
             }
           }

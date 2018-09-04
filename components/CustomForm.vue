@@ -180,7 +180,7 @@ div
           el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
     el-row.pr-10
       el-col(:span="24")
-        el-form-item.validFormal(label="开票地址：")
+        el-form-item(label="开票地址：")
           //- el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
           //- el-cascader.full-width(v-model="form.billAddr", placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
           .row
@@ -386,8 +386,8 @@ export default {
         phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
-        busiLicenseCode: [{min: 15, message: '公司证照编号不能小于15位', trigger: 'blur'}],
-        tfn: [{min: 15, message: '税号不能小于15位', trigger: 'blur'}],
+        busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
+        tfn: [{min: 15, max: 20, message: '税号必须大于15位小于20位', trigger: 'blur'}],
         openAcct: [{validator: openAcctValid, trigger: 'blur'}]
       },
       timeout: null,

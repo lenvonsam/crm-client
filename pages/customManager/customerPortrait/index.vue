@@ -152,20 +152,18 @@
           if (data.returnCode === 0) {
             let arr = []
             // let endDate = new Date()
-            let endDate = new Date(this.date2Str(new Date()) + ' 00:00:00')
+            let endDate = new Date(this.date2Str(new Date()) + ' 02:00:00')
             let arrList = this.cstmArr
             data.list.map(itm => {
               let obj = {}
               for(let i=0; i<arrList.length; i++){
                 obj[arrList[i]] = itm[i]
               }
-              // let startDate = new Date(itm[5])
-              let startDate = new Date(this.date2Str(new Date(itm[5])) + ' 23:59:59')
+              let startDate = new Date(this.date2Str(new Date(itm[5])) + ' 02:00:00')
               let date = endDate.getTime() - startDate.getTime()
               let days = Math.floor(date/(24*3600*1000))
-              console.log('客户画像--' + days)
-              obj.billDateDays = days
-              obj.createAtDate2 = this.datetime2Str(new Date(itm[17]))
+              obj.billDateDays = (days < 0)? 0 : days
+              obj.createAtDate2 = (itm[17] == null) ? '' : this.datetime2Str(new Date(itm[17]))
               arr.push(obj)
             })
             this.tableValue.tableData = arr

@@ -228,7 +228,7 @@ export default {
           data.list.map(itm => {
             itm[0].createAtDate2 = this.date2Str(new Date(itm[0].createAt))
             itm[0].planVisitTimeDate2 = this.date2Str(new Date(itm[0].planVisitTime))
-            itm[0].customer.convertDate = this.datetime2Str(new Date(itm[0].customer.convertDate))
+            itm[0].customer.convertDate = (itm[0].customer.convertDate == null) ? '' : this.datetime2Str(new Date(itm[0].customer.convertDate))
             itm[0].link = itm[1]
             arr.push(itm[0])
           })
