@@ -4,7 +4,7 @@
     //- .col 欠款得分=score[欠款金额]
     //- .col.text-right
     //-   el-button(size="small", type="primary", @click="addAmountOwed") 新增欠款金额区间
-    el-button(size="small", type="primary", @click="addAmountOwed") 新增欠款金额区间
+    el-button(size="small", type="primary", @click="addAmountOwed", v-if="currentAuth.hasCreate == 1") 新增欠款金额区间
   .mt-10
     el-table(border, :data="tableValue.tableData")
       template(v-for="head in tableValue.tableHead")
@@ -17,9 +17,9 @@
                 .col 
                   el-input(v-model="scope.row['max']", @change="amountOwedChange(scope)")
               .text-center(v-else) money > {{scope.row['min']}}
-            template(v-else-if="scope.$index == (tableValue.tableData.length - 2)")
+            template(v-else-if="((scope.$index == (tableValue.tableData.length - 2)) && scope.$index !== 0 && currentAuth.hasDelete == 1)")
               el-button(type="text", class="default", @click="delBtn(scope.$index, scope.row)") 删除
-  .mt-10.text-center
+  .mt-10.text-center(v-if="currentAuth.hasUpdate == 1")
     el-button(type="primary", size="small", @click="save") 保存
     el-button(size="small", @click="reset") 重置
 </template>
@@ -41,6 +41,10 @@
       del: {
         type: Function,
         required: true
+      },
+      currentAuth: {
+        type: Object,
+        require: true
       }
     },
     data () {
@@ -106,31 +110,38 @@
           return
         }
         this.tableValue.tableData[idx + 1].min = scope.row.max
-        // console.log(this.tableValue.tableData[idx + 1].min)
       },
       addAmountOwed () {
         let idx = 0
-        if (this.tableValue.tableData.length > 1) {
-          idx = this.tableValue.tableData.length - 2
+        let tabValData = this.tableValue.tableData
+        if (tabValData.length > 1) {
+          idx = tabValData.length - 2
           let object = {
-            min:  this.tableValue.tableData[idx].max,
-            max:  Number(this.tableValue.tableData[idx].max) + 1,
+            min:  tabValData[idx].max,
+            max:  Number(tabValData[idx].max) + 1,
             score: '0'
           }
-          this.tableValue.tableData.splice(idx + 1, 0, object)
+          tabValData.splice(idx + 1, 0, object)
         } else {
-          idx = this.tableValue.tableData.length - 1
+          idx = tabValData.length - 1
           let object = {
-            min:  this.tableValue.tableData[idx].max ? this.tableValue.tableData[idx].max : '0',
-            max:  Number(this.tableValue.tableData[idx].max) + 1,
+            min:  tabValData[idx].max ?tabValData[idx].max : '0',
+            max:  Number(tabValData[idx].max) + 1,
             score: '0'
           }
-          this.tableValue.tableData.splice(idx, 0, object)
+          tabValData.splice(idx, 0, object)
         }
-        
+        tabValData[tabValData.length - 1].min = tabValData[tabValData.length - 2].max
       },
       delBtn (idx, row) {
-        this.del(row.id)
+        console.log(row.id)
+        if (row.id) {
+          this.del(row.id)
+        } else {
+          let tabValData = this.tableValue.tableData
+          tabValData.splice(idx, 1)
+          tabValData[tabValData.length - 1].min = tabValData[tabValData.length - 2].max
+        }
       }
     }
   }

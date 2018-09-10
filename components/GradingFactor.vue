@@ -9,7 +9,7 @@
         el-tag.mr-10 {{itm.name}}
         el-tag.mr-10 ×
         el-input.input-border-radius(value="0", type="number", size="small", clearable, v-model="itm.coefficient")
-    .col
+    .col(v-if="currentAuth.hasUpdate == 1")
       el-button(label="保存", size="small", @click="save") 保存
       el-button(label="重置", size="small", @click="init") 重置 
 </template>
@@ -35,6 +35,10 @@
       loadDataVal: {
         type: Array,
         default: null
+      },
+      currentAuth: {
+        type: Object,
+        require: true
       }
     },
     mounted () {

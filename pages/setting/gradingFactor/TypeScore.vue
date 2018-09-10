@@ -3,7 +3,7 @@
   //- span 类型得分=score[类型]
   .mt-10
     basic-table(:tableValue="tableValue", :loading="loading")
-  .mt-10.text-center
+  .mt-10.text-center(v-if="currentAuth.hasUpdate == 1")
     el-button(type="primary", size="small", @click="save") 保存
     el-button(size="small", @click="reset") 重置
 </template>
@@ -21,6 +21,10 @@
       loadDataVal: {
         type: Array,
         default: null
+      },
+      currentAuth: {
+        type: Object,
+        require: true
       }
     },
     data () {

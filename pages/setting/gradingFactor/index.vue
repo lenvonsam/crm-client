@@ -4,18 +4,18 @@
   .full-width.bg-f9.mt-20.p-15
     el-tabs(@tab-click="handleClick", tab-position="left", v-model="tabName")
       el-tab-pane(:label="itm.name", :name="itm.id", :key="idx", v-for="(itm, idx) in elTabPaneVal", v-if="elTabPaneVal.length > 0")
-        grading-factor(v-if="tabName == '2' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        regional-score(v-if="tabName == '3' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData")
-        type-score(v-if="tabName == '4' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        arrears-score(v-if="tabName == '5' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData")
-        grading-factor(v-if="tabName == '6' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        grading-factor(v-if="tabName == '7' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        grading-factor(v-if="tabName == '8' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        oficial-and-public-score(v-if="tabName == '9' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        category-score(v-if="tabName == '10' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData") 
-        generation-billing-score(v-if="tabName == '11' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        customer-score(v-if="tabName == '12' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
-        grading-factor(v-if="tabName == '30' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal")
+        grading-factor(v-if="tabName == '2' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        regional-score(v-if="tabName == '3' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData", :currentAuth="currentAuth")
+        type-score(v-if="tabName == '4' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        arrears-score(v-if="tabName == '5' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData", :currentAuth="currentAuth")
+        grading-factor(v-if="tabName == '6' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        grading-factor(v-if="tabName == '7' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        grading-factor(v-if="tabName == '8' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        oficial-and-public-score(v-if="tabName == '9' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        category-score(v-if="tabName == '10' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :del="delData", :currentAuth="currentAuth") 
+        generation-billing-score(v-if="tabName == '11' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        customer-score(v-if="tabName == '12' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
+        grading-factor(v-if="tabName == '30' && loadDataVal.length > 0", :cb="saveHandler", :loadDataVal="loadDataVal", :currentAuth="currentAuth")
   .full-width.bg-f9.mt-20.p-15
     .ft-16.border-bottom-line.pb-10 分级公式
       span.text-red.text-left.ft-13.pl-5 所有客户按得分每10%分一档，共10档：A、B、C、D、E、F、G、H、I、J
@@ -24,13 +24,13 @@
       el-button(size="mini", @click="insertFormulaHandler('插入符号')") 插入符号
     .bg-white.mt-15.p-10 总得分 =
       span.pointer.ml-15(v-for="(itm, idx) in formulaVal", :key="idx")
-        i.el-icon-close.icon-del(@click="handleClose(itm, idx)")
+        i.el-icon-close.icon-del(@click="handleClose(itm, idx)", v-if="currentAuth.hasDelete == 1")
         span(v-if="itm !=='+' && itm !=='-' && itm !=='*' && itm !=='/' && itm !=='(' && itm !==')'")
           span.el-tag.ml-5.ft-15 {{ itm }}
         span.symbol(v-else)
           el-select(v-model="formulaVal[idx]", size="mini")
             el-option(v-for="item in options", :key="idx + item", :label="item", :value="item")
-    .mt-15.p-10.text-center
+    .mt-15.p-10.text-center(v-if="currentAuth.hasUpdate == 1")
       el-button(size="small", type="primary", @click="saveFormula") 保存公式
       el-button(size="small", @click="resetFormula") 重置公式
       el-button(size="small", @click="clearFormula") 清除公式
@@ -46,6 +46,7 @@
   import generationBillingScore from '@/pages/setting/gradingFactor/GenerationBillingScore.vue'
   import customerScore from '@/pages/setting/gradingFactor/CustomerScore.vue'
   import gradingFactor from '@/components/GradingFactor.vue'
+  import { mapState } from 'vuex'
   export default {
     layout: 'main',
     components: {
@@ -58,6 +59,11 @@
       generationBillingScore,
       customerScore,
       gradingFactor
+    },
+    computed: {
+      ...mapState({
+        currentUser: state => state.user.currentUser
+      })
     },
     data () {
       return {
@@ -73,7 +79,12 @@
         loadDataVal: [],
         resetFormulaVal: [],
         resetElTabPaneVal: [],
-        initElTabPaneVal: []
+        initElTabPaneVal: [],
+        currentAuth: {
+          hasCreate: '',
+          hasDelete: '',
+          hasUpdate: ''
+        }
       }
     },
     mounted () {
@@ -87,24 +98,25 @@
         this.loadData()
       },
       insertFormulaHandler (val, idx) {
-        if (val == '插入符号') {
-          this.formulaVal.push('+')
-        } else {
-          this.elTabPaneVal[idx].active = !this.elTabPaneVal[idx].active
-          if(this.elTabPaneVal[idx].active == false){
-            this.formulaVal.splice(this.formulaVal.indexOf(val), 1);
-          } else {
-            this.formulaVal.push(val)
+        if (this.currentAuth.hasUpdate == 1) {
+          if (val == '插入符号') {
             this.formulaVal.push('+')
+          } else {
+            this.elTabPaneVal[idx].active = !this.elTabPaneVal[idx].active
+            if(this.elTabPaneVal[idx].active == false){
+              this.formulaVal.splice(this.formulaVal.indexOf(val), 1);
+            } else {
+              this.formulaVal.push(val)
+              this.formulaVal.push('+')
+            }
           }
-        }
+        }        
       },
       optionsHandler (val) {
         this.formulaVal.push(val)
       },
       handleClose (val, idx) {
         this.formulaVal.splice(idx, 1)
-        console.log(val)
         this.elTabPaneVal.map(itm => {
           if (itm.name == val) {
             itm.active = false
@@ -189,7 +201,7 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/grading', params: {parentId: 1}})
           if (data.returnCode === 0) {
-            this.formulaVal = data.grade.equationName.split('||')[0].split(',')
+            this.formulaVal = (data.grade.equationName !== null) ? data.grade.equationName.split('||')[0].split(',') : []
             this.elTabPaneVal.map(itm => {
               if (this.formulaVal.indexOf(itm.name) > -1) {
                 itm.active = true
@@ -207,6 +219,22 @@
       },
       async loadParentData () {
         try {
+          if (this.currentUser.id == 1) {
+            this.currentAuth = {
+              hasCreate: 1,
+              hasDelete: 1,
+              hasUpdate: 1
+            }
+          } else {
+            let idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
+            this.currentAuth = {
+              hasCreate: this.currentUser.auths[idx].hasCreate,
+              hasDelete: this.currentUser.auths[idx].hasDelete,
+              hasUpdate: this.currentUser.auths[idx].hasUpdate
+            }
+          }
+          this.$forceUpdate()
+          console.log(this.currentAuth)
           let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/grading/queryParent'})
           if (data.returnCode === 0) {
             data.list.map(itm => {

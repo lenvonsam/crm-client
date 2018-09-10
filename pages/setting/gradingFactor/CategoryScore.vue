@@ -4,8 +4,8 @@
     //- .col 品类得分=sum[品名得分]
     //- .col.text-right
     //-   el-button(@click="addClick", size="small", type="primary") 新增品名score
-    el-button(@click="addClick", size="small", type="primary") 新增品名score
-  .mt-10 品名得分=[品名]销量*score[品名]
+    el-button(@click="addClick", size="small", type="primary", v-if="currentAuth.hasCreate == 1") 新增品名score
+  //- .mt-10 品名得分=[品名]销量*score[品名]
   .mt-10
     basic-table(:tableValue="tableValue", :loading="loading", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="rowDelete")
 </template>
@@ -27,6 +27,10 @@
       del: {
         type: Function,
         required: true
+      },
+      currentAuth: {
+        type: Object,
+        require: true
       }
     },
     data () {

@@ -107,6 +107,7 @@
           }, 6000);
         } else {
           this.msgShow(this, data.errMsg)
+          this.refreshCode()
         }
       },
       async visitDialogData (uid) {

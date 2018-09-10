@@ -4,7 +4,7 @@
     //- .col 地区得分=score[地区]
     //- .col.text-right
     //-   el-button(@click="addClick", size="small", type="primary") 新增地区score
-    el-button(@click="addClick", size="small", type="primary") 新增地区score
+    el-button(@click="addClick", size="small", type="primary", v-if="currentAuth.hasCreate == 1") 新增地区score
   .mt-10
     basic-table(:tableValue="tableValue", :loading="loading", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="rowDelete")
 </template>
@@ -26,6 +26,10 @@
       del: {
         type: Function,
         required: true
+      },
+      currentAuth: {
+        type: Object,
+        require: true
       }
     },
     data () {

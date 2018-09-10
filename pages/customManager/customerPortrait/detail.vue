@@ -249,7 +249,6 @@ export default {
         }
         if (params.length === 3) body.category = params[2]
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmPortrait/sales/' + this.$route.query.id, params: body})
-        console.log(data)
         if (data.returnCode === 0) {
           if (searchType === 'dealSearch') {
             this.dealTableValue.tableData = [{
@@ -267,7 +266,9 @@ export default {
             this.saleGoodsChartData.datasets[0].data = data.totalList.map(itm => Number(itm))
             this.saleGoodsChartData.datasets[1].data = data.onlineList.map(itm => Number(itm))
             this.saleGoodsChartData.datasets[2].data = data.offlineList.map(itm => Number(itm))
-            this.$refs.goodsLineChart.update()
+            if (this.$refs.goodsLineChart) {
+              this.$refs.goodsLineChart.update()
+            }
           }
         } else {
           if (data.errMsg !== '无效客户') {
