@@ -12,7 +12,7 @@
             basic-table(:tableValue="roleTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowEdit="rowEdit", @tableRowDelete="rowDelete", @chooseData="selectData", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'roleFormNew' || tabModel == 'roleFormUpdate'")
           .padding
-            el-button(size="small", @click="tabModel = 'roleList'") 返回列表
+            el-button(size="small", @click="back2list('roleList')") 返回列表
           el-form.mt-15(label-width="85px", style="max-width: 40%", ref="roleForm", :model="formObj", :rules="formRules", status-icon, :validate-on-rule-change="false")
             el-form-item(label="角色名称", prop="name")
               el-input(size="medium", v-model="formObj.name")
@@ -51,7 +51,7 @@
             basic-table(:tableValue="authTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tablePgChange", @tableRowAuthManage="rowEdit")
         template(v-else)
           .padding
-            el-button(size="small", @click="tabModel = 'authList'") 返回列表
+            el-button(size="small", @click="back2list('authList')") 返回列表
           .row.padding
             .col.flex-80 姓名：
             .col {{formObj.name}}
@@ -244,6 +244,10 @@
             return false
           }
         })
+      },
+      back2list (tabModel) {
+        this.stepIdx = 1
+        this.tabModel = tabModel
       },
       async roleCreate () {
         try {

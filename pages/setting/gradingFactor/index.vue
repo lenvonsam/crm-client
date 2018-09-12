@@ -83,7 +83,8 @@
         currentAuth: {
           hasCreate: '',
           hasDelete: '',
-          hasUpdate: ''
+          hasUpdate: '',
+          show: false
         }
       }
     },
@@ -165,6 +166,24 @@
         params.parentId = this.parentId
         this.saveData(params)
       },
+      currentAuthFun () {
+        if (this.currentUser.id == 1) {
+          this.currentAuth = {
+            hasCreate: 1,
+            hasDelete: 1,
+            hasUpdate: 1,
+            show: true
+          }
+        } else {
+          let idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
+          this.currentAuth = {
+            hasCreate: this.currentUser.auths[idx].hasCreate,
+            hasDelete: this.currentUser.auths[idx].hasDelete,
+            hasUpdate: this.currentUser.auths[idx].hasUpdate,
+            show: true
+          }
+        }
+      },
       async saveData (params, formulaStr) {
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/grading/createOrUpdate', params: params})
@@ -219,22 +238,6 @@
       },
       async loadParentData () {
         try {
-          if (this.currentUser.id == 1) {
-            this.currentAuth = {
-              hasCreate: 1,
-              hasDelete: 1,
-              hasUpdate: 1
-            }
-          } else {
-            let idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
-            this.currentAuth = {
-              hasCreate: this.currentUser.auths[idx].hasCreate,
-              hasDelete: this.currentUser.auths[idx].hasDelete,
-              hasUpdate: this.currentUser.auths[idx].hasUpdate
-            }
-          }
-          this.$forceUpdate()
-          console.log(this.currentAuth)
           let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/grading/queryParent'})
           if (data.returnCode === 0) {
             data.list.map(itm => {
@@ -246,8 +249,11 @@
               this.elTabPaneVal.push(obj)
               this.initElTabPaneVal = JSON.parse(JSON.stringify(this.elTabPaneVal))
             })
-            this.loadData()
-            this.loadFormulaData()
+            this.currentAuthFun()
+            if (this.currentAuth.show) {
+              this.loadData()
+              this.loadFormulaData()
+            }
           } else {
             this.msgShow(this, data.errMsg)
           }
