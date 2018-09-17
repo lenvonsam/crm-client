@@ -99,10 +99,15 @@ router.post('/common/post', (req, res) => {
   const body = req.body
   console.log(body)
   hptl.httpPost(proxyUrl + body.url, body.params).then(({data}) => {
-    if ((body.url === 'login' || body.url === 'setting/acct/updateProfile') && data.returnCode === 0) {
+    if ((body.url === 'login' || body.url === 'setting/acct/updateProfile' || body.url === 'setting/acct/createOrUpdate') && data.returnCode === 0) {
       let currentUser = data.currentUser
-      currentUser.loginTime = new Date().getTime()
-      req.session.currentUser = currentUser
+      let originUser = req.session.currentUser
+      if (body.url === 'login') {
+        currentUser.loginTime = new Date().getTime()
+      } else {
+        if (currentUser.id === originUser.id) currentUser.loginTime = originUser.loginTime
+      }
+      if (body.url !== 'setting/acct/createOrUpdate' || (body.url === 'setting/acct/createOrUpdate' && (originUser.id === currentUser.id))) req.session.currentUser = currentUser
     }
     res.json(data)
   }, err => {

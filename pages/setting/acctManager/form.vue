@@ -45,7 +45,7 @@
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
   export default {
     layout: 'main',
     components: {
@@ -126,7 +126,8 @@
         dataAuthOpts: state => state.dataAuthOpts,
         eduOpts: state => state.eduOpts,
         politicalOpts: state => state.politicalOpts,
-        maritalOpts: state => state.maritalOpts
+        maritalOpts: state => state.maritalOpts,
+        currentUser: state => state.user.currentUser
       })
     },
     watch: {
@@ -137,6 +138,9 @@
       }
     },
     methods: {
+      ...mapActions([
+        'setUser'
+      ]),
       selectChange (val) {
         this.$forceUpdate()
       },
@@ -157,9 +161,9 @@
         }
       },
       getPageObj (key) {
-        console.log('-------------')
-        console.log(key)
-        console.log(this[key])
+        // console.log('-------------')
+        // console.log(key)
+        // console.log(this[key])
         return this[key]
       },
       async dptCombo () {
@@ -207,6 +211,7 @@
           if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/createOrUpdate', params: param})
           if (data.returnCode === 0) {
+            if (this.currentUser.id === data.currentUser.id) this.setUser(data.currentUser)
             this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
             this.back()
           } else {

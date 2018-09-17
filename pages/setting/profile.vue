@@ -127,7 +127,7 @@
           edit: false
         }, {
           lbl: '职位',
-          key: 'jobTitle',
+          key: 'position',
           edit: false
         }, {
           lbl: '手机号',
@@ -184,7 +184,8 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/updatePwd', params: {
             uid: this.currentUser.id,
-            newPwd: sha1(this.pwdForm.newPwd.trim())
+            newPwd: sha1(this.pwdForm.newPwd.trim()),
+            oldPwd: sha1(this.pwdForm.oldPwd.trim())
           }})
           if (data.returnCode === 0) {
             this.resetUserPwd()

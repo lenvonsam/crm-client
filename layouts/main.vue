@@ -1,7 +1,10 @@
 <template lang="pug">
 .crm.main
-  .crm-topbar
-    .item.brand CRM管理系统
+  .crm-topbar.pl-15
+    .item.brand.pl-5.row
+      div
+        img.logo-img(src="../static/logo2.png")
+      span.pl-10.ft-16 CRM管理系统
     .item
     .item.flex-50(@click="jump({path: '/setting/profile'})")
       img.header-img(:src="currentUser.avatar == undefined ? defaultAvatar : currentUser.avatar")
@@ -61,5 +64,12 @@
   width: 36px; 
   height: 36px; 
   margin-top: 7px;
+}
+.logo-img{
+  width: 50px;
+  padding-top: 16px;
+}
+.row{
+  align-items: center;
 }
 </style>
