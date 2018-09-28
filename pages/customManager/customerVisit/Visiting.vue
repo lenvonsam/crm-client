@@ -87,15 +87,17 @@ export default {
           lbl: '计划开单日期',
           width: '120px',
           prop: 'planDate'
-        }, {
-          type: 'action',
-          width: '100',
-          fixed: 'right',
-          actionBtns: [{
-            lbl: '设为已拜访',
-            type: 'setVisit'
-          }]
-        }]
+        }
+        // , {
+        //   type: 'action',
+        //   width: '100',
+        //   fixed: 'right',
+        //   actionBtns: [{
+        //     lbl: '设为已拜访',
+        //     type: 'setVisit'
+        //   }]
+        // }
+        ]
       },
       currentPage: 1,
       totalCount: 0,

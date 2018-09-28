@@ -92,20 +92,20 @@ export default {
           factValue(row){
             return (row==0) ? '未拜访' : (row==1) ? '拜访成功' : '拜访失败'
           }
-        }, {
-          type: 'action',
-          width: '100',
-          fixed: 'right',
-          actionBtns: [{
-            lbl: '设为已拜访',
-            type: 'setVisit'
-          }
-          // , {
-          //   lbl: '设为失败',
-          //   type: 'setVisit'
-          // }
-          ]
-        }]
+        }
+        // , {
+        //   type: 'action',
+        //   width: '100',
+        //   fixed: 'right',
+        //   actionBtns: [{
+        //     lbl: '设为已拜访',
+        //     type: 'setVisit'
+        //   }, {
+        //     lbl: '设为失败',
+        //     type: 'setVisit'
+        //   }]
+        // }
+        ]
       },
       currentPage: 1,
       totalCount: 0,
