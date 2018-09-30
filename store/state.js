@@ -76,15 +76,12 @@ export default {
     label: '100人以上'
   }],
   // 公司类型
-  compTypeOpts: [{
+  compTypeOpts: [ {
+    value: '私营有限责任公司',
+    label: '私营有限责任公司'
+  }, {
     value: '国有企业',
     label: '国有企业'
-  }, {
-    value: '私营企业',
-    label: '私营企业'
-  }, {
-    value: '股份制企业',
-    label: '股份制企业'
   }, {
     value: '外资企业',
     label: '外资企业'
