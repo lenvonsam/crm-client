@@ -70,7 +70,7 @@ div
 
       el-col(:span="12")
         el-form-item(label="业务员：", prop="fkAcctName")
-          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate")
+          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate", clearable)
             el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
     el-row.pr-10
       el-col(:span="12")
@@ -369,6 +369,19 @@ export default {
         callback(new Error('开户账号不能有中文'))
       }
     }
+    var phoneValid = (rule, value, callback) => {
+      let reg = this.phoneReg
+      console.log('phoneReg:>>' + reg)
+      if (value.trim().length === 0) {
+        callback(new Error('手机号不能为空'))
+      } else if (value.trim().length != 11) {
+        callback(new Error('手机号位数要是11位'))
+      } else if (!reg.test(value.trim())) {
+        callback(new Error('请输入正确的手机号'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
@@ -383,7 +396,7 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
+        phone: [{ validator: phoneValid, trigger: 'blur'}],
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
@@ -447,13 +460,16 @@ export default {
       try {
         // this.form.compAddrArr.push(this.form.compAddrDetail)
         // this.form.billAddr.push(this.form.billAddrDetail)
-
-        this.form.compProv = this.form.compAddrArr[0]
-        this.form.compCity = this.form.compAddrArr[1]
-        this.form.compArea = this.form.compAddrArr[2]
-        this.form.billProv = this.form.billAddrArr[0]
-        this.form.billCity = this.form.billAddrArr[1]
-        this.form.billArea = this.form.billAddrArr[2]
+        if (this.form.compAddr) {
+          this.form.compProv = this.form.compAddrArr[0]
+          this.form.compCity = this.form.compAddrArr[1]
+          this.form.compArea = this.form.compAddrArr[2]
+        }
+        if (this.form.billAddrArr) {
+          this.form.billProv = this.form.billAddrArr[0]
+          this.form.billCity = this.form.billAddrArr[1]
+          this.form.billArea = this.form.billAddrArr[2]
+        }
         let url = 'customerManage/customer/create'
         if (this.$route.query.type === 'edit') {
           url = 'customerManage/customer/update'
@@ -491,6 +507,7 @@ export default {
         delete this.form.depositCycleVal
         delete this.form.billDate
         delete this.form.convertDate
+        if (this.form.phone !== ' ') this.form.phone = this.form.phone.trim()
         if (typeof(this.form.fkAcctName) == 'number') {
           this.form.fkAcctId = this.form.fkAcctName
         }

@@ -1,7 +1,7 @@
 <template lang="pug">
 .crm.main
   .crm-topbar.pl-15
-    .item.brand.pl-5.row
+    .item.brand.pl-5.row(@click="jump({path: '/dashboard'})")
       div
         img.logo-img(src="../static/logo2.png")
       span.pl-10.ft-16 CRM管理系统
@@ -61,8 +61,8 @@
 @import "../assets/stylus/common"
 .header-img{
   border-radius: 50%;
-  width: 36px; 
-  height: 36px; 
+  width: 36px;
+  height: 36px;
   margin-top: 7px;
 }
 .logo-img{

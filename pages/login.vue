@@ -20,12 +20,12 @@
       .box
         el-form(:model="loginModel",:rules="loginRules", ref="loginForm", status-icon)
           el-form-item(prop="acct")
-            el-input(placeholder="用户名", v-model="loginModel.acct")
+            el-input(placeholder="请输入账号", v-model="loginModel.acct", :maxlength="20")
           el-form-item(prop="pwd")
-            el-input(placeholder="密码", v-model="loginModel.pwd", type="password")
+            el-input(placeholder="请输入登录密码", v-model="loginModel.pwd", type="password", :maxlength="20")
           el-form-item.flex(prop="codeConfirm")
             .col
-              el-input(placeholder="验证码", v-model="loginModel.codeConfirm")
+              el-input(placeholder="请输入验证码", v-model="loginModel.codeConfirm", :maxlength="4")
             .col.code
               graphic-code(:identifyCode="code", @refresh="refreshCode") 验证码
           el-button(type="primary", size="medium", style="border-radius: 0px; width: 100%", @click="submit('loginForm')") 登录
