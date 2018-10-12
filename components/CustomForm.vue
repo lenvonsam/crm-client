@@ -642,16 +642,16 @@ export default {
       this.fileObj = file
     },
     initform (newVal, firstTime = true) {
-      // console.log('init form')
-      // console.log(newVal)
+      console.log('init form')
+      console.log(newVal)
       this.form = Object.assign(this.form, newVal)
       this.form.customerType = newVal.customerType.toString()
       this.form.status = newVal.status.toString()
-      this.form.fkDptId = newVal.fkDpt.id
-      this.form.fkAcctId = newVal.fkAcct.id
-      this.form.fkAcctName = newVal.fkAcct.name
-      this.form.fkCustomPropertyId = newVal.fkCustomProperty.id
-      this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
+      this.form.fkDptId = newVal.fkDpt !== undefined ? newVal.fkDpt.id : this.form.fkDptId
+      this.form.fkAcctId = newVal.fkAcct !== undefined ? newVal.fkAcct.id : this.form.fkAcctId
+      this.form.fkAcctName = newVal.fkAcct !== undefined ? newVal.fkAcct.name : this.form.fkAcctName
+      this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
+      if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
       if (firstTime) {
         this.form.phone = newVal.linkers[0].phone
         this.form.name = newVal.linkers[0].name
@@ -665,12 +665,12 @@ export default {
         this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
         this.form.linkId = newVal.linkers[0].id
       }
-      this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
-      this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
-      this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
-      this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
-      this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
-      this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+      if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
+      if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
+      if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
+      if (newVal.processRequirement) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
+      if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
+      if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
       this.form.compAddrArr.push(newVal.compProv)
@@ -681,9 +681,7 @@ export default {
       this.form.billAddrArr.push(newVal.billCity)
       this.form.billAddrArr.push(newVal.billArea)
       this.form.billAddr = newVal.billAddr
-      if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      // this.$forceUpdate()
-      // console.log(this.form.customerSource)
+      if (newVal.setUpDate !== null && newVal.setUpDate !== undefined) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
       if (this.form.customerSource === '型云') {
         this.customerSourceDisabled = true
       }
