@@ -371,7 +371,7 @@ export default {
     }
     var phoneValid = (rule, value, callback) => {
       let reg = this.phoneReg
-      console.log('phoneReg:>>' + reg)
+      // console.log('phoneReg:>>' + reg + ';val:>>' + value)
       if (value.trim().length === 0) {
         callback(new Error('手机号不能为空'))
       } else if (value.trim().length != 11) {
@@ -396,7 +396,7 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{ validator: phoneValid, trigger: 'blur'}],
+        phone: [{ validator: phoneValid, trigger: 'blur', required: true}],
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
@@ -406,7 +406,8 @@ export default {
       timeout: null,
       fileObj: {},
       addr: areaJson,
-      customerSourceDisabled: false
+      customerSourceDisabled: false,
+      cloneObj: {}
     }
   },
   computed: {
@@ -460,6 +461,9 @@ export default {
       try {
         // this.form.compAddrArr.push(this.form.compAddrDetail)
         // this.form.billAddr.push(this.form.billAddrDetail)
+        this.cloneObj = Object.assign({}, this.form)
+        // console.log(this.cloneObj)
+        // console.log(this.form.compAddr)
         if (this.form.compAddr) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
@@ -491,7 +495,7 @@ export default {
         }
         delete this.form.compAddrArr
         delete this.form.billAddrArr
-        // delete this.form.billAddrDetail
+        delete this.form.billAddrDetail
         delete this.form.createAt
         delete this.form.fkRelationVal
         delete this.form.fkCustomPropertyIdVal
@@ -524,10 +528,13 @@ export default {
           this.back()
         } else {
           this.msgShow(this, data.errMsg)
+          this.initform(this.cloneObj, false)
+          // this.$forceUpdate()
         }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
+        this.initform(this.cloneObj, false)
       }
     },
     async fkRelationCreate () {
@@ -633,6 +640,53 @@ export default {
     },
     fileLogo (file) {
       this.fileObj = file
+    },
+    initform (newVal, firstTime = true) {
+      // console.log('init form')
+      // console.log(newVal)
+      this.form = Object.assign(this.form, newVal)
+      this.form.customerType = newVal.customerType.toString()
+      this.form.status = newVal.status.toString()
+      this.form.fkDptId = newVal.fkDpt.id
+      this.form.fkAcctId = newVal.fkAcct.id
+      this.form.fkAcctName = newVal.fkAcct.name
+      this.form.fkCustomPropertyId = newVal.fkCustomProperty.id
+      this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
+      if (firstTime) {
+        this.form.phone = newVal.linkers[0].phone
+        this.form.name = newVal.linkers[0].name
+        this.form.sex = newVal.linkers[0].sex
+        this.form.age = newVal.linkers[0].age
+        this.form.edu = newVal.linkers[0].edu
+        this.form.nativePlace = newVal.linkers[0].nativePlace
+        this.form.wxNo = newVal.linkers[0].wxNo
+        this.form.qqNo = newVal.linkers[0].qqNo
+        this.form.wbName = newVal.linkers[0].wbName
+        this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
+        this.form.linkId = newVal.linkers[0].id
+      }
+      this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
+      this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
+      this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
+      this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
+      this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
+      this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+      this.form.sellHighStatus = newVal.sellHighStatus
+      this.form.createAt = this.date2Str(new Date(newVal.createAt))
+      this.form.compAddrArr.push(newVal.compProv)
+      this.form.compAddrArr.push(newVal.compCity)
+      this.form.compAddrArr.push(newVal.compArea)
+      this.form.compAddr = newVal.compAddr
+      this.form.billAddrArr.push(newVal.billProv)
+      this.form.billAddrArr.push(newVal.billCity)
+      this.form.billAddrArr.push(newVal.billArea)
+      this.form.billAddr = newVal.billAddr
+      if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
+      // this.$forceUpdate()
+      // console.log(this.form.customerSource)
+      if (this.form.customerSource === '型云') {
+        this.customerSourceDisabled = true
+      }
     }
   },
   mounted() {
@@ -652,47 +706,7 @@ export default {
   },
   watch: {
     originObj (newVal, oldVal) {
-      this.form = Object.assign(this.form, newVal)
-      this.form.customerType = newVal.customerType.toString()
-      this.form.status = newVal.status.toString()
-      this.form.fkDptId = newVal.fkDpt.id
-      this.form.fkAcctId = newVal.fkAcct.id
-      this.form.fkAcctName = newVal.fkAcct.name
-      this.form.fkCustomPropertyId = newVal.fkCustomProperty.id
-      this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
-      this.form.name = newVal.linkers[0].name
-      this.form.phone = newVal.linkers[0].phone
-      this.form.sex = newVal.linkers[0].sex
-      this.form.age = newVal.linkers[0].age
-      this.form.edu = newVal.linkers[0].edu
-      this.form.nativePlace = newVal.linkers[0].nativePlace
-      this.form.wxNo = newVal.linkers[0].wxNo
-      this.form.qqNo = newVal.linkers[0].qqNo
-      this.form.wbName = newVal.linkers[0].wbName
-      this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
-      this.form.linkId = newVal.linkers[0].id
-      this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
-      this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
-      this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
-      this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
-      this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
-      this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
-      this.form.sellHighStatus = newVal.sellHighStatus
-      this.form.createAt = this.date2Str(new Date(newVal.createAt))
-      this.form.compAddrArr.push(newVal.compProv)
-      this.form.compAddrArr.push(newVal.compCity)
-      this.form.compAddrArr.push(newVal.compArea)
-      this.form.compAddr = newVal.compAddr
-      this.form.billAddrArr.push(newVal.billProv)
-      this.form.billAddrArr.push(newVal.billCity)
-      this.form.billAddrArr.push(newVal.billArea)
-      this.form.billAddr = newVal.billAddr
-      if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      // this.$forceUpdate()
-      console.log(this.form.customerSource)
-      if (this.form.customerSource === '型云') {
-        this.customerSourceDisabled = true
-      }
+      this.initform(newVal)
       // this.loadingS().close()
       this.pageHide(this)
     }

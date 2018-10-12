@@ -25,7 +25,7 @@
             el-input(placeholder="请输入登录密码", v-model="loginModel.pwd", type="password", :maxlength="20")
           el-form-item.flex(prop="codeConfirm")
             .col
-              el-input(placeholder="请输入验证码", v-model="loginModel.codeConfirm", :maxlength="4")
+              el-input(placeholder="请输入验证码", v-model="loginModel.codeConfirm", :maxlength="4", @keyup.enter.native="submit('loginForm')")
             .col.code
               graphic-code(:identifyCode="code", @refresh="refreshCode") 验证码
           el-button(type="primary", size="medium", style="border-radius: 0px; width: 100%", @click="submit('loginForm')") 登录
