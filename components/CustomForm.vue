@@ -57,7 +57,7 @@ div
       el-col(:span="12")
         el-form-item(label="业务关系：", prop="fkRelation")
           el-select.full-width(v-model="form.fkRelation",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
-            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id")
+            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id", :disabled="(currentUser.id !== 1 && item.name === '内部单位')")
       el-col(:span="12")
         el-form-item(label="客户性质：", prop="fkCustomPropertyId")
           el-select.full-width(v-model="form.fkCustomPropertyId", placeholder="请选择客户性质")
