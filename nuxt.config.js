@@ -59,7 +59,7 @@ module.exports = {
       secret: 'zhd-crm-client',
       resave: false,
       saveUninitialized: false,
-      cookie: {maxAge: 36000000}
+      cookie: {maxAge: 10800000}
     }),
     '~/server/proxy'
   ]
