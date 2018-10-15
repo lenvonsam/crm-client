@@ -133,7 +133,7 @@ div
           el-input(v-model="form.name", placeholder="请输入主联系人", clearable)
       el-col(:span="12")
         el-form-item(label="联系电话：", prop="phone")
-          el-input(v-model="form.phone", placeholder="请输入联系电话", clearable)
+          el-input(v-model="form.phone", placeholder="请输入联系电话", clearable, :disabled="(originObj && originObj.ebusiAdminAcctNo != null)")
     el-row.pr-10
       el-col(:span="6")
         el-form-item(label="性别：")
