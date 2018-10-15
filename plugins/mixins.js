@@ -27,6 +27,7 @@ function generatePickerOpts () {
 const minixs = {
   data () {
     return {
+      phoneReg: /^1[345789]\d{9}$/
       // bkProxyUrl: 'http://localhost:8668/api/'
     }
   },

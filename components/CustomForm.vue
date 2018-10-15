@@ -57,7 +57,7 @@ div
       el-col(:span="12")
         el-form-item(label="业务关系：", prop="fkRelation")
           el-select.full-width(v-model="form.fkRelation",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
-            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id")
+            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id", :disabled="(currentUser.id !== 1 && item.name === '内部单位')")
       el-col(:span="12")
         el-form-item(label="客户性质：", prop="fkCustomPropertyId")
           el-select.full-width(v-model="form.fkCustomPropertyId", placeholder="请选择客户性质")
@@ -70,7 +70,7 @@ div
 
       el-col(:span="12")
         el-form-item(label="业务员：", prop="fkAcctName")
-          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate")
+          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate", clearable)
             el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
     el-row.pr-10
       el-col(:span="12")
@@ -369,13 +369,36 @@ export default {
         callback(new Error('开户账号不能有中文'))
       }
     }
+    var phoneValid = (rule, value, callback) => {
+      let reg = this.phoneReg
+      // console.log('phoneReg:>>' + reg + ';val:>>' + value)
+      if (value.trim().length === 0) {
+        callback(new Error('手机号不能为空'))
+      } else if (value.trim().length != 11) {
+        callback(new Error('手机号位数要是11位'))
+      } else if (!reg.test(value.trim())) {
+        callback(new Error('请输入正确的手机号'))
+      } else {
+        callback()
+      }
+    }
+    var compNameValid = (rule, value, callback) => {
+      let reg = /^[^\x00-\xff]+$/
+      if (value.trim().length === 0) {
+        callback(new Error('公司名称不能为空'))
+      } else if (!reg.test(value.trim())) {
+        callback(new Error('公司名中有非法字符或数字'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
       },
       rules: {
         compName: [
-          { required: true, message: '不能为空', trigger: 'blur' },
+          { required: true, validator: compNameValid, trigger: 'blur' },
           { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
         ],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -383,7 +406,7 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
+        phone: [{ validator: phoneValid, trigger: 'blur', required: true}],
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
@@ -393,7 +416,8 @@ export default {
       timeout: null,
       fileObj: {},
       addr: areaJson,
-      customerSourceDisabled: false
+      customerSourceDisabled: false,
+      cloneObj: {}
     }
   },
   computed: {
@@ -447,13 +471,19 @@ export default {
       try {
         // this.form.compAddrArr.push(this.form.compAddrDetail)
         // this.form.billAddr.push(this.form.billAddrDetail)
-
-        this.form.compProv = this.form.compAddrArr[0]
-        this.form.compCity = this.form.compAddrArr[1]
-        this.form.compArea = this.form.compAddrArr[2]
-        this.form.billProv = this.form.billAddrArr[0]
-        this.form.billCity = this.form.billAddrArr[1]
-        this.form.billArea = this.form.billAddrArr[2]
+        this.cloneObj = Object.assign({}, this.form)
+        // console.log(this.cloneObj)
+        // console.log(this.form.compAddr)
+        if (this.form.compAddr) {
+          this.form.compProv = this.form.compAddrArr[0]
+          this.form.compCity = this.form.compAddrArr[1]
+          this.form.compArea = this.form.compAddrArr[2]
+        }
+        if (this.form.billAddrArr) {
+          this.form.billProv = this.form.billAddrArr[0]
+          this.form.billCity = this.form.billAddrArr[1]
+          this.form.billArea = this.form.billAddrArr[2]
+        }
         let url = 'customerManage/customer/create'
         if (this.$route.query.type === 'edit') {
           url = 'customerManage/customer/update'
@@ -475,7 +505,7 @@ export default {
         }
         delete this.form.compAddrArr
         delete this.form.billAddrArr
-        // delete this.form.billAddrDetail
+        delete this.form.billAddrDetail
         delete this.form.createAt
         delete this.form.fkRelationVal
         delete this.form.fkCustomPropertyIdVal
@@ -491,6 +521,7 @@ export default {
         delete this.form.depositCycleVal
         delete this.form.billDate
         delete this.form.convertDate
+        if (this.form.phone !== ' ') this.form.phone = this.form.phone.trim()
         if (typeof(this.form.fkAcctName) == 'number') {
           this.form.fkAcctId = this.form.fkAcctName
         }
@@ -507,10 +538,13 @@ export default {
           this.back()
         } else {
           this.msgShow(this, data.errMsg)
+          this.initform(this.cloneObj, false)
+          // this.$forceUpdate()
         }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
+        this.initform(this.cloneObj, false)
       }
     },
     async fkRelationCreate () {
@@ -616,6 +650,51 @@ export default {
     },
     fileLogo (file) {
       this.fileObj = file
+    },
+    initform (newVal, firstTime = true) {
+      console.log('init form')
+      console.log(newVal)
+      this.form = Object.assign(this.form, newVal)
+      this.form.customerType = newVal.customerType.toString()
+      this.form.status = newVal.status.toString()
+      this.form.fkDptId = newVal.fkDpt !== undefined ? newVal.fkDpt.id : this.form.fkDptId
+      this.form.fkAcctId = newVal.fkAcct !== undefined ? newVal.fkAcct.id : this.form.fkAcctId
+      this.form.fkAcctName = newVal.fkAcct !== undefined ? newVal.fkAcct.name : this.form.fkAcctName
+      this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
+      if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
+      if (firstTime) {
+        this.form.phone = newVal.linkers[0].phone
+        this.form.name = newVal.linkers[0].name
+        this.form.sex = newVal.linkers[0].sex
+        this.form.age = newVal.linkers[0].age
+        this.form.edu = newVal.linkers[0].edu
+        this.form.nativePlace = newVal.linkers[0].nativePlace
+        this.form.wxNo = newVal.linkers[0].wxNo
+        this.form.qqNo = newVal.linkers[0].qqNo
+        this.form.wbName = newVal.linkers[0].wbName
+        this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
+        this.form.linkId = newVal.linkers[0].id
+      }
+      if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
+      if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
+      if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
+      if (newVal.processRequirement) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
+      if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
+      if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+      this.form.sellHighStatus = newVal.sellHighStatus
+      this.form.createAt = this.date2Str(new Date(newVal.createAt))
+      this.form.compAddrArr.push(newVal.compProv)
+      this.form.compAddrArr.push(newVal.compCity)
+      this.form.compAddrArr.push(newVal.compArea)
+      this.form.compAddr = newVal.compAddr
+      this.form.billAddrArr.push(newVal.billProv)
+      this.form.billAddrArr.push(newVal.billCity)
+      this.form.billAddrArr.push(newVal.billArea)
+      this.form.billAddr = newVal.billAddr
+      if (newVal.setUpDate !== null && newVal.setUpDate !== undefined) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
+      if (this.form.customerSource === '型云') {
+        this.customerSourceDisabled = true
+      }
     }
   },
   mounted() {
@@ -635,47 +714,7 @@ export default {
   },
   watch: {
     originObj (newVal, oldVal) {
-      this.form = Object.assign(this.form, newVal)
-      this.form.customerType = newVal.customerType.toString()
-      this.form.status = newVal.status.toString()
-      this.form.fkDptId = newVal.fkDpt.id
-      this.form.fkAcctId = newVal.fkAcct.id
-      this.form.fkAcctName = newVal.fkAcct.name
-      this.form.fkCustomPropertyId = newVal.fkCustomProperty.id
-      this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
-      this.form.name = newVal.linkers[0].name
-      this.form.phone = newVal.linkers[0].phone
-      this.form.sex = newVal.linkers[0].sex
-      this.form.age = newVal.linkers[0].age
-      this.form.edu = newVal.linkers[0].edu
-      this.form.nativePlace = newVal.linkers[0].nativePlace
-      this.form.wxNo = newVal.linkers[0].wxNo
-      this.form.qqNo = newVal.linkers[0].qqNo
-      this.form.wbName = newVal.linkers[0].wbName
-      this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
-      this.form.linkId = newVal.linkers[0].id
-      this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
-      this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
-      this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
-      this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
-      this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
-      this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
-      this.form.sellHighStatus = newVal.sellHighStatus
-      this.form.createAt = this.date2Str(new Date(newVal.createAt))
-      this.form.compAddrArr.push(newVal.compProv)
-      this.form.compAddrArr.push(newVal.compCity)
-      this.form.compAddrArr.push(newVal.compArea)
-      this.form.compAddr = newVal.compAddr
-      this.form.billAddrArr.push(newVal.billProv)
-      this.form.billAddrArr.push(newVal.billCity)
-      this.form.billAddrArr.push(newVal.billArea)
-      this.form.billAddr = newVal.billAddr
-      if (newVal.setUpDate !== null) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      // this.$forceUpdate()
-      console.log(this.form.customerSource)
-      if (this.form.customerSource === '型云') {
-        this.customerSourceDisabled = true
-      }
+      this.initform(newVal)
       // this.loadingS().close()
       this.pageHide(this)
     }

@@ -52,6 +52,20 @@
       breadcrumb
     },
     data () {
+      var phoneValid = (rule, value, callback) => {
+      let reg = this.phoneReg
+      console.log('phoneReg:>>' + reg)
+      console.log('len:>>' + value.trim().length)
+      if (value.trim().length === 0) {
+        callback(new Error('手机号不能为空'))
+      } else if (value.trim().length != 11) {
+        callback(new Error('手机号位数要是11位'))
+      } else if (!reg.test(value.trim())) {
+        callback(new Error('请输入正确的手机号'))
+      } else {
+        callback()
+      }
+    }
       return {
         breadItems: [],
         // 部门下拉
@@ -102,7 +116,7 @@
           loginAcct: [{required: true, message: '不能为空', trigger: 'blur'}],
           name: [{required: true, message: '不能为空', trigger: 'blur'}],
           dptId: [{required: true, message: '不能为空', trigger: 'blur'}],
-          phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
+          phone: [{validator: phoneValid, trigger: 'blur'}],
           dataAuth: [{required: true, message: '不能为空', trigger: 'change'}],
           roleId: [{required: true, message: '不能为空', trigger: 'change'}],
           sex: [{required: true, message: '不能为空', trigger: 'blur'}]
@@ -200,6 +214,7 @@
           param.status = Number(param.status)
           param.dptId = Number(param.dptId)
           param.roleId = Number(param.roleId)
+          if (param.phone !== ' ') param.phone = param.phone.trim()
           if (this.$route.query.type === 'edit') {
             delete param.createAt
             delete param.updateAt
