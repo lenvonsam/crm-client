@@ -178,7 +178,7 @@
         dptTableValue: {
           hasCbx: true,
           tableHead: [{
-            lbl: '部门代码1',
+            lbl: '部门代码',
             width: '100px',
             prop: 'id'
           }, {
