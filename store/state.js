@@ -321,6 +321,9 @@ export default {
     }, {
       title: '异常管理',
       url: '/setting/errLog'
+    }, {
+      title: '消息管理',
+      url: '/setting/mqMsg'
     }]
   }, {
     title: '基础数据',
