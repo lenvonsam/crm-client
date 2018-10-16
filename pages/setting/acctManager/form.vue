@@ -116,7 +116,7 @@
           loginAcct: [{required: true, message: '不能为空', trigger: 'blur'}],
           name: [{required: true, message: '不能为空', trigger: 'blur'}],
           dptId: [{required: true, message: '不能为空', trigger: 'blur'}],
-          phone: [{validator: phoneValid, trigger: 'blur'}],
+          phone: [{required: true, validator: phoneValid, trigger: 'blur'}],
           dataAuth: [{required: true, message: '不能为空', trigger: 'change'}],
           roleId: [{required: true, message: '不能为空', trigger: 'change'}],
           sex: [{required: true, message: '不能为空', trigger: 'blur'}]
