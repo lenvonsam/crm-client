@@ -354,6 +354,7 @@
   }
   .avatar img{
     width: 100%;
+    height: 100%;
   }
   .box-header{
     border-radius: 10px;

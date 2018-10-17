@@ -13,7 +13,7 @@
     .mt-10.text-center
       el-button(type="primary", size="small", @click="onSubmit('ok')") 确认
   el-dialog(title="地图", :visible.sync="dialogMap", width="900", @close="baiduMapCb")
-    baidu-map.baidu-map(:ak="bdMapAk", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="true")
+    baidu-map.baidu-map(:ak="bdMapAk", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="true" v-if="isBaiduShow")
       bm-marker.baidu-map(:position="baiduMapData.center", :dragging="true", animation="BMAP_ANIMATION_BOUNCE")
 </template>
 <script>
@@ -157,7 +157,8 @@ export default {
       baiduMapData: {
         zoom: 12,
         center: {lng: 31.47, lat: 119.58}
-      }
+      },
+      isBaiduShow: false
     }
   },
   computed: {
@@ -178,13 +179,15 @@ export default {
   methods: {
     baiduMapCb() {
       this.dialogMap = false
+      this.isBaiduShow = false
     },
-    RowMap() {
+    RowMap(row) {
       this.baiduMapData = {
-        zoom: 20,
-        center: {lng: 119.9995 , lat: 31.8177}
+        zoom: 18,
+        center: {lng: row.longitude , lat: row.latitude}
       }
       this.dialogMap = true
+      this.isBaiduShow = true
     },
     searchForm (paramsObj) {
       this.loading = true
@@ -228,7 +231,8 @@ export default {
           data.list.map(itm => {
             itm[0].createAtDate2 = this.date2Str(new Date(itm[0].createAt))
             itm[0].planVisitTimeDate2 = this.date2Str(new Date(itm[0].planVisitTime))
-            itm[0].customer.convertDate = (itm[0].customer.convertDate == null) ? '' : this.datetime2Str(new Date(itm[0].customer.convertDate))
+            // itm[0].customer.convertDate = (itm[0].customer.convertDate == null) ? '' : this.datetime2Str(new Date(itm[0].customer.convertDate))
+            itm[0].customer.convertDate = (itm[0].customer.convertDate == null || itm[0].customer.mark != 3) ? '--' : this.datetime2Str(new Date(itm[0].customer.convertDate))
             itm[0].link = itm[1]
             arr.push(itm[0])
           })
