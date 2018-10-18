@@ -350,9 +350,10 @@ export default {
     var openAcctNameValid = (rule, value, callback) => {
       if (this.chineseReg(value.trim()) || value.trim() == '') {
         callback()
-      } else {
-        callback(new Error('开户名称只能为中文'))
       }
+      //  else {
+      //   callback(new Error('开户名称只能为中文'))
+      // }
     }
     var faxNumValid = (rule, value, callback) => {
         if (this.faxNumReg(value.trim()) || value.trim() == '') {
@@ -386,11 +387,12 @@ export default {
       let reg = /^[^\x00-\xff]+$/
       if (value.trim().length === 0) {
         callback(new Error('公司名称不能为空'))
-      } else if (!reg.test(value.trim())) {
-        callback(new Error('公司名中有非法字符或数字'))
       } else {
         callback()
       }
+      // else if (!reg.test(value.trim())) {
+      //   callback(new Error('公司名中有非法字符或数字'))
+      // }
     }
     return {
       form: {
@@ -399,7 +401,7 @@ export default {
       rules: {
         compName: [
           { required: true, validator: compNameValid, trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
+          { min: 1, message: '不能为空', trigger: 'blur' }
         ],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkCustomPropertyId: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -407,6 +409,7 @@ export default {
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
         phone: [{ validator: phoneValid, trigger: 'blur', required: true}],
+        // openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],

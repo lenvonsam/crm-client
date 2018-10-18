@@ -307,16 +307,21 @@
         cstmLoading: false
       }
     },
-    mounted () {
-      this.linker.uid = this.currentUser.id
-      this.snapData = JSON.parse(JSON.stringify(this.linker))
+    beforeMount () {
       this.searchFormItems[1][1].list = [{value: '', label: '全部'}, {value: 1, label: '主联系人'}, {value: 0, label: '普通联系人'}]
       this.searchFormItems[1][2].list = this.sexOpts
+    },
+    mounted () {
+      this.$nextTick(() => {
+        this.linker = {id: this.currentUser.id, name: '', phone: '',  sex: null, age: '0', edu: '', wxNo: '', qqNo: '',
+          mainStatus: 0, position: '', cstmId: '', compName: '', uid: '', remark: ''}
+        this.snapData = JSON.parse(JSON.stringify(this.linker))  
+      })      
       this.queryObject = {
         currentPage: this.currentPage - 1,
         pageSize: this.pageSize
       }
-      this.loadData()
+      this.loadData()        
     },
     methods: {
       rowObjMainStatus () {
@@ -346,6 +351,7 @@
       },
       groupBtnClick (type) {
         if (type == 'add') {
+          debugger
           this.linker = JSON.parse(JSON.stringify(this.snapData))
           if (this.cstmIdList.length == 0) {
             this.customerGet()
@@ -365,6 +371,7 @@
       subForm (flg) {
         if(flg == 'ok'){
           this.linker.age = Number(this.linker.age)
+          debugger
           this.$refs['linker'].validate((valid) => {
             if (valid) {
               if (typeof(this.linker.compName) == 'number') {
