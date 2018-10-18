@@ -91,16 +91,21 @@
         }
       }
       var verifyPw = (rule, value, cb) => {
-        if (value.trim().length === 0) {
-          cb(new Error('不能为空'))
+        if (value.trim().length < 6 || value.trim().length > 12) {
+          cb(new Error('请设置6-12位密码'))        
         } else {
-          let regex = /^([A-Z])(?=.*[a-z])(?!\d+$)(?![\W_]+$)\S{5,}$/
-          if (!regex.test(value)) {
-            cb(new Error('密码最少6位必须包含大写字母开头并且包含小写字母和数字'))
-            return
-          }
           cb()
         }
+        // if (value.trim().length === 0) {
+        //   cb(new Error('不能为空'))
+        // } else {
+        //   let regex = /^([A-Z])(?=.*[a-z])(?!\d+$)(?![\W_]+$)\S{5,}$/
+        //   if (!regex.test(value)) {
+        //     cb(new Error('密码最少6位必须包含大写字母开头并且包含小写字母和数字'))
+        //     return
+        //   }
+        //   cb()
+        // }
       }
       return {
         url: '',
