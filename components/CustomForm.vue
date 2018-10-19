@@ -115,8 +115,12 @@ div
             el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
     el-row.pr-10
       el-col(:span="12")
+        //- el-form-item(label="地区：")
+        //-   el-input(v-model="form.region", placeholder="请输入地区", clearable)
         el-form-item(label="地区：")
-          el-input(v-model="form.region", placeholder="请输入地区", clearable)
+          el-select.full-width(v-model="form.region", filterable, placeholder="请选择地区")
+            el-option-group(v-for="group in cityAreaArr", :key="group.label", :label="group.label")
+              el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
       el-col(:span="12")
         el-form-item(label="成立日期：")
           el-date-picker.full-width(v-model="form.fkSetUpDate", type="date", placeholder="选择日期", value-format="yyyy-MM-dd", format="yyyy-MM-dd")
@@ -327,6 +331,7 @@ import singlePicUpload from '@/components/SinglePicUpload.vue'
 import simpleUpload from '@/components/SimpleUpload.vue'
 import zoomImg from '@/components/ZoomImg.vue'
 import areaJson from '@/components/AreaJson.js'
+import cityArea from '@/components/city.js'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
@@ -420,7 +425,8 @@ export default {
       fileObj: {},
       addr: areaJson,
       customerSourceDisabled: false,
-      cloneObj: {}
+      cloneObj: {},
+      cityAreaArr: cityArea
     }
   },
   computed: {

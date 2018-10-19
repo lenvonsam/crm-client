@@ -313,8 +313,8 @@
     },
     mounted () {
       this.$nextTick(() => {
-        this.linker = {id: this.currentUser.id, name: '', phone: '',  sex: null, age: '0', edu: '', wxNo: '', qqNo: '',
-          mainStatus: 0, position: '', cstmId: '', compName: '', uid: '', remark: ''}
+        this.linker = {id: '', name: '', phone: '',  sex: null, age: '0', edu: '', wxNo: '', qqNo: '',
+          mainStatus: 0, position: '', cstmId: '', compName: '', uid: this.currentUser.id, remark: ''}
         this.snapData = JSON.parse(JSON.stringify(this.linker))  
       })      
       this.queryObject = {
