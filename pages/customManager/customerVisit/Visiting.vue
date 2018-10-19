@@ -39,7 +39,6 @@ export default {
           prop: 'customer',
           type: 'linkObject',
           minWidth: '340px',
-          // linkUrl: '/customManager/contactManager/detail',
           linkUrl: '/customManager/customerVisit/detail',
           factValue(row){
             let arr = {
@@ -88,6 +87,14 @@ export default {
           lbl: '计划开单日期',
           width: '120px',
           prop: 'planDate'
+        }, {
+          lbl: '状态',
+          prop: 'status',
+          width: '100px',
+          type: 'object',
+          factValue(row){
+            return (row==0) ? '未拜访' : (row==1) ? '拜访成功' : '拜访失败'
+          }
         }
         // , {
         //   type: 'action',

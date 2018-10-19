@@ -36,7 +36,7 @@ export default {
           prop: 'customer',
           type: 'linkObject',
           minWidth: '340px',
-          linkUrl: '/customManager/publicCustom/detail',
+          linkUrl: '/customManager/customerVisit/detail',
           factValue(row){
             let arr = {
               id: row.id,

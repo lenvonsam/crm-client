@@ -13,6 +13,7 @@
     .mt-10.text-center
       el-button(type="primary", size="small", @click="onSubmit('ok')") 确认
   el-dialog(title="地图", :visible.sync="dialogMap", width="900", @close="baiduMapCb")
+    .ft-16.mb-10(v-if="locateAddr") 打卡点： {{locateAddr}}
     baidu-map.baidu-map(:ak="bdMapAk", :center="baiduMapData.center", :zoom="baiduMapData.zoom", :scroll-wheel-zoom="true" v-if="isBaiduShow")
       bm-marker.baidu-map(:position="baiduMapData.center", :dragging="true", animation="BMAP_ANIMATION_BOUNCE")
 </template>
@@ -49,7 +50,7 @@ export default {
           prop: 'customer',
           type: 'linkObject',
           minWidth: '340px',
-          linkUrl: '/customManager/publicCustom/detail',
+          linkUrl: '/customManager/customerVisit/detail',
           factValue(row){
             let arr = {
               id: row.id,
@@ -106,6 +107,10 @@ export default {
             return (row==0) ? '未拜访' : (row==1) ? '拜访成功' : '拜访失败'
           }
         }, {
+          lbl: '备注',
+          width: '210px',
+          prop: 'remark'                    
+        }, {
           type: 'action',
           width: '60',
           fixed: 'right',
@@ -158,7 +163,8 @@ export default {
         zoom: 12,
         center: {lng: 31.47, lat: 119.58}
       },
-      isBaiduShow: false
+      isBaiduShow: false,
+      locateAddr: null
     }
   },
   computed: {
@@ -186,6 +192,9 @@ export default {
         zoom: 18,
         center: {lng: row.longitude , lat: row.latitude}
       }
+      console.log('-----------5')
+      console.log(row)
+      this.locateAddr = row.locateAddr
       this.dialogMap = true
       this.isBaiduShow = true
     },
