@@ -105,8 +105,8 @@
             {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
           [{label: '添加日期', model: 'createAt', type: 'timeLimit', val: ''},
-          {label: '业务部门', model: 'dptName', placeholder: '请选择业务部门', val: ''},
-          {label: '业务员', model: 'acctName', placeholder: '请选择业务员', val: ''}]
+          {label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: ''},
+          {label: '业务员', model: 'acctName', placeholder: '请输入业务员', val: ''}]
         ],
         reason: '',
         // dialogFormVisible: false,

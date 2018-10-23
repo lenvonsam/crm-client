@@ -149,9 +149,9 @@
           [{label: '添加日期', model: 'createAt', type: 'timeLimit', placeholder: '请选择添加日期', val: ''},
           {label: '联系人类型', model: 'mainStatus', type: 'select', placeholder: '请选择联系人类型', val: '', list: []},
           {label: '性别', model: 'sex', type: 'select', placeholder: '请选择性别', val: '', list: []}],
-          [{label: '职位', model: 'position', type: 'autocomplete', placeholder: '请选择职位', val: ''},
-          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请选择业务部门', val: ''},
-          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请选择业务员', val: ''}]
+          [{label: '职位', model: 'position', type: 'text', placeholder: '请输入职位', val: ''},
+          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''},
+          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}]
         ],
         tableValue: {
           tableData: [],

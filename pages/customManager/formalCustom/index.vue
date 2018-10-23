@@ -37,8 +37,8 @@
             {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
           [{label: '转化日期', model: 'createAt', type: 'timeLimit', placeholder: '请选择转化日期', val: ''},
-          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请选择业务部门', val: ''},
-          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请选择业务员', val: ''}]
+          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''},
+          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}]
         ],
         tableValue: {
           tableData: [],

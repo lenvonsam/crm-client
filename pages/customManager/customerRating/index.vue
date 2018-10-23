@@ -31,8 +31,8 @@ export default {
       searchFormItems: [
         [{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
             {label: '转化日期', model: 'transformDate', type: 'timeLimit', placeholder: '请选择转化日期', val: ''},
-          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请选择业务部门', val: ''}],
-          [{label: '业务员', model: 'acctName', type: 'text', placeholder: '请选择业务员', val: ''},
+          {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''}],
+          [{label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''},
           {label: '客户得分', model: 'cstmScore', type: 'range', minPlaceholder: '最小值', maxPlaceholder: '最大值', min: '', max: ''},
           {label: '客户等级', model: 'level', type: 'select', placeholder: '请选择客户等级', val: '', list: [{label:'A', value:'A'}, {label:'B', value:'B'},{label:'C', value:'C'}]}]
         ],
