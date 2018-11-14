@@ -1,7 +1,7 @@
 <template lang="pug">
 div
-  el-table(:data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @sort-change="sortChange")
-    el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")
+  el-table(ref="multipleTable", :data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @sort-change="sortChange")
+    el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")    
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
         template(slot-scope="scope") {{scope.row[head.prop]}}

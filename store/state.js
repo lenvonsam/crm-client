@@ -186,6 +186,97 @@ export default {
     value: '电话推广',
     label: '电话推广'
   }],
+  // 客户类型
+  customerMarkOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '1',
+    label: '潜在客户'
+  }, {
+    value: '2',
+    label: '正式客户'
+  }, {
+    value: '3',
+    label: '公共客户'
+  }],
+  // 业务关系
+  busiRelationOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '客户',
+    label: '客户'
+  }, {
+    value: '供应商',
+    label: '供应商'
+  }, {
+    value: '费用单位',
+    label: '费用单位'
+  }],
+  // 客户性质
+  customPropertyOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '经销商',
+    label: '经销商'
+  }, {
+    value: '终端客户',
+    label: '终端客户'
+  }, {
+    value: '供应商',
+    label: '供应商'
+  }],
+  // 客户等级
+  levelOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: 'A',
+    label: 'A'
+  }, {
+    value: 'B',
+    label: 'B'
+  }, {
+    value: 'C',
+    label: 'C'
+  }, {
+    value: 'D',
+    label: 'D'
+  }, {
+    value: 'E',
+    label: 'E'
+  }],
+  // 未开单天数
+  billDateOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '0',
+    label: '30天内未开单'
+  }, {
+    value: '1',
+    label: '30-60天未开单'
+  }, {
+    value: '2',
+    label: '61-90天未开单'
+  }, {
+    value: '3',
+    label: '90天以上未开单'
+  }],
+  // 联系人类型
+  mainStatusTypeOpts: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '1',
+    label: '主联系人'
+  }, {
+    value: '0',
+    label: '子联系人'
+  }],
+  // 客户登记
   depositRateOpts: [{
     value: '10',
     label: '10'
@@ -254,6 +345,26 @@ export default {
     value: '其他',
     label: '其他'
   }],
+  // 发送短信状态
+  smsStatus: [{
+    value:'', 
+    label:'全部'
+  }, {
+    value:'1', 
+    label:'成功'
+  }, {
+    value:'2', 
+    label:'失败'
+  },{
+    value:'3', 
+    label:'发送中'
+  },{
+    value:'4', 
+    label:'定时'
+  },{
+    value:'5', 
+    label:'已取消'
+  }],
   //是否是主联系人
   mainStatusOpts: [{
     value: 0,
@@ -269,6 +380,28 @@ export default {
     subItems: [{
       title: '基本情况',
       url: '/dashboard'
+    }]
+  },{
+    title: '客服中心',
+    iconClass: 'iconfont icon-call-center',
+    subItems: [{
+      title: '在线客服',
+      url: '/callCenter/onlineService'
+    }, {
+      title: '消息中心',
+      url: '/callCenter/messageCenter'
+    }, {
+      title: '短信中心',
+      url: '/callCenter/sms'
+    }, {
+      title: '客户回访',
+      url: '/callCenter/customerReturnVisit'
+    }, {
+      title: '客户反馈',
+      url: '/callCenter/customerFeedback'
+    }, {
+      title: '投诉处理',
+      url: '/callCenter/complaint'
     }]
   },{
     title: '客户管理',
@@ -291,12 +424,20 @@ export default {
     }, {
       title: '客户画像',
       url: '/customManager/customerPortrait'
-    }
-    , {
+    }, {
       title: '客户分级',
       url: '/customManager/customerRating'
-    }
-    ]
+    }, {
+      title: '商机管理',
+      url: '/customManager/busiOppty'
+    }]
+  }, {
+    title: '行政人资',
+    iconClass: 'iconfont icon-hr',
+    subItems: [{
+      title: '短信收发',
+      url: '/hrManager/sms'
+    }]
   }, {
     title: '系统设置',
     iconClass: 'iconfont icon-setting',

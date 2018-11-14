@@ -50,6 +50,8 @@ const rowData = (value, key) => {
     case 'time':
     case 'billDate':
     case 'convertDate':
+    case 'delayTime':
+    case 'replyTime':
       return (value) ? datetime2Str(new Date(value)) : ''
     default:
       return value
