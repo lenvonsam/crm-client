@@ -113,8 +113,7 @@
           phone: [{ validator: phoneValid, trigger: 'blur', required: true}]
         },
         outLinkerIdsData: [],
-        checkTotal: 0,
-        downApiUrl: 'callCenter/download'
+        checkTotal: 0
       }
     },
     computed: {
@@ -139,11 +138,9 @@
         } else if (type == 'addLinker') {
           this.dialogShow = true
         } else if (type == 'template') {
-          this.downApiUrl = 'callCenter/download'
-          this.download()
+          this.download('1')
         } else if (type == 'export') {
-          this.downApiUrl = 'callCenter/export'
-          this.download()
+          this.download('2')
         }
       },
       searchForm (paramsObj) {
@@ -359,12 +356,12 @@
           this.loading = false
         }
       },
-      async download () {
+      async download (mark) {
         try {
-          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'callCenter/download'})
+          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'file/address/' + mark})
           if (data.returnCode === 0) {
-            // let downUrl = decodeURIComponent(data.addr)
-            window.location.href = data.addr
+            let downUrl = decodeURIComponent(data.addr)
+            window.location.href = downUrl
           } else {
             this.msgShow(this, data.errMsg)
           }

@@ -213,6 +213,7 @@
             })
             this.smsForm['mobile'] = mobileArr.toString()
           } else {
+            this.smsMobileStr.replace(/\，/g,',')
             this.smsForm['mobile'] = this.smsMobileStr
           }
         }
@@ -324,5 +325,9 @@
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
+  }
+  .el-textarea.is-disabled .el-textarea__inner {
+    color: #606266;
+    background-color: #fff;
   }
 </style>
