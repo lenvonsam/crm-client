@@ -213,8 +213,7 @@
             })
             this.smsForm['mobile'] = mobileArr.toString()
           } else {
-            this.smsMobileStr.replace(/\，/g,',')
-            this.smsForm['mobile'] = this.smsMobileStr
+            this.smsForm['mobile'] = this.smsMobileStr.replace(/\，/g,',')
           }
         }
         if (this.smsForm['mobile'] == '') {
