@@ -63,8 +63,8 @@
         searchFormItems: [
           [{label: '姓名', model: 'name', type: 'text', placeholder: '请输入姓名', val: ''},
             {label: '手机号', model: 'phone', type: 'text', placeholder: '请输入手机号', val: ''},
-            {label: '标签', model: 'mainStatus', type: 'text', placeholder: '请输入标签', val: ''}],
-          [{label: '备注', model: 'compName', type: 'text', placeholder: '请输入备注', val: ''}]          
+            {label: '标签', model: 'label', type: 'text', placeholder: '请输入标签', val: ''}],
+          [{label: '备注', model: 'remark', type: 'text', placeholder: '请输入备注', val: ''}]          
         ],
         tableValue: {
           tableData: [],
@@ -104,6 +104,7 @@
           currentPage: this.currentPage - 1,
           pageSize: 5
         },
+        pageSize: 5,
         loading: false,
         dialogTitle: '新增联系人',
         dialogShow: false,
@@ -113,12 +114,12 @@
           phone: [{ validator: phoneValid, trigger: 'blur', required: true}]
         },
         outLinkerIdsData: [],
-        checkTotal: 0
+        checkTotal: 0,
+        isOutLinkerIds: false
       }
     },
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser
       })
     },
@@ -151,8 +152,8 @@
         this.loadData()
       },
       selectData (val) {
-        this.chooseArray = val                      
-        if (val.length !== undefined) {
+        this.chooseArray = val
+        if (val.length !== undefined && !this.isOutLinkerIds) {
           this.outLinkerIdsData = []
           this.checkTotal = val.length
           val.map((item) => {
@@ -176,6 +177,8 @@
             this.msgShow(this, data.errMsg)
           }
           this.loading = false
+          console.log('---------totalCount')
+          console.log(this.totalCount)
         } catch (e) {
           console.error(e)
           this.msgShow(this)
@@ -326,9 +329,11 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/outLinkerIds', params: params})
           if (data.returnCode === 0) {
-            this.outLinkerIdsData = data.ids.split()
-            this.toggleSelection()
+            this.outLinkerIdsData = data.ids.split(',')
             this.checkTotal = data.total
+            this.isOutLinkerIds = true
+            this.toggleSelection()    
+            this.isOutLinkerIds = false        
             console.log(this.outLinkerIdsData)
           } else {
             this.msgShow(this, data.errMsg)

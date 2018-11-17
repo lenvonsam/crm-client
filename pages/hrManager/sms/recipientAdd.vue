@@ -6,7 +6,7 @@
     .mt-5.text-center
       el-button(type="", size="small", @click="toggleSelection") 选择当前页
       el-button(type="", size="small", @click="selectClose") 取消选择
-      //- el-button(type="", size="small", @click="tableAllAdd") 添加全部
+      el-button(type="", size="small", @click="tableAllAdd") 添加全部
       el-button(type="primary", size="small" @click="tablePageAdd") 添加
       el-button(type="", size="small", @click="close") 关闭
 </template>
