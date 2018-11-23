@@ -56,10 +56,12 @@
           rowClassName: true,
           tableHead: [{
             lbl: '模板分组',
-            prop: 'groupName'
+            prop: 'groupName',
+            width: 100
           },{
             lbl: '模板名称',
-            prop: 'name'
+            prop: 'name',
+            width: 100
           },{
             lbl: '模板内容',
             prop: 'content'
@@ -206,9 +208,12 @@
         this.dialogTitle = '修改模板'
       },
       rowDel (row) {
-        console.log(row)
-        this.delete(row.id).then(() => {
-          this.loadData()
+        this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+          this.delete(row.id).then(() => {
+            this.loadData()
+          })
+        }, () => {
+          console.log('delete')
         })
       }
     }

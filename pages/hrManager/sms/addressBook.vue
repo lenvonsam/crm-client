@@ -138,6 +138,7 @@
           this.back()
         } else if (type == 'addLinker') {
           this.dialogShow = true
+          this.linker = { id: '', phone: '', name: '', label: '', remark:'', uid: ''}
         } else if (type == 'template') {
           this.download('1')
         } else if (type == 'export') {
@@ -223,8 +224,12 @@
       },
       rowDel (row) {
         console.log(row)
-        this.outLinkerDel(row.id).then(() => {          
-          this.loadData()
+        this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+          this.outLinkerDel(row.id).then(() => {          
+            this.loadData()
+          })
+        }, () => {
+          console.log('delete')
         })
       },
       linkerHandler () {

@@ -217,11 +217,11 @@
           }
         }
         if (this.smsForm['mobile'] == '') {
-          this.msgShow('请选择联系人发送')
+          this.msgShow(this,'请选择联系人发送')
           return
         }
         if (this.smsForm['content'] == '') {
-          this.msgShow('请输入短信内容')
+          this.msgShow(this,'请输入短信内容')
           return 
         }
         let delayTimeStr = this.datetime2Str(this.delayTime)
@@ -271,6 +271,7 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/smsCreate', params: this.smsForm})
           if (data.returnCode === 0) {
             this.msgShow(this, '设置成功', 'success')
+            this.clearRecipient()
           } else {
             this.msgShow(this, data.errMsg)
           }
