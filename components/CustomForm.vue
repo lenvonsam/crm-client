@@ -26,6 +26,77 @@ div
           el-input(v-model="form.compNameAb", placeholder="请输入简称", clearable)
     el-row.pr-10
       el-col(:span="12")
+        el-form-item(label="主联系人：", prop="name")
+          el-input(v-model="form.name", placeholder="请输入主联系人", clearable)
+      el-col(:span="12")
+        el-form-item(label="联系电话：", prop="phone")
+          el-input(v-model="form.phone", placeholder="请输入联系电话", clearable, :disabled="(originObj && originObj.ebusiAdminAcctNo != null)")
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item(label="业务关系：", prop="fkRelation")
+          el-select.full-width(v-model="form.fkRelation",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
+            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id", :disabled="(currentUser.id !== 1 && item.name === '内部单位')")
+      el-col(:span="12")
+        el-form-item(label="客户性质：", prop="fkCustomPropertyId")
+          el-select.full-width(v-model="form.fkCustomPropertyId", placeholder="请选择客户性质")
+            el-option(v-for="item in form.fkCustomPropertyIdVal", :key="item.id", :label="item.name", :value="item.id")
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item(label="业务部门：", prop="fkDptId")
+          el-select.full-width(v-model="form.fkDptId" filterable placeholder="请选择业务部门")
+            el-option(v-for="item in form.fkDptIdVal", :key="item.id", :label="item.name", :value="item.id")
+      el-col(:span="12")
+        el-form-item(label="业务员：", prop="fkAcctName")
+          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate", clearable)
+            el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
+    el-row.pr-10
+      el-col(:span="12")
+        //- el-form-item(label="所处行业：", prop="industry")
+        //-   el-input(v-model="form.industry", placeholder="请输入所处行业", clearable)
+        el-form-item(label="所处行业：", prop="fkIndustry")
+          el-select.full-width(v-model="form.fkIndustry",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
+            el-option(v-for="item in form.fkIndustryVal", :key="item.id", :label="item.name", :value="item.name")
+      el-col(:span="12")
+        el-form-item(label="经营范围：")
+          el-input(v-model="form.busiScope", placeholder="请输入经营范围", clearable)
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
+          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
+      el-col(:span="10")
+        el-form-item.validFormal(label="公司地址：")
+          //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
+          .row
+            .col
+              el-cascader.full-width(v-model="form.compAddrArr", clearable, placeholder="请选择公司地址", separator=" ", :options="addr", filterable, change-on-select)
+            .col
+              el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item.validFormal(label="公司规模：")
+          el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模")
+            el-option(v-for="item in compSizeOpts", :key="item.value", :label="item.label", :value="item.value")
+      el-col(:span="12")
+        el-form-item.validFormal(label="公司类型：")
+          el-select.full-width(v-model="form.compType", placeholder="请选择公司类型")
+            el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item.validFormal(label="税号：", prop="tfn")
+          el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
+      el-col(:span="12")
+        el-form-item.validFormal(label="开户名称：", prop="openAcctName")
+          //- el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable, @blur="isValid('openAcctName')")
+          el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
+    el-row.pr-10
+      el-col(:span="12")
+        el-form-item.validFormal(label="开户银行：")
+          el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
+      el-col(:span="12")
+        el-form-item.validFormal(label="开户账号：", prop="openAcct")
+          el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
+    el-row.pr-10
+      el-col(:span="12")
         el-form-item(label="助记码：")
           el-input(v-model="form.memberCode", :disabled="true")
       el-col(:span="12")
@@ -52,36 +123,7 @@ div
           el-input(v-model="form.ebusiMemberCode", :disabled="true", clearable)
       el-col(:span="8")
         el-form-item(label="电商管理员账号：")
-          el-input(v-model="form.ebusiAdminAcctNo", :disabled="true", clearable)
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item(label="业务关系：", prop="fkRelation")
-          el-select.full-width(v-model="form.fkRelation",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
-            el-option(v-for="item in form.fkRelationVal", :key="item.id", :label="item.name", :value="item.id", :disabled="(currentUser.id !== 1 && item.name === '内部单位')")
-      el-col(:span="12")
-        el-form-item(label="客户性质：", prop="fkCustomPropertyId")
-          el-select.full-width(v-model="form.fkCustomPropertyId", placeholder="请选择客户性质")
-            el-option(v-for="item in form.fkCustomPropertyIdVal", :key="item.id", :label="item.name", :value="item.id")
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item(label="业务部门：", prop="fkDptId")
-          el-select.full-width(v-model="form.fkDptId" filterable placeholder="请选择业务部门")
-            el-option(v-for="item in form.fkDptIdVal", :key="item.id", :label="item.name", :value="item.id")
-
-      el-col(:span="12")
-        el-form-item(label="业务员：", prop="fkAcctName")
-          el-select.full-width(v-model="form.fkAcctName",  value-key, filterable, remote, placeholder="请输入业务员", :remote-method="fkAccCreate", clearable)
-            el-option(v-for="item in form.fkAcctIdVal", :key="item.id", :label="item.name", :value="item.id")
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
-          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
-      el-col(:span="10")
-        .row
-          .col
-            el-form-item(label="注册资本：")
-              el-input-number.full-width(v-model="form.registerCapital", :precision="1", :controls="false")
-          .col.flex-10.mt-10.ml-5 万
+          el-input(v-model="form.ebusiAdminAcctNo", :disabled="true", clearable)    
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="法人代表：")
@@ -94,25 +136,14 @@ div
               i.pl-5.el-icon-circle-check
     el-row.pr-10
       el-col(:span="12")
-        el-form-item.validFormal(label="公司地址：")
-          //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
-          .row
-            .col
-              el-cascader.full-width(v-model="form.compAddrArr", clearable, placeholder="请选择公司地址", separator=" ", :options="addr", filterable, change-on-select)
-            .col
-              el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
+        .row
+          .col
+            el-form-item(label="注册资本：")
+              el-input-number.full-width(v-model="form.registerCapital", :precision="1", :controls="false")
+          .col.flex-10.mb-25.ml-5 万
       el-col(:span="12")
         el-form-item(label="传真号码：", prop="faxNum")
           el-input(v-model="form.faxNum", placeholder="请输入传真号码", clearable)
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item.validFormal(label="公司规模：")
-          el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模")
-            el-option(v-for="item in compSizeOpts", :key="item.value", :label="item.label", :value="item.value")
-      el-col(:span="12")
-        el-form-item.validFormal(label="公司类型：")
-          el-select.full-width(v-model="form.compType", placeholder="请选择公司类型")
-            el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
     el-row.pr-10
       el-col(:span="12")
         //- el-form-item(label="地区：")
@@ -131,13 +162,6 @@ div
       el-col(:span="12")
         el-form-item(label="实际控制人身份证：")
           el-input(v-model="form.factControllerIdno", placeholder="请输入实际控制人身份证", clearable)
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item(label="主联系人：", prop="name")
-          el-input(v-model="form.name", placeholder="请输入主联系人", clearable)
-      el-col(:span="12")
-        el-form-item(label="联系电话：", prop="phone")
-          el-input(v-model="form.phone", placeholder="请输入联系电话", clearable, :disabled="(originObj && originObj.ebusiAdminAcctNo != null)")
     el-row.pr-10
       el-col(:span="6")
         el-form-item(label="性别：")
@@ -168,21 +192,6 @@ div
         el-form-item(label="其他联系方式：")
           el-input(v-model="form.otherLinkWay", placeholder="请输入其他联系方式", clearable)
     el-row.pr-10
-      el-col(:span="12")
-        el-form-item.validFormal(label="税号：", prop="tfn")
-          el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
-      el-col(:span="12")
-        el-form-item.validFormal(label="开户名称：", prop="openAcctName")
-          //- el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable, @blur="isValid('openAcctName')")
-          el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item.validFormal(label="开户银行：")
-          el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
-      el-col(:span="12")
-        el-form-item.validFormal(label="开户账号：", prop="openAcct")
-          el-input(v-model="form.openAcct", placeholder="请输入开户账号", clearable)
-    el-row.pr-10
       el-col(:span="24")
         el-form-item(label="开票地址：")
           //- el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
@@ -191,14 +200,7 @@ div
             .col
               el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
             .col
-              el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)
-    el-row.pr-10
-      el-col(:span="12")
-        el-form-item(label="所处行业：")
-          el-input(v-model="form.industry", placeholder="请输入所处行业", clearable)
-      el-col(:span="12")
-        el-form-item(label="经营范围：")
-          el-input(v-model="form.busiScope", placeholder="请输入经营范围", clearable)
+              el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)    
     el-row.pr-10
       el-col(:span="6")
         el-form-item(label="采购周期：")
@@ -209,7 +211,7 @@ div
           .col
             el-form-item(label="月采吨位：")
               el-input-number.full-width(v-model="form.weightPerMonth", :precision="1", :controls="false")
-          .col.flex-10.mt-10.ml-5 吨
+          .col.flex-10.mb-25.ml-5 吨
       el-col(:span="6")
         el-form-item(label="高卖情况：")
           el-select.full-width(v-model="form.sellHighStatus", placeholder="请选择高卖情况")
@@ -224,13 +226,13 @@ div
           .col
             el-form-item(label="年销售额：")
               el-input-number.full-width(v-model="form.annualSales", :precision="1", placeholder="请输入所处行业", clearable, :controls="false")
-          .col.flex-10.mt-10.ml-5 万
+          .col.flex-10.mb-25.ml-5 万
       el-col(:span="11")
         .row
           .col
             el-form-item(label="纳税额：")
               el-input-number.full-width(v-model="form.taxPay", :precision="1", placeholder="请输入经营范围", clearable, :controls="false")
-          .col.flex-10.mt-10.ml-5 万
+          .col.flex-10.mb-25.ml-5 万
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="采购物资品类：")
@@ -265,14 +267,14 @@ div
             el-form-item(label="订金金额：")
               el-select.full-width(v-model="form.depositRate", filterable, allow-create, default-first-option, placeholder="请选择订金金额")
                 el-option(v-for="item in depositRateOpts", :key="item.value", :label="item.label", :value="item.value")
-          .col.flex-10.mt-10.ml-5 %
+          .col.flex-10.mb-25.ml-5 %
       el-col(:span="8")
         .row
           .col
             el-form-item(label="订金周期：")
               el-select.full-width(v-model="form.depositCycle", filterable, allow-create, default-first-option, placeholder="请选择订金金额")
                 el-option(v-for="item in depositCycleOpts", :key="item.value", :label="item.label", :value="item.value")
-          .col.flex-10.mt-10.ml-5 天
+          .col.flex-10.mb-25.ml-5 天
     el-row.pr-10
       el-col(:span="24")
         el-form-item(label="加工需求：")
@@ -401,7 +403,7 @@ export default {
     }
     return {
       form: {
-        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', industry: null, busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
+        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
       },
       rules: {
         compName: [
@@ -419,7 +421,8 @@ export default {
         faxNum: [{validator: faxNumValid, trigger: 'blur'}],
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
         tfn: [{min: 15, max: 20, message: '税号必须大于15位小于20位', trigger: 'blur'}],
-        openAcct: [{validator: openAcctValid, trigger: 'blur'}]
+        openAcct: [{validator: openAcctValid, trigger: 'blur'}],
+        fkIndustry: [{ required: true, message: '不能为空', trigger: 'change' }]
       },
       timeout: null,
       fileObj: {},
@@ -449,7 +452,7 @@ export default {
   methods: {
     onSubmit (formStr) {
       if(formStr == 'form') {
-        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone']
+        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry']
         let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
         let that = this
         formalArr.map(itm => {
@@ -510,6 +513,7 @@ export default {
           delete this.form.hopeAddGoods
           delete this.form.dealGoods
           delete this.form.dealPurpose
+          delete this.form.industry
           this.form.cstmId = this.$route.query.id
         }
         delete this.form.compAddrArr
@@ -521,6 +525,7 @@ export default {
         delete this.form.fkDptIdVal
         delete this.form.fkAcctIdVal
         delete this.form.fkPurchaseGoodsVal
+        delete this.form.fkIndustryVal
         delete this.form.fkDealGoodsVal
         delete this.form.fkPurchaseUseVal
         delete this.form.fkDealPurposeUseVal
@@ -560,7 +565,13 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/busiRelation/queryCombo'})
           if (data.returnCode === 0) {
-            this.form.fkRelationVal = data.list
+            let arr = []
+            data.list.map((item)=>{
+              if (item.status == 1) {
+                arr.push(item)
+              }
+            })
+            this.form.fkRelationVal = arr
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -569,11 +580,36 @@ export default {
         this.msgShow(this)
       }
     },
+    async fkIndustryValCreate () {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/industry/queryCombo'})
+          if (data.returnCode === 0) {
+            let arr = []
+            data.list.map((item)=>{
+              if (item.status == 1) {
+                arr.push(item)
+              }
+            })
+            this.form.fkIndustryVal = arr
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },    
     async fkCustomPropertyCreate () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/customProperty/queryCombo'})
           if (data.returnCode === 0) {
-            this.form.fkCustomPropertyIdVal = data.list
+            let arr = []
+            data.list.map((item)=>{
+              if (item.status == 1) {
+                arr.push(item)
+              }
+            })
+            this.form.fkCustomPropertyIdVal = arr
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -586,9 +622,15 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/supplyCatalog/queryCombo'})
         if (data.returnCode === 0) {
-          this.form.fkDealGoodsVal = data.list
-          this.form.fkPurchaseGoodsVal = data.list
-          this.form.fkHopeAddGoodsVal = data.list
+          let arr = []
+          data.list.map((item)=>{
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkDealGoodsVal = arr
+          this.form.fkPurchaseGoodsVal = arr
+          this.form.fkHopeAddGoodsVal = arr
         } else {
           this.msgShow(this, data.errMsg)
         }
@@ -601,8 +643,14 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/purpose/queryCombo'})
         if (data.returnCode === 0) {
-          this.form.fkPurchaseUseVal = data.list
-          this.form.fkDealPurposeUseVal = data.list
+          let arr = []
+          data.list.map((item)=>{
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkPurchaseUseVal = arr
+          this.form.fkDealPurposeUseVal = arr
         } else {
           this.msgShow(this, data.errMsg)
         }
@@ -615,7 +663,13 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/processReq/queryCombo'})
         if (data.returnCode === 0) {
-          this.form.fkProcessingRequirementsVal = data.list
+          let arr = []
+          data.list.map((item)=>{
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkProcessingRequirementsVal = arr
         } else {
           this.msgShow(this, data.errMsg)
         }
@@ -629,7 +683,13 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/dpt/queryCombo'})
           if (data.returnCode === 0) {
-            me.form.fkDptIdVal = data.list
+            let arr = []
+            data.list.map((item)=>{
+              if (item.status == 1) {
+                arr.push(item)
+              }
+            })
+            me.form.fkDptIdVal = arr
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -647,8 +707,13 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/queryCombo', params: params})
           if (data.returnCode === 0) {
-            me.form.fkAcctIdVal = data.list
-
+            let arr = []
+            data.list.map((item)=>{
+              if (item.status == 1) {
+                arr.push(item)
+              }
+            })
+            me.form.fkAcctIdVal = arr
           } else {
             this.msgShow(this, data.errMsg)
           }
@@ -690,6 +755,7 @@ export default {
       if (newVal.processRequirement) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
       if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
       if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+      if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
       this.form.compAddrArr.push(newVal.compProv)
@@ -714,11 +780,13 @@ export default {
     this.supplyCatalogCreate()
     this.purposeCreate()
     this.processReqCreate()
+    this.fkIndustryValCreate()
     // if (this.originObj) this.form = this.originObj
     if (this.$route.query.type == 'new') {
       this.form.fkDptId = this.currentUser.fkDpt.id
       this.form.fkAcctId = this.currentUser.id
       this.form.fkAcctName = this.currentUser.name
+      this.form.fkRelation = [1]
     }
   },
   watch: {

@@ -212,19 +212,19 @@
         this.loadData()
       },
       rowConversion (obj) {
-        // this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
-        //   let arr = []
-        //   let paramsObj = {
-        //     cstmId: obj.id,
-        //     uid: this.currentUser.id,
-        //     orderType: 0
-        //   }
-        //   this.customerTransform(paramsObj)
-        // }, () => {
-        //   console.log('cancel')
-        // })
-        this.rowObj = obj
-        this.dialogShow = true
+        this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
+          let arr = []
+          let paramsObj = {
+            cstmId: obj.id,
+            uid: this.currentUser.id,
+            orderType: 0
+          }
+          this.customerTransform(paramsObj)
+        }, () => {
+          console.log('cancel')
+        })
+        // this.rowObj = obj
+        // this.dialogShow = true
       },
       conversionSure () {
         let paramsObj = {

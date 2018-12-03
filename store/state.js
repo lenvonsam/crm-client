@@ -484,6 +484,9 @@ export default {
     }, {
       title: '加工需求',
       url: '/basicData/processReq'
+    }, {
+      title: '所处行业',
+      url: '/basicData/industry'
     }]
   }]
 }

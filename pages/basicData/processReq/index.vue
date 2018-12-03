@@ -238,6 +238,8 @@
             this.currentPage = 1
             this.loadData()
             this.msgShow(this, '删除成功', 'success')
+          } else {
+            this.msgShow(this, data.errMsg)
           }
         } catch (e) {
           console.error(e)
