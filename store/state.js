@@ -384,16 +384,17 @@ export default {
   },{
     title: '客服中心',
     iconClass: 'iconfont icon-call-center',
-    subItems: [{
+    subItems: [
+    /*{
       title: '在线客服',
       url: '/callCenter/onlineService'
     }, {
       title: '消息中心',
       url: '/callCenter/messageCenter'
-    }, {
+    }, */{
       title: '短信中心',
       url: '/callCenter/sms'
-    }, {
+    }/*, {
       title: '客户回访',
       url: '/callCenter/customerReturnVisit'
     }, {
@@ -402,7 +403,7 @@ export default {
     }, {
       title: '投诉处理',
       url: '/callCenter/complaint'
-    }]
+    }*/]
   },{
     title: '客户管理',
     iconClass: 'iconfont icon-custom',

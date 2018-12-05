@@ -54,7 +54,7 @@ div
         //- el-form-item(label="所处行业：", prop="industry")
         //-   el-input(v-model="form.industry", placeholder="请输入所处行业", clearable)
         el-form-item(label="所处行业：", prop="fkIndustry")
-          el-select.full-width(v-model="form.fkIndustry",  multiple, filterable, default-first-option, placeholder="请选择业务关系")
+          el-select.full-width(v-model="form.fkIndustry",  multiple, filterable, default-first-option, placeholder="请选择所处行业")
             el-option(v-for="item in form.fkIndustryVal", :key="item.id", :label="item.name", :value="item.name")
       el-col(:span="12")
         el-form-item(label="经营范围：")
