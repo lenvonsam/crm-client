@@ -5,3 +5,7 @@ package-lock.json
 .svn
 .nuxt
 .project
+dist/
+.DS_Store
+**/*/.DS_Store
+**/.DS_Store
