@@ -171,8 +171,63 @@ const minixs = {
     mobileReg (mobile) {
       var reg = /^1[3|4|5|8|9][0-9]\d{4,8}$/
       return reg.test(mobile)
+    },
+    // 解决js计算误差问题
+    // 加法
+    accAdd (a, b) {
+      var c, d, e;
+      try {
+          c = a.toString().split(".")[1].length;
+      } catch (f) {
+          c = 0;
+      }
+      try {
+          d = b.toString().split(".")[1].length;
+      } catch (f) {
+          d = 0;
+      }
+      return e = Math.pow(10, Math.max(c, d)), (this.accMul(a, e) + this.accMul(b, e)) / e;
+    },
+    // 减法
+    accSub(a, b) {
+      var c, d, e;
+      try {
+          c = a.toString().split(".")[1].length;
+      } catch (f) {
+          c = 0;
+      }
+      try {
+          d = b.toString().split(".")[1].length;
+      } catch (f) {
+          d = 0;
+      }
+      return e = Math.pow(10, Math.max(c, d)), (this.accMul(a, e) - this.accMul(b, e)) / e;
+    },
+    // 乘法
+    accMul(a, b) {
+      var c = 0,
+          d = a.toString(),
+          e = b.toString();
+      try {
+          c += d.split(".")[1].length;
+      } catch (f) {}
+      try {
+          c += e.split(".")[1].length;
+      } catch (f) {}
+      return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
+    },
+    // 除法
+    accDiv(a, b) {
+      var c, d, e = 0,
+          f = 0;
+      try {
+          e = a.toString().split(".")[1].length;
+      } catch (g) {}
+      try {
+          f = b.toString().split(".")[1].length;
+      } catch (g) {}
+      return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), this.accMul(c / d, Math.pow(10, f - e));
     }
   }
 }
-
 Vue.mixin(minixs)

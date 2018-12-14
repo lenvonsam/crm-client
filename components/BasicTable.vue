@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  el-table(ref="multipleTable", :data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @sort-change="sortChange")
+  el-table(ref="multipleTable", :data="currentData", :row-class-name="tableRowClassName", highlight-current-row,  v-loading="loading", style="width: 100%", border, @selection-change="handleSelectionChange", @current-change="handleCurrentChange", :default-sort="{order: 'descending'}", size="medium", :header-cell-class-name="headerCellClassName", :filter-change="tableFiler", @sort-change="sortChange", :show-summary="tableValue.summary? tableValue.summary : false", :summary-method="getSummaries")
     el-table-column(v-if="tableValue.hasCbx", type="selection", width="55")    
     template(v-for="head in tableValue.tableHead")
       //- el-table-column(v-if="head.type == 'date'", :label="head.lbl", :width="head.width ? head.width : 'auto'")
@@ -12,6 +12,9 @@ div
       el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
+      el-table-column(v-else-if="head.type == 'linkRow'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+        template(slot-scope="scope")
+          a(:href="head.linkUrl + '?row=' + JSON.stringify(scope.row)") {{scope.row[head.prop]}}
       el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
@@ -109,16 +112,23 @@ div
       lockFun: {
         type: Function,
         require: true
+      },
+      sumsFun: {
+        type: Function,
+        require: true
       }
     },
     methods: {
       tableRowClassName ({row, rowIndex}) {
+        console.log(row)
         if(this.tableValue.rowClassName){
-          console.log(row.billDateDays)
           if (row.billDateDays >= 60) {
             return 'loss-cstm'
           } else if (row.billDateDays > 30 && row.billDateDays < 60) {
             return 'communicate-cstm'
+          }
+          if (row.rowClassName) {
+            return row.rowClassName
           }
         }
       },
@@ -312,6 +322,35 @@ div
             this.isVerify = false
           }
         }
+      },
+      getSummaries (params) {
+        console.log(params)
+        const { columns, data } = params
+        const sums = []
+        let that = this
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '合计'
+            return
+          }
+          if (this.tableValue.tableHead[index].summary) {
+            const values = data.map(item => Number(item[column.property]));
+            if (!values.every(value => isNaN(value))) {
+              sums[index] = values.reduce((prev, curr) => {
+                const value = Number(curr)
+                if (!isNaN(value)) {
+                  return that.accAdd(prev, curr)
+                } else {
+                  return prev
+                }
+              }, 0)
+            }
+          }          
+        })
+        if (this.sumsFun) {
+          this.sumsFun(sums)
+        }                
+        return sums
       }
     }
   }

@@ -381,6 +381,19 @@ export default {
       title: '基本情况',
       url: '/dashboard'
     }]
+  }, {
+      title: '销售管理',
+      iconClass: 'iconfont icon-sales',
+      subItems: [{
+        title: '销售报表',
+        url: '/salesManage/reports'
+      }, {
+        title: '交易跟踪',
+        url: '/salesManage/tracking'
+      }, {
+        title: '产品资源',
+        url: '/salesManage/resources'
+      }]
   },{
     title: '客服中心',
     iconClass: 'iconfont icon-call-center',
