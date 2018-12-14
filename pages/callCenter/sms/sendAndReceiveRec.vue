@@ -66,7 +66,7 @@ export default {
           prop: 'statusStr'
         }],
       recSearchFormItems: [
-        [{label: '短信ID', model: 'id', type: 'text', placeholder: '请输入短信ID', val: ''},
+        [{label: '短信ID', model: 'msgId', type: 'text', placeholder: '请输入短信ID', val: ''},
           {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''},
           {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}],
          [{label: '回复人', model: 'name', type: 'text', placeholder: '请输入回复人', val: ''},
@@ -78,7 +78,7 @@ export default {
       recTableHead: [{
         lbl: '短信ID',
         width: 110,
-        prop: 'id'
+        prop: 'msgId'
       },{
         lbl: '回复时间',
         prop: 'replyTime',

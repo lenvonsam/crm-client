@@ -36,11 +36,14 @@
           const idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
           const authObj = this.currentUser.auths[idx]
           this.btns.map(itm => {
-            if (authObj.hasCreate === 1 && itm.type === 'add') this.actionBtns.push(itm)
-            if (authObj.hasUpdate === 1 && (itm.type === 'start' || itm.type === 'stop')) this.actionBtns.push(itm)
-            if (authObj.hasUpdate === 1 && itm.type === 'conversion') this.actionBtns.push(itm)
-            // if (itm.type === 'delRec' || itm.type === 'conversionRec' || itm.type === 'outflow' || itm.type === 'back' || itm.type === 'res' || itm.type === 'edit' || itm.type === 'statistics') this.actionBtns.push(itm)
-            this.actionBtns.push(itm)
+            if (itm.type === 'add' || itm.type === 'start' || itm.type === 'stop' || itm.type === 'conversion') {
+              if (authObj.hasCreate === 1 && itm.type === 'add') this.actionBtns.push(itm)
+              if (authObj.hasUpdate === 1 && (itm.type === 'start' || itm.type === 'stop')) this.actionBtns.push(itm)
+              if (authObj.hasUpdate === 1 && itm.type === 'conversion') this.actionBtns.push(itm)  
+            } else {
+              this.actionBtns.push(itm)
+            }            
+            // if (itm.type === 'delRec' || itm.type === 'conversionRec' || itm.type === 'outflow' || itm.type === 'back' || itm.type === 'res' || itm.type === 'edit' || itm.type === 'statistics') this.actionBtns.push(itm)            
           })
         } else {
           this.actionBtns = this.btns

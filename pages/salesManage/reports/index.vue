@@ -1,26 +1,17 @@
 <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    .pt-15
-      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap", @tableRowConversion="rowConversion")
-    baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
-    el-dialog(title="提示", :visible="dialogShow", @close="dialogShow=false")
-      span.ft-16 转为正式客户请确认以下内容是否完善：
-      .mt-5 工商证照编码， 公司地址， 公司规模， 公司类型， 税号， 开户名称， 开户银行， 开户账号， 开票地址， 营业执照（附件）， 开票资料（附件）
-      span(slot="footer" class="dialog-footer")
-        el-button(@click="rowEdit(rowObj)", size="small") 编 辑
-        el-button(type="primary" @click="conversionSure", size="small") 确 定
 </template>
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
-  import buttonGroup from '@/components/ButtonGroup.vue'
+  // import buttonGroup from '@/components/ButtonGroup.vue'
   import { mapState } from 'vuex'
   import baiduMap from '@/components/BaiduMap.vue'
   export default {
@@ -29,12 +20,11 @@
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup,
       baiduMap
     },
     data() {
       return {
-        breadItems: ['客户管理', '潜在客户'],
+        breadItems: ['销售管理', '销售报表'],
         currentPage: 1,
         totalCount: 0,
         queryObject: {
@@ -43,70 +33,56 @@
           orderType: '0',
           mark: '1'
         },
-        btnGroups: [{
-          lbl: '添加潜在客户',
-          type: 'add'
-        }, {
-          lbl: '转化记录',
-          type: 'conversionRec'
-        }],
         tableValue: {
           tableData: [],
           hasCbx: false,
           rowClassName: false,
           tableHead: [{
-            lbl: '公司名称',
-            prop: 'compName',
-            type: 'link',
-            minWidth: '340px',
-            linkUrl: '/customManager/potentialCustom/detail'           
+            lbl: '品名',
+            prop: 'compName',            
+            width: 150
           }, {
-            lbl: '主联系人',
+            lbl: '材质',
             prop: 'linkName',
             width: '200px'
           }, {
-            lbl: '联系方式',
+            lbl: '规格',
             prop: 'linkPhone',
             width: '120px'
           }, {
-            lbl: '添加日期',
+            lbl: '长度',
             prop: 'createAt',
             width: '200px'
           }, {
-            lbl: '业务部门',
+            lbl: '产地',
             prop: 'dptName',
             width: '150px'
           }, {
-            lbl: '业务员',
+            lbl: '公差范围',
             prop: 'acctName',
             width: '150px'
           }, {
-            lbl: '创建人',
+            lbl: '重量范围',
             prop: 'creatorName',
             width: '100px'
           }, {
-            type: 'action',
-            width: '200px',
-            fixed: 'right',
-            actionBtns: [{
-              lbl: '编辑',
-              type: 'edit'
-            }, {
-              lbl: '转化正式客户',
-              type: 'conversion'
-            }, {
-              lbl: '地图',
-              type: 'map'
-            }]
+            lbl: '曾购客户',
+            prop: 'creatorName',
+            width: '120px',
+            sort: ''
+          }, {
+            lbl: '可卖库存量(吨)',
+            prop: 'creatorName',
+            width: '100px'
           }]
         },
         searchFormItems: [
-          [{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
-            {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
-            {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
-          [{label: '添加日期', model: 'createAt', type: 'timeLimit', val: ''},
-          {label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: ''},
-          {label: '业务员', model: 'acctName', placeholder: '请输入业务员', val: ''}]
+          [{label: '品名', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
+            {label: '材质', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
+            {label: '规格', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
+          [{label: '长度', model: 'createAt', type: 'timeLimit', val: ''},
+          {label: '公差范围', model: 'dptName', placeholder: '请输入业务部门', val: ''},
+          {label: '重量范围', model: 'acctName', placeholder: '请输入业务员', val: ''}]
         ],
         reason: '',
         // dialogFormVisible: false,

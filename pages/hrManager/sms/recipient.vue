@@ -47,18 +47,17 @@
   .mt-20.text-center.mb-30
     el-button(type="primary", @click="sendHandler") 发送
   el-dialog(:visible="recipientShow", width="1200px", :before-close="recipientBox")
-    recipientAdd(:close="recipientBox", @rowAdd="addRecipient", @pageAdd="pageaddRecipient", @allAdd="allAddRecipient", v-if="mark == '0'")
-    recipientHRAdd(:close="recipientBox", @rowAdd="addRecipient", @pageAdd="pageaddRecipient", @allAdd="allAddRecipient", v-else)
+    recipientHRAdd(:close="recipientBox", @rowAdd="addRecipient", @pageAdd="pageaddRecipient", @allAdd="allAddRecipient")
 </template>
 <script>
   import basicTable from '@/components/BasicTable.vue'
-  import recipientAdd from './recipientAdd.vue'
-  import recipientHRAdd from './../../hrManager/sms/recipientAdd.vue'
+  // import recipientAdd from './../../callCenter/sms/recipientAdd.vue'
+  import recipientHRAdd from './recipientAdd.vue'
   import { mapState } from 'vuex'
   export default {
     components: {
       basicTable,
-      recipientAdd,
+      // recipientAdd,
       recipientHRAdd
     },
     props: {
@@ -144,7 +143,7 @@
         this.recipientShow = !this.recipientShow
       },
       templateManagement () {
-        this.jump({path: '/callCenter/sms/templateManagement'})
+        this.jump({path: '/hrManager/sms/templateManagement'})
       },
       addRecipient (row) {
         if (row.idx > -1) delete row.idx
@@ -196,7 +195,7 @@
       insertTemplate () {
         if (this.templateDetail.content) {
           this.smsForm.content = JSON.parse(JSON.stringify(this.templateDetail.content))
-        } 
+        }    
       },
       sendHandler () {
         this.smsForm['uid'] = this.currentUser.id

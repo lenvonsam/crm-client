@@ -4,12 +4,11 @@
   .mt-15
     el-table(ref="multipleTable", :data="tableData", v-loading="loading", border, @selection-change="selectData", @current-change="selectData")
       template(v-for="head in tableHead")
-        el-table-column(v-if="head.type !== 'action'",:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :align="head.align ? head.align : 'left'", show-overflow-tooltip)
+        el-table-column(v-if="head.type !== 'action'",:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :align="head.align ? head.align : 'left'")
           template(slot-scope="scope") 
             template(v-if="head.prop == 'content'") 
-              el-popover(trigger="hover", placement="top") 
-                div {{scope.row[head.prop]}}
-                div(slot="reference" class="name-wrapper") {{scope.row[head.prop]}}
+              el-popover(trigger="hover", placement="top-start", width="500", :content="scope.row[head.prop]") 
+                .ellps.full-width(slot="reference") {{scope.row[head.prop]}}
             template(v-else) {{scope.row[head.prop] | rowData(head.prop)}}
       el-table-column(label="操作", width="150", fixed="right")
         template(slot-scope="scope")
@@ -66,7 +65,8 @@
           rowClassName: true,
           tableHead: []
         },
-        detailKey: []
+        detailKey: [],
+        popover: false
       }
     },
     computed: {
@@ -85,13 +85,13 @@
         {lbl: '联系方式', prop: 'linkPhone', width: 120},
         {lbl: '类型', width: 100, prop: 'mainStatus', type: 'object', factValue (val) {return (val == 0) ? '子联系人' : '主联系人'}},
         {lbl: '所属客户',prop: 'compName'},
-        {lbl: '状态', width: 50, prop: 'status'}]
+        {lbl: '状态', width: 100, prop: 'status', type:'object', factValue(val){return (val == 0) ? '发送成功' : (val == 1) ? '发送中' : (val == 2) ? '发送失败' : (val == 3) ? '定时发送' : '已取消'}}]
         this.detailKey = ['compName','linkName','linkPhone','parentId','status','msgId','createAt','updateAt','mainStatus']
       } else if (this.mark == '1') {
         this.tableValue.tableHead = [{lbl: '短信ID', prop: 'msgId'},
         {lbl: '姓名', prop: 'linkName', width: 150},
         {lbl: '联系方式', prop: 'linkPhone', width: 120},
-        {lbl: '状态', width: 50, prop: 'status'}]
+        {lbl: '状态', width: 100, prop: 'status', type:'object', factValue(val){return (val == 0) ? '发送成功' : (val == 1) ? '发送中' : (val == 2) ? '发送失败' : (val == 3) ? '定时发送' : '已取消'}}]
         this.detailKey = ['linkName','linkPhone','parentId','status','msgId','createAt','updateAt']
       }
       this.queryObject = {
@@ -129,7 +129,8 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      handerRowBtnDetail (row) {     
+      handerRowBtnDetail (row) {    
+        debugger 
         this.parentData = row
         this.parentData['mark'] = this.queryObject.mark
         this.dialogShow = true

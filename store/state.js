@@ -381,19 +381,33 @@ export default {
       title: '基本情况',
       url: '/dashboard'
     }]
+  }, {
+      title: '销售管理',
+      iconClass: 'iconfont icon-sales',
+      subItems: [{
+        title: '销售报表',
+        url: '/salesManage/reports'
+      }, {
+        title: '交易跟踪',
+        url: '/salesManage/tracking'
+      }, {
+        title: '产品资源',
+        url: '/salesManage/resources'
+      }]
   },{
     title: '客服中心',
     iconClass: 'iconfont icon-call-center',
-    subItems: [{
+    subItems: [
+    /*{
       title: '在线客服',
       url: '/callCenter/onlineService'
     }, {
       title: '消息中心',
       url: '/callCenter/messageCenter'
-    }, {
+    }, */{
       title: '短信中心',
       url: '/callCenter/sms'
-    }, {
+    }/*, {
       title: '客户回访',
       url: '/callCenter/customerReturnVisit'
     }, {
@@ -402,7 +416,7 @@ export default {
     }, {
       title: '投诉处理',
       url: '/callCenter/complaint'
-    }]
+    }*/]
   },{
     title: '客户管理',
     iconClass: 'iconfont icon-custom',
@@ -484,6 +498,9 @@ export default {
     }, {
       title: '加工需求',
       url: '/basicData/processReq'
+    }, {
+      title: '所处行业',
+      url: '/basicData/industry'
     }]
   }]
 }

@@ -63,8 +63,8 @@
         searchFormItems: [
           [{label: '姓名', model: 'name', type: 'text', placeholder: '请输入姓名', val: ''},
             {label: '手机号', model: 'phone', type: 'text', placeholder: '请输入手机号', val: ''},
-            {label: '标签', model: 'mainStatus', type: 'text', placeholder: '请输入标签', val: ''}],
-          [{label: '备注', model: 'compName', type: 'text', placeholder: '请输入备注', val: ''}]          
+            {label: '标签', model: 'label', type: 'text', placeholder: '请输入标签', val: ''}],
+          [{label: '备注', model: 'remark', type: 'text', placeholder: '请输入备注', val: ''}]          
         ],
         tableValue: {
           tableData: [],
@@ -104,6 +104,7 @@
           currentPage: this.currentPage - 1,
           pageSize: 5
         },
+        pageSize: 5,
         loading: false,
         dialogTitle: '新增联系人',
         dialogShow: false,
@@ -114,12 +115,11 @@
         },
         outLinkerIdsData: [],
         checkTotal: 0,
-        downApiUrl: 'callCenter/download'
+        isOutLinkerIds: false
       }
     },
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser
       })
     },
@@ -138,12 +138,11 @@
           this.back()
         } else if (type == 'addLinker') {
           this.dialogShow = true
+          this.linker = { id: '', phone: '', name: '', label: '', remark:'', uid: ''}
         } else if (type == 'template') {
-          this.downApiUrl = 'callCenter/download'
-          this.download()
+          this.download('1')
         } else if (type == 'export') {
-          this.downApiUrl = 'callCenter/export'
-          this.download()
+          this.download('2')
         }
       },
       searchForm (paramsObj) {
@@ -154,8 +153,8 @@
         this.loadData()
       },
       selectData (val) {
-        this.chooseArray = val                      
-        if (val.length !== undefined) {
+        this.chooseArray = val
+        if (val.length !== undefined && !this.isOutLinkerIds) {
           this.outLinkerIdsData = []
           this.checkTotal = val.length
           val.map((item) => {
@@ -179,6 +178,8 @@
             this.msgShow(this, data.errMsg)
           }
           this.loading = false
+          console.log('---------totalCount')
+          console.log(this.totalCount)
         } catch (e) {
           console.error(e)
           this.msgShow(this)
@@ -223,8 +224,12 @@
       },
       rowDel (row) {
         console.log(row)
-        this.outLinkerDel(row.id).then(() => {          
-          this.loadData()
+        this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+          this.outLinkerDel(row.id).then(() => {          
+            this.loadData()
+          })
+        }, () => {
+          console.log('delete')
         })
       },
       linkerHandler () {
@@ -329,9 +334,11 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/outLinkerIds', params: params})
           if (data.returnCode === 0) {
-            this.outLinkerIdsData = data.ids.split()
-            this.toggleSelection()
+            this.outLinkerIdsData = data.ids.split(',')
             this.checkTotal = data.total
+            this.isOutLinkerIds = true
+            this.toggleSelection()    
+            this.isOutLinkerIds = false        
             console.log(this.outLinkerIdsData)
           } else {
             this.msgShow(this, data.errMsg)
@@ -359,12 +366,12 @@
           this.loading = false
         }
       },
-      async download () {
+      async download (mark) {
         try {
-          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'callCenter/download'})
+          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'file/address/' + mark})
           if (data.returnCode === 0) {
-            // let downUrl = decodeURIComponent(data.addr)
-            window.location.href = data.addr
+            let downUrl = decodeURIComponent(data.addr)
+            window.location.href = downUrl
           } else {
             this.msgShow(this, data.errMsg)
           }

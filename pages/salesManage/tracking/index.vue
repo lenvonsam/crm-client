@@ -1,40 +1,37 @@
 <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    .pt-15
-      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
-    .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm")
-    .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowEdit="rowEdit", @tableRowMap = "rowMap", @tableRowConversion="rowConversion")
-    baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
-    el-dialog(title="提示", :visible="dialogShow", @close="dialogShow=false")
-      span.ft-16 转为正式客户请确认以下内容是否完善：
-      .mt-5 工商证照编码， 公司地址， 公司规模， 公司类型， 税号， 开户名称， 开户银行， 开户账号， 开票地址， 营业执照（附件）， 开票资料（附件）
-      span(slot="footer" class="dialog-footer")
-        el-button(@click="rowEdit(rowObj)", size="small") 编 辑
-        el-button(type="primary" @click="conversionSure", size="small") 确 定
+    //- .mt-15
+    //-   search-form(:searchFormItems="searchFormItems", @search="searchForm")
+    //- .pt-15
+    //-   basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange")
+    el-tabs(type="border-card", v-model="tabName", @tab-click="elTabsHandler")
+      el-tab-pane(label='离职人员销量报表', name="1")
+        resignation-report(v-if="tabName == '1'")
+      el-tab-pane(label='销量预警报表', name="2")
+        early-warning(v-if="tabName == '2'")
 </template>
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
-  import buttonGroup from '@/components/ButtonGroup.vue'
+  import ResignationReport from './ResignationReport.vue'
+  import EarlyWarning from './EarlyWarning.vue'
+  // import buttonGroup from '@/components/ButtonGroup.vue'
   import { mapState } from 'vuex'
-  import baiduMap from '@/components/BaiduMap.vue'
   export default {
     layout: 'main',
     components: {
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup,
-      baiduMap
+      ResignationReport,
+      EarlyWarning
     },
     data() {
       return {
-        breadItems: ['客户管理', '潜在客户'],
+        breadItems: ['销售管理', '交易跟踪'],
         currentPage: 1,
         totalCount: 0,
         queryObject: {
@@ -43,13 +40,6 @@
           orderType: '0',
           mark: '1'
         },
-        btnGroups: [{
-          lbl: '添加潜在客户',
-          type: 'add'
-        }, {
-          lbl: '转化记录',
-          type: 'conversionRec'
-        }],
         tableValue: {
           tableData: [],
           hasCbx: false,
@@ -84,20 +74,6 @@
             lbl: '创建人',
             prop: 'creatorName',
             width: '100px'
-          }, {
-            type: 'action',
-            width: '200px',
-            fixed: 'right',
-            actionBtns: [{
-              lbl: '编辑',
-              type: 'edit'
-            }, {
-              lbl: '转化正式客户',
-              type: 'conversion'
-            }, {
-              lbl: '地图',
-              type: 'map'
-            }]
           }]
         },
         searchFormItems: [
@@ -121,7 +97,8 @@
           keyWord: ''
         },
         dialogShow: false,
-        rowObj: {}
+        rowObj: {},
+        tabName: '1'
       }
     },
     mounted () {
@@ -131,7 +108,7 @@
         orderType: '0',
         mark: '1'
       }
-      this.loadData()
+      // this.loadData()
     },
     computed: {
       ...mapState({
@@ -143,16 +120,6 @@
     methods: {
       baiduMapCb() {
         this.dialogMap = false
-      },
-      rowMap (obj) {
-        this.baiduMapData.keyWord = obj.compName
-        this.baiduMapData = {
-          center: {lng: 116.404, lat: 39.915},
-          zoom: 6,
-          location: '',
-          keyWord: obj.compName
-        }
-        this.dialogMap = true
       },
       async loadData () {
         this.queryObject.uid = this.currentUser.id
@@ -211,21 +178,6 @@
         console.log(this.queryObject.orderType)
         this.loadData()
       },
-      rowConversion (obj) {
-        this.confirmDialog(this, '您确认要转换为正式客户吗？').then(() => {
-          let arr = []
-          let paramsObj = {
-            cstmId: obj.id,
-            uid: this.currentUser.id,
-            orderType: 0
-          }
-          this.customerTransform(paramsObj)
-        }, () => {
-          console.log('cancel')
-        })
-        // this.rowObj = obj
-        // this.dialogShow = true
-      },
       conversionSure () {
         let paramsObj = {
           cstmId: this.rowObj.id,
@@ -233,6 +185,9 @@
           orderType: 0
         }
         this.customerTransform(paramsObj)
+      },
+      elTabsHandler (tab) {
+        this.tabName = tab.name
       },
       async actionDelete () {
         try {
@@ -273,9 +228,6 @@
           console.error(e)
           this.msgShow(this)
         }
-      },
-      rowEdit (obj) {
-        this.jump('/customManager/potentialCustom/form?type=edit&id=' + obj.id)
       }
     }
   }
