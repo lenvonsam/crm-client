@@ -12,7 +12,7 @@ const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://localhost:7786/'
 // const proxyUrl = 'http://172.16.120.225:7786/'
 // const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+const proxyUrl = 'http://192.168.20.170:8080/crmserver/'
 
 
 router.use((req, res, next) => {
