@@ -6,9 +6,10 @@
       template(v-for="head in tableHead")
         el-table-column(v-if="head.type !== 'action'",:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :align="head.align ? head.align : 'left'")
           template(slot-scope="scope") 
+            //- span {{scope.row[head.prop]}}
             template(v-if="head.prop == 'content'") 
               el-popover(trigger="hover", placement="top-start", width="500", :content="scope.row[head.prop]") 
-                .ellps.full-width(slot="reference") {{scope.row[head.prop]}}
+                .ellps-row.full-width(slot="reference") {{scope.row[head.prop]}}
             template(v-else) {{scope.row[head.prop] | rowData(head.prop)}}
       el-table-column(label="操作", width="150", fixed="right")
         template(slot-scope="scope")
@@ -129,8 +130,7 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      handerRowBtnDetail (row) {    
-        debugger 
+      handerRowBtnDetail (row) {
         this.parentData = row
         this.parentData['mark'] = this.queryObject.mark
         this.dialogShow = true

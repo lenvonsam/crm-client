@@ -148,7 +148,11 @@
       searchForm (paramsObj) {
         this.queryObject['currentPage'] = 0
         for (let key in paramsObj) {
-          this.queryObject[key] = paramsObj[key]
+          if (paramsObj[key].trim() != '') {
+            this.queryObject[key] = paramsObj[key]
+          } else {
+            delete this.queryObject[key] 
+          }          
         }
         this.loadData()
       },
@@ -178,7 +182,6 @@
             this.msgShow(this, data.errMsg)
           }
           this.loading = false
-          console.log('---------totalCount')
           console.log(this.totalCount)
         } catch (e) {
           console.error(e)
