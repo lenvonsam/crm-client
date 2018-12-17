@@ -10,7 +10,7 @@
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
-  import recipient from './recipient.vue'
+  import recipient from './../../callCenter/sms/recipient.vue'
   export default {
     layout: 'main',
     components: {
