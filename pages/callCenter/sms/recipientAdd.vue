@@ -77,9 +77,10 @@
         },
         currentPage: 1,
         totalCount: 0,
+        pageSize: 5,
         queryObject: {
           currentPage: this.currentPage - 1,
-          pageSize: 5
+          pageSize: this.pageSize
         },
         checkTotal: 0,
         loading: false
@@ -97,7 +98,6 @@
     },
     computed: {
       ...mapState({
-      	pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser,
         cstmArr: state => state.cstmArr,
         customerMarkOpts: state => state.customerMarkOpts,
@@ -129,7 +129,11 @@
       searchForm (paramsObj) {
         this.queryObject['currentPage'] = 0
         for (let key in paramsObj) {
-          this.queryObject[key] = paramsObj[key]
+          if (paramsObj[key].trim() != '') {
+            this.queryObject[key] = paramsObj[key]
+          } else {
+            delete this.queryObject[key] 
+          }          
         }
         this.loadData()
       },
