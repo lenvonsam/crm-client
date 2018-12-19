@@ -84,10 +84,6 @@ export default {
           width: '180px',
           prop: 'planVisitTime'
         }, {
-          lbl: '计划开单日期',
-          width: '120px',
-          prop: 'planDate'
-        }, {
           lbl: '状态',
           prop: 'status',
           width: '100px',

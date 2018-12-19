@@ -57,8 +57,10 @@ div
           el-select.full-width(v-model="form.fkIndustry",  multiple, filterable, default-first-option, placeholder="请选择所处行业")
             el-option(v-for="item in form.fkIndustryVal", :key="item.id", :label="item.name", :value="item.name")
       el-col(:span="12")
-        el-form-item(label="经营范围：")
-          el-input(v-model="form.busiScope", placeholder="请输入经营范围", clearable)
+        el-form-item(label="地区：", prop="region")
+          el-select.full-width(v-model="form.region", filterable, placeholder="请选择地区")
+            el-option-group(v-for="group in cityAreaArr", :key="group.label", :label="group.label")
+              el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="12")
         el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
@@ -146,12 +148,13 @@ div
           el-input(v-model="form.faxNum", placeholder="请输入传真号码", clearable)
     el-row.pr-10
       el-col(:span="12")
-        //- el-form-item(label="地区：")
-        //-   el-input(v-model="form.region", placeholder="请输入地区", clearable)
-        el-form-item(label="地区：")
-          el-select.full-width(v-model="form.region", filterable, placeholder="请选择地区")
-            el-option-group(v-for="group in cityAreaArr", :key="group.label", :label="group.label")
-              el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
+        el-form-item(label="经营范围：")
+          el-input(v-model="form.busiScope", placeholder="请输入经营范围", clearable)
+      //- el-col(:span="12")
+      //-   el-form-item(label="地区：", prop="region")
+      //-     el-select.full-width(v-model="form.region", filterable, placeholder="请选择地区")
+      //-       el-option-group(v-for="group in cityAreaArr", :key="group.label", :label="group.label")
+      //-         el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
       el-col(:span="12")
         el-form-item(label="成立日期：")
           el-date-picker.full-width(v-model="form.fkSetUpDate", type="date", placeholder="选择日期", value-format="yyyy-MM-dd", format="yyyy-MM-dd")
@@ -422,7 +425,8 @@ export default {
         busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
         tfn: [{min: 15, max: 20, message: '税号必须大于15位小于20位', trigger: 'blur'}],
         openAcct: [{validator: openAcctValid, trigger: 'blur'}],
-        fkIndustry: [{ required: true, message: '不能为空', trigger: 'change' }]
+        fkIndustry: [{ required: true, message: '不能为空', trigger: 'change' }],
+        region: [{required: true, message: '不能为空', trigger: 'change' }]
       },
       timeout: null,
       fileObj: {},
@@ -452,7 +456,7 @@ export default {
   methods: {
     onSubmit (formStr) {
       if(formStr == 'form') {
-        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry']
+        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region']
         let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
         let that = this
         formalArr.map(itm => {
