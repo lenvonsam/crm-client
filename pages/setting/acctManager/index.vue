@@ -6,7 +6,7 @@
   .pt-20
     search-form(:searchFormItems="searchItems", @search="searchBtn")
   .pt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", @tableRowDelete="rowDelete", @tableRowResetPwd="rowResetPwd")
+    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", :pageSize="pageSize", @tableRowDelete="rowDelete", @tableRowResetPwd="rowResetPwd")
 </template>
 
 <script>

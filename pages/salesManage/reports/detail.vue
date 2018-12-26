@@ -22,7 +22,7 @@
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
-  import { mapState } from 'vuex'
+  import { mapState } from 'vuex'  
   export default {
     layout: 'main',
     components: {
@@ -95,14 +95,18 @@
       }
     },
     mounted () {
-      this.query = JSON.parse(this.$route.query.row)
+      let str = this.$route.query.row
+      if (this.$route.fullPath.indexOf('#') != -1) {
+        str += this.$route.fullPath.match(/#(\S*)/)[1]
+      }
+      this.query = JSON.parse(str)
       this.queryObject = {
         currentPage: this.currentPage - 1,
         pageSize: this.pageSize,
         sort: '0',
-        sumgoodsBatch: this.query.sumgoodsBatch
+        sumgoodsBatch: this.query['sumgoodsBatch']
       }
-      this.loadData()
+      this.loadData()     
     },
     computed: {
       ...mapState({
@@ -158,6 +162,10 @@
         if (type == 'back') {
           this.back()
         } else if (type == 'sms') {
+          if (this.chooseArray.length == 0) {
+            this.msgShow(this, '请选择需要发送短信的客户')
+            return
+          }
           this.smsBoxShow = true
           const partsNameStr = '#品名' + this.query['partsName'] + '#/'
           const materialStr = '#材质' + this.query['material'] + '#/'

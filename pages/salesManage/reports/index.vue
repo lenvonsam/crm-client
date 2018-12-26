@@ -111,8 +111,8 @@
             let arr = []
             data.list.map((item) => {
               let obj = {}
-              for (let i=0;i<keyArr.length; i++) {
-                obj[keyArr[i]] = item[i]
+              for (let i=0;i<keyArr.length; i++) {                
+                obj[keyArr[i]] = (item[i]) ? item[i] : '--'
               }
               arr.push(obj)
             })
