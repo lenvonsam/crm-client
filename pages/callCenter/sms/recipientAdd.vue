@@ -187,7 +187,7 @@
         let table = this.$refs.table.$refs.multipleTable;
         for (let i=0;i<table['tableData'].length; i++) {
           table.toggleRowSelection(table['tableData'][i]);
-        }        
+        }
       },
       selectClose () {
         this.$refs.table.$refs.multipleTable.clearSelection();
