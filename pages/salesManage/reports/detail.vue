@@ -97,8 +97,9 @@
     mounted () {
       let str = this.$route.query.row
       if (this.$route.fullPath.indexOf('#') != -1) {
-        str += this.$route.fullPath.match(/#(\S*)/)[1]
+        str += this.$route.hash
       }
+      console.log(str)
       this.query = JSON.parse(str)
       this.queryObject = {
         currentPage: this.currentPage - 1,
