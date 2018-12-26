@@ -7,7 +7,7 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @sort="sortHandler")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", ref="table", @sort="sortHandler")
     el-dialog(title="短信发送", :visible="smsBoxShow", :before-close="smsBoxClose")      
       .ft-15 发送内容
       el-input.mt-15(type="textarea", :autosize="{minRows:3}", maxlenght=500, placeholder="请输入内容", v-model="smsContent")
@@ -154,15 +154,14 @@
         this.loadData()
       },
       selectData (val) {
-        console.log(val)
         this.chooseArray = val
       },
       groupBtnClick (type) {
-        console.log(type)
         if (type == 'back') {
           this.back()
         } else if (type == 'sms') {
-          if (this.chooseArray.length == 0) {
+          let table = this.$refs.table.$refs.multipleTable
+          if (table.selection.length == 0) {
             this.msgShow(this, '请选择需要发送短信的客户')
             return
           }
@@ -182,7 +181,8 @@
       },
       smsButton () {
         let mobileArr = []
-        this.chooseArray.map((item) => {
+        let table = this.$refs.table.$refs.multipleTable
+        table.selection.map((item) => {
           console.log(item)
           mobileArr.push(item.linkPhone)
         })
