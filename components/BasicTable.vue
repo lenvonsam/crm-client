@@ -7,7 +7,8 @@ div
         template(slot-scope="scope") {{scope.row[head.prop]}}
       el-table-column(v-if="head.type == 'link'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
-          a(:href="head.linkUrl + '?id=' + scope.row.id") {{scope.row[head.prop]}}
+          //- a(:href="(head.query) ? head.linkUrl + '?' + head.query + '='+scope.row[head.query] : head.linkUrl + '?id=' + scope.row.id") {{scope.row[head.prop]}}
+          a(:href="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
       el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
@@ -43,11 +44,12 @@ div
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
       el-table-column(v-else-if="head.type == 'object'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort")
-        template(slot-scope="scope") {{head.factValue(scope.row[head.prop])}}
+        template.ellps-row.full-width(slot-scope="scope") {{head.factValue(scope.row[head.prop])}}
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
-        template(slot-scope="scope") {{scope.row[head.prop] | rowData(head.prop)}}
-          el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-          span(v-if="head.prop == 'billDateDays'") / 90
+        template(slot-scope="scope") 
+          .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
+            el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
+            span(v-if="head.prop == 'billDateDays'") / 90
           //- span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
           //-   i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
           //-   i.iconfont.icon-locka(v-else)
@@ -77,6 +79,9 @@ div
     },
     beforeMount () {
       this.$nextTick(() => {
+        console.log('---------')
+        console.log(this.total)
+        console.log(this.pageSize)
         this.currentData = Object.assign([], this.tableValue.tableData)
       })
     },
@@ -120,7 +125,6 @@ div
     },
     methods: {
       tableRowClassName ({row, rowIndex}) {
-        console.log(row)
         if(this.tableValue.rowClassName){
           if (row.billDateDays >= 60) {
             return 'loss-cstm'
@@ -324,7 +328,6 @@ div
         }
       },
       getSummaries (params) {
-        console.log(params)
         const { columns, data } = params
         const sums = []
         let that = this
@@ -351,6 +354,19 @@ div
           this.sumsFun(sums)
         }                
         return sums
+      },
+      urlFun (head, scope) {
+        if (head.query) {
+          let obj = {}
+          let queryKey = head.query
+          for (let i=0;i<head.query.length; i++) {
+            obj[queryKey[i]] = scope.row[queryKey[i]]   
+          }
+          console.log(JSON.stringify(obj))
+          return 'row=' + JSON.stringify(obj)
+        } else {
+          return 'id=' + scope.row.id
+        }
       }
     }
   }
