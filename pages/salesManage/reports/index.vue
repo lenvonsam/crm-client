@@ -79,7 +79,7 @@
           [{label: '品名', model: 'partsName', type: 'text', placeholder: '请输入品名', val: ''},
             {label: '材质', model: 'material', type: 'text', placeholder: '请输入材质', val: ''},
             {label: '规格', model: 'goodsSpec', type: 'text', placeholder: '请输入规格', val: ''}],
-          [{label: '长度', model: 'length', placeholder: '请输入规格', val: ''},
+          [{label: '长度', model: 'length', placeholder: '请输入长度', val: ''},
           {label: '公差范围', model: 'toleranceRange', placeholder: '请输入公差范围', val: ''},
           {label: '重量范围', model: 'weightRange', placeholder: '请输入重量范围', val: ''}]
         ],
