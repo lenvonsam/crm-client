@@ -119,7 +119,11 @@
     methods: {
       searchForm (paramsObj) {
         for (let key in paramsObj) {
-          this.queryObject[key] = paramsObj[key]
+          if (paramsObj[key].trim() != '') {
+            this.queryObject[key] = paramsObj[key]
+          } else {
+            delete this.queryObject[key] 
+          }           
         }
         this.loadData()
       },

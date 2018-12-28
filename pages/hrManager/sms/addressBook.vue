@@ -100,11 +100,11 @@
         },
         currentPage: 1,
         totalCount: 0,
+        pageSize: 5,
         queryObject: {
           currentPage: this.currentPage - 1,
-          pageSize: 5
-        },
-        pageSize: 5,
+          pageSize: this.pageSize
+        },        
         loading: false,
         dialogTitle: '新增联系人',
         dialogShow: false,
@@ -127,7 +127,7 @@
       this.$nextTick(() =>{
         this.queryObject = {
             currentPage: this.currentPage - 1,
-            pageSize: 5
+            pageSize: this.pageSize
           }
         this.loadData()
       })
@@ -148,7 +148,11 @@
       searchForm (paramsObj) {
         this.queryObject['currentPage'] = 0
         for (let key in paramsObj) {
-          this.queryObject[key] = paramsObj[key]
+          if (paramsObj[key].trim() != '') {
+            this.queryObject[key] = paramsObj[key]
+          } else {
+            delete this.queryObject[key] 
+          }          
         }
         this.loadData()
       },
@@ -178,7 +182,6 @@
             this.msgShow(this, data.errMsg)
           }
           this.loading = false
-          console.log('---------totalCount')
           console.log(this.totalCount)
         } catch (e) {
           console.error(e)
@@ -211,7 +214,6 @@
         this.$refs.table.$refs.multipleTable.clearSelection()
       },
       rowEdit (row) {
-        console.log(row)
         let obj = {
           id: row.id,
           name: row.name,
@@ -223,7 +225,6 @@
         this.dialogShow = true
       },
       rowDel (row) {
-        console.log(row)
         this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
           this.outLinkerDel(row.id).then(() => {          
             this.loadData()
@@ -289,7 +290,6 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/batchUpdate', params: params})
           if (data.returnCode === 0) {
-            console.log(data)
             this.msgShow(this, '操作成功', 'success')
             this.dialogLableShow = false            
           } else {
@@ -304,7 +304,6 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/outLinker/createOrUpdate', params: this.linker})
           if (data.returnCode === 0) {
-            console.log(data)
             this.msgShow(this, '新增成功', 'success')
             this.dialogShow = false            
           } else {
@@ -319,7 +318,6 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/del', {url: 'callCenter/outLinker/' + id})
           if (data.returnCode === 0) {
-            console.log(data)
             this.msgShow(this, '删除成功', 'success')
             this.dialogShow = false
           } else {
@@ -338,8 +336,7 @@
             this.checkTotal = data.total
             this.isOutLinkerIds = true
             this.toggleSelection()    
-            this.isOutLinkerIds = false        
-            console.log(this.outLinkerIdsData)
+            this.isOutLinkerIds = false
           } else {
             this.msgShow(this, data.errMsg)
           }

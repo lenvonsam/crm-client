@@ -5,11 +5,12 @@
     el-table(ref="multipleTable", :data="tableData", v-loading="loading", border, @selection-change="selectData", @current-change="selectData")
       template(v-for="head in tableHead")
         el-table-column(v-if="head.type !== 'action'",:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :align="head.align ? head.align : 'left'")
-          template(slot-scope="scope") 
-            template(v-if="head.prop == 'content'") 
+          template(slot-scope="scope")
+            template(v-if="head.prop == 'content'")
               el-popover(trigger="hover", placement="top-start", width="500", :content="scope.row[head.prop]") 
-                .ellps.full-width(slot="reference") {{scope.row[head.prop]}}
-            template(v-else) {{scope.row[head.prop] | rowData(head.prop)}}
+                .ellps-row.full-width(slot="reference") {{scope.row[head.prop]}}
+            template(v-else) 
+              .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
       el-table-column(label="操作", width="150", fixed="right")
         template(slot-scope="scope")
           el-button(type="text", @click="handerRowBtnDetail(scope.row)") 查看详情
@@ -129,8 +130,7 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      handerRowBtnDetail (row) {    
-        debugger 
+      handerRowBtnDetail (row) {
         this.parentData = row
         this.parentData['mark'] = this.queryObject.mark
         this.dialogShow = true
@@ -162,7 +162,7 @@
         try {          
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/smsStatistic', params: this.queryObject})
           if (data.returnCode === 0) {
-            let keyArr = ['id','acctName', 'createAt', 'updateAt', 'delayTime', 'content', 'sendCount', 'status', 'failureNum']            
+            let keyArr = ['id','acctName', 'createAt', 'updateAt', 'delayTime', 'content', 'sendCount', 'status', 'failureNum', 'phone']          
             let arr = []
             data.list.map((item)=>{
               let obj = {}
@@ -175,7 +175,7 @@
               arr.push(obj)
             })            
             this.totalCount = data.total
-            this.tableData = arr            
+            this.tableData = arr
           } else {
             this.msgShow(this, data.errMsg)
           }

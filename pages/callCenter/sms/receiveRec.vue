@@ -8,7 +8,7 @@
           template(slot-scope="scope") 
             template(v-if="head.prop == 'content'") 
               el-popover(trigger="hover", placement="top-start", width="400", :content="scope.row[head.prop]") 
-                .ellps.full-width(slot="reference") {{scope.row[head.prop]}}
+                .ellps-row.full-width(slot="reference") {{scope.row[head.prop]}}
             template(v-else) {{scope.row[head.prop] | rowData(head.prop)}}
     .padding.text-right
       el-pagination(:current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="totalCount", @current-change="tableChange")

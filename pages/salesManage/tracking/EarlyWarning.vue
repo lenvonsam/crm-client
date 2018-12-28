@@ -110,7 +110,7 @@
               let obj = {}
               for(let i=0; i< keyArr.length; i++){
                 obj[keyArr[i]] = item[i]
-              }              
+              }
               let lastMonthWeight = (obj['lastMonthWeight'] == 0) ? 1 : obj['lastMonthWeight']
               let scale = (this.accDiv(obj['thisMonthWeight'], lastMonthWeight) * 100).toFixed(3)
               obj['scale'] = scale + '%'

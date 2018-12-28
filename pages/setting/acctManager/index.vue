@@ -6,7 +6,7 @@
   .pt-20
     search-form(:searchFormItems="searchItems", @search="searchBtn")
   .pt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", @tableRowDelete="rowDelete", @tableRowResetPwd="rowResetPwd")
+    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :total="totalCount", @pageChange="tablePage", @tableRowEdit="rowEdit", @chooseData="selectData", :pageSize="pageSize", @tableRowDelete="rowDelete", @tableRowResetPwd="rowResetPwd")
 </template>
 
 <script>
@@ -115,22 +115,22 @@
         this.btnGroups.push({lbl: '批量导入', dataType: 'acct', type: 'excel'})
         this.$forceUpdate()
       }
-      if (this.currentUser.id === 1) {
-        let idx = this.tableValue.tableHead.findIndex(th => th.type === 'action')
-        this.tableValue.tableHead[idx].width=180
-        this.tableValue.tableHead[idx].actionBtns =  [{
-          lbl: '编辑',
-          type: 'edit'
-        }, {
-          lbl: '删除',
-          type: 'delete'
-        }, {
-          lbl: '重置密码',
-          type: 'resetPwd'
-        }]
-        this.$forceUpdate()
-      }
       this.$nextTick(() => {
+        if (this.currentUser.id === 1) {
+          let idx = this.tableValue.tableHead.findIndex(th => th.type === 'action')
+          this.tableValue.tableHead[idx].width=180
+          this.tableValue.tableHead[idx].actionBtns =  [{
+            lbl: '编辑',
+            type: 'edit'
+          }, {
+            lbl: '删除',
+            type: 'delete'
+          }, {
+            lbl: '重置密码',
+            type: 'resetPwd'
+          }]
+          this.$forceUpdate()
+        }
         this.queryObject = {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize

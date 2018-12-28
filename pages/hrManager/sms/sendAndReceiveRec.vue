@@ -58,6 +58,10 @@ export default {
           prop: 'delayTime',
           width: 160
         },{
+          lbl: '手机号',
+          width: 200,
+          prop: 'phone'
+        }, {
           lbl: '发送内容',
           prop: 'content'
         },{

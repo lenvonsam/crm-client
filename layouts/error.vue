@@ -28,7 +28,7 @@
   .text-center
     text-align center
   .blank-logo
-    background-image url('http://pav6lmvyn.bkt.clouddn.com/404.png?imageView2/0/w/500/h/250')
+    background-image url('http://crm-cdn.xingyun361.com/404.png?imageView2/0/w/500/h/250')
     width 500px
     height 250px
     margin 0 auto

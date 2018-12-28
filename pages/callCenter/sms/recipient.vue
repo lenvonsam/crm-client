@@ -144,7 +144,11 @@
         this.recipientShow = !this.recipientShow
       },
       templateManagement () {
-        this.jump({path: '/callCenter/sms/templateManagement'})
+        if (this.mark == '0') {
+          this.jump({path: '/callCenter/sms/templateManagement'})  
+        } else if (this.mark == '1') {
+          this.jump({path: '/hrManager/sms/templateManagement'})
+        }        
       },
       addRecipient (row) {
         if (row.idx > -1) delete row.idx
@@ -157,6 +161,9 @@
           tableData = JSON.parse(JSON.stringify(this.tableData))
           this.totalCount = this.tableData.length
           this.tableValue.tableData = tableData.splice(0,5)
+        } else {
+          this.msgShow(this,'已添加')
+          return
         }
       },
       pageaddRecipient (pageRow) {
@@ -201,8 +208,8 @@
       sendHandler () {
         this.smsForm['uid'] = this.currentUser.id
         this.smsForm['mark'] = this.mark
-        if (this.mark == '0') {
-          let mobileArr = []
+        let mobileArr = []
+        if (this.mark == '0') {          
           this.tableData.map((item) => {
             mobileArr.push(item.linkPhone)
           })
@@ -215,13 +222,26 @@
             })
             this.smsForm['mobile'] = mobileArr.toString()
           } else {
-            this.smsForm['mobile'] = this.smsMobileStr.replace(/\，/g,',')
+            this.smsForm['mobile'] = this.smsMobileStr.replace(/\，/g,',').replace(/\ /g,'')
+            mobileArr = this.smsForm['mobile'].split(',')
+            let mobileReg = []
+            for (let i=0; i<mobileArr.length; i++) {
+              let reg = this.phoneReg
+              if (!reg.test(mobileArr[i])) {
+                mobileReg.push(mobileArr[i])
+              }         
+            }
+            if (mobileReg.length > 0) {
+              this.msgShow(this,'手机号码：' + mobileReg.toString() + '格式错误')
+              return
+            }
           }
         }
         if (this.smsForm['mobile'] == '') {
           this.msgShow(this,'请选择联系人发送')
           return
         }
+
         if (this.smsForm['content'] == '') {
           this.msgShow(this,'请输入短信内容')
           return 
@@ -272,7 +292,11 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/smsCreate', params: this.smsForm})
           if (data.returnCode === 0) {
-            this.msgShow(this, '设置成功', 'success')
+            if (data.numMsg != '') {
+              this.msgShow(this, '存在重复号码，重复号码只会发送1次', 'success')    
+            } else {
+              this.msgShow(this, '设置成功', 'success')
+            }            
             this.clearRecipient()
           } else {
             this.msgShow(this, data.errMsg)

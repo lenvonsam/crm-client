@@ -58,11 +58,12 @@
             }]
           }]
         },
+        pageSize: 5,
         currentPage: 1,
         totalCount: 0,
         queryObject: {
           currentPage: this.currentPage - 1,
-          pageSize: 5
+          pageSize: this.pageSize
         },
         loading: false
       }
@@ -79,7 +80,6 @@
     },
     computed: {
       ...mapState({
-      	pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser,
         cstmArr: state => state.cstmArr
       })
@@ -97,7 +97,11 @@
       searchForm (paramsObj) {
         this.queryObject['currentPage'] = 0
         for (let key in paramsObj) {
-          this.queryObject[key] = paramsObj[key]
+          if (paramsObj[key].trim() != '') {
+            this.queryObject[key] = paramsObj[key]
+          } else {
+            delete this.queryObject[key] 
+          }          
         }
         this.loadData()
       },
