@@ -56,9 +56,7 @@ el-dialog(title="地图", :visible.sync="dialShow", width="900", @close="cb")
     methods: {
       searchcomplete (res) {
         this.search.mapUrl = res.moreResultsUrl
-        if(res.xQ){
-          this.baiduMapData.location = res.xQ[0].city
-        } else if(res.Ar.length == 0){
+        if(res.Ar.length == 0){
           this.msgShow(this, '抱歉，未找到相关地点')
           return
         }
