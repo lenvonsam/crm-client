@@ -10,13 +10,13 @@ div
           //- a(:href="(head.query) ? head.linkUrl + '?' + head.query + '='+scope.row[head.query] : head.linkUrl + '?id=' + scope.row.id") {{scope.row[head.prop]}}
           a(:href="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
-      el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+      el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
-      el-table-column(v-else-if="head.type == 'linkRow'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+      el-table-column(v-else-if="head.type == 'linkRow'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           a(:href="head.linkUrl + '?row=' + JSON.stringify(scope.row)") {{scope.row[head.prop]}}
-      el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort ? head.sort : false")
+      el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="(scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && head.prop == 'name'")
@@ -35,7 +35,7 @@ div
               el-option(v-for="(item, idx) in acctOptions", :key="idx", :label="item.name", :value="item.platformCode + '&' + item.name + '&' + item.fkDpt.id + '&' + item.fkDpt.name")
             el-select.full-width(v-else-if="head.editType == 'org'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryOrgCombo", size="mini")
               el-option(v-for="(item, idx) in orgOptions", :key="idx", :label="item.name", :value="item.id + '&' + item.name")
-      el-table-column(v-else-if="head.type == 'action'", :align="head.align ? head.align : 'left'" :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+      el-table-column(v-else-if="head.type == 'action'", :align="head.align ? head.align : 'left'" :fixed="head.fixed", label="操作", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
@@ -43,9 +43,9 @@ div
           template(v-else)
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
-      el-table-column(v-else-if="head.type == 'object'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'",  :prop="head.prop", :sortable="head.sort")
+      el-table-column(v-else-if="head.type == 'object'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template.ellps-row.full-width(slot-scope="scope") {{head.factValue(scope.row[head.prop])}}
-      el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort", :align="head.align ? head.align : 'left'")
+      el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") 
           .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")

@@ -95,11 +95,10 @@
       }
     },
     mounted () {
-      let str = this.$route.query.row
+      let str = this.$route.query.row      
       if (this.$route.fullPath.indexOf('#') != -1) {
-        str += this.$route.hash
+        str += decodeURI(this.$route.hash)
       }
-      console.log(str)
       this.query = JSON.parse(str)
       this.queryObject = {
         currentPage: this.currentPage - 1,
@@ -220,7 +219,7 @@
         console.log(obj)
         const weightAsc = (obj['order'] == 'ascending' && obj['property'] == 'weight')
         const weightDesc = (obj['order'] == 'descending' && obj['property'] == 'weight')
-        this.queryObject.sort = weightDesc ? '1' : '0'
+        this.queryObject.sort = weightDesc ? '0' : '1'
         this.queryObject.currentPage = 0
         this.loading = true
         this.loadData()

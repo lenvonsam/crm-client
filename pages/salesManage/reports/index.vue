@@ -4,7 +4,7 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @sort="sortHandler")
 </template>
 
 <script>
@@ -68,7 +68,7 @@
             sort: 'salesCount',
             type: 'linkRow',
             linkUrl: '/salesManage/reports/detail',
-            width: 120
+            width: 150
           }, {
             lbl: '可卖库存量(吨)',
             prop: 'goodsSupplyweight',
@@ -149,6 +149,15 @@
         this.loading = true
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
+      },
+      sortHandler (obj) {
+        debugger
+        // const salesCountAsc = (obj['order'] == 'ascending' && obj['property'] == 'salesCount')
+        const salesCountDesc = (obj['order'] == 'descending' && obj['property'] == 'salesCount')
+        this.queryObject.sort = salesCountDesc ? '0' : '1'
+        this.queryObject.currentPage = 0
+        this.loading = true
         this.loadData()
       }
     }
