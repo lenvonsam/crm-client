@@ -3,7 +3,7 @@ export default {
   // http://wechat.xingyun361.com/
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
-  qiniuOutlink: 'http://crm-cdn.xingyun361.com/',
+  qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   globalSuccessMsg: '',
@@ -351,16 +351,16 @@ export default {
     label:'全部'
   }, {
     value:'1', 
-    label:'成功'
+    label:'发送中'
   }, {
     value:'2', 
-    label:'失败'
+    label:'全部成功'
   },{
     value:'3', 
-    label:'发送中'
+    label:'发送失败'
   },{
     value:'4', 
-    label:'定时'
+    label:'定时发送'
   },{
     value:'5', 
     label:'已取消'
