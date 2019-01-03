@@ -30,7 +30,8 @@
           currentPage: this.currentPage - 1,
           pageSize: 5
         },
-        loading: true
+        loading: true,
+        pageSize: 5
       }
     },
     props: {
@@ -57,7 +58,6 @@
     },
     computed: {
       ...mapState({
-        pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser,
         smsStatus: state => state.smsStatus
       })

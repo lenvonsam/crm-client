@@ -39,7 +39,7 @@ div
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
-              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{btn.lbl}}
+              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{scope.row.btnLbl ? scope.row.btnLbl : btn.lbl}}
           template(v-else)
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
@@ -354,7 +354,7 @@ div
         })
         if (this.sumsFun) {
           this.sumsFun(sums)
-        }                
+        }
         return sums
       },
       urlFun (head, scope) {

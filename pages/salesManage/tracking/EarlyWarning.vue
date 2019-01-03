@@ -81,7 +81,10 @@
       }
     },
     mounted () {
-      this.schedule = (new Date().getDate() / 30 * 100).toFixed(0)
+      // this.schedule = (new Date().getDate() / 31 * 100).toFixed(0)
+      let d = new Date()
+      let monthDay = this.getDaysInOneMonth(d.getFullYear(), d.getMonth() + 1)
+      this.schedule = Number(d.getDate()/monthDay*100).toFixed(0)
       this.searchFormItems[1][0].list = [{label: '全部', value: ''}, {label: '不预警', value: '0'}, {label: '预警', value: '1'}]
       this.queryObject = {
         currentPage: this.currentPage - 1,
@@ -113,7 +116,7 @@
               }
               let lastMonthWeight = (obj['lastMonthWeight'] == 0) ? 1 : obj['lastMonthWeight']
               let scale = (this.accDiv(obj['thisMonthWeight'], lastMonthWeight) * 100).toFixed(3)
-              obj['scale'] = scale + '%'
+              obj['scale'] = Number(scale) + '%'
               // if (Number(this.schedule) > 50 && Number(scale) < Number(this.schedule)) {
               if (Number(scale) < Number(this.schedule)) {
                 obj['state'] = '预警'
@@ -139,7 +142,7 @@
         if (sums[4] != undefined && sums[3] != undefined) {
           let lastSums = (sums[3] == 0) ? 1 : sums[3]
           let scale = (this.accDiv(sums[4], lastSums) * 100).toFixed(3)
-          sums[5] = scale + '%'
+          sums[5] = Number(scale) + '%'
           // if (Number(this.schedule) > 50 && Number(scale) < Number(this.schedule)) {
           if (Number(scale) < Number(this.schedule)) {
             sums[6] = '预警'
@@ -148,6 +151,11 @@
           }
         }
         return sums
+      },
+      getDaysInOneMonth(year, month){
+        let d = new Date(year, month, 0)
+        month = parseInt(month, 10)
+        return d.getDate()
       },
       searchForm (paramsObj) {
         this.loading = true

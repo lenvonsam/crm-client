@@ -93,7 +93,15 @@ export default {
           return `${row.billProv == null ? '' : row.billProv} ${row.billCity == null ? '' : row.billCity} ${row.billArea == null ? '' : row.billArea} ${row.billAddr == null ? '' : row.billAddr}`
         }}],
         [{lbl: '开户账号', key: 'openAcct'}, {lbl: '开户银行', key: 'openBank'}],
-        [{lbl: '所处行业', key: 'industry'}, {lbl: '经营范围', key: 'busiScope'}],
+        [{lbl: '所处行业', key: 'industry', type: 'object', factValue: (row) => {
+          let industryName = ''
+          if (row.length > 0) {
+            row.map((item) => {
+              industryName += item['name']
+            })  
+          }
+          return industryName
+        }}, {lbl: '经营范围', key: 'busiScope'}],
         [{lbl: '采购周期', key: 'purchaseCycle'}, {lbl: '月采吨位', key: 'weightPerMonth', type: 'object', factValue: (row) => { return (row)? row + '吨' : ''}}],
         [{lbl: '高卖情况', key: 'sellHighStatus'}, {lbl: '信用情况', key: 'creditStatus'}],
         [{lbl: '年销售额', key: 'annualSales', type: 'object', factValue: (row) => { return (row)? row + '万' : ''}}, {lbl: '纳税额', key: 'taxPay', type: 'object', factValue: (row) => { return (row)? row + '万' : ''}}],

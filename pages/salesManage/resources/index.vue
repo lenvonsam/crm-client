@@ -7,8 +7,8 @@
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowTempSave="rowTempSave", @sort="sortHandler", ref="table")
-    el-dialog(title="暂存", :visible="dialogShow", :before-close="dialogClose")
-      //- zan-cun(:tempStore="tempStore")
+    el-dialog(v-if="dialogShow", title="导出预览", :visible="dialogShow", width="80%", :before-close="dialogClose")
+      zan-cun(:tempData="tempStore", :dialogClose="dialogClose", @tempDataCancel="tempDataCancel")
 </template>
 
 <script>
@@ -16,7 +16,7 @@
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
-  // import zanCun from './zancun.vue'
+  import zanCun from './zanCun.vue'
   import { mapState } from 'vuex'
   export default {
     layout: 'main',
@@ -24,7 +24,8 @@
       breadcrumb,
       basicTable,
       searchForm,
-      buttonGroup
+      buttonGroup,
+      zanCun
     },
     data() {
       return {
@@ -140,8 +141,9 @@
             width: 140
           }, {
             type: 'action',
-            width: '60px',
+            width: '100px',
             fixed: 'right',
+            align: 'center',
             actionBtns: [{
               lbl: '暂存',
               type: 'tempSave'
@@ -163,7 +165,8 @@
         chooseArray: [],
         loading: true,
         tempStore: [],
-        dialogShow: false
+        dialogShow: false,
+        snapData: []
       }
     },
     mounted () {
@@ -278,15 +281,29 @@
         this.loadData()
       },
       rowTempSave (row) {
+        console.log(row)
+        // this.tempDataCancel(row)
         delete row['idx']
         const tempStoreArr = this.tempStore
-        if (tempStoreArr.indexOf(row) == -1) {
-          tempStoreArr.push(row)
-          this.msgShow(this, '暂存成功', 'success')       
-        } else {
-          this.msgShow(this, '请不要重复暂存')
-          return
-        }        
+        let tempIdx = tempStoreArr.indexOf(row)
+        let idx = this.tableValue.tableData.indexOf(row)
+        this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
+        if (row['btnLbl'] == '取消暂存') {
+          this.snapData[idx]['btnLbl'] = '暂存'
+          this.tempStore.splice(tempIdx, 1)          
+        } else {          
+          this.snapData[idx]['btnLbl'] = '取消暂存'
+          row = this.snapData[idx]
+          if (tempIdx == -1) {
+            tempStoreArr.push(row)
+            this.msgShow(this, '暂存成功', 'success')
+          } else {
+            this.msgShow(this, '请不要重复暂存')
+            return
+          }
+        }
+        this.tableValue.tableData = this.snapData
+        this.$forceUpdate()
       },
       rowExportExcel (row) {
         delete row['idx']
@@ -312,8 +329,23 @@
         this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
       },
-      dialogClose () {
+      dialogClose (type) {
         this.dialogShow = false
+      },
+      tempDataCancel (row) {
+        this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
+        let idx = -1
+        for (let i=0; i<this.snapData.length; i++) {
+          if (JSON.stringify(this.snapData[i]) == JSON.stringify(row)) {
+            idx = i
+            break
+          }
+        }
+        if (idx != -1) {
+          this.snapData[idx]['btnLbl'] = '暂存'
+          this.tableValue.tableData = this.snapData
+        }        
+        this.$forceUpdate()
       }
     }
   }
