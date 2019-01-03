@@ -53,8 +53,10 @@ div
           //- span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
           //-   i.iconfont.icon-lockb(v-if="scope.row.lockStatus == 0")
           //-   i.iconfont.icon-locka(v-else)
-  .padding.text-right
-    el-pagination(v-if="!tableValue.page", :current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
+  .padding.text-right.row
+    .col
+      el-pagination(v-if="!tableValue.page", :current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
+    span(style="padding-bottom: 3px;") 共 {{total}} 条数据
 
 </template>
 

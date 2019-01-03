@@ -10,7 +10,7 @@
         el-form-item
           el-button(type="primary", @click="submitForm('searchForm')", size="small") 查询
           el-button(@click="resetForm('searchForm')", size="small") 重置
-    basic-table(v-if="tableValue.tableData.length > 0", :tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @sort="sortHandler")
+    basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @sort="sortHandler")
     .mt-15(v-if="saleGoodsChartData.labels.length > 0")
       line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart")
 </template>
@@ -184,17 +184,19 @@
         this.loadData()
       },
       sortHandler (obj) {
+        this.loading = true
         if (obj.property =='dataBweight' || obj.property =='gm') {
-          this.loading = true
           let dataBweightAsc = (obj.order =='ascending' && obj.property =='dataBweight')
           let dataBweightDesc = (obj.order =='descending' && obj.property =='dataBweight')
           let gmAsc = (obj.order =='ascending' && obj.property =='gm')
           let gmDesc = (obj.order =='descending' && obj.property =='gm')
-          this.queryObject.sort = (dataBweightAsc) ? '1' : (dataBweightDesc) ? '0' : (gmAsc) ? '3' : (gmDesc)? '2' : '0'
-          this.currentPage = 1
-          this.queryObject.currentPage = this.currentPage - 1
-          this.loadData()
+          this.queryObject.sort = (dataBweightAsc) ? '2' : (dataBweightDesc) ? '1' : (gmAsc) ? '4' : (gmDesc)? '3' : '0'
+        } else {
+          this.queryObject.sort = '0'
         }
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
+        this.loadData()
       }
     }
   }

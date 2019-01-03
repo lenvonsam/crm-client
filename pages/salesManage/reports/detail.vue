@@ -6,6 +6,15 @@
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
+    .mt-15.p-5.text-white.pro-title
+      span 品名：{{query.partsName}}
+      span.pl-15 材质：{{query.material}}
+      span.pl-15 规格：{{query.goodsSpec}}
+      span.pl-15 长度：{{query.length}} 米
+      span.pl-15 产地：{{query.productArea}}
+      span.pl-15 公差范围：{{query.toleranceRange}}
+      span.pl-15 重量范围：{{query.weightRange}}
+      span.pl-15 当前可卖量：{{query.goodsSupplyweight}} 吨
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", ref="table", @sort="sortHandler")
     el-dialog(title="短信发送", :visible="smsBoxShow", :before-close="smsBoxClose")      
@@ -95,18 +104,20 @@
       }
     },
     mounted () {
-      let str = this.$route.query.row      
-      if (this.$route.fullPath.indexOf('#') != -1) {
-        str += decodeURI(this.$route.hash)
-      }
-      this.query = JSON.parse(str)
-      this.queryObject = {
-        currentPage: this.currentPage - 1,
-        pageSize: this.pageSize,
-        sort: '0',
-        sumgoodsBatch: this.query['sumgoodsBatch']
-      }
-      this.loadData()     
+      this.$nextTick(() => {
+        let str = this.$route.query.row      
+        if (this.$route.fullPath.indexOf('#') != -1) {
+          str += decodeURI(this.$route.hash)
+        }
+        this.query = JSON.parse(str)
+        this.queryObject = {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize,
+          sort: '0',
+          sumgoodsBatch: this.query['sumgoodsBatch']
+        }
+        this.loadData()     
+      })      
     },
     computed: {
       ...mapState({
@@ -143,7 +154,8 @@
       },
       searchForm (paramsObj) {
         this.loading = true
-        this.queryObject['currentPage'] = 0
+        this.currentPage = 1
+        this.queryObject['currentPage'] = this.currentPage - 1
         for (let key in paramsObj) {
           if (paramsObj[key].trim() != '') {
             this.queryObject[key] = paramsObj[key]
@@ -166,13 +178,13 @@
             return
           }
           this.smsBoxShow = true
-          const partsNameStr = '#品名' + this.query['partsName'] + '#/'
-          const materialStr = '#材质' + this.query['material'] + '#/'
-          const goodsSpecStr = '#规格' + this.query['goodsSpec'] + '#/'
-          const lengthStr = '#长度' + this.query['length'] + '#/'
-          const productAreaStr = '#产地' + this.query['productArea'] + '#/'
-          const toleranceRangeStr = '#公差范围' + this.query['toleranceRange'] + '#/'
-          const weightRangeStr = '#重量范围' + this.query['weightRange'] + '#'
+          const partsNameStr = '#品名：' + this.query['partsName'] + '#/'
+          const materialStr = '#材质：' + this.query['material'] + '#/'
+          const goodsSpecStr = '#规格：' + this.query['goodsSpec'] + '#/'
+          const lengthStr = '#长度：' + this.query['length'] + '#/'
+          const productAreaStr = '#产地：' + this.query['productArea'] + '#/'
+          const toleranceRangeStr = '#公差范围：' + this.query['toleranceRange'] + '#/'
+          const weightRangeStr = '#重量范围：' + this.query['weightRange'] + '#'
           this.smsContent = '亲爱的客户,智恒达最近来了一批新货' + partsNameStr + materialStr + goodsSpecStr + lengthStr + productAreaStr + toleranceRangeStr + weightRangeStr + '感兴趣的话快来联系' + this.currentUser.name +this.currentUser.phone
         }
       },
@@ -219,8 +231,9 @@
         console.log(obj)
         const weightAsc = (obj['order'] == 'ascending' && obj['property'] == 'weight')
         const weightDesc = (obj['order'] == 'descending' && obj['property'] == 'weight')
-        this.queryObject.sort = weightDesc ? '0' : '1'
-        this.queryObject.currentPage = 0
+        this.queryObject.sort = weightDesc ? '0' : '1'        
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
         this.loading = true
         this.loadData()
       }
@@ -230,4 +243,7 @@
 <style lang="styl", scoped>
   .width-input-250
     width: 250px
+  .pro-title
+    border-radius: 2px;
+    background: rgba(0,0,0,.5)
 </style>

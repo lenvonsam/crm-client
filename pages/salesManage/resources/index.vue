@@ -6,7 +6,9 @@
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowTempSave="rowTempSave", @tableRowExportExcel="rowExportExcel", @sort="sortHandler", ref="table")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowTempSave="rowTempSave", @sort="sortHandler", ref="table")
+    el-dialog(title="暂存", :visible="dialogShow", :before-close="dialogClose")
+      //- zan-cun(:tempStore="tempStore")
 </template>
 
 <script>
@@ -14,6 +16,7 @@
   import basicTable from '@/components/BasicTable.vue'
   import searchForm from '@/components/SearchForm.vue'
   import buttonGroup from '@/components/ButtonGroup.vue'
+  // import zanCun from './zancun.vue'
   import { mapState } from 'vuex'
   export default {
     layout: 'main',
@@ -36,6 +39,9 @@
         btnGroups: [{
           lbl: '批量暂存',
           type: 'tempSave'
+        }, {
+          lbl: '显示暂存',
+          type: 'tempShow'
         }, {
           lbl: '批量导出',
           type: 'exportExcel'
@@ -134,14 +140,11 @@
             width: 140
           }, {
             type: 'action',
-            width: '100px',
+            width: '60px',
             fixed: 'right',
             actionBtns: [{
               lbl: '暂存',
               type: 'tempSave'
-            }, {
-              lbl: '导出',
-              type: 'exportExcel'
             }]
           }]
         },
@@ -159,7 +162,8 @@
         rowDelObj: {},
         chooseArray: [],
         loading: true,
-        tempStore: []
+        tempStore: [],
+        dialogShow: false
       }
     },
     mounted () {
@@ -215,7 +219,8 @@
       },
       searchForm (paramsObj) {
         this.loading = true
-        this.queryObject['currentPage'] = 0
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
         for (let key in paramsObj) {
           if (paramsObj[key].trim() != '') {
             this.queryObject[key] = paramsObj[key]
@@ -244,6 +249,8 @@
               this.msgShow(this, '暂存成功', 'success')
             })
           }
+        } else if (type == 'tempShow') {
+          this.dialogShow = true
         } else if (type == 'exportExcel') {
           if (this.tempStore.length == 0 && table.selection.length == 0) {
             this.msgShow(this, '请选择需要导出的数据')
@@ -300,9 +307,13 @@
         const goodsNumDesc = (obj['order'] == 'descending' && obj['property'] == 'goodsNum')
         const goodsWeightAsc = (obj['order'] == 'ascending' && obj['property'] == 'goodsWeight')
         const goodsWeightDesc = (obj['order'] == 'descending' && obj['property'] == 'goodsWeight')
-        this.queryObject.sort = goodsSupplyNumAsc ? '0' : goodsSupplyNumDesc ? '1' : goodsSupplyweightAsc ? '2' : goodsSupplyweightDesc ? '3' : goodsNumAsc ? '4' : goodsNumDesc ? '5' : goodsWeightAsc ? '6' : goodsWeightDesc ? '7' : '0'
-        this.queryObject.currentPage = 0
+        this.queryObject.sort = goodsSupplyNumAsc ? '0' : goodsSupplyNumDesc ? '1' : goodsSupplyweightAsc ? '2' : goodsSupplyweightDesc ? '3' : goodsNumAsc ? '4' : goodsNumDesc ? '5' : goodsWeightAsc ? '6' : goodsWeightDesc ? '7' : '0' 
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
         this.loadData()
+      },
+      dialogClose () {
+        this.dialogShow = false
       }
     }
   }

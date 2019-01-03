@@ -130,7 +130,8 @@
       },
       searchForm (paramsObj) {
         this.loading = true
-        this.queryObject['currentPage'] = 0
+        this.currentPage = 1
+        this.queryObject['currentPage'] = this.currentPage - 1
         for (let key in paramsObj) {
           if (paramsObj[key].trim() != '') {
             this.queryObject[key] = paramsObj[key]
@@ -152,11 +153,11 @@
         this.loadData()
       },
       sortHandler (obj) {
-        debugger
-        // const salesCountAsc = (obj['order'] == 'ascending' && obj['property'] == 'salesCount')
-        const salesCountDesc = (obj['order'] == 'descending' && obj['property'] == 'salesCount')
-        this.queryObject.sort = salesCountDesc ? '0' : '1'
-        this.queryObject.currentPage = 0
+        const salesCountAsc = (obj['order'] == 'ascending' && obj['property'] == 'salesCount')
+        // const salesCountDesc = (obj['order'] == 'descending' && obj['property'] == 'salesCount')
+        this.queryObject.sort = salesCountAsc ? '1' : '0'
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1        
         this.loading = true
         this.loadData()
       }

@@ -154,18 +154,11 @@
         this.currentPage = 1
         this.queryObject.currentPage = this.currentPage - 1
         Object.keys(paramsObj).map(key => {
-          if(key == 'createAt'){
-            if (paramsObj.createAt !== null) {
-              this.queryObject.startTime = paramsObj.createAt[0]
-              this.queryObject.endTime = paramsObj.createAt[1]
-            } else {
-              delete this.queryObject.startTime
-              delete this.queryObject.endTime
-            }
-          } else if (paramsObj['warningType'] == '0' || paramsObj['warningType'] == '1') {
+          if (paramsObj['warningType'] == '0' || paramsObj['warningType'] == '1') {
             this.queryObject['percent'] = this.schedule / 100
             this.queryObject['warningType'] = paramsObj['warningType']
-          } else if (paramsObj[key].length > 0) {
+          }
+          if (paramsObj[key].length > 0) {
             this.queryObject[key] = paramsObj[key].trim()
           } else {
             delete this.queryObject[key]

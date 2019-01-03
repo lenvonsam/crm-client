@@ -103,8 +103,9 @@
       this.loadData()
     },
     methods: {
-      searchForm (paramsObj) {
-        this.queryObject['currentPage'] = 0
+      searchForm (paramsObj) {        
+        this.currentPage = 1
+        this.queryObject.currentPage = this.currentPage - 1
         delete this.queryObject['startTime']
         delete this.queryObject['endTime']
         for (let key in paramsObj) {
