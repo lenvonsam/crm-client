@@ -7,7 +7,7 @@
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @tableRowTempSave="rowTempSave", @sort="sortHandler", ref="table")
-    el-dialog(v-if="dialogShow", title="导出预览", :visible="dialogShow", width="80%", :before-close="dialogClose")
+    el-dialog(v-if="dialogShow", title="暂存列表", :visible="dialogShow", width="80%", :before-close="dialogClose")
       zan-cun(:tempData="tempStore", :dialogClose="dialogClose", @tempDataCancel="tempDataCancel")
 </template>
 

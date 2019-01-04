@@ -90,12 +90,10 @@
           }, {
             lbl: '可卖数量',
             prop: 'goodsSupplynum',
-            sort: 'goodsSupplynum',
             width: 120
           }, {
             lbl: '可卖重量(吨）',
             prop: 'goodsSupplyweight',
-            sort: 'goodsSupplyweight',
             width: 140
           }, {
             lbl: '可卖理重(吨）',
@@ -116,12 +114,10 @@
           }, {
             lbl: '实物数量',
             prop: 'goodsNum',
-            sort: 'goodsNum',
             width: 110
           }, {
             lbl: '实物重量(吨）',
             prop: 'goodsWeight',
-            sort: 'goodsWeight',
             width: 140
           }, {
             lbl: '实物理重(吨）',
