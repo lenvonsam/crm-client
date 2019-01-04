@@ -147,6 +147,10 @@
     },
     methods: {
       exportExcelFun () {
+        if (this.tempData.length == 0) {
+          this.msgShow(this, '请添加数据')
+          return
+        }
         let params = {
           mark: 1,
           content: JSON.stringify(this.tempData)
