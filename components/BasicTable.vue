@@ -8,14 +8,17 @@ div
       el-table-column(v-if="head.type == 'link'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
         template(slot-scope="scope")
           //- a(:href="(head.query) ? head.linkUrl + '?' + head.query + '='+scope.row[head.query] : head.linkUrl + '?id=' + scope.row.id") {{scope.row[head.prop]}}
-          a(:href="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}
+          //- a(:href="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}          
+          router-link(:to="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
       el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
-          a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
+          //- a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
+          router-link(:to="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
       el-table-column(v-else-if="head.type == 'linkRow'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
-          a(:href="head.linkUrl + '?row=' + JSON.stringify(scope.row)") {{scope.row[head.prop]}}
+          //- a(:href="head.linkUrl + '?row=' + JSON.stringify(scope.row)") {{scope.row[head.prop]}}
+          router-link(:to="head.linkUrl + '?row=' + JSON.stringify(scope.row)") {{scope.row[head.prop]}}
       el-table-column(v-else-if="head.type == 'edit'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
