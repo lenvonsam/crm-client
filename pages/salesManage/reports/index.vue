@@ -73,6 +73,10 @@
             lbl: '可卖库存量(吨)',
             prop: 'goodsSupplyweight',
             width: 150
+          }, {
+            lbl: '可卖数量',
+            prop: 'goodsSupplyNum',
+            width: 150
           }]
         },
         searchFormItems: [
@@ -107,7 +111,7 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'salesManage/saleReports/goodSale', params: this.queryObject})
           if (data.returnCode === 0) {
-            let keyArr = ['sumgoodsBatch', 'partsName', 'material', 'goodsSpec', 'length', 'productArea', 'toleranceRange', 'weightRange', 'salesCount', 'goodsSupplyweight']
+            let keyArr = ['sumgoodsBatch', 'partsName', 'material', 'goodsSpec', 'length', 'productArea', 'toleranceRange', 'weightRange', 'salesCount', 'goodsSupplyweight', 'goodsSupplyNum']
             let arr = []
             data.list.map((item) => {
               let obj = {}

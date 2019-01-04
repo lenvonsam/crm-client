@@ -193,6 +193,16 @@
               item['goodsProperty5'] = (item['goodsProperty5']) ? item['goodsProperty5'] : '--'
               item['goodsProperty4'] = (item['goodsProperty4']) ? item['goodsProperty4'] : '--'
             })
+            if (this.tempStore.length > 0) {
+              let tempStoreData = JSON.parse(JSON.stringify(this.tempStore))
+              tempStoreData.map((item) => {
+                delete item['btnLbl']
+                let idx = this.getTableIdx(item, data['list'])
+                if (idx !== -1) {
+                  data.list[idx]['btnLbl'] = '取消暂存'
+                }                
+              })
+            }
             this.tableValue.tableData = data.list
             this.totalCount = data.total
             this.loading = false
@@ -237,6 +247,16 @@
         console.log(val)
         this.chooseArray = val
       },
+      getTableIdx (row, data) {
+        let idx = -1
+        for (let i=0; i<data.length; i++) {
+          if (JSON.stringify(data[i]) == JSON.stringify(row)) {
+            idx = i
+            return idx
+          }
+        }
+        return idx
+      },
       groupBtnClick (type) {
         let table = this.$refs.table.$refs.multipleTable
         const tempStoreArr = this.tempStore
@@ -245,12 +265,19 @@
             this.msgShow(this, '请选择需要暂存的数据')
             return
           } else {
+            this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
             table.selection.map((item) => {
-              if (tempStoreArr.indexOf(item) == -1) {
-                tempStoreArr.push(item)
+              console.log(item)
+              if (this.getTableIdx(item, tempStoreArr) == -1) {
+                let idx = this.getTableIdx(item, this.snapData)
+                this.snapData[idx]['btnLbl'] = '取消暂存'
+                item['btnLbl'] = '取消暂存'
+                this.tableValue.tableData = this.snapData
+                tempStoreArr.push(item)                                
               }
-              this.msgShow(this, '暂存成功', 'success')
             })
+            this.$forceUpdate()
+            this.msgShow(this, '暂存成功', 'success')
           }
         } else if (type == 'tempShow') {
           this.dialogShow = true
@@ -281,11 +308,9 @@
         this.loadData()
       },
       rowTempSave (row) {
-        console.log(row)
-        // this.tempDataCancel(row)
         delete row['idx']
         const tempStoreArr = this.tempStore
-        let tempIdx = tempStoreArr.indexOf(row)
+        let tempIdx = this.getTableIdx(row, tempStoreArr)
         let idx = this.tableValue.tableData.indexOf(row)
         this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
         if (row['btnLbl'] == '取消暂存') {
@@ -334,14 +359,8 @@
       },
       tempDataCancel (row) {
         this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
-        let idx = -1
-        for (let i=0; i<this.snapData.length; i++) {
-          if (JSON.stringify(this.snapData[i]) == JSON.stringify(row)) {
-            idx = i
-            break
-          }
-        }
-        if (idx != -1) {
+        let idx = this.getTableIdx(row, this.snapData)
+        if (idx !== -1) {
           this.snapData[idx]['btnLbl'] = '暂存'
           this.tableValue.tableData = this.snapData
         }        

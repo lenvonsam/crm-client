@@ -182,12 +182,15 @@
         this.tableTempValue.tableData = this.tempData.slice((val-1)*this.pageSize, this.currentPage*this.pageSize)
       },
       rowTempCancel (row) {                
-        delete row['idx']
+        delete row['idx']        
         this.$emit('tempDataCancel', row)
         let idx = this.tempData.indexOf(row)
         this.tempData.splice(idx,1)
         this.tableTempValue.tableData = this.tempData.slice((this.currentPage-1)*this.pageSize, this.currentPage*this.pageSize)
-        this.totalCount = this.tempData.length                
+        this.totalCount = this.tempData.length
+        if (this.tableTempValue.tableData.length == 0 && this.totalCount !== 0) {
+          this.tableChange(this.currentPage-1)
+        }             
       }
     }
   }
