@@ -289,7 +289,7 @@
           let exportArr = JSON.parse(JSON.stringify(this.tempStore))
           if (table.selection.length > 0) {
             table.selection.map((item) => {
-              if (tempStoreArr.indexOf(item) == -1) {
+              if (this.getTableIdx(item, tempStoreArr) == -1) {
                 exportArr.push(item)
               }
             })
