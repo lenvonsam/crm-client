@@ -41,11 +41,11 @@
           }, {
             lbl: '材质',
             prop: 'material',
-            width: 100
+            width: 150
           }, {
             lbl: '规格',
             prop: 'goodsSpec',
-            width: 150
+            width: 170
           }, {
             lbl: '长度',
             prop: 'length',

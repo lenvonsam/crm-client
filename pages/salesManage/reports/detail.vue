@@ -68,7 +68,7 @@
           }, {
             lbl: '业务部门',
             prop: 'dptName',
-            width: 100
+            width: 150
           }, {
             lbl: '业务员',
             prop: 'acctName',
@@ -76,7 +76,7 @@
           }, {
             lbl: '主联系人',
             prop: 'linkName',
-            width: 120
+            width: 150
           }, {
             lbl: '联系方式',
             prop: 'linkPhone',

@@ -93,6 +93,11 @@
             align: 'center',
             prop: 'status'
           }, {
+            lbl: '职务状态',
+            width: '100px',
+            align: 'center',
+            prop: 'demissionStr'
+          }, {
             type: 'action',
             width: '100px',
             fixed: 'right',
@@ -251,7 +256,10 @@
         this.loading = true
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct', params: this.queryObject})
-          if (data.returnCode === 0) {
+          if (data.returnCode === 0) {            
+            data.list.map((item) => {
+              item['demissionStr'] = (item['demission'] == 0) ? '在职' : '离职'              
+            })
             this.tableValue.tableData = data.list
             this.totalCount = data.total
           } else {
