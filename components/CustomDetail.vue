@@ -94,13 +94,13 @@ export default {
         }}],
         [{lbl: '开户账号', key: 'openAcct'}, {lbl: '开户银行', key: 'openBank'}],
         [{lbl: '所处行业', key: 'industry', type: 'object', factValue: (row) => {
-          let industryName = ''
+          let industryNameArr = []
           if (row.length > 0) {
             row.map((item) => {
-              industryName += item['name']
-            })  
+              industryNameArr.push(item['name'])
+            })            
           }
-          return industryName
+          return industryNameArr.join('，')
         }}, {lbl: '经营范围', key: 'busiScope'}],
         [{lbl: '采购周期', key: 'purchaseCycle'}, {lbl: '月采吨位', key: 'weightPerMonth', type: 'object', factValue: (row) => { return (row)? row + '吨' : ''}}],
         [{lbl: '高卖情况', key: 'sellHighStatus'}, {lbl: '信用情况', key: 'creditStatus'}],
