@@ -107,12 +107,14 @@
       }
     },
     mounted () {
-      this.rowObj = JSON.parse(this.$route.query.row)
-      this.queryObject = {
-        currentPage: this.currentPage - 1,
-        pageSize: this.pageSize
-      }
-      this.loadData()
+      this.$nextTick(() => {
+        this.rowObj = JSON.parse(this.$route.query.row)
+        this.queryObject = {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize
+        }
+        this.loadData()
+      })      
     },
     computed: {
       ...mapState({
@@ -173,6 +175,7 @@
         this.chooseArray = val
       },
       tableChange (val) {
+        debugger
         this.loading = true
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1        
