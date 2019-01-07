@@ -280,6 +280,10 @@
             this.msgShow(this, '暂存成功', 'success')
           }
         } else if (type == 'tempShow') {
+          if (this.tempStore.length == 0) {
+            this.msgShow(this, '请添加数据')
+            return
+          }
           this.dialogShow = true
         } else if (type == 'exportExcel') {
           if (this.tempStore.length == 0 && table.selection.length == 0) {
