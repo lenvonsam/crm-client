@@ -6,17 +6,33 @@
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
-    .mt-15.p-5.text-white.pro-title
-      span 品名：{{query.partsName}}
-      span.pl-15 材质：{{query.material}}
-      span.pl-15 规格：{{query.goodsSpec}}
-      span.pl-15 长度：{{query.length}} 米
-      span.pl-15 产地：{{query.productArea}}
-      span.pl-15 公差范围：{{query.toleranceRange}}
-      span.pl-15 重量范围：{{query.weightRange}}
-      span.pl-15 当前可卖量：{{query.goodsSupplyweight}} 吨
-    .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", ref="table", @sort="sortHandler")
+    .mt-15.p-5.pro-title
+      span
+        strong 品名：
+        span {{query.partsName}}
+      span.pl-15 
+        strong 材质：
+        span {{query.material}}
+      span.pl-15 
+        strong 规格：
+        span {{query.goodsSpec}}
+      span.pl-15 
+        strong 长度：
+        span {{query.length}} 米
+      span.pl-15 
+        strong 产地：
+        span {{query.productArea}}
+      span.pl-15 
+        strong 公差范围：
+        span {{query.toleranceRange}}
+      span.pl-15 
+        strong 重量范围：
+        span {{query.weightRange}}
+      span.pl-15 
+        strong 当前可卖量：
+        span {{query.goodsSupplyweight}} 吨
+    //- .pt-15
+    basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", ref="table", @sort="sortHandler")
     el-dialog(title="短信发送", :visible="smsBoxShow", :before-close="smsBoxClose")      
       .ft-15 发送内容
       el-input.mt-15(type="textarea", :autosize="{minRows:3}", maxlenght=500, placeholder="请输入内容", v-model="smsContent")
@@ -63,29 +79,23 @@
           rowClassName: false,
           tableHead: [{
             lbl: '公司名称',
-            prop: 'compName',            
-            minWidth: 150
+            prop: 'compName'
           }, {
             lbl: '业务部门',
-            prop: 'dptName',
-            width: 150
+            prop: 'dptName'
           }, {
             lbl: '业务员',
-            prop: 'acctName',
-            width: 150
+            prop: 'acctName'
           }, {
             lbl: '主联系人',
-            prop: 'linkName',
-            width: 150
+            prop: 'linkName'
           }, {
             lbl: '联系方式',
-            prop: 'linkPhone',
-            width: 150
+            prop: 'linkPhone'
           }, {
             lbl: '客户采购量（吨）',
             prop: 'weight',
-            sort: 'weight',
-            width: 180
+            sort: 'weight'
           }]
         },
         searchFormItems: [
@@ -244,6 +254,9 @@
   .width-input-250
     width: 250px
   .pro-title
-    border-radius: 2px;
-    background: rgba(0,0,0,.5)
+    border: 1px #ebeef5 solid
+    border-bottom: none
+    line-height: 28px
+    color: #333
+    background: #f6f6f6
 </style>

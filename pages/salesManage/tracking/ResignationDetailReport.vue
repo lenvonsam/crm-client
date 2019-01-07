@@ -51,22 +51,18 @@
             prop: 'compName'
           }, {
             lbl: '业务部门',
-            prop: 'dptName',
-            width: '150px'
+            prop: 'dptName'
           }, {
             lbl: '业务员',
-            prop: 'acctName',
-            width: '150px'
+            prop: 'acctName'
           }, {
             lbl: '实提销量（吨）',
             prop: 'dataBweight',
-            width: '150px',
             sort: 'dataBweight',
             summary: true
           }, {
             lbl: '高卖量（元）',
             prop: 'gm',
-            width: '150px',
             sort: 'gm',
             summary: true
           }]
@@ -114,10 +110,7 @@
       this.rowObj = JSON.parse(this.$route.query.row)
       this.queryObject = {
         currentPage: this.currentPage - 1,
-        pageSize: this.pageSize,
-        compName: this.rowObj['compName'],
-        acctName: this.rowObj['acctName'],
-        dptName: this.rowObj['dptName']
+        pageSize: this.pageSize
       }
       this.loadData()
     },
@@ -129,6 +122,9 @@
     methods: {
       async loadData () {
         try {
+          this.queryObject['compName'] = this.rowObj['compName']
+          this.queryObject['acctName'] = this.rowObj['acctName']
+          this.queryObject['dptName'] = this.rowObj['dptName']
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'salesManage/tracking/demission', params: this.queryObject})
           if (data.returnCode === 0) {
             let keyArr = ['dateTime', 'compName', 'acctName', 'dptName', 'dataBweight', 'gm']
@@ -179,8 +175,8 @@
       tableChange (val) {
         this.loading = true
         this.currentPage = val
-        this.queryObject.currentPage = this.currentPage - 1
-        console.log(this.queryObject.orderType)
+        this.queryObject.currentPage = this.currentPage - 1        
+        // console.log(this.queryObject.orderType)
         this.loadData()
       },
       sortHandler (obj) {

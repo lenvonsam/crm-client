@@ -39,26 +39,21 @@
             lbl: '公司名称',
             prop: 'compName',
             type: 'linkRow',
-            minWidth: '340px',
             linkUrl: '/salesManage/tracking/ResignationDetailReport'
           }, {
             lbl: '业务部门',
-            prop: 'dptName',
-            width: '150px'
+            prop: 'dptName'
           }, {
             lbl: '业务员',
-            prop: 'acctName',
-            width: '150px'
+            prop: 'acctName'
           }, {
             lbl: '实提销量（吨）',
             prop: 'dataBweight',
-            width: '150px',
             sort: 'dataBweight',
             summary: true
           }, {
             lbl: '高卖量（元）',
             prop: 'gm',
-            width: '150px',
             sort: 'gm',
             summary: true
           }]
