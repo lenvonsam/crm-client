@@ -157,7 +157,18 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/linker', params: this.queryObject})
           if (data.returnCode === 0) {
-            this.tableValue.tableData = this.dataFilter(data.list)
+            // this.tableValue.tableData = this.dataFilter(data.list)
+            let key = ['linkName', 'linkPhone', 'acctName','dptName','region','compName','mainStatus']
+            let arr = []
+            data.list.map((item) => {
+              let obj = {}
+              for (let i=0;i<item.length;i++) {
+                obj[key[i]] = item[i]
+              }
+              obj['name'] = obj['linkName']
+              arr.push(obj)
+            })
+            this.tableValue.tableData = arr            
             this.totalCount = data.total
           } else {
             this.msgShow(this, data.errMsg)
