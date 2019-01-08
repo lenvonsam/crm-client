@@ -157,18 +157,7 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/linker', params: this.queryObject})
           if (data.returnCode === 0) {
-            // this.tableValue.tableData = this.dataFilter(data.list)
-            let key = ['linkName', 'linkPhone', 'acctName','dptName','region','compName','mainStatus']
-            let arr = []
-            data.list.map((item) => {
-              let obj = {}
-              for (let i=0;i<item.length;i++) {
-                obj[key[i]] = item[i]
-              }
-              obj['name'] = obj['linkName']
-              arr.push(obj)
-            })
-            this.tableValue.tableData = arr            
+            this.tableValue.tableData = this.dataFilter(data.list)          
             this.totalCount = data.total
           } else {
             this.msgShow(this, data.errMsg)
@@ -181,7 +170,8 @@
         }
       },
       dataFilter (dataList) {
-        let key = ['linkName', 'linkPhone', 'mainStatus','createAt','updateAt','compName','mark','region','busiName','acctName','dptName','proName','billDate','summaryLevel']
+        // let key = ['linkName', 'linkPhone', 'mainStatus','createAt','updateAt','compName','mark','region','busiName','acctName','dptName','proName','billDate','summaryLevel']
+        let key = ['linkName', 'linkPhone', 'acctName','dptName','region','compName','mainStatus']
         let arr = []
         dataList.map((item) => {
           let obj = {}
