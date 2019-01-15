@@ -351,7 +351,6 @@
       },
       groupBtnClick (type) {
         if (type == 'add') {
-          debugger
           this.linker = JSON.parse(JSON.stringify(this.snapData))
           if (this.cstmIdList.length == 0) {
             this.customerGet()
