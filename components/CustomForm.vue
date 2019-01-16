@@ -752,14 +752,21 @@ export default {
         this.form.wbName = newVal.linkers[0].wbName
         this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
         this.form.linkId = newVal.linkers[0].id
+        if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
+        if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
+        if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
+        if (newVal.processRequirement) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
+        if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
+        if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+        if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
       }
-      if (newVal.procurementGoods > 0) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
-      if (newVal.procurementPurpose > 0) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
-      if (newVal.hopeAddGoods > 0) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
-      if (newVal.processRequirement > 0) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
-      if (newVal.dealGoods > 0) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
-      if (newVal.dealPurpose > 0) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
-      if (newVal.industry.length > 0) this.form.fkIndustry = newVal.industry.map(item => item.name)
+      // if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
+      // if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
+      // if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
+      // if (newVal.processRequirement) this.form.fkProcessingRequirements = newVal.processRequirement.map(itm => itm.name)
+      // if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
+      // if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
+      // if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
       this.form.compAddrArr.push(newVal.compProv)
