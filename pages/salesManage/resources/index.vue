@@ -219,7 +219,7 @@
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'file/export/excel', params: params})
           if (data.returnCode !== -1) {
-              window.location.href = data
+              window.location.href = decodeURIComponent(data)
           } else {
             this.msgShow(this, '导出失败')
           }
