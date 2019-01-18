@@ -13,8 +13,8 @@ div
             el-radio(label= 0) 新客户
             el-radio(label= 1) 老客户
       el-col(:span="12")
-        el-form-item(label="开始日期")          
-          el-date-picker.full-width(v-model="form.startTime", placeholder="请选择开始日期")
+        el-form-item(label="起始日期")          
+          el-date-picker.full-width(v-model="form.startTime", placeholder="请选择起始日期")
         //- el-form-item(label="状态：")
         //-   el-radio-group(v-model="form.status", :disabled="true")
         //-     el-radio(label= 1) 启用
