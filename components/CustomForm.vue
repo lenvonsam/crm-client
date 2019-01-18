@@ -9,14 +9,16 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="客户类型：")
-          el-radio-group(v-model="form.customerType", :disabled="true")
-            el-radio(label= 1) 公司客户
-            el-radio(label= 2) 个人客户
+          el-radio-group(v-model="form.cstmType")
+            el-radio(label= 0) 新客户
+            el-radio(label= 1) 老客户
       el-col(:span="12")
-        el-form-item(label="状态：")
-          el-radio-group(v-model="form.status", :disabled="true")
-            el-radio(label= 1) 启用
-            el-radio(label= 0) 停用
+        el-form-item(label="开始日期")          
+          el-date-picker.full-width(v-model="form.startTime", placeholder="请选择开始日期")
+        //- el-form-item(label="状态：")
+        //-   el-radio-group(v-model="form.status", :disabled="true")
+        //-     el-radio(label= 1) 启用
+        //-     el-radio(label= 0) 停用
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司名称：", prop="compName")
@@ -406,7 +408,7 @@ export default {
     }
     return {
       form: {
-        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: ''
+        compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0'
       },
       rules: {
         compName: [
@@ -544,8 +546,13 @@ export default {
           this.form.fkAcctId = this.form.fkAcctName
         }
         // delete this.form.fkAcctName
+        if (this.form.startTime) {
+          this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))          
+        }
+        delete this.form.startTime
+        this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
-        this.form.sex = Number(this.form.sex)
+        this.form.sex = Number(this.form.sex)        
         this.form.status = 1
         this.form.fkDptId = Number(this.form.fkDptId)
         this.form.fkAcctId = Number(this.form.fkAcctId)
@@ -734,6 +741,7 @@ export default {
       console.log(newVal)
       this.form = Object.assign(this.form, newVal)
       this.form.customerType = newVal.customerType.toString()
+      this.form.cstmType = newVal.cstmType.toString()
       this.form.status = newVal.status.toString()
       this.form.fkDptId = newVal.fkDpt !== undefined ? newVal.fkDpt.id : this.form.fkDptId
       this.form.fkAcctId = newVal.fkAcct !== undefined ? newVal.fkAcct.id : this.form.fkAcctId
@@ -769,6 +777,8 @@ export default {
       // if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
+      this.form.startTime = (newVal.startTime) ? this.date2Str(new Date(newVal.startTime)) : null
+      
       this.form.compAddrArr.push(newVal.compProv)
       this.form.compAddrArr.push(newVal.compCity)
       this.form.compAddrArr.push(newVal.compArea)
