@@ -140,7 +140,7 @@ export default {
           this.obj = data.obj
           this.obj.setUpDateStr = (data.obj.setUpDate) ? this.date2Str(new Date(data.obj.setUpDate)) : ''
           this.obj.startTime = (data.obj.startTime) ? this.date2Str(new Date(data.obj.startTime)) : ''          
-          this.obj.cstmType = (data.obj.cstmType == 0) ? '老客户' : '新客户'
+          this.obj.cstmType = (data.obj.cstmType == 1) ? '老客户' : '新客户'
           this.$emit('cb', this.obj)
         } else {
           this.msgShow(this, data.errMsg)
