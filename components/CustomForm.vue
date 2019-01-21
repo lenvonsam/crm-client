@@ -1,10 +1,10 @@
 <template lang="pug">
 div
   .mb-5.bg-f9.head-title.pl-15
-    span.text-blue.ft-14 *
-    span.ml-5 标记为客户转化必填项
-    span.ml-10.text-red.ft-14 *
+    span.text-red.ft-14 *
     span.ml-5 标记为客户必填项
+    span.ml-10.text-blue.ft-14 *
+    span.ml-5 标记为型云客户必填项    
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
       el-col(:span="12")
@@ -406,7 +406,7 @@ export default {
       // }
     }
     var compAddrValid = (rule, value, callback) => {
-      if (value.length < 3) {
+      if (!value[2]) {
         callback(new Error('请完善公司地址'))
       } else {
         callback()
