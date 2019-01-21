@@ -492,7 +492,7 @@ export default {
         this.cloneObj = Object.assign({}, this.form)
         // console.log(this.cloneObj)
         // console.log(this.form.compAddr)
-        if (this.form.compAddr) {
+        if (this.form.compAddrArr.length > 0) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
           this.form.compArea = this.form.compAddrArr[2]
