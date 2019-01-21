@@ -405,6 +405,13 @@ export default {
       //   callback(new Error('公司名中有非法字符或数字'))
       // }
     }
+    var compAddrValid = (rule, value, callback) => {
+      if (value.length < 3) {
+        callback(new Error('请完善公司地址'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0'
@@ -414,7 +421,8 @@ export default {
           { required: true, validator: compNameValid, trigger: 'blur' },
           { min: 1, message: '不能为空', trigger: 'blur' }
         ],
-        compAddrArr: [{ required: true, message: '不能为空', trigger: 'change' }],
+        // compAddrArr: [{ validator: openAcctValid, required: true, message: '不能为空', trigger: 'change' }],
+        compAddrArr: [{ validator: compAddrValid, trigger: 'change' }],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkCustomPropertyId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -492,10 +500,12 @@ export default {
         this.cloneObj = Object.assign({}, this.form)
         // console.log(this.cloneObj)
         // console.log(this.form.compAddr)
-        if (this.form.compAddrArr.length > 0) {
+        if (this.form.compAddrArr.length > 1) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
           this.form.compArea = this.form.compAddrArr[2]
+        } else {
+          this.msgShow(this, '请完善公司地址')
         }
         if (this.form.billAddrArr) {
           this.form.billProv = this.form.billAddrArr[0]
