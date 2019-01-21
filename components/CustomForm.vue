@@ -65,16 +65,15 @@ div
               el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
-          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
-      el-col(:span="10")
-        el-form-item.validFormal(label="公司地址：")
-          //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
+        el-form-item(label="公司地址：", prop="compAddrArr")
           .row
             .col
               el-cascader.full-width(v-model="form.compAddrArr", clearable, placeholder="请选择公司地址", separator=" ", :options="addr", filterable, change-on-select)
             .col
               el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
+      el-col(:span="12")
+        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
+          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")      
     el-row.pr-10
       el-col(:span="12")
         el-form-item.validFormal(label="公司规模：")
@@ -415,6 +414,7 @@ export default {
           { required: true, validator: compNameValid, trigger: 'blur' },
           { min: 1, message: '不能为空', trigger: 'blur' }
         ],
+        compAddrArr: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkCustomPropertyId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -458,7 +458,7 @@ export default {
   methods: {
     onSubmit (formStr) {
       if(formStr == 'form') {
-        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region']
+        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region', 'compAddrArr']
         let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
         let that = this
         formalArr.map(itm => {
