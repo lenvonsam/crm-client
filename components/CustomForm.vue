@@ -421,8 +421,7 @@ export default {
           { required: true, validator: compNameValid, trigger: 'blur' },
           { min: 1, message: '不能为空', trigger: 'blur' }
         ],
-        // compAddrArr: [{ validator: openAcctValid, required: true, message: '不能为空', trigger: 'change' }],
-        compAddrArr: [{ validator: compAddrValid, trigger: 'change' }],
+        compAddrArr: [{ validator: compAddrValid, required: true, trigger: 'change' }],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkCustomPropertyId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -500,12 +499,13 @@ export default {
         this.cloneObj = Object.assign({}, this.form)
         // console.log(this.cloneObj)
         // console.log(this.form.compAddr)
-        if (this.form.compAddrArr.length > 1) {
+        if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
           this.form.compArea = this.form.compAddrArr[2]
         } else {
           this.msgShow(this, '请完善公司地址')
+          return
         }
         if (this.form.billAddrArr) {
           this.form.billProv = this.form.billAddrArr[0]
