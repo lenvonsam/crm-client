@@ -16,7 +16,7 @@ export default {
   },
   data () {
     return {
-      breadItems: ['客户管理', '客户拜访', '修改联系人'],
+      breadItems: ['客户管理', '客户拜访', '客户编辑'],
       obj: null
     }
   },
