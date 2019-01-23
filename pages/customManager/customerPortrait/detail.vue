@@ -135,6 +135,9 @@ export default {
         }]
       },
       saleGoodsChartOptions: {
+        plugins:{
+          customerRating: false
+        },
         maintainAspectRatio: false,
         title:{
           display:false,

@@ -21,7 +21,7 @@
           .col
             el-form-item(label="所属客户", prop="cstmName")
               el-select.full-width(v-model="busiOpts.cstmName", :loading="cstmLoading", clearable, value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet")
-                el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
+                el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.compName")
           .col
             el-form-item(prop="linkerName", label="联系人姓名")
               el-input(v-model="busiOpts.linkerName", clearable, placeholder="请输入联系人姓名")
