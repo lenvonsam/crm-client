@@ -24,7 +24,7 @@
                 el-option(v-for="item in mainStatusOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(prop="phone", label="联系方式")
-              el-input(v-model="linker.phone")
+              el-input(v-model="linker.phone", :disabled="linker.ebusiAdminAcctNo")
         .row
           .col
             el-form-item(label="性别", prop="sex")
@@ -159,17 +159,10 @@
           rowClassName: false,
           tableHead: [{
             lbl: '所属客户',
-            prop: 'fkCustom',
-            type: 'linkObject',
+            prop: 'compName',
+            type: 'link',
             minWidth: '340px',
-            linkUrl: '/customManager/contactManager/detail',
-            factValue (row) {
-              let arr = {
-                id: row.id,
-                name: row.compName
-              }
-              return arr
-            }
+            linkUrl: '/customManager/contactManager/detail'
           }, {
             lbl: '联系人',
             prop: 'name',
@@ -204,18 +197,13 @@
             width: '150px'
           }, {
             lbl: '添加时间',
-            prop: 'createAt',
+            prop: 'createAtStr',
             width: '195px',
             align: 'center',
             sort: true
           }, {
             lbl: '创建人',
-            prop: 'creator',
-            type: 'object',
-            // width: '145px',
-            factValue (row) {
-              return row.name
-            }
+            prop: 'creatorName'
           }, {
             type: 'action',
             width: '150px',
@@ -370,19 +358,34 @@
       subForm (flg) {
         if(flg == 'ok'){
           this.linker.age = Number(this.linker.age)
-          debugger
           this.$refs['linker'].validate((valid) => {
             if (valid) {
               if (typeof(this.linker.compName) == 'number') {
                 this.linker.cstmId = this.linker.compName
               }
               this.linker.uid = this.currentUser.id
-              if (this.disabled) {
-                // delete this.linker.compName
-                delete this.linker.fkCustom
-                delete this.linker.creator
+              if (this.btnStr == '更新') {
+                // this.linker.cstmId = this.linker.id
+                this.linker.originCstmId = this.linker.cstmId
+                this.linker.id = this.linker.linkId
+                delete this.linker.linkId
+                delete this.linker.acctId
+                delete this.linker.acctName
+                delete this.linker.contactId
                 delete this.linker.createAt
+                delete this.linker.createAtStr
+                delete this.linker.creatorId
+                delete this.linker.creatorName
+                delete this.linker.cstmMark
+                delete this.linker.cstmStatus
+                delete this.linker.dptId
+                delete this.linker.dptName
+                delete this.linker.ebusiAdminAcctNo
+                delete this.linker.erpCode
+                delete this.linker.idx
+                delete this.linker.orgId
                 delete this.linker.updateAt
+                delete this.linker.updateAtStr
               }
               this.createOrUpdate(this.linker)
             }
@@ -421,7 +424,7 @@
         this.linkerModifyObj = {
           currentPage: this.currentPageDetail - 1,
           pageSize: this.pageSize,
-          linkId: obj.id
+          linkId: obj.linkId
         }
         this.linkerModify()
       },
@@ -494,11 +497,17 @@
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/linker', params: this.queryObject})
             if (data.returnCode === 0) {
               let arr = []
-              data.list.map(itm => {
-                itm[0].fkCustom  = itm[1]
-                itm[0].cstmId = itm[1].id
-                itm[0].compName = itm[1].compName                
-                arr.push(itm[0])
+              let key = ['erpCode', 'ebusiAdminAcctNo', 'cstmStatus', 'cstmMark', 'cstmId', 'compName', 'acctId', 'acctName', 'dptId', 'dptName', 'orgId', 'linkId', 'createAt', 'updateAt', 'age', 'edu', 'mainStatus', 'name', 'phone', 'position', 'qqNo', 'remark', 'wxNo', 'sex', 'creatorId', 'creatorName']
+              data.list.map(item => {
+                let obj = {}                 
+                for (let i = 0; i < key.length; i++) {
+                  obj[key[i]] = item[i]
+                  if (key[i] == 'createAt' || key[i] == 'updateAt') {
+                    obj[key[i]+'Str'] = this.datetime2Str(new Date(item[i]))
+                  }
+                }
+                obj['id'] = obj['cstmId']
+                arr.push(obj)
               })
               this.tableValue.tableData = arr
               this.totalCount = data.total
@@ -531,7 +540,7 @@
       async linkerDelete () {
         try {
           let params = {
-            id: this.rowObj.id,
+            id: this.rowObj.linkId,
             cstmId: this.rowObj.cstmId,
             uid: this.currentUser.id,
             reason: this.reason
