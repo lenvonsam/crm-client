@@ -127,7 +127,8 @@
               data.list.map(itm => {
                 itm[0].planVisitTime = this.datetime2Str(new Date(itm[0].planVisitTime))
                 itm[0].compName = itm[0].customer.compName
-                temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>' + itm[0].planVisitTime + '</div>'+ itm[0].compName + '</div>'
+                // temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>' + itm[0].planVisitTime + '</div>'+ itm[0].compName + '</div>'
+                temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>名称：' + itm[0].compName + '</div><div>拜访时间：' + itm[0].planVisitTime + '</div>'
               })
               this.visitNotify(temp)
             }
@@ -142,7 +143,7 @@
       visitNotify(temp) {
         let me = this
         this.$notify({
-          title: '温馨提示',
+          title: '您有以下客户需要拜访：',
           dangerouslyUseHTMLString: true,
           message: temp,
           onClick: function(){
@@ -182,7 +183,7 @@
     .logo
       flex 0 0 450px
       height 600px
-      background-image url('http://crm-cdn.xingyun361.com/login_logo_new.png?imageView2/2/w/450/h/465')
+      background-image url('http://pav6lmvyn.bkt.clouddn.com/login_logo_new.png?imageView2/2/w/450/h/465')
       background-repeat no-repeat
       // background-size cover
       background-position center
