@@ -344,7 +344,7 @@
             this.customerGet()
           }
           this.dialogShow = true
-          if(this.$refs['linker']!==undefined){
+          if(this.$refs['linker']){
             this.$refs['linker'].clearValidate()
             this.disabled = false
             this.disabledMainStatus = false
@@ -387,10 +387,13 @@
                 delete this.linker.updateAt
                 delete this.linker.updateAtStr
               }
-              this.createOrUpdate(this.linker)
+              this.createOrUpdate(this.linker).then(() => {
+                this.linker = JSON.parse(JSON.stringify(this.snapData))
+              })
             }
           })
         } else {
+          this.linker = JSON.parse(JSON.stringify(this.snapData))
           this.dialogShow = false
           this.disabledMainStatus = false
         }
