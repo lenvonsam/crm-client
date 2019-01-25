@@ -205,6 +205,7 @@ export default {
     },
     chartPlugins () {
       Chart.plugins.register({
+        id: 'customerRating',
         afterDatasetsDraw: function(chart) {
           var ctx = chart.ctx;
           chart.data.datasets.forEach(function(dataset, i) {
@@ -228,7 +229,6 @@ export default {
 
                 var padding = 5
                 var position = element.tooltipPosition()
-                console.log(data)
                 ctx.fillText(data.level, position.x, position.y - (fontSize / 2) - padding)
               })
             }

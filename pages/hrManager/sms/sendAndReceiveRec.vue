@@ -35,10 +35,9 @@ export default {
             {label: '操作人', model: 'acctName', type: 'text', placeholder: '请输入操作人姓名', val: ''},
             {label: '发送类型', model: 'type', type: 'select', placeholder: '请选择发送类型', val: '', list:[]}],
            [{label: '状态', model: 'status', type: 'select', placeholder: '请选择状态', val: '', list:[]},
-            {label: '接收客户', model: 'cstmName', type: 'text', placeholder: '请输入接收客户', val: ''},
-            {label: '接收人姓名', model: 'name', type: 'text', placeholder: '请输入接收人姓名', val: ''}],
-           [{label: '接收手机', model: 'phone', type: 'text', placeholder: '请输入接收手机', val: ''},
-            {label: '提交时间', model: 'createAt', type: 'datetimerange', val: ''},
+            {label: '接收人姓名', model: 'name', type: 'text', placeholder: '请输入接收人姓名', val: ''},
+            {label: '接收手机', model: 'phone', type: 'text', placeholder: '请输入接收手机', val: ''}],
+           [{label: '提交时间', model: 'createAt', type: 'datetimerange', val: ''},
             {label: '发送内容', model: 'content', type: 'text', placeholder: '请输入发送内容', val: ''}]
           ],
       sendTableHead: [{

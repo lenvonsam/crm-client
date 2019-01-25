@@ -26,12 +26,18 @@ div
 import detailTable from '@/components/DetailTable.vue'
 import buttonGroup from '@/components/ButtonGroup.vue'
 import zoomImg from '@/components/ZoomImg.vue'
+import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
     detailTable,
     buttonGroup,
     zoomImg
+  },
+  computed: {
+    ...mapState({
+      currentUser: state => state.user.currentUser
+    })
   },
   data () {
     return {
@@ -113,21 +119,27 @@ export default {
         [{lbl: '常用开平尺寸', key: 'depositCycle'}, {lbl: '订金金额', key: 'depositRate', type: 'object', factValue: (row) => {return row ? row + '%' : ''}}],
         [{lbl: '加工需求', key: 'processRequirement', type:'object', factValue: (row) => {return row.map(itm => itm.name).join(',')}}, {lbl: '订金周期', key: 'depositCycle', type: 'object', factValue: (row) => {return row ? row + '天' : ''}}],
         [{lbl: '备注信息', key: 'remark'}]
-      ]
+      ],
+      isEdit: true
     }
   },
   beforeMount () {
+    if (this.currentUser.id !== 1) {
+      let idx = this.currentUser.auths.findIndex(itm => this.$route.path.startsWith(itm.fkMenu.pageUrl))
+      const currentAuth = this.currentUser.auths[idx]
+      if (currentAuth.hasUpdate === 0) this.isEdit = false
+    }
     this.loadData()
   },
   props: {
     url: {
       type: String,
       default: ''
-    },
-    isEdit: {
-      type: Boolean,
-      default: true
     }
+    // isEdit: {
+    //   type: Boolean,
+    //   default: true
+    // }
   },
   methods: {
     editForm () {

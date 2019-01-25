@@ -1,10 +1,10 @@
 <template lang="pug">
 div
   .mb-5.bg-f9.head-title.pl-15
-    span.text-blue.ft-14 *
-    span.ml-5 标记为客户转化必填项
-    span.ml-10.text-red.ft-14 *
+    span.text-red.ft-14 *
     span.ml-5 标记为客户必填项
+    span.ml-10.text-blue.ft-14 *
+    span.ml-5 标记为型云客户必填项    
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
       el-col(:span="12")
@@ -65,16 +65,15 @@ div
               el-option(v-for="item in group.options", :key="item.name", :label="item.name", :value="item.name")
     el-row.pr-10
       el-col(:span="12")
-        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
-          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
-      el-col(:span="10")
-        el-form-item.validFormal(label="公司地址：")
-          //- el-input(v-model="form.compAddr", placeholder="请输入公司地址", clearable)
+        el-form-item(label="公司地址：", prop="compAddrArr")
           .row
             .col
               el-cascader.full-width(v-model="form.compAddrArr", clearable, placeholder="请选择公司地址", separator=" ", :options="addr", filterable, change-on-select)
             .col
               el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
+      el-col(:span="12")
+        el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
+          el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")      
     el-row.pr-10
       el-col(:span="12")
         el-form-item.validFormal(label="公司规模：")
@@ -406,6 +405,13 @@ export default {
       //   callback(new Error('公司名中有非法字符或数字'))
       // }
     }
+    var compAddrValid = (rule, value, callback) => {
+      if (!value[2]) {
+        callback(new Error('请完善公司地址'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0'
@@ -415,6 +421,7 @@ export default {
           { required: true, validator: compNameValid, trigger: 'blur' },
           { min: 1, message: '不能为空', trigger: 'blur' }
         ],
+        compAddrArr: [{ validator: compAddrValid, required: true, trigger: 'change' }],
         fkRelation: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkCustomPropertyId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
@@ -458,7 +465,7 @@ export default {
   methods: {
     onSubmit (formStr) {
       if(formStr == 'form') {
-        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region']
+        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region', 'compAddrArr']
         let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
         let that = this
         formalArr.map(itm => {
@@ -492,10 +499,13 @@ export default {
         this.cloneObj = Object.assign({}, this.form)
         // console.log(this.cloneObj)
         // console.log(this.form.compAddr)
-        if (this.form.compAddr) {
+        if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
           this.form.compArea = this.form.compAddrArr[2]
+        } else {
+          this.msgShow(this, '请完善公司地址')
+          return
         }
         if (this.form.billAddrArr) {
           this.form.billProv = this.form.billAddrArr[0]

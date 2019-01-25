@@ -6,7 +6,7 @@
   .mt-15
     el-tabs(type="border-card", value="1", @tab-click="handleClick")
       el-tab-pane(label="基础信息", name="1")
-        custom-detail(:url="'/customManager/contactManager/'", v-if="tabName == '1'", :isEdit="false")
+        custom-detail(:url="'/customManager/customerVisit/'", v-if="tabName == '1'", :isEdit="false")
       el-tab-pane(label="沟通信息", name="2") 
         communication-info(v-if="tabName == '2'")
       el-tab-pane(label="联系人信息", name="3") 

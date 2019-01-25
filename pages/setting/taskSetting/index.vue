@@ -57,7 +57,9 @@ export default {
       queryObject: {
         currentPage: this.currentPage - 1,
         pageSize: this.pageSize,
-        type: 3
+        type: 3,
+        year: Number(this.tabsVal),
+        month: this.monthActive + 1
       }
     }
   },
@@ -184,6 +186,13 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/task/createOrUpdate', params: params})
           if (data.returnCode === 0) {
             this.msgShow(this, '保存成功', 'success')
+            this.queryObject = {
+              currentPage: this.currentPage - 1,
+              pageSize: this.pageSize,
+              type: Number(this.typeTablName),
+              year: Number(this.tabsVal),
+              month: this.monthActive + 1
+            }
             this.loadData()
           } else {
             this.msgShow(this, data.errMsg)

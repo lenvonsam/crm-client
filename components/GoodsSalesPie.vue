@@ -47,6 +47,9 @@ export default {
         labels: []
       },
       pieOptions: {
+        plugins:{
+          customerRating: false
+        },
         responsive: false,
         title:{
           display: false,
@@ -77,11 +80,12 @@ export default {
       this.onlinePie = newVal.map(s => Number(s.online))
       this.offlinePie = newVal.map(s => Number(s.offline))
       const labels = newVal.map(s => s.type)
-      const bgColors = newVal.map(s => this.getRandomColor())
+      // const bgColors = newVal.map(s => this.getRandomColor())
       this.pieVal.pieData.labels = labels
-      this.pieVal.pieData.datasets[0].backgroundColor = bgColors
+      // this.pieVal.pieData.datasets[0].backgroundColor = bgColors
+      this.pieVal.pieData.datasets[0].backgroundColor = ['#4796fb', '#bd34f4', '#fd3118', '#fde811', '#36dc7a']
       console.log(labels)
-      console.log(bgColors)
+      // console.log(bgColors)
       this.changePieData()
     },
     pieTab (newVal) {

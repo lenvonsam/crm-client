@@ -21,7 +21,7 @@
           .col
             el-form-item(label="所属客户", prop="cstmName")
               el-select.full-width(v-model="busiOpts.cstmName", :loading="cstmLoading", clearable, value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet")
-                el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
+                el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.compName")
           .col
             el-form-item(prop="linkerName", label="联系人姓名")
               el-input(v-model="busiOpts.linkerName", clearable, placeholder="请输入联系人姓名")
@@ -121,7 +121,7 @@
         dialogShow: false,
         busiOpts: {
           opptyName: '',
-          cstmName: '',
+          cstmName: null,
           linkerName: '',
           linkerPhone: '',
           opptyAddr: '',
@@ -136,10 +136,12 @@
           remark: [{ required: true, message: '不能为空', trigger: 'blur' }]
         },
         cstmIdList: [],
-        cstmLoading: false
+        cstmLoading: false,
+        cloneBusiOpts: {}
       }
     },
     mounted () {
+      this.cloneBusiOpts = JSON.parse(JSON.stringify(this.busiOpts))
       this.queryObject = {
         currentPage: this.currentPage - 1,
         pageSize: this.pageSize
@@ -159,17 +161,19 @@
         this.loadData()
       },
       groupBtnClick () {
-        this.dialogShow = true
+        this.dialogShow = true        
+        if (this.$refs['busiOpts']) {
+          this.$refs['busiOpts'].clearValidate()
+        }
       },
       subForm (flg) {
         if (flg == "ok") {
           this.$refs['busiOpts'].validate((valid) => {
             if (valid) {
-              console.log('--------subForm')
-              console.log(this.busiOpts)
-              this.busiOpts['uid'] = this.currentUser.id
-              this.createBusiOppty().then(() => {
+              this.busiOpts['uid'] = this.currentUser.id 
+              this.createBusiOppty().then(() => {              
                 this.dialogShow = false
+                this.busiOpts = JSON.parse(JSON.stringify(this.cloneBusiOpts))
                 this.loadData()
               })
             } else {
@@ -179,6 +183,7 @@
           })          
         } else {
           this.dialogShow = false
+          this.busiOpts = JSON.parse(JSON.stringify(this.cloneBusiOpts))
         }
       },
       tableChange (val) {
