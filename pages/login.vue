@@ -156,6 +156,8 @@
 </script>
 
 <style lang="stylus">
+body,html
+  font-size: 14px
 .login-container
   position fixed
   top 0
