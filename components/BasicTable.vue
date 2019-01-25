@@ -59,7 +59,7 @@ div
   .padding.text-right.row
     .col
       el-pagination(v-if="!tableValue.page", :current-page="currentPage", :page-size="pageSize", background, layout="prev, pager, next, jumper", :total="total", @current-change="pgCurrentChange")
-    span(style="padding-bottom: 3px;") 共 {{total}} 条数据
+    span(v-if="!tableValue.page", style="padding-bottom: 3px;") 共 {{total}} 条数据
 
 </template>
 

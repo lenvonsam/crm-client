@@ -168,38 +168,39 @@ export default {
       // this.$refs[formName].resetFields();
       this.searchForm.date = []
     },
-    chartPlugins () {
-      Chart.plugins.register({
-        afterDatasetsDraw: function(chart) {
-          var ctx = chart.ctx;
-          chart.data.datasets.forEach(function(dataset, i) {
-            var meta = chart.getDatasetMeta(i);
-            if (!meta.hidden) {
-              meta.data.forEach(function(element, index) {
-                // Draw the text in black, with the specified font
-                ctx.fillStyle = 'rgb(0, 0, 0)'
+    // chartPlugins () {
+    //   Chart.plugins.register({
+    //     id: 'customerRating',
+    //     afterDatasetsDraw: function(chart) {
+    //       var ctx = chart.ctx;
+    //       chart.data.datasets.forEach(function(dataset, i) {
+    //         var meta = chart.getDatasetMeta(i);
+    //         if (!meta.hidden) {
+    //           meta.data.forEach(function(element, index) {
+    //             // Draw the text in black, with the specified font
+    //             ctx.fillStyle = 'rgb(0, 0, 0)'
 
-                var fontSize = 16
-                var fontStyle = 'normal'
-                var fontFamily = 'Helvetica Neue'
-                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily)
+    //             var fontSize = 16
+    //             var fontStyle = 'normal'
+    //             var fontFamily = 'Helvetica Neue'
+    //             ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily)
 
-                // Just naively convert to string for now
-                // var dataString = dataset.data[index].toString();
-                var data = dataset.data[index]
-                // Make sure alignment settings are correct
-                ctx.textAlign = 'center'
-                ctx.textBaseline = 'middle'
+    //             // Just naively convert to string for now
+    //             // var dataString = dataset.data[index].toString();
+    //             var data = dataset.data[index]
+    //             // Make sure alignment settings are correct
+    //             ctx.textAlign = 'center'
+    //             ctx.textBaseline = 'middle'
 
-                var padding = 5
-                var position = element.tooltipPosition()
-                ctx.fillText(data.level, position.x, position.y - (fontSize / 2) - padding)
-              })
-            }
-          })
-        }
-      })
-    },
+    //             var padding = 5
+    //             var position = element.tooltipPosition()
+    //             ctx.fillText(data.level, position.x, position.y - (fontSize / 2) - padding)
+    //           })
+    //         }
+    //       })
+    //     }
+    //   })
+    // },
     async cstmRatingDetail () {
       try {
         this.chartData.datasets[0].data = []
@@ -228,7 +229,7 @@ export default {
                 mark: (data.mark == 2) ? '正式客户' : (data.mark == 3) ? '潜在客户' : ''
               }
             }
-            this.chartPlugins()
+            // this.chartPlugins()
             this.dealTableValue.tableData = arr
             this.totalCount = data.total
             this.loading = false

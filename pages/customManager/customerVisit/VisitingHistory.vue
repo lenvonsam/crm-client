@@ -141,6 +141,9 @@ export default {
           }]
         },
         barOptions: {
+          plugins:{
+            customerRating: false
+          },
           responsive: false,
           maintaionAspectRatio: false,
           scales: {

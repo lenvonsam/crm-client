@@ -11,8 +11,8 @@
           el-button(type="primary", @click="submitForm('searchForm')", size="small") 查询
           el-button(@click="resetForm('searchForm')", size="small") 重置
     basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", @sort="sortHandler")
-    .mt-15(v-if="saleGoodsChartData.labels.length > 0")
-      line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart")
+    .mt-15
+      line-chart(:data="saleGoodsChartData", :options="saleGoodsChartOptions", style="width: 100%; height: 600px", ref="goodsLineChart", v-if="saleGoodsChartData.labels.length > 0")
 </template>
 
 <script>
@@ -86,6 +86,9 @@
           }]
         },
         saleGoodsChartOptions: {
+          plugins:{
+            customerRating: false
+          },
           maintainAspectRatio: false,
           title:{
             display:false,
