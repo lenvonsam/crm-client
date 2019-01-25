@@ -155,6 +155,7 @@
       },
       async loadData () {
         try {
+          this.queryObject['uid'] = this.currentUser.id
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/linker', params: this.queryObject})
           if (data.returnCode === 0) {
             this.tableValue.tableData = this.dataFilter(data.list)          
@@ -213,6 +214,7 @@
       },
       async loadAllData (params) {
         try {
+          params['uid'] = this.currentUser.id
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'callCenter/linkerAll', params: params})
           if (data.returnCode === 0) {
             let arr = this.dataFilter(data.list)
