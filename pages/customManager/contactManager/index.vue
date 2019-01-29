@@ -24,7 +24,7 @@
                 el-option(v-for="item in mainStatusOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(prop="phone", label="联系方式")
-              el-input(v-model="linker.phone", :disabled="linker.ebusiAdminAcctNo")
+              el-input(v-model="linker.phone", :disabled="phoneDisabled")
         .row
           .col
             el-form-item(label="性别", prop="sex")
@@ -32,7 +32,7 @@
                 el-option(v-for="item in sexOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(label="年龄", prop="age")
-              el-input(v-model="linker.age", type="number", clearable)
+              el-input(v-model="linker.age", type="number")
         .row
           .col
             el-form-item(label="学历")
@@ -148,6 +148,7 @@
         }
       }
       return {
+        phoneDisabled: false,
         breadItems: ['客户管理', '联系人管理'],
         btnGroups: [{lbl: '新增联系人信息', type: 'add'}, {lbl: '删除记录', type: 'delRec'}],
         searchFormItems: [
@@ -354,7 +355,7 @@
           if (this.cstmIdList.length == 0) {
             this.customerGet()
           }
-          this.dialogShow = true
+          this.dialogShow = true                    
           if(this.$refs['linker']){
             this.$refs['linker'].clearValidate()
             this.disabled = false
@@ -457,8 +458,9 @@
         this.linker.originCstmId = this.linker.cstmId
         if(this.$refs['linker'] !== undefined){
           this.$refs['linker'].clearValidate()
-        }
+        }        
         this.disabled = true
+        this.phoneDisabled = (this.linker.ebusiAdminAcctNo) ? true : false
         if(row.mainStatus == 1){
           this.disabledMainStatus = true
         }
