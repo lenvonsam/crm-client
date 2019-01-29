@@ -98,8 +98,8 @@
       })
     },
     beforeMount () {
-      this.$nextTick(() => {
-        this.searchFormItems[2][0].list = this.xyMarkList
+      this.searchFormItems[2][0].list = this.xyMarkList
+      this.$nextTick(() => {        
         this.queryObject = {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
