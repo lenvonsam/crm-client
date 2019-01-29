@@ -31,6 +31,7 @@ export default{
           {lbl: '修改值', prop: 'modifyVal', type: 'text'}],
         hasCbx: false,
         edit: true,
+        page: true,
         tableData: []
       },
       snapData: [],
@@ -94,7 +95,7 @@ export default{
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmModify', params: this.queryObject})
           if (data.returnCode === 0) {
             this.tableValue.tableData = data.list
-            this.totalCount = data.total
+            // this.totalCount = data.total
           } else {
             this.msgShow(this, data.errMsg)
           }
