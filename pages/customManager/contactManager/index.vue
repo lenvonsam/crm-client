@@ -360,6 +360,7 @@
             this.$refs['linker'].clearValidate()
             this.disabled = false
             this.disabledMainStatus = false
+            this.phoneDisabled = false
           }
           this.dialogTitle = '新增联系人信息'
           this.btnStr = '创建'
