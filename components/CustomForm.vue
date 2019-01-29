@@ -7,18 +7,19 @@ div
     span.ml-5 标记为型云客户必填项    
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
-      el-col(:span="12")
+      el-col(:span="7")
         el-form-item(label="客户类型：")
           el-radio-group(v-model="form.cstmType")
             el-radio(label= 0) 新客户
             el-radio(label= 1) 老客户
+      el-col(:span="5")
+          el-form-item(label="状态：", label-width="100px")
+            el-radio-group(v-model="form.status", :disabled="form.customerSource == '型云'")
+              el-radio(label= 1) 启用
+              el-radio(label= 0) 停用
       el-col(:span="12")
         el-form-item(label="起始日期")          
           el-date-picker.full-width(v-model="form.startTime", placeholder="请选择起始日期")
-        //- el-form-item(label="状态：")
-        //-   el-radio-group(v-model="form.status", :disabled="true")
-        //-     el-radio(label= 1) 启用
-        //-     el-radio(label= 0) 停用
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司名称：", prop="compName")
@@ -563,7 +564,7 @@ export default {
         this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
         this.form.sex = Number(this.form.sex)        
-        this.form.status = 1
+        // this.form.status = 1
         this.form.fkDptId = Number(this.form.fkDptId)
         this.form.fkAcctId = Number(this.form.fkAcctId)
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})

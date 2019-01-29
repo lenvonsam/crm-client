@@ -52,6 +52,7 @@ export default{
               type: 'delete'
             }]
           }],
+        page: true,
         hasCbx: false,
         edit: true,
         tableData: []

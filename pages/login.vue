@@ -156,8 +156,15 @@
 </script>
 
 <style lang="stylus">
+* {
+  -webkit-top-highlight-color: transparent;
+  -webkit-box-sizing: border-box !important;
+  box-sizing: border-box !important;
+}
 body,html
+  font-family: 'PingFang SC', 'Microsoft Yahei', 'SimSun', 'Helvetica', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback'
   font-size: 14px
+  color: #262626
 .login-container
   position fixed
   top 0

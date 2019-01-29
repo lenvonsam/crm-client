@@ -37,7 +37,8 @@
           {label: '客户类型', model: 'mark', type: 'select', placeholder: '请选择客户类型', val: '2', list: []}],
           [{label: '客户性质', model: 'customProperty', type: 'select', placeholder: '请选择客户性质', val: '', list: []},
           {label: '客户等级', model: 'level', type: 'select', placeholder: '请选择客户等级', val: '', list: []},
-          {label: '未开单天数', model: 'billDate', type: 'select', placeholder: '请选择未开单天数', val: '', list: []}]
+          {label: '未开单天数', model: 'billDate', type: 'select', placeholder: '请选择未开单天数', val: '', list: []}],
+          [{label: '上线情况', model: 'xyMark', type: 'select', placeholder: '请选择上线情况', val: '', list: []}]
         ],
         tableValue: {
           tableData: [],
@@ -105,7 +106,8 @@
         levelOpts: state => state.levelOpts,
         billDateOpts: state => state.billDateOpts,
         mainStatusTypeOpts: state => state.mainStatusTypeOpts,
-        busiRelationOpts: state => state.busiRelationOpts
+        busiRelationOpts: state => state.busiRelationOpts,
+        xyMarkList: state => state.xyMarkList
       })
     },
     mounted () {      
@@ -116,6 +118,7 @@
         this.searchFormItems[3][0].list = this.customPropertyOpts
         this.searchFormItems[3][1].list = this.levelOpts
         this.searchFormItems[3][2].list = this.billDateOpts
+        this.searchFormItems[4][0].list = this.xyMarkList
         this.queryObject = {
             currentPage: this.currentPage - 1,
             mark: '2',
@@ -127,7 +130,8 @@
     },
     methods: {
       searchForm (paramsObj) {
-        this.queryObject['currentPage'] = 0
+        this.currentPage = 1
+        this.queryObject['currentPage'] = this.currentPage - 1
         for (let key in paramsObj) {
           if (paramsObj[key].trim() != '') {
             this.queryObject[key] = paramsObj[key]
