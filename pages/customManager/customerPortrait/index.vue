@@ -32,7 +32,8 @@
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
           [{label: '转化日期', model: 'createAt', type: 'timeLimit', placeholder: '请选择转化日期', val: ''},
           {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''},
-          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}]
+          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}],
+          [{label: '上线情况', model: 'xyMark', type: 'select', placeholder: '请选择上线情况', val: '', list: []}]
         ],
         tableValue: {
           tableData: [],
@@ -92,11 +93,13 @@
       ...mapState({
         pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser,
-        cstmArr: state => state.cstmArr
+        cstmArr: state => state.cstmArr,
+        xyMarkList: state => state.xyMarkList
       })
     },
     beforeMount () {
       this.$nextTick(() => {
+        this.searchFormItems[2][0].list = this.xyMarkList
         this.queryObject = {
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,

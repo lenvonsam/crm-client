@@ -10,8 +10,7 @@
       .mt-15
         el-tabs(type="border-card", @tab-click="tabsHandle", v-model="tabsType")
           el-tab-pane(label="选择联系人发送", name="0")
-            basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange
-            ="tableChange", @tableRowDel="rowDel")
+            basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange", @tableRowDel="rowDel")
           el-tab-pane(label="自定义发送", name="1", v-if="mark == '1'")
             el-input(type="textarea", :autosize="{minRows:5}", placeholder="请输入手机号，逗号分隔", v-model="smsMobileStr")
   .mt-15.bg-f9
@@ -131,7 +130,14 @@
         this.tableData.splice(num + row.idx,1)
         tableData = JSON.parse(JSON.stringify(this.tableData))
         this.totalCount = tableData.length
-        this.tableValue.tableData = tableData.splice(num,5)
+        let tableDataArr = tableData.splice(num,5)
+        this.tableValue.tableData = tableDataArr
+        if (tableDataArr.length > 0) {
+          this.tableValue.tableData = tableDataArr
+        } else {
+          this.currentPage = this.currentPage - 1
+          this.tableValue.tableData = tableData.splice((this.currentPage - 1) * this.pageSize ,5)
+        }
       },
       clearRecipient () {
         this.tableData = []
