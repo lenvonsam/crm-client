@@ -192,7 +192,7 @@ body,html
     .logo
       flex 0 0 450px
       height 600px
-      background-image url('http://pav6lmvyn.bkt.clouddn.com/login_logo_new.png?imageView2/2/w/450/h/465')
+      background-image url('http://crm-cdn.xingyun361.com/login_logo_new.png?imageView2/2/w/450/h/465')
       background-repeat no-repeat
       // background-size cover
       background-position center

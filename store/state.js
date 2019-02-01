@@ -3,7 +3,7 @@ export default {
   // http://wechat.xingyun361.com/
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
-  qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
+  qiniuOutlink: 'http://crm-cdn.xingyun361.com/',
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   uploadFileUrl: '/proxy/uploadFile',
