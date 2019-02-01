@@ -14,7 +14,7 @@ div
             el-radio(label= 1) 老客户
       el-col(:span="5")
           el-form-item(label="状态：", label-width="100px")
-            el-radio-group(v-model="form.status", :disabled="form.customerSource == '型云'")
+            el-radio-group(v-model="form.status", :disabled="customerSourceDisabled")
               el-radio(label= 1) 启用
               el-radio(label= 0) 停用
       el-col(:span="12")
@@ -799,7 +799,10 @@ export default {
       this.form.billAddrArr.push(newVal.billArea)
       this.form.billAddr = newVal.billAddr
       if (newVal.setUpDate !== null && newVal.setUpDate !== undefined) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      if (this.form.customerSource === '型云') {
+      // if (this.form.customerSource === '型云') {
+      //   this.customerSourceDisabled = true
+      // }
+      if (this.form.ebusiAdminAcctNo) {
         this.customerSourceDisabled = true
       }
     }

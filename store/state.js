@@ -437,10 +437,10 @@ export default {
     label: '全部'
   }, {
     value: '1',
-    label: '型云'
+    label: '已上型云'
   }, {
     value: '2',
-    label: 'ERP'
+    label: '未上型云'
   }],
   currentMenus: [],
   allMenus: [{
