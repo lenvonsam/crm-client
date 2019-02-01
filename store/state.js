@@ -6,6 +6,7 @@ export default {
   qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
+  uploadFileUrl: '/proxy/uploadFile',
   globalSuccessMsg: '',
   globalErrorMsg: '',
   currentPathIdx: '1-1',
@@ -228,6 +229,17 @@ export default {
     value: '供应商',
     label: '供应商'
   }],
+  // 启用状态
+  enableStatus: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '1',
+    label: '启用'
+  }, {
+    value: '0',
+    label: '停用'
+  }],
   // 客户等级
   levelOpts: [{
     value: '',
@@ -373,6 +385,63 @@ export default {
     value: 1,
     label: '是'
   }],
+  // 任务状态
+  taskStatus: [{
+    value: 0,
+    label: '待处理'
+  }, {
+    value: 1,
+    label: '暂不处理'
+  }, {
+    value: 2,
+    label: '进行中'
+  }, {
+    value: 3,
+    label: '开发完成'
+  }, {
+    value: 4,
+    label: '待验证'
+  }, {
+    value: 5,
+    label: '测试中'
+  }, {
+    value: 6,
+    label: '已完成'
+  }, {
+    value: 7,
+    label: '退回'
+  }, {
+    value: 8,
+    label: '关闭'
+  }],
+  // 任务优先级
+  priority: [{
+    value: 0,
+    label: '次要'
+  }, {
+    value: 1,
+    label: '一般'
+  }, {
+    value: 2,
+    label: '严重'
+  }, {
+    value: 3,
+    label: '紧急'
+  }, {
+    value: 4,
+    label: '致命'
+  }],
+  // 上线情况
+  xyMarkList: [{
+    value: '',
+    label: '全部'
+  }, {
+    value: '1',
+    label: '已上型云'
+  }, {
+    value: '2',
+    label: '未上型云'
+  }],
   currentMenus: [],
   allMenus: [{
     title: '首页',
@@ -501,6 +570,19 @@ export default {
     }, {
       title: '所处行业',
       url: '/basicData/industry'
+    }]
+  }, {
+    title: '任务管理',
+    iconClass: 'iconfont icon-task-line',
+    subItems: [{
+      title: '任务信息',
+      url: '/taskManage/taskInfo'
+    }, {
+      title: '项目设置',
+      url: '/taskManage/projectSetting'
+    }, {
+      title: '类型设置',
+      url: '/taskManage/typeSetting'
     }]
   }]
 }

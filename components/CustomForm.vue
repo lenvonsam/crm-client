@@ -7,18 +7,19 @@ div
     span.ml-5 标记为型云客户必填项    
   el-form(ref="form", :rules="rules", show-message, :model="form", label-width="145px", label-position="right", :disabled="disabled")
     el-row.pr-10
-      el-col(:span="12")
+      el-col(:span="7")
         el-form-item(label="客户类型：")
           el-radio-group(v-model="form.cstmType")
             el-radio(label= 0) 新客户
             el-radio(label= 1) 老客户
+      el-col(:span="5")
+          el-form-item(label="状态：", label-width="100px")
+            el-radio-group(v-model="form.status", :disabled="customerSourceDisabled")
+              el-radio(label= 1) 启用
+              el-radio(label= 0) 停用
       el-col(:span="12")
         el-form-item(label="起始日期")          
           el-date-picker.full-width(v-model="form.startTime", placeholder="请选择起始日期")
-        //- el-form-item(label="状态：")
-        //-   el-radio-group(v-model="form.status", :disabled="true")
-        //-     el-radio(label= 1) 启用
-        //-     el-radio(label= 0) 停用
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司名称：", prop="compName")
@@ -563,7 +564,7 @@ export default {
         this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
         this.form.sex = Number(this.form.sex)        
-        this.form.status = 1
+        // this.form.status = 1
         this.form.fkDptId = Number(this.form.fkDptId)
         this.form.fkAcctId = Number(this.form.fkAcctId)
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
@@ -759,17 +760,21 @@ export default {
       this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
       if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
       if (firstTime) {
-        this.form.phone = newVal.linkers[0].phone
-        this.form.name = newVal.linkers[0].name
-        this.form.sex = newVal.linkers[0].sex
-        this.form.age = newVal.linkers[0].age
-        this.form.edu = newVal.linkers[0].edu
-        this.form.nativePlace = newVal.linkers[0].nativePlace
-        this.form.wxNo = newVal.linkers[0].wxNo
-        this.form.qqNo = newVal.linkers[0].qqNo
-        this.form.wbName = newVal.linkers[0].wbName
-        this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
-        this.form.linkId = newVal.linkers[0].id
+        let mainIdx = newVal.linkers.findIndex(itm => itm.mainStatus == 1)
+        if (mainIdx >= 0) {
+          let mainLink = newVal.linkers[mainIdx]
+          this.form.phone = mainLink.phone
+          this.form.name = mainLink.name
+          this.form.sex = mainLink.sex
+          this.form.age = mainLink.age
+          this.form.edu = mainLink.edu
+          this.form.nativePlace = mainLink.nativePlace
+          this.form.wxNo = mainLink.wxNo
+          this.form.qqNo = mainLink.qqNo
+          this.form.wbName = mainLink.wbName
+          this.form.otherLinkWay = mainLink.otherLinkWay
+          this.form.linkId = mainLink.id
+        }
         if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
         if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
         if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
@@ -798,7 +803,10 @@ export default {
       this.form.billAddrArr.push(newVal.billArea)
       this.form.billAddr = newVal.billAddr
       if (newVal.setUpDate !== null && newVal.setUpDate !== undefined) this.form.fkSetUpDate = this.date2Str(new Date(newVal.setUpDate))
-      if (this.form.customerSource === '型云') {
+      // if (this.form.customerSource === '型云') {
+      //   this.customerSourceDisabled = true
+      // }
+      if (this.form.ebusiAdminAcctNo) {
         this.customerSourceDisabled = true
       }
     }

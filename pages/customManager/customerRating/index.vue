@@ -34,7 +34,8 @@ export default {
           {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''}],
           [{label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''},
           {label: '客户得分', model: 'cstmScore', type: 'range', minPlaceholder: '最小值', maxPlaceholder: '最大值', min: '', max: ''},
-          {label: '客户等级', model: 'level', type: 'select', placeholder: '请选择客户等级', val: '', list: [{label:'A', value:'A'}, {label:'B', value:'B'},{label:'C', value:'C'}]}]
+          {label: '客户等级', model: 'level', type: 'select', placeholder: '请选择客户等级', val: '', list: [{label:'A', value:'A'}, {label:'B', value:'B'},{label:'C', value:'C'}]}],
+          [{label: '上线情况', model: 'xyMark', type: 'select', placeholder: '请选择上线情况', val: '', list: []}]
         ],
       searchShow: false,
       tableValue: {
@@ -144,11 +145,13 @@ export default {
   computed: {
     ...mapState({
       pageSize: state => state.pageSize,
-      currentUser: state => state.user.currentUser
+      currentUser: state => state.user.currentUser,
+      xyMarkList: state => state.xyMarkList
     })
   },
   mounted () {
     this.$nextTick(function () {
+      this.searchFormItems[2][0].list = this.xyMarkList
       this.getLevelCombo()
       this.queryObject = {
         currentPage: this.currentPage - 1,

@@ -24,15 +24,15 @@
                 el-option(v-for="item in mainStatusOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
             el-form-item(prop="phone", label="联系方式")
-              el-input(v-model="linker.phone", :disabled="linker.ebusiAdminAcctNo")
+              el-input(v-model="linker.phone", :disabled="phoneDisabled")
         .row
           .col
             el-form-item(label="性别", prop="sex")
               el-select.full-width(v-model="linker.sex", clearable)
                 el-option(v-for="item in sexOpts", :key="item.value", :label="item.label", :value="item.value")
           .col
-            el-form-item(label="年龄")
-              el-input(v-model="linker.age", type="number", clearable)
+            el-form-item(label="年龄", prop="age")
+              el-input(v-model="linker.age", type="number")
         .row
           .col
             el-form-item(label="学历")
@@ -135,11 +135,20 @@
         mainStatusOpts: state => state.mainStatusOpts,
         eduOpts: state => state.eduOpts,
         pageSize: state => state.pageSize,
-        currentUser: state => state.user.currentUser
+        currentUser: state => state.user.currentUser,
+        xyMarkList: state => state.xyMarkList
       })
     },
     data () {
+      var ageValid = (rule, value, callback) => {
+        if (Number(value) > 0) {
+          callback()
+        } else {
+          callback(new Error('年龄不能为负值'))
+        }
+      }
       return {
+        phoneDisabled: false,
         breadItems: ['客户管理', '联系人管理'],
         btnGroups: [{lbl: '新增联系人信息', type: 'add'}, {lbl: '删除记录', type: 'delRec'}],
         searchFormItems: [
@@ -151,7 +160,8 @@
           {label: '性别', model: 'sex', type: 'select', placeholder: '请选择性别', val: '', list: []}],
           [{label: '职位', model: 'position', type: 'text', placeholder: '请输入职位', val: ''},
           {label: '业务部门', model: 'dptName', type: 'text', placeholder: '请输入业务部门', val: ''},
-          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}]
+          {label: '业务员', model: 'acctName', type: 'text', placeholder: '请输入业务员', val: ''}],
+          [{label: '上线情况', model: 'xyMark', type: 'select', placeholder: '请选择上线情况', val: '', list: []}]
         ],
         tableValue: {
           tableData: [],
@@ -243,7 +253,8 @@
           name: [{ required: true, message: '不能为空', trigger: 'blur' }],
           phone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, {len: 11, message: '手机号位数要是11位', trigger: 'blur'}],
           sex: [{ required: true, message: '不能为空', trigger: 'change' }],
-          compName: [{ required: true, message: '不能为空', trigger: 'change' }]
+          compName: [{ required: true, message: '不能为空', trigger: 'change' }],
+          age:[{validator: ageValid, message: '不能小于0', trigger: 'blur'}]
         },
         dialogShow: false,
         dialogDel: false,
@@ -298,6 +309,7 @@
     beforeMount () {
       this.searchFormItems[1][1].list = [{value: '', label: '全部'}, {value: 1, label: '主联系人'}, {value: 0, label: '普通联系人'}]
       this.searchFormItems[1][2].list = this.sexOpts
+      this.searchFormItems[3][0].list = this.xyMarkList
     },
     mounted () {
       this.$nextTick(() => {
@@ -343,11 +355,12 @@
           if (this.cstmIdList.length == 0) {
             this.customerGet()
           }
-          this.dialogShow = true
+          this.dialogShow = true                    
           if(this.$refs['linker']){
             this.$refs['linker'].clearValidate()
             this.disabled = false
             this.disabledMainStatus = false
+            this.phoneDisabled = false
           }
           this.dialogTitle = '新增联系人信息'
           this.btnStr = '创建'
@@ -446,8 +459,9 @@
         this.linker.originCstmId = this.linker.cstmId
         if(this.$refs['linker'] !== undefined){
           this.$refs['linker'].clearValidate()
-        }
+        }        
         this.disabled = true
+        this.phoneDisabled = (this.linker.ebusiAdminAcctNo) ? true : false
         if(row.mainStatus == 1){
           this.disabledMainStatus = true
         }

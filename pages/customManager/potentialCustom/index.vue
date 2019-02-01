@@ -41,6 +41,7 @@
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
           orderType: '0',
+          status: '1',
           mark: '1'
         },
         btnGroups: [{
@@ -106,7 +107,8 @@
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
           [{label: '添加日期', model: 'createAt', type: 'timeLimit', val: ''},
           {label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: ''},
-          {label: '业务员', model: 'acctName', placeholder: '请输入业务员', val: ''}]
+          {label: '业务员', model: 'acctName', placeholder: '请输入业务员', val: ''}],
+          [{label: '状态', model: 'status', type: 'select', placeholder: '请选择状态类型', val: '1', list: []}]
         ],
         reason: '',
         // dialogFormVisible: false,
@@ -125,19 +127,24 @@
       }
     },
     mounted () {
-      this.queryObject = {
-        currentPage: this.currentPage - 1,
-        pageSize: this.pageSize,
-        orderType: '0',
-        mark: '1'
-      }
-      this.loadData()
+      this.searchFormItems[2][0]['list'] = this.enableStatus
+      this.$nextTick(() => {        
+        this.queryObject = {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize,
+          orderType: '0',
+          status: '1',
+          mark: '1'
+        }
+        this.loadData()
+      })      
     },
     computed: {
       ...mapState({
         pageSize: state => state.pageSize,
         currentUser: state => state.user.currentUser,
-        cstmArr: state => state.cstmArr
+        cstmArr: state => state.cstmArr,
+        enableStatus: state => state.enableStatus
       })
     },
     methods: {
