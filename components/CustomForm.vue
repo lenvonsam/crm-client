@@ -760,17 +760,21 @@ export default {
       this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
       if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
       if (firstTime) {
-        this.form.phone = newVal.linkers[0].phone
-        this.form.name = newVal.linkers[0].name
-        this.form.sex = newVal.linkers[0].sex
-        this.form.age = newVal.linkers[0].age
-        this.form.edu = newVal.linkers[0].edu
-        this.form.nativePlace = newVal.linkers[0].nativePlace
-        this.form.wxNo = newVal.linkers[0].wxNo
-        this.form.qqNo = newVal.linkers[0].qqNo
-        this.form.wbName = newVal.linkers[0].wbName
-        this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
-        this.form.linkId = newVal.linkers[0].id
+        let mainIdx = newVal.linkers.findIndex(itm => itm.mainStatus == 1)
+        if (mainIdx >= 0) {
+          let mainLink = newVal.linkers[mainIdx]
+          this.form.phone = mainLink.phone
+          this.form.name = mainLink.name
+          this.form.sex = mainLink.sex
+          this.form.age = mainLink.age
+          this.form.edu = mainLink.edu
+          this.form.nativePlace = mainLink.nativePlace
+          this.form.wxNo = mainLink.wxNo
+          this.form.qqNo = mainLink.qqNo
+          this.form.wbName = mainLink.wbName
+          this.form.otherLinkWay = mainLink.otherLinkWay
+          this.form.linkId = mainLink.id
+        }
         if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
         if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
         if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
