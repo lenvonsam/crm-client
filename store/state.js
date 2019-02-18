@@ -513,6 +513,9 @@ export default {
     }, {
       title: '商机管理',
       url: '/customManager/busiOppty'
+    }, {
+      title: '客户合并',
+      url: '/customManager/customerCombine'
     }]
   }, {
     title: '行政人资',
