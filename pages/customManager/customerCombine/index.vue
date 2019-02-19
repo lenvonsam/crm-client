@@ -7,21 +7,24 @@
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .mt-5
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", ref="table", :loading="loading", @tableRowMerge="rowMerge")
-    el-dialog(title="客户合并", :visible.sync="dialogShow")
+    el-dialog(title="客户合并", :visible.sync="dialogShow", width="500px")
       .ft-16 将客户：
       el-row.mt-10(:gutter="10")
+        //- el-input(v-model="custmOld.compName", value="custmOld.compName", size="small", :disabled="true")
         el-col(:span="8")
-          el-input(v-model="custmOld.id", value="custmOld.id", size="small", :disabled="true")
+          el-input(v-model="custmOld.erpCode", value="custmOld.erpCode", size="small", :disabled="true")
         el-col(:span="16")
-          el-input(v-model="custmOld.compName", value="custmOld.compName", size="small", :disabled="true")      
+          el-input(v-model="custmOld.compName", value="custmOld.compName", size="small", :disabled="true")
       .ft-16.mt-15 合并到：
       el-row.mt-10(:gutter="10")
+        //- el-select.full-width(v-model="custmNew.compName",  size="small",  value-key, filterable, remote, placeholder="请输入客户名称", :remote-method="customSearch", clearable, @change="custmChange")
+          el-option(v-for="item in custmVal", :key="item.id", :label="item.compName", :value="item.id")
         el-col(:span="8")
-          el-input(v-model="custmNew.id", value="custmNew.id", size="small", :disabled="true")
+          el-input(v-model="custmNew.erpCode", value="custmNew.erpCode", size="small", :disabled="true")
         el-col(:span="16")
           el-select.full-width(v-model="custmNew.compName",  size="small",  value-key, filterable, remote, placeholder="请输入客户名称", :remote-method="customSearch", clearable, @change="custmChange")
             el-option(v-for="item in custmVal", :key="item.id", :label="item.compName", :value="item.id")
-      .row.mt-15.text-center
+      .row.mt-15(style="display: flex; justify-content: center;")
         el-button(size="small", @click="dialogShow = false") 取消
         el-button(type="primary", size="small", @click="mergeSave") 确定
 </template>
@@ -42,8 +45,8 @@
     },
     data () {
       return {
-        custmOld: {id: '', compName: ''},
-        custmNew: {id: '', compName: ''},
+        custmOld: {id: '', compName: '', erpCode: ''},
+        custmNew: {id: '', compName: '', erpCode: ''},
         custmVal: [],
         breadItems: ['客户管理', '客户合并'],
         searchFormItems: [
@@ -143,11 +146,14 @@
         this.loadData()
       },
       custmChange (val) {
-        this.custmNew.id = val
+        let items = this.custmVal.filter(item => item.id == val)
+        this.custmNew.id = items[0].id
+        this.custmNew.erpCode = items[0].erpCode
       },
       rowMerge (obj) {        
         this.dialogShow = true
-        this.custmNew = {id: '', compName: ''}
+        this.custmNew = {id: '', compName: '', erpCode: ''}
+        this.custmOld.erpCode = obj.erpCode
         this.custmOld.id = obj.id
         this.custmOld.compName = obj.compName
       },
