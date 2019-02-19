@@ -198,7 +198,7 @@
         }
       },
       mergeSave () {
-        if (!this.custmNew.id) {
+        if (!this.custmNew.compName) {
           this.msgShow(this, '请输入客户名称')
           return
         }
