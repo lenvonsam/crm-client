@@ -3,7 +3,7 @@ export default {
   // http://wechat.xingyun361.com/
   // 192.168.20.149:8080
   // fileUploadUrl: 'http://wechat.xingyun361.com/quasarserver/file/uedit/upload',
-  qiniuOutlink: 'http://pav6lmvyn.bkt.clouddn.com/',
+  qiniuOutlink: 'http://crm-cdn.xingyun361.com/',
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   uploadFileUrl: '/proxy/uploadFile',
@@ -11,7 +11,7 @@ export default {
   globalErrorMsg: '',
   currentPathIdx: '1-1',
   // 客户查询返回数据字段
-  cstmArr: ['id', 'compName', 'linkName', 'linkPhone', 'createAt', 'billDate', 'dptName', 'acctName', 'creatorName', 'mark', 'orgId', 'dptId', 'acctId', 'empCode', 'visitCount', 'lockStatus', 'updateAt', 'convertDate'],
+  cstmArr: ['id', 'compName', 'linkName', 'linkPhone', 'createAt', 'billDate', 'dptName', 'acctName', 'creatorName', 'mark', 'orgId', 'dptId', 'acctId', 'empCode', 'visitCount', 'lockStatus', 'updateAt', 'convertDate', 'status', 'erpCode', 'xyCode'],
   // 默认头像
   defaultAvatar: require('../static/defaultAvatar.png'),
   // 数据权限等级
@@ -513,6 +513,9 @@ export default {
     }, {
       title: '商机管理',
       url: '/customManager/busiOppty'
+    }, {
+      title: '客户合并',
+      url: '/customManager/customerCombine'
     }]
   }, {
     title: '行政人资',
