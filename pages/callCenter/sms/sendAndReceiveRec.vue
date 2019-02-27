@@ -46,13 +46,16 @@ export default {
           prop: 'id'
         },{
           lbl: '操作人',
-          prop: 'acctName'
+          prop: 'acctName',
+          width: 120
         },{
           lbl: '提交时间',
-          prop: 'createAt'
+          prop: 'createAt',
+          width: 160
         },{
           lbl: '定时时间',
-          prop: 'delayTime'
+          prop: 'delayTime',
+          width: 160
         },{
           lbl: '发送内容',
           prop: 'content'
