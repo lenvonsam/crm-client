@@ -80,12 +80,17 @@ export default {
       this.onlinePie = newVal.map(s => Number(s.online))
       this.offlinePie = newVal.map(s => Number(s.offline))
       const labels = newVal.map(s => s.type)
-      // const bgColors = newVal.map(s => this.getRandomColor())
+      // const bgColors = newVal.map(s => this.getRandomColor())      
       this.pieVal.pieData.labels = labels
-      // this.pieVal.pieData.datasets[0].backgroundColor = bgColors
-      this.pieVal.pieData.datasets[0].backgroundColor = ['#4796fb', '#bd34f4', '#fd3118', '#fde811', '#36dc7a']
-      console.log(labels)
-      // console.log(bgColors)
+      let r = 360 / newVal.length
+      let bgColors = []
+      for (let i=0; i<newVal.length; i++) {
+        let s = (i + 2) * r / 1000
+        bgColors.push('#'+(s*0xffffff<<0).toString(16))
+      }
+      console.log(bgColors)
+      this.pieVal.pieData.datasets[0].backgroundColor = bgColors
+      // this.pieVal.pieData.datasets[0].backgroundColor = ['#4796fb', '#bd34f4', '#fd3118', '#fde811', '#36dc7a', '#2828FF', '#0072E3', '#00CACA', '#02DF82', '#00DB00', '#467500']      
       this.changePieData()
     },
     pieTab (newVal) {

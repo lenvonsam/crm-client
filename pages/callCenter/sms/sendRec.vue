@@ -90,9 +90,9 @@
         this.detailKey = ['compName','linkName','linkPhone','parentId','status','msgId','createAt','updateAt','mainStatus']
       } else if (this.mark == '1') {
         this.tableValue.tableHead = [{lbl: '短信ID', prop: 'msgId'},
-        {lbl: '姓名', prop: 'linkName', width: 150},
-        {lbl: '联系方式', prop: 'linkPhone', width: 120},
-        {lbl: '状态', width: 100, prop: 'status', type:'object', factValue(val){return (val == 0) ? '发送成功' : (val == 1) ? '发送中' : (val == 2) ? '发送失败' : (val == 3) ? '定时发送' : '已取消'}}]
+        {lbl: '姓名', prop: 'linkName'},
+        {lbl: '联系方式', prop: 'linkPhone'},
+        {lbl: '状态', prop: 'status', type:'object', factValue(val){return (val == 0) ? '发送成功' : (val == 1) ? '发送中' : (val == 2) ? '发送失败' : (val == 3) ? '定时发送' : '已取消'}}]
         this.detailKey = ['linkName','linkPhone','parentId','status','msgId','createAt','updateAt']
       }
       this.queryObject = {

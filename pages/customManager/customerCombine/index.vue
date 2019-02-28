@@ -1,8 +1,8 @@
 <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    //- .pt-15
-    //-   button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
+    .pt-15
+      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .mt-5
@@ -45,6 +45,7 @@
     },
     data () {
       return {
+        btnGroups: [{lbl: '合并记录', type: 'combine'}],
         custmOld: {id: '', compName: '', erpCode: ''},
         custmNew: {id: '', compName: '', erpCode: ''},
         custmVal: [],
@@ -124,6 +125,9 @@
       })
     },
     methods: {
+      groupBtnClick (type) {
+        this.$router.push({path: '/customManager/customerCombine/combineRec'})
+      },
       searchForm (paramsObj) {
         this.loading = true
         this.currentPage = 1
@@ -211,6 +215,7 @@
       },
       async createCombine (params) {
         try {
+          params['uid'] = this.currentUser.id
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/combine', params: params})
             if (data.returnCode === 0) {
               this.msgShow(this, '合并成功', 'success')
