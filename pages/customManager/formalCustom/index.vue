@@ -125,6 +125,12 @@
       })
     },
     beforeMount () {
+      // if (this.currentUser.fkDpt.name.indexOf('采购') > -1) {
+      //   this.btnGroups.push({lbl: '新增客户', dataType: 'addCustm', type: 'add'})
+      // }
+      if (this.currentUser.fkRole.name == '采购') {
+        this.btnGroups.push({lbl: '新增客户', dataType: 'addCustm', type: 'add'})
+      }
       let idx = this.btnGroups.findIndex(itm => itm.lbl === '批量导入')
       if (this.currentUser.id === 1 && idx < 0) {
         this.btnGroups.push({lbl: '批量导入', dataType: 'custm', type: 'excel'})
@@ -172,6 +178,8 @@
       groupBtnClick (type) {
         if(type == 'outflow'){
           this.$router.push({path: '/customManager/formalCustom/outflowRec'})
+        } else if (type == 'add') {
+          this.$router.push({path: '/customManager/formalCustom/form?type=formalAdd'})
         }
       },
       selectData (val) {
