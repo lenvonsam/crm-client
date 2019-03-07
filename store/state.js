@@ -442,6 +442,17 @@ export default {
     value: '2',
     label: '未上型云'
   }],
+  // 工作组
+  workGroupList: [{
+    value: '1',
+    label: '板材组'
+  }, {
+    value: '2',
+    label: '国标组'
+  }, {
+    value: '3',
+    label: '协标组'
+  }],
   currentMenus: [],
   allMenus: [{
     title: '首页',
