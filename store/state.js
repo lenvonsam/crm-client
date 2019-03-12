@@ -7,6 +7,7 @@ export default {
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   uploadFileUrl: '/proxy/uploadFile',
+  searchParams: {},
   globalSuccessMsg: '',
   globalErrorMsg: '',
   currentPathIdx: '1-1',

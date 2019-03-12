@@ -33,7 +33,8 @@
     },
     methods: {
       ...mapActions([
-        'exitUser'
+        'exitUser',
+        'clearSearchParams'
       ]),
       exitAction () {
         this.confirmDialog(this, '请确定要退出吗?').then(() => {
@@ -47,6 +48,7 @@
           let { data } = await this.apiStreamPost('/proxy/logout', {})
           if (data.returnCode === 0) {
             this.exitUser()
+            this.clearSearchParams()
             this.jump({path: '/login'})
           }
         } catch (e) {
