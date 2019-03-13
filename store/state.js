@@ -528,6 +528,9 @@ export default {
     }, {
       title: '客户合并',
       url: '/customManager/customerCombine'
+    }, {
+      title: '采购供应商',
+      url: '/customManager/supplier'
     }]
   }, {
     title: '行政人资',
