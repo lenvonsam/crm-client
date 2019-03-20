@@ -53,7 +53,7 @@
             })
           })
         }        
-      } else {
+      } else if (this.$route.path.indexOf(this.searchParams['url']) == -1){
         this.clearSearchParams()
       }
       this.copyItems = Object.assign([], this.searchFormItems)
