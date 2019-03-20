@@ -1,7 +1,8 @@
 <template lang="pug">
 .crm.main
-  .crm-topbar.pl-15
-    .item.brand.pl-5.row(@click="jump({path: '/dashboard'})")
+  //- .crm-topbar.pl-15
+  .crm-topbar
+    .item.brand.pl-10.row(@click="jump({path: '/dashboard'})")
       div
         img.logo-img(src="../static/logo2.png")
       span.pl-10.ft-16 CRM管理系统
@@ -32,7 +33,8 @@
     },
     methods: {
       ...mapActions([
-        'exitUser'
+        'exitUser',
+        'clearSearchParams'
       ]),
       exitAction () {
         this.confirmDialog(this, '请确定要退出吗?').then(() => {
@@ -46,6 +48,7 @@
           let { data } = await this.apiStreamPost('/proxy/logout', {})
           if (data.returnCode === 0) {
             this.exitUser()
+            this.clearSearchParams()
             this.jump({path: '/login'})
           }
         } catch (e) {

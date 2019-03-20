@@ -29,6 +29,7 @@
       el-button(size="small", @click="search('reset')") 重置
 </template>
 <script>
+  import { mapState, mapActions } from 'vuex'
   export default {
     data () {
       return {
@@ -36,7 +37,25 @@
         selectIdxArr: []
       }
     },
+    computed: {
+      ...mapState({
+        searchParams: state => state.searchParams
+      })
+    },
     beforeMount () {
+      if (this.searchParams['url'] == this.$route.path) {
+        for (let key in  this.searchParams.params) {
+          this.searchFormItems.map((item) => {
+            item.map((obj) => {
+              if (obj.model == key) {
+                obj.val = this.searchParams.params[key]
+              }
+            })
+          })
+        }        
+      } else {
+        this.clearSearchParams()
+      }
       this.copyItems = Object.assign([], this.searchFormItems)
       if (this.copyItems.length>1){
         let i = 3 - this.copyItems[this.copyItems.length - 1 ].length
@@ -50,8 +69,12 @@
         type: Array,
         required: true
       }
-    },
+    },    
     methods: {
+      ...mapActions([
+        'setSearchParams',
+        'clearSearchParams'
+      ]),
       search (type) {
         let itemLength = this.copyItems.length
           let searchParm = {}
@@ -87,7 +110,9 @@
               }
             }
           }
-        if(type == 'submit'){
+        if(type == 'submit'){          
+          let searchParamsObj = {url: this.$route.path, params: searchParm}
+          this.setSearchParams(searchParamsObj)
           this.$emit('search', searchParm)
         }
       },
