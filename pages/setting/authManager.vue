@@ -7,7 +7,7 @@
         template(v-if="tabModel == 'roleList'")
           button-group(:btns="roleBtnGroups", @groupBtnClick="btnsClick")
           .pt-20
-            search-form(:searchFormItems="roleSearchItems", @search="searchBtn")
+            search-form(:searchFormItems="roleSearchItems", @search="searchBtn", :autoChange="false")
           .pt-10
             basic-table(:tableValue="roleTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowEdit="rowEdit", @tableRowDelete="rowDelete", @chooseData="selectData", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'roleFormNew' || tabModel == 'roleFormUpdate'")
@@ -46,7 +46,7 @@
                   cbx-group(:cbxs="rowCbxLbl", @change="cbxChange", :rIdx="scope.$index", :chooseGroup="scope.row.authConfig")
       el-tab-pane(label="权限分配", name="auth")
         template(v-if="tabModel == 'authList'")
-          search-form(:searchFormItems="acctSearchItems", @search="searchBtn")
+          search-form(:searchFormItems="acctSearchItems", @search="searchBtn", :autoChange="false")
           .pt-20
             basic-table(:tableValue="authTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @pageChange="tablePgChange", @tableRowAuthManage="rowEdit")
         template(v-else)
@@ -248,6 +248,12 @@
       back2list (tabModel) {
         this.stepIdx = 1
         this.tabModel = tabModel
+        this.currentPage = 1
+        this.queryObject = {
+          currentPage:this.currentPage - 1,
+          pageSize: this.pageSize
+        }
+        this.loadData()
       },
       async roleCreate () {
         try {

@@ -43,7 +43,7 @@
       })
     },
     beforeMount () {
-      if (this.searchParams['url'] == this.$route.path) {
+      if (this.searchParams['url'] == this.$route.path && this.autoChange) {
         for (let key in  this.searchParams.params) {
           this.searchFormItems.map((item) => {
             item.map((obj) => {
@@ -68,6 +68,10 @@
       searchFormItems: {
         type: Array,
         required: true
+      },
+      autoChange: {
+        type: Boolean,
+        default: true
       }
     },    
     methods: {
