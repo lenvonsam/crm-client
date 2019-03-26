@@ -7,13 +7,13 @@ const app = express()
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'https://showcase.thinkingsam.cn/syun-backend/api/'
 // const proxyUrl = 'http://deploy.thinkingsam.cn/syun-backend-dev/'
-// const proxyUrl = 'http://172.16.120.245:7786/'
+// const proxyUrl = 'http://172.16.120.250:7786/'
+// const proxyUrl = 'http://localhost:7786/' 
 // const proxyUrl = 'http://172.16.16.193:7786/'
 // const proxyUrl = 'http://localhost:7786/'
 // const proxyUrl = 'http://172.16.120.225:7786/'
+// const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
 const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
-//const proxyUrl = 'http://192.168.20.200:8080/crmserver/'
-
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
@@ -95,7 +95,35 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
     res.send(body)
   })
 })
-
+router.post('/uploadFile', multipartMiddleware, (req, res) => {
+  console.log(req)
+  console.log(res)
+  var currentProfile = ''
+  if (req.body.currentProfile) {
+    currentProfile = req.body.currentProfile
+  } else {
+    currentProfile = url_parts.query.currentProfile
+  }
+  const formData = {
+    currentProfile: currentProfile,
+    upfile: fs.createReadStream(req.files.upfile.path)
+  }
+  rqt.post({url: 'http://192.168.20.170:8080/crmserver/file/uploadFile', formData: formData, headers: {'zhdcrm-proxy-token': hptl.proxyToken('zhdcrm')}}, function (err, resp, body) {
+    fs.unlink(req.files.upfile.path, function(err) {
+      if (err)
+        console.error(err)
+      else
+        console.log('temp file delete success')
+    })
+    res.send(body)
+  })
+})
+function getClientIP (req) {
+  return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
+    req.connection.remoteAddress || // 判断 connection 的远程 IP
+    req.socket.remoteAddress || // 判断后端的 socket 的 IP
+    req.connection.socket.remoteAddress;
+}
 router.post('/common/post', (req, res) => {
   const body = req.body
   console.log(body)
@@ -105,6 +133,7 @@ router.post('/common/post', (req, res) => {
       let originUser = req.session.currentUser
       if (body.url === 'login') {
         currentUser.loginTime = new Date().getTime()
+        currentUser.ipAddress = getClientIP(req)
       } else {
         if (currentUser.id === originUser.id) currentUser.loginTime = originUser.loginTime
       }
@@ -123,7 +152,7 @@ router.post('/common/get', (req, res) => {
     res.json(data)
   }, err => {
     console.log(err)
-    resj.json({returnCode: -1, errMsg: '网络异常'})
+    res.json({returnCode: -1, errMsg: '网络异常'})
   })
 })
 

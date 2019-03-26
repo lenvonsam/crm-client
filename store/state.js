@@ -566,7 +566,10 @@ export default {
     }, {
       title: '消息管理',
       url: '/setting/mqMsg'
-    }]
+    }, {
+        title: '登录记录',
+        url: '/setting/loginMsg'
+      }]
   }, {
     title: '基础数据',
     iconClass: 'iconfont icon-basic-data',
