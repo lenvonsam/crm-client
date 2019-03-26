@@ -99,9 +99,9 @@ export default {
       this.queryObj.currentPage = this.currentPage - 1
       Object.keys(paramsObj).map(key => {
         if(key == 'loginTime'){
-          if (paramsObj.createAt !== null) {
-            this.queryObj.startTime = paramsObj.createAt[0]
-            this.queryObj.endTime = paramsObj.createAt[1]
+          if (paramsObj.loginTime !== null) {
+            this.queryObj.startTime = paramsObj.loginTime[0]
+            this.queryObj.endTime = paramsObj.loginTime[1]
           } else {
             delete this.queryObj.startTime
             delete this.queryObj.endTime
