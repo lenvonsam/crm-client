@@ -7,6 +7,7 @@ export default {
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
   uploadFileUrl: '/proxy/uploadFile',
+  searchParams: {},
   globalSuccessMsg: '',
   globalErrorMsg: '',
   currentPathIdx: '1-1',
@@ -442,6 +443,17 @@ export default {
     value: '2',
     label: '未上型云'
   }],
+  // 工作组
+  workGroupList: [{
+    value: '1',
+    label: '板材组'
+  }, {
+    value: '2',
+    label: '国标组'
+  }, {
+    value: '3',
+    label: '协标组'
+  }],
   currentMenus: [],
   allMenus: [{
     title: '首页',
@@ -516,6 +528,9 @@ export default {
     }, {
       title: '客户合并',
       url: '/customManager/customerCombine'
+    }, {
+      title: '采购供应商',
+      url: '/customManager/supplier'
     }]
   }, {
     title: '行政人资',
@@ -551,7 +566,10 @@ export default {
     }, {
       title: '消息管理',
       url: '/setting/mqMsg'
-    }]
+    }, {
+        title: '登录记录',
+        url: '/setting/loginMsg'
+      }]
   }, {
     title: '基础数据',
     iconClass: 'iconfont icon-basic-data',

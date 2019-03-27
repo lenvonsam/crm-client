@@ -91,6 +91,12 @@
         let now = this.date2Str(new Date())
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'login', params: {code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now+this.code)}})
         if (data.returnCode === 0) {
+          let params = {
+            loginAcct: this.loginModel.acct.trim(),
+            ip: data.currentUser.ipAddress,
+            deviceType: navigator.userAgent.toLowerCase()
+          }
+          this.createLoginMsg(params)
           this.setUser(data.currentUser)
           this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
           let pageUrl = '/'
@@ -109,6 +115,18 @@
           this.msgShow(this, data.errMsg)
           this.refreshCode()
         }
+      },
+      async createLoginMsg (params) {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/loginMsg/create', params: params})
+          if (data.returnCode === 0) {
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        } 
       },
       async visitDialogData (uid) {
         try {

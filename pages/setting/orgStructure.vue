@@ -7,22 +7,22 @@
         template(v-if="tabModel == 'orgList'")
           button-group(:btns="orgBtnGroups", @groupBtnClick="btnsClick")
           .pt-20
-            search-form(:searchFormItems="orgSearchItems", @search="searchBtn")
+            search-form(:searchFormItems="orgSearchItems", @search="searchBtn", :autoChange="false")
           .pt-20
             basic-table(:tableValue="orgTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowQuery="orgRowQuery", @tableRowEdit="orgRowEdit", @tableRowDelete="rowDel", @chooseData="selectData", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'orgFormDetail'")
-          el-button(@click="tabModel = 'orgList'", size="small") 返回列表
+          el-button(@click="back2list('orgList')", size="small") 返回列表
           .pt-15
             detail-table(:tableForm="orgDetailItems", :tableValue="orgItems")
       el-tab-pane(label="部门设置", name="dpt")
         template(v-if="tabModel == 'dptList'")
           button-group(:btns="dptBtnGroups", @groupBtnClick="btnsClick", @fileUploadSuccess="excelUploadSuccess")
           .pt-20
-            search-form(:searchFormItems="dptSearchItems", @search="searchBtn")
+            search-form(:searchFormItems="dptSearchItems", @search="searchBtn", :autoChange="false")
           .pt-20
             basic-table(:tableValue="dptTableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @tableRowDelete="rowDel", @tableRowEdit="dptRowEdit", @tableRowQuery="dptRowQuery", @pageChange="tablePgChange")
         template(v-else-if="tabModel == 'dptFormDetail'")
-          el-button(@click="tabModel = 'dptList'", size="small") 返回列表
+          el-button(@click="back2list('dptList')", size="small") 返回列表
           .pt-15
             detail-table(:tableForm="dptDetailItems", :tableValue="dptItems")
   el-dialog(:title="dialogTitle", :visible.sync="dialogShow", width="35%")
@@ -269,7 +269,10 @@
       activeName (newVal, oldVal) {
         console.log(newVal)
         this.currentPage = 1
-        this.queryObj.currentPage = this.currentPage - 1
+        this.queryObj = {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize
+        }
         if (newVal === 'org') {
           this.breadItems = ['系统设置', '组织架构', '机构设置']
           this.tabModel = 'orgList'
@@ -296,6 +299,15 @@
       })
     },
     methods: {
+      back2list (tabModel) {
+        this.tabModel = tabModel
+        this.currentPage = 1
+        this.queryObj = {
+          currentPage:this.currentPage - 1,
+          pageSize: this.pageSize
+        }
+        this.loadData()
+      },
       btnsClick (type) {
         if (type === 'add') {
           this.dialogTitle = this.activeName === 'org' ? '机构新增' : '部门新增'
