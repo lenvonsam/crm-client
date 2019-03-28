@@ -152,7 +152,7 @@
         breadItems: ['客户管理', '联系人管理'],
         btnGroups: [{lbl: '新增联系人信息', type: 'add'}, {lbl: '删除记录', type: 'delRec'}],
         searchFormItems: [
-          [{label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
+          [{label: '所属客户', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: ''},
             {label: '联系人姓名', model: 'name', type: 'text', placeholder: '请输入联系人姓名', val: ''},
             {label: '联系方式', model: 'phone', type: 'text', placeholder: '请输入联系方式', val: ''}],
           [{label: '添加日期', model: 'createAt', type: 'timeLimit', placeholder: '请选择添加日期', val: ''},
