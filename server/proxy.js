@@ -96,6 +96,13 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
   })
 })
 
+function getClientIP (req) {
+  return req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
+    req.connection.remoteAddress || // 判断 connection 的远程 IP
+    req.socket.remoteAddress || // 判断后端的 socket 的 IP
+    req.connection.socket.remoteAddress;
+}
+
 router.post('/common/post', (req, res) => {
   const body = req.body
   console.log(body)
@@ -105,6 +112,7 @@ router.post('/common/post', (req, res) => {
       let originUser = req.session.currentUser
       if (body.url === 'login') {
         currentUser.loginTime = new Date().getTime()
+        currentUser.ipAddress = getClientIP(req)
       } else {
         if (currentUser.id === originUser.id) currentUser.loginTime = originUser.loginTime
       }

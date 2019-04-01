@@ -3,7 +3,11 @@ const Qs = require('qs')
 const sha1 = require('sha1')
 module.exports = {
   proxyToken (key) {
-    const date = new Date()
+    let date = new Date()
+    if (date.getTimezoneOffset() != -480) {
+      console.log('currentTimezone:>>>', date.getTimezoneOffset())
+      date = new Date(date.getTime() + 480 * 60 * 1000)
+    }
     const dateStr = date.getFullYear() + '-' + ((date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : '0' + (date.getMonth() + 1)) + '-' + (date.getDate() > 9 ? date.getDate() : '0' + date.getDate())
     return sha1(dateStr + key)
   },

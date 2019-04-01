@@ -30,9 +30,18 @@ export default {
       }
     }
   },
-  mounted() {
-    this.pageShow(this)
-    this.queryAcct()
+  mounted() {   
+    let me = this
+    this.$nextTick(function () {
+      if(me.$route.query.type === 'edit') {
+        this.pageShow(this)
+        me.breadItems = Object.assign([], ['客户管理', '正式客户', '修改正式客户'])
+        me.queryAcct()
+        me.$forceUpdate()
+      } else {
+        me.breadItems = Object.assign([], ['客户管理', '正式客户', '增加正式客户'])
+      }
+    })   
   }
 }
 </script>
