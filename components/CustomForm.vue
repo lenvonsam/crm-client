@@ -785,17 +785,32 @@ export default {
       this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
       if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
       if (firstTime) {
-        this.form.phone = newVal.linkers[0].phone
-        this.form.name = newVal.linkers[0].name
-        this.form.sex = newVal.linkers[0].sex
-        this.form.age = newVal.linkers[0].age
-        this.form.edu = newVal.linkers[0].edu
-        this.form.nativePlace = newVal.linkers[0].nativePlace
-        this.form.wxNo = newVal.linkers[0].wxNo
-        this.form.qqNo = newVal.linkers[0].qqNo
-        this.form.wbName = newVal.linkers[0].wbName
-        this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
-        this.form.linkId = newVal.linkers[0].id
+        newVal.linkers.map((item) => {
+          if (item.mainStatus == 1) {
+            this.form.phone = item.phone
+            this.form.name = item.name
+            this.form.sex = item.sex
+            this.form.age = item.age
+            this.form.edu = item.edu
+            this.form.nativePlace = item.nativePlace
+            this.form.wxNo = item.wxNo
+            this.form.qqNo = item.qqNo
+            this.form.wbName = item.wbName
+            this.form.otherLinkWay = item.otherLinkWay
+            this.form.linkId = item.id
+          }
+        })
+        // this.form.phone = newVal.linkers[0].phone
+        // this.form.name = newVal.linkers[0].name
+        // this.form.sex = newVal.linkers[0].sex
+        // this.form.age = newVal.linkers[0].age
+        // this.form.edu = newVal.linkers[0].edu
+        // this.form.nativePlace = newVal.linkers[0].nativePlace
+        // this.form.wxNo = newVal.linkers[0].wxNo
+        // this.form.qqNo = newVal.linkers[0].qqNo
+        // this.form.wbName = newVal.linkers[0].wbName
+        // this.form.otherLinkWay = newVal.linkers[0].otherLinkWay
+        // this.form.linkId = newVal.linkers[0].id
         if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
         if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
         if (newVal.hopeAddGoods) this.form.fkHopeAddGoods = newVal.hopeAddGoods.map(item => item.name)
