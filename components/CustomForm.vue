@@ -479,7 +479,6 @@ export default {
         let that = this
         formalArr.map(itm => {
           if (that.form[itm] !== '' && that.form[itm] !== null) {
-            console.log(itm + ':' + that.form[itm])
             valiArr.push(itm)
           }
         })
@@ -492,7 +491,8 @@ export default {
           })
         })
         if (isValid) {
-          if (this.form.fkRelation.length === 1 && this.form.fkRelation[0] == 2 && !this.form.workgroupName) {
+          let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
+          if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
             this.msgShow(this, '请选择工作组')
             return
           }          
@@ -507,11 +507,7 @@ export default {
     },
     async customDetailCreate () {
       try {
-        // this.form.compAddrArr.push(this.form.compAddrDetail)
-        // this.form.billAddr.push(this.form.billAddrDetail)
         this.cloneObj = Object.assign({}, this.form)
-        // console.log(this.cloneObj)
-        // console.log(this.form.compAddr)
         if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
           this.form.compCity = this.form.compAddrArr[1]
@@ -589,7 +585,6 @@ export default {
         }
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
         if (data.returnCode === 0) {
-          console.log(data)
           this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
           this.back()
         } else {
