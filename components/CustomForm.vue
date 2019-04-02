@@ -74,7 +74,7 @@ div
               el-input(v-model="form.compAddr", placeholder="请输入公司详细地址", clearable)
       el-col(:span="12")
         el-form-item(label="工作组：")
-          el-select.full-width(v-model="form.workgroupName", placeholder="请选择工作组", clearable)
+          el-select.full-width(v-model="form.workgroupName", placeholder="请选择工作组", clearable, @change="$forceUpdate()")
             el-option(v-for="item in workGroupList", :key="item.label", :label="item.label", :value="item.label")
     div(v-if="$route.query.type !== 'formalAdd'")
       el-row.pr-10
@@ -83,12 +83,12 @@ div
             el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
         el-col(:span="12")
           el-form-item.validFormal(label="公司规模：")
-            el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模")
+            el-select.full-width(v-model="form.compSize", placeholder="请选择公司规模", @change="$forceUpdate()")
               el-option(v-for="item in compSizeOpts", :key="item.value", :label="item.label", :value="item.value")        
       el-row.pr-10
         el-col(:span="12")
           el-form-item.validFormal(label="公司类型：")
-            el-select.full-width(v-model="form.compType", placeholder="请选择公司类型")
+            el-select.full-width(v-model="form.compType", placeholder="请选择公司类型", @change="$forceUpdate()")
               el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="12")
           el-form-item.validFormal(label="税号：", prop="tfn")
@@ -122,7 +122,7 @@ div
       el-row.pr-10
         el-col(:span="12")
           el-form-item(label="客户渠道：")
-            el-select.full-width(v-model="form.customerChannel", placeholder="请选择客户渠道")
+            el-select.full-width(v-model="form.customerChannel", placeholder="请选择客户渠道", @change="$forceUpdate()")
               el-option(v-for="item in customerChannelOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="12")
           el-form-item(label="ERP编号：")
@@ -176,14 +176,14 @@ div
       el-row.pr-10
         el-col(:span="6")
           el-form-item(label="性别：")
-            el-select.full-width(v-model="form.sex", placeholder="请选择性别")
+            el-select.full-width(v-model="form.sex", placeholder="请选择性别", @change="$forceUpdate()")
               el-option(v-for="item in sexOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="6")
           el-form-item(label="年龄：")
             el-input-number.full-width(v-model="form.age", placeholder="请输入年龄", clearable, :controls="false")
         el-col(:span="6")
           el-form-item(label="学历：")
-            el-select.full-width(v-model="form.edu", placeholder="请选择学历")
+            el-select.full-width(v-model="form.edu", placeholder="请选择学历", @change="$forceUpdate()")
               el-option(v-for="item in eduOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="6")
           el-form-item(label="籍贯：")
@@ -215,7 +215,7 @@ div
       el-row.pr-10
         el-col(:span="6")
           el-form-item(label="采购周期：")
-            el-select.full-width(v-model="form.purchaseCycle", placeholder="请选择采购周期")
+            el-select.full-width(v-model="form.purchaseCycle", placeholder="请选择采购周期", @change="$forceUpdate()")
               el-option(v-for="item in purchaseCycleOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="5")
           .row
@@ -225,11 +225,11 @@ div
             .col.flex-10.mb-25.ml-5 吨
         el-col(:span="6")
           el-form-item(label="高卖情况：")
-            el-select.full-width(v-model="form.sellHighStatus", placeholder="请选择高卖情况")
+            el-select.full-width(v-model="form.sellHighStatus", placeholder="请选择高卖情况", @change="$forceUpdate()")
               el-option(v-for="item in isSellHighOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="6")
           el-form-item(label="信用情况：")
-            el-select.full-width(v-model="form.creditStatus", placeholder="请选择信用情况")
+            el-select.full-width(v-model="form.creditStatus", placeholder="请选择信用情况", @change="$forceUpdate()")
               el-option(v-for="item in creditStatusOpts", :key="item.value", :label="item.label", :value="item.value")
       el-row.pr-10
         el-col(:span="11")
@@ -247,49 +247,49 @@ div
       el-row.pr-10
         el-col(:span="12")
           el-form-item(label="采购物资品类：")
-            el-select.full-width(v-model="form.fkPurchaseGoods", multiple, filterable, default-first-option, placeholder="请选择采购周期")
+            el-select.full-width(v-model="form.fkPurchaseGoods", multiple, filterable, default-first-option, placeholder="请选择采购周期", @change="$forceUpdate()")
               el-option(v-for="item in form.fkPurchaseGoodsVal", :key="item.id", :label="item.name", :value="item.name")
         el-col(:span="12")
           el-form-item(label="采购用途：")
-            el-select.full-width(v-model="form.fkPurchaseUse", multiple, filterable, default-first-option, placeholder="请输入采购用途")
+            el-select.full-width(v-model="form.fkPurchaseUse", multiple, filterable, default-first-option, placeholder="请输入采购用途", @change="$forceUpdate()")
               el-option(v-for="item in form.fkPurchaseUseVal", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10
         el-col(:span="24")
           el-form-item(label="希望我们增加提供采购的物资品类（可详细填写）:",  label-width="350px")
-            el-select.full-width(v-model="form.fkHopeAddGoods", multiple, filterable, default-first-option, placeholder="请输入采购用途")
+            el-select.full-width(v-model="form.fkHopeAddGoods", multiple, filterable, default-first-option, placeholder="请输入采购用途", @change="$forceUpdate()")
               el-option(v-for="item in form.fkHopeAddGoodsVal", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10
         el-col(:span="12")
           el-form-item(label="经营物资品类：")
-            el-select.full-width(v-model="form.fkDealGoods", multiple, filterable, default-first-option, placeholder="请选择经营物资品类")
+            el-select.full-width(v-model="form.fkDealGoods", multiple, filterable, default-first-option, placeholder="请选择经营物资品类", @change="$forceUpdate()")
               el-option(v-for="item in form.fkDealGoodsVal", :key="item.id", :label="item.name", :value="item.name")
         el-col(:span="12")
           el-form-item(label="经营用途：")
-            el-select.full-width(v-model="form.fkDealPurposeUse", multiple, filterable, default-first-option, placeholder="请选择经营用途")
+            el-select.full-width(v-model="form.fkDealPurposeUse", multiple, filterable, default-first-option, placeholder="请选择经营用途", @change="$forceUpdate()")
               el-option(v-for="item in form.fkDealPurposeUseVal", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10
         el-col(:span="8")
           el-form-item(label="订金需求：")
-            el-select.full-width(v-model="form.depositRequirement", placeholder="请选择订金需求")
-              el-option(v-for="item in depositRequirementOpts", :key="item.value", :label="item.label", :value="item.value")
+            el-select.full-width(v-model="form.depositRequirement", placeholder="请选择订金需求", @change="$forceUpdate()")
+              el-option(v-for="item in depositRequirementOpts", :key="item.value", :label="item.label", :value="item.value", @change="$forceUpdate()")
         el-col(:span="8")
           .row
             .col
               el-form-item(label="订金金额：")
-                el-select.full-width(v-model="form.depositRate", filterable, allow-create, default-first-option, placeholder="请选择订金金额")
+                el-select.full-width(v-model="form.depositRate", filterable, allow-create, default-first-option, placeholder="请选择订金金额", @change="$forceUpdate()")
                   el-option(v-for="item in depositRateOpts", :key="item.value", :label="item.label", :value="item.value")
             .col.flex-10.mb-25.ml-5 %
         el-col(:span="8")
           .row
             .col
               el-form-item(label="订金周期：")
-                el-select.full-width(v-model="form.depositCycle", filterable, allow-create, default-first-option, placeholder="请选择订金金额")
+                el-select.full-width(v-model="form.depositCycle", filterable, allow-create, default-first-option, placeholder="请选择订金金额", @change="$forceUpdate()")
                   el-option(v-for="item in depositCycleOpts", :key="item.value", :label="item.label", :value="item.value")
             .col.flex-10.mb-25.ml-5 天
       el-row.pr-10
         el-col(:span="24")
           el-form-item(label="加工需求：")
-            el-select.full-width(v-model="form.fkProcessingRequirements", multiple, filterable, default-first-option, placeholder="请选择加工需求")
+            el-select.full-width(v-model="form.fkProcessingRequirements", multiple, filterable, default-first-option, placeholder="请选择加工需求", @change="$forceUpdate()")
               el-option(v-for="item in form.fkProcessingRequirementsVal", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10
         el-col(:span="24")
@@ -492,7 +492,7 @@ export default {
           })
         })
         if (isValid) {
-          if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName) {            
+          if (this.form.fkRelation.length === 1 && this.form.fkRelation[0] == 2 && !this.form.workgroupName) {
             this.msgShow(this, '请选择工作组')
             return
           }          
