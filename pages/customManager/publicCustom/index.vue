@@ -91,7 +91,8 @@
           currentPage: this.currentPage - 1,
           pageSize: this.pageSize,
           orderType: '0',
-          mark: '3'
+          mark: '3',
+          status: '1'
         },
         chooseArray: [],
         // planDate: '',
