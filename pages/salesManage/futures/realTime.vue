@@ -136,20 +136,22 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'salesManage/sinaFutures', params: {type: this.legendData[0].code}})              
         let list = data.list
         let resData = []
+        let resTime = []
         let option = this.myChart.getOption()
         for (let i=0; i<data.total; i++) {          
           let timeArr = list[i]['datetime'].split('')
           let dateTime = timeArr[0] + timeArr[1] + ':' + timeArr[2] + timeArr[3] + ':' + timeArr[4] + timeArr[5]
-          this.newDate.push(dateTime)
+          resTime.push(dateTime)
           resData.push(list[i]['latestPrice'])
         }
+        console.log(resData)
         option.series[0].data = resData
         // K线图
         // if (list.length > 1) {
         //   let prev = option.series[1].data[option.series[1].data.length - 1]
         //   option.series[0].data.push([prev, list[1][8], list[1][4], list[1][3]]) 
         // }
-        option.xAxis[0].data = this.newDate
+        option.xAxis[0].data = resTime
         this.myChart.setOption(option)
       } catch (e) {
         console.error(e)
