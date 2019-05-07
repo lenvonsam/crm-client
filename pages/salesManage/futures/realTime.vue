@@ -52,45 +52,39 @@ export default {
         xAxis: {
           type: 'category',
           data: [],
-          axisLine: { lineStyle: { color: '#8392A5' } }
+          axisLine: { lineStyle: { color: '#7b8898' } },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              type: 'dotted',
+              color: '#5c5f63',
+              interval: 1
+            }
+          }
+          // type: 'time',
+          // min: 1557190860000,
+          // max: 1557212460000
         },
-        yAxis: {
-          scale: true,
-          axisLine: { lineStyle: { color: '#8392A5' } },
-          splitLine: { show: false }
-        },
+        yAxis: [{
+            scale: true,
+            axisLine: { lineStyle: { color: '#7b8898' } },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                type: 'dotted',
+                color: '#5c5f63'
+              }
+            }
+          }
+        ],
         grid: {
           show: false,
           top: 40,
           bottom: 40,
           x: '7%', 
-          y: '5%', 
-          // width: '80%', 
-          // height: '80%'
+          y: '5%'
         },
         dataZoom: [{
-          textStyle: {
-            color: '#8392A5'
-          },
-          handleIcon: 'M10.7',
-          handleSize: '100%',
-          dataBackground: {
-            areaStyle: {
-              color: '#8392A5'
-            },
-            lineStyle: {
-              opacity: 0.9,
-              color: '#8392A5'
-            }
-          },
-          handleStyle: {
-            color: '#fff',
-            shadowBlur: 3,
-            shadowColor: 'rgba(0, 0, 0, 0.9)',
-            shadowOffsetX: 2,
-            shadowOffsetY: 2
-          }
-        }, {
           type: 'inside'
         }],
         animation: false,
@@ -116,7 +110,7 @@ export default {
       name: me.legendData[0].name,
       type: 'line',
       data: [],
-      smooth: true,  
+      // smooth: true,  //设置平滑曲线
       showSymbol: false,     
       lineStyle: {normal: {
         width: 1
