@@ -29,7 +29,6 @@
     "element-ui": "^2.4.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "iconv-lite": "^0.4.24",
     "lodash": "^4.17.10",
     "nuxt": "^1.4.0",
     "request": "^2.87.0",
