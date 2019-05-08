@@ -91,7 +91,7 @@
           pageSize: this.pageSize,
           orderType: '0',
           status: '1',
-          mark: '2',
+          mark: '4',
           specialMark: '0'
         },
         loading: true,
@@ -128,7 +128,7 @@
         	pageSize: this.pageSize,
 	        orderType: '0',
 	        status: '1',
-        	mark: '2',
+        	mark: '4',
         	specialMark: '0'
       	}
       	this.loadData()

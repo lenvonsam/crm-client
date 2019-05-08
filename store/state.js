@@ -474,6 +474,9 @@ export default {
       }, {
         title: '产品资源',
         url: '/salesManage/resources'
+      }, {
+        title: '期货管理',
+        url: '/salesManage/futures'
       }]
   },{
     title: '客服中心',
