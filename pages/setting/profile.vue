@@ -32,7 +32,7 @@
               .col.flex-80
                 label 新密码
               .col
-                el-input.max-300(v-model="pwdForm.newPwd", type="password")
+                el-input.max-300(v-model="pwdForm.newPwd", type="password", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
                 span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
           el-form-item(prop="confirmPwd")
             .row.flex-center
