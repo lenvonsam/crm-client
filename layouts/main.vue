@@ -35,11 +35,11 @@
             .col.flex-80
               label 确认新密码
             .col
-              el-input.max-330(v-model="pwdForm.confirmPwd", type="password", placeholder="请输入新密码")
+              el-input.max-330(v-model="pwdForm.confirmPwd", type="password", maxlength="18", placeholder="请输入新密码")
         el-form-item.text-center
           el-button-group
             el-button(type="primary", size="size", @click="savePwd('pwdForm')") 保存
-            el-button(size="size", @click="$refs.pwdForm.resetFields()") 重置
+            el-button(size="size", @click="reset") 重置
 </template>
 
 <script>
@@ -131,6 +131,10 @@
             console.error('invalid')
           }
         })
+      },
+      reset () {
+        this.$refs.pwdForm.resetFields()
+        this.pwMsg = ''
       },
       async resetUserPwd () {
         const me = this
