@@ -26,20 +26,20 @@
               .col.flex-80
                 label 旧密码
               .col
-                el-input.max-300(v-model="pwdForm.oldPwd", type="password")
+                el-input.max-330(v-model="pwdForm.oldPwd", type="password", placeholder="请输入旧密码")
           el-form-item(prop="newPwd")
             .row.flex-center
               .col.flex-80
                 label 新密码
               .col
-                el-input.max-300(v-model="pwdForm.newPwd", type="password", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
+                el-input.max-330(v-model="pwdForm.newPwd", type="password", maxlength="18", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
                 span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
           el-form-item(prop="confirmPwd")
             .row.flex-center
               .col.flex-80
                 label 确认新密码
               .col
-                el-input.max-300(v-model="pwdForm.confirmPwd", type="password")
+                el-input.max-330(v-model="pwdForm.confirmPwd", type="password", placeholder="请输入新密码")
           el-button-group
             el-button(type="primary", size="medium", @click="subForm('pwdForm')") 保存
             el-button(size="medium", @click="$refs.pwdForm.resetFields()") 重置
@@ -101,7 +101,7 @@
         if (this.checkIfPass(value.trim())) {
           cb()
         } else {
-          cb(new Error(' '))
+          cb(new Error('6-18位字母、数字、特殊字符、任意两种组合'))
         }
       }
       return {

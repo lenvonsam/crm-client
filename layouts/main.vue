@@ -15,27 +15,27 @@
     side-bar
   .crm-content
     router-view
-    el-dialog(title="密码等级较低，请修改密码", :visible="pwDialogBox", width="460px", :show-close="false")
+    el-dialog(title="密码等级较低，请修改密码", :visible="pwDialogBox", width="500px", :show-close="false")
       el-form(ref="pwdForm", :model="pwdForm", :rules="pwdRules")
         el-form-item(prop="oldPwd")
           .row.flex-center
             .col.flex-80
               label 旧密码
             .col
-              el-input.max-300(v-model="pwdForm.oldPwd", type="password")              
+              el-input.max-330(v-model="pwdForm.oldPwd", type="password", placeholder="请输入旧密码")
         el-form-item(prop="newPwd")
           .row.flex-center
             .col.flex-80
               label 新密码
             .col
-              el-input.max-300(v-model="pwdForm.newPwd", type="password", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
+              el-input.max-330(v-model="pwdForm.newPwd", maxlength="18", type="password", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
               span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
         el-form-item(prop="confirmPwd")
           .row.flex-center
             .col.flex-80
               label 确认新密码
             .col
-              el-input.max-300(v-model="pwdForm.confirmPwd", type="password")
+              el-input.max-330(v-model="pwdForm.confirmPwd", type="password", placeholder="请输入新密码")
         el-form-item.text-center
           el-button-group
             el-button(type="primary", size="size", @click="savePwd('pwdForm')") 保存
@@ -63,7 +63,7 @@
         if (this.checkIfPass(value.trim())) {
           cb()
         } else {
-          cb(new Error(' '))
+          cb(new Error('6-18位字母、数字、特殊字符、任意两种组合'))
         }        
       }
       return {
@@ -77,8 +77,8 @@
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
           newPwd: [
-            {validator: verifyPw, trigger: 'blur'},
-            {validator: verifyPw, trigger: 'change'}
+            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'blur'},
+            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'change'}
           ],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
