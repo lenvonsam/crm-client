@@ -99,6 +99,7 @@
           data.currentUser['safeLevel'] = this.pwStrengthStr(this.loginModel.pwd.trim())
           this.createLoginMsg(params)
           this.setUser(data.currentUser)
+          this.refreshUser(data.currentUser)
           this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
           let pageUrl = '/'
           if (data.currentUser.id !== 1) {
@@ -115,6 +116,14 @@
         } else {
           this.msgShow(this, data.errMsg)
           this.refreshCode()
+        }
+      },
+      async refreshUser (usr) {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/refreshUser', {user: usr})
+          console.log('data:>>', data)
+        } catch(e) {
+          console.log(e)
         }
       },
       async createLoginMsg (params) {
