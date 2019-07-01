@@ -26,22 +26,23 @@
               .col.flex-80
                 label 旧密码
               .col
-                el-input.max-300(v-model="pwdForm.oldPwd", type="password")
+                el-input.max-330(v-model="pwdForm.oldPwd", type="password", placeholder="请输入旧密码")
           el-form-item(prop="newPwd")
             .row.flex-center
               .col.flex-80
                 label 新密码
               .col
-                el-input.max-300(v-model="pwdForm.newPwd", type="password")
+                el-input.max-330(v-model="pwdForm.newPwd", type="password", maxlength="18", placeholder="6-18位字母、数字、特殊字符、任意两种组合")
+                span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
           el-form-item(prop="confirmPwd")
             .row.flex-center
               .col.flex-80
                 label 确认新密码
               .col
-                el-input.max-300(v-model="pwdForm.confirmPwd", type="password")
+                el-input.max-330(v-model="pwdForm.confirmPwd", type="password", maxlength="18", placeholder="请输入新密码")
           el-button-group
             el-button(type="primary", size="medium", @click="subForm('pwdForm')") 保存
-            el-button(size="medium", @click="$refs.pwdForm.resetFields()") 重置
+            el-button(size="medium", @click="rest") 重置
 
 </template>
 
@@ -91,24 +92,21 @@
         }
       }
       var verifyPw = (rule, value, cb) => {
-        if (value.trim().length < 6 || value.trim().length > 12) {
-          cb(new Error('请设置6-12位密码'))        
-        } else {
-          cb()
-        }
-        // if (value.trim().length === 0) {
-        //   cb(new Error('不能为空'))
+        // if (value.trim().length < 6 || value.trim().length > 12) {
+        //   cb(new Error('请设置6-12位密码'))        
         // } else {
-        //   let regex = /^([A-Z])(?=.*[a-z])(?!\d+$)(?![\W_]+$)\S{5,}$/
-        //   if (!regex.test(value)) {
-        //     cb(new Error('密码最少6位必须包含大写字母开头并且包含小写字母和数字'))
-        //     return
-        //   }
         //   cb()
         // }
+        this.pwMsg = this.pwStrengthStr(value.trim())
+        if (this.checkIfPass(value.trim())) {
+          cb()
+        } else {
+          cb(new Error('6-18位字母、数字、特殊字符、任意两种组合'))
+        }
       }
       return {
         url: '',
+        pwMsg: '',
         breadItems: ['系统设置', '个人信息'],
         imageUrl: null,
         pageUser: {},
@@ -151,7 +149,11 @@
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
           // newPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
-          newPwd: [{validator: verifyPw, trigger: 'blur'}],
+          // newPwd: [{validator: verifyPw, trigger: 'blur'}],
+          newPwd: [
+            {validator: verifyPw, trigger: 'blur'},
+            {validator: verifyPw, trigger: 'change'}
+          ],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
       }
@@ -169,6 +171,10 @@
             console.error('invalid')
           }
         })
+      },
+      rest () {
+        this.$refs.pwdForm.resetFields()
+        this.pwMsg = ''
       },
       async resetUserPwd () {
         const me = this
