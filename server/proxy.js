@@ -40,6 +40,10 @@ router.post('/test', (req, res) => {
     res.json({returnCode: 0})
   })
 })
+router.post('/refreshUser', (req, res) => {
+  if (req.session.currentUser) req.session.currentUser = req.body.user
+  res.json({returnCode: 0})
+})
 
 router.post('/logout', (req, res) => {
   if (req.session.currentUser) delete req.session.currentUser

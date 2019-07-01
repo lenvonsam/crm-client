@@ -24,6 +24,103 @@ function generatePickerOpts () {
   return arr
 }
 
+/**
+ * mjj 2019-06-12
+ * 规则： 
+　　密码可输入类型（数字，字母大写，字母小写，特殊字符）,必须6位以上,包含两种以上类型。 
+　　基础分为，密码长度，长度必须大于6位，一个长度为一分，大于18个字符都为18分；密码里面包含一种可输入类型，基础分加4分。 
+　　加分为，一种密码可输入类型的总数量大于等于2个，加分2分，如果总数量大于等于5，加分4分。 
+　　减分为，如果有连续重复的相同字符（aaaa,1111），则重复一次减1分。 十位以下纯数字，连续长度大于6位减10分。
+　　总分50分。 
+　　0~10分：弱 
+　　11~20分：一般 
+　　21~30分：很好 
+　　31~50分：极佳 
+ */
+//以下是密码强度校验  
+//计算分数
+function passwordGrade(pwd) {
+  var score = 0
+  var regexArr = ['[0-9]', '[a-z]', '[A-Z]', '[\\W_]']
+  var type = 0
+  //长度一个加一分，大于18按18算   
+  var len = pwd.length
+  score += len > 18 ? 18 : len
+  //字符类型多一个加4分   
+  for (var i = 0, num = regexArr.length; i < num; i++) {  
+    if (eval('/' + regexArr[i] + '/').test(pwd)) {  
+      score += 4
+      type++
+    }  
+  }
+  //单一类型不通过
+  if(type==1){
+    return 0;
+  }
+  for (var i = 0, num = regexArr.length; i < num; i++) {  
+    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 2) {  
+      score += 2
+    }  
+    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 5) {  
+      score += 2
+    }  
+  }  
+  //重复一次减一分  
+  var repeatCount = 0;  
+  var prevChar = '';  
+  for (var i = 0, num = pwd.length; i < num; i++) {  
+    if (pwd.charAt(i) == prevChar) {  
+      repeatCount++
+    }  
+    else {  
+      prevChar = pwd.charAt(i)
+    }  
+  } 
+  score -= repeatCount * 1
+  
+  //10位以下纯数字
+  if(pwd.match(eval('/^[0-9]{0,10}$/'))){
+    //6位以上递增
+    var tempNum=-10;
+    var continueCount=0;
+    for (var i = 0, num = pwd.length; i < num; i++) { 
+      if (pwd.charAt(i) == (tempNum+1+continueCount)) {
+        continueCount++;
+      } else {
+        if(continueCount>=5){//其中一段数字递增6位也算
+          score -= 10;
+          break;
+        }
+        tempNum = pwd.charAt(i)-0;
+        continueCount=0;
+      }
+    }
+    if(continueCount>=5){
+      score -= 10;
+    }
+    
+    //6位以上递减
+    tempNum=-10;
+    continueCount=0;
+    for (var i = 0, num = pwd.length; i < num; i++) { 
+      if (pwd.charAt(i) == (tempNum-(1+continueCount))) {
+        continueCount++;
+      } else {
+        if(continueCount>=5){
+          score -= 10;
+          break;
+        }
+        tempNum = pwd.charAt(i)-0;
+        continueCount=0;
+      }  
+    }
+    if(continueCount>=5){
+      score -= 10;
+    }
+  }
+  return score;  
+}
+
 const minixs = {
   data () {
     return {
@@ -50,6 +147,47 @@ const minixs = {
     }
   },
   methods: {
+    checkIfPass(pwd) {
+      if (pwd == null || pwd == ''||pwd.length < 6) {  
+          return false;  
+      } else { 
+        var mark = passwordGrade(pwd);     
+        if (mark<=10) {  
+          return false;  
+        }else{
+          return true;
+        }  
+      }
+    },
+    pwStrengthStr (pwd) {
+      //pwStrength函数
+      if (pwd == null || pwd == '') {  
+        return '';
+      } else {
+        if (pwd.length < 6) { 
+          return '弱';
+        }  
+        var levelStr;  
+        var mark = passwordGrade(pwd);  
+        // 弱
+        if (mark <= 10) {  
+          levelStr = '弱';
+        }  
+        //一般  
+        if (mark > 10 && mark <= 20) {  
+          levelStr = '一般';
+        }  
+        //很好  
+        if (mark > 20 && mark <= 30) {  
+          levelStr = '很好';
+        }  
+        //极佳  
+        if (mark > 30) {  
+          levelStr = '极佳';
+        }
+        return levelStr;  
+      }
+    },
     jump (to) {
       if (this.$router) this.$router.push(to)
     },
@@ -107,7 +245,7 @@ const minixs = {
     },
     apiGet: httpUtil.httpGet,
     apiPost: httpUtil.httpPost,
-    apiStreamPost: httpUtil.httpStreamPost,
+    apiStreamPost: httpUtil.httpStreamPost,    
     pageShow: elementUtil.pageShow,
     pageHide: elementUtil.pageHide,
     msgShow: elementUtil.msgShow,
@@ -141,8 +279,7 @@ const minixs = {
       return doubleArr
     },
     getValidateCode () {
-      // const basicArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-      const basicArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+      const basicArray = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
       let basiCode = ['Z', 'H', '1', '8']
       basiCode.map((itm, idx) => {
         const rdmIdx = Math.floor(Math.random() * 100) % basicArray.length

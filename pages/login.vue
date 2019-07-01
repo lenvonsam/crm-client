@@ -87,7 +87,7 @@
         });
       },
       async login () {
-        let encodePwd = sha1(this.loginModel.pwd.trim())
+        let encodePwd = sha1(this.loginModel.pwd.trim())        
         let now = this.date2Str(new Date())
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'login', params: {code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now+this.code)}})
         if (data.returnCode === 0) {
@@ -96,8 +96,10 @@
             ip: data.currentUser.ipAddress,
             deviceType: navigator.userAgent.toLowerCase()
           }
+          data.currentUser['safeLevel'] = this.pwStrengthStr(this.loginModel.pwd.trim())
           this.createLoginMsg(params)
           this.setUser(data.currentUser)
+          this.refreshUser(data.currentUser)
           this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
           let pageUrl = '/'
           if (data.currentUser.id !== 1) {
@@ -114,6 +116,14 @@
         } else {
           this.msgShow(this, data.errMsg)
           this.refreshCode()
+        }
+      },
+      async refreshUser (usr) {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/refreshUser', {user: usr})
+          console.log('data:>>', data)
+        } catch(e) {
+          console.log(e)
         }
       },
       async createLoginMsg (params) {
@@ -210,7 +220,7 @@ body,html
     .logo
       flex 0 0 450px
       height 600px
-      background-image url('http://crm-cdn.xingyun361.com/login_logo_new.png?imageView2/2/w/450/h/465')
+      background-image url('http://pav6lmvyn.bkt.clouddn.com/login_logo_new.png?imageView2/2/w/450/h/465')
       background-repeat no-repeat
       // background-size cover
       background-position center
