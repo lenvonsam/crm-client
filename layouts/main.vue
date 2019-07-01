@@ -15,13 +15,75 @@
     side-bar
   .crm-content
     router-view
+    el-dialog(title="密码等级较低，请修改密码", :visible="pwDialogBox", width="460px", :show-close="false")
+      el-form(ref="pwdForm", :model="pwdForm", :rules="pwdRules")
+        el-form-item(prop="oldPwd")
+          .row.flex-center
+            .col.flex-80
+              label 旧密码
+            .col
+              el-input.max-300(v-model="pwdForm.oldPwd", type="password")              
+        el-form-item(prop="newPwd")
+          .row.flex-center
+            .col.flex-80
+              label 新密码
+            .col
+              el-input.max-300(v-model="pwdForm.newPwd", type="password")
+              span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
+        el-form-item(prop="confirmPwd")
+          .row.flex-center
+            .col.flex-80
+              label 确认新密码
+            .col
+              el-input.max-300(v-model="pwdForm.confirmPwd", type="password")
+        el-form-item.text-center
+          el-button-group
+            el-button(type="primary", size="size", @click="savePwd('pwdForm')") 保存
+            el-button(size="size", @click="$refs.pwdForm.resetFields()") 重置
 </template>
 
 <script>
   import sideBar from '@/components/SideBar.vue'
+  import sha1 from 'sha1'
   import { mapState, mapActions } from 'vuex'
   export default {
     middleware: 'mainRouteMatch',
+    data () {
+      const confirmPwdValidate = (rule, value, cb) => {
+        if (value.trim().length === 0) {
+          cb(new Error('不能为空'))
+        } else if (value !== this.pwdForm.newPwd) {
+          cb(new Error('密码不一致'))
+        } else {
+          cb()
+        }
+      }
+      const verifyPw = (rule, value, cb) => {        
+        this.pwMsg = this.pwStrengthStr(value.trim())
+        if (this.checkIfPass(value.trim())) {
+          cb()
+        } else {
+          cb(new Error(' '))
+        }        
+      }
+      return {
+        pwDialogBox: false,
+        pwMsg: '',
+        pwdForm: {
+          oldPwd: '',
+          newPwd: '',
+          confirmPwd: ''
+        },
+        pwdRules: {
+          oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
+          newPwd: [
+            {validator: verifyPw, trigger: 'blur'},
+            {validator: verifyPw, trigger: 'change'}
+          ],
+          confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
+        }
+      }
+    },
     components: {
       sideBar
     },
@@ -30,6 +92,11 @@
         currentUser: state => state.user.currentUser,
         defaultAvatar: state => state.defaultAvatar
       })
+    },
+    mounted() {
+      if (this.currentUser.safeLevel === '弱') {
+        this.pwDialogBox = true
+      }
     },
     methods: {
       ...mapActions([
@@ -50,6 +117,48 @@
             this.exitUser()
             this.clearSearchParams()
             this.jump({path: '/login'})
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
+      },
+      savePwd (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.userUpdatePwd()
+          } else {
+            console.error('invalid')
+          }
+        })
+      },
+      async resetUserPwd () {
+        const me = this
+        let { data } = await this.apiStreamPost('/proxy/logout', {})
+        if (data.returnCode === 0) {
+          this.$alert('密码更新成功,需重新登录', '友情提示', {
+            confirmButtonText: '确定',
+            showClose: false,
+            callback: action => {
+              console.log(action)
+              me.exitUser()
+              me.jump({path: '/login'})
+            }
+          })
+        }
+      },
+      async userUpdatePwd () {
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/updatePwd', params: {
+            uid: this.currentUser.id,
+            newPwd: sha1(this.pwdForm.newPwd.trim()),
+            oldPwd: sha1(this.pwdForm.oldPwd.trim())
+          }})
+          if (data.returnCode === 0) {
+            this.pwDialogBox = false
+            this.resetUserPwd()
+          } else {
+            this.msgShow(this, data.errMsg)
           }
         } catch (e) {
           console.error(e)

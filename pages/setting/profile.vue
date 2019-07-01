@@ -33,6 +33,7 @@
                 label 新密码
               .col
                 el-input.max-300(v-model="pwdForm.newPwd", type="password")
+                span.pl-10(:class="pwMsg === '弱' ? 'text-red' : 'text-green'") {{pwMsg}}
           el-form-item(prop="confirmPwd")
             .row.flex-center
               .col.flex-80
@@ -91,24 +92,21 @@
         }
       }
       var verifyPw = (rule, value, cb) => {
-        if (value.trim().length < 6 || value.trim().length > 12) {
-          cb(new Error('请设置6-12位密码'))        
-        } else {
-          cb()
-        }
-        // if (value.trim().length === 0) {
-        //   cb(new Error('不能为空'))
+        // if (value.trim().length < 6 || value.trim().length > 12) {
+        //   cb(new Error('请设置6-12位密码'))        
         // } else {
-        //   let regex = /^([A-Z])(?=.*[a-z])(?!\d+$)(?![\W_]+$)\S{5,}$/
-        //   if (!regex.test(value)) {
-        //     cb(new Error('密码最少6位必须包含大写字母开头并且包含小写字母和数字'))
-        //     return
-        //   }
         //   cb()
         // }
+        this.pwMsg = this.pwStrengthStr(value.trim())
+        if (this.checkIfPass(value.trim())) {
+          cb()
+        } else {
+          cb(new Error(' '))
+        }
       }
       return {
         url: '',
+        pwMsg: '',
         breadItems: ['系统设置', '个人信息'],
         imageUrl: null,
         pageUser: {},
@@ -151,7 +149,11 @@
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
           // newPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
-          newPwd: [{validator: verifyPw, trigger: 'blur'}],
+          // newPwd: [{validator: verifyPw, trigger: 'blur'}],
+          newPwd: [
+            {validator: verifyPw, trigger: 'blur'},
+            {validator: verifyPw, trigger: 'change'}
+          ],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
       }
