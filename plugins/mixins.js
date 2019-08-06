@@ -46,6 +46,8 @@ function passwordGrade(pwd) {
   //长度一个加一分，大于18按18算   
   var len = pwd.length
   score += len > 18 ? 18 : len
+  //长度必须大于6位
+  score += len <= 6 ? -50: 0
   //字符类型多一个加4分   
   for (var i = 0, num = regexArr.length; i < num; i++) {  
     if (eval('/' + regexArr[i] + '/').test(pwd)) {  
@@ -148,7 +150,7 @@ const minixs = {
   },
   methods: {
     checkIfPass(pwd) {
-      if (pwd == null || pwd == ''||pwd.length < 6) {  
+      if (pwd == null || pwd == ''||pwd.length <= 6) {  
           return false;  
       } else { 
         var mark = passwordGrade(pwd);     
@@ -164,7 +166,7 @@ const minixs = {
       if (pwd == null || pwd == '') {  
         return '';
       } else {
-        if (pwd.length < 6) { 
+        if (pwd.length <= 6) { 
           return '弱';
         }  
         var levelStr;  
