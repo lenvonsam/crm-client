@@ -60,6 +60,10 @@
       }
       const verifyPw = (rule, value, cb) => {        
         this.pwMsg = this.pwStrengthStr(value.trim())
+        if(value.indexOf(" ")!=-1){
+          cb(new Error('存在非法字符‘空格’，请修改！'))
+          return
+        }
         if (this.checkIfPass(value.trim())) {
           cb()
         } else {
