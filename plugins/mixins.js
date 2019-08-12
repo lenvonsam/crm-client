@@ -46,8 +46,8 @@ function passwordGrade(pwd) {
   //长度一个加一分，大于18按18算   
   var len = pwd.length
   score += len > 18 ? 18 : len
-  //长度必须大于6位
-  score += len <= 6 ? -50: 0
+  //长度必须大于等于6位
+  score += len < 6 ? -50: 0
   //字符类型多一个加4分   
   for (var i = 0, num = regexArr.length; i < num; i++) {  
     if (eval('/' + regexArr[i] + '/').test(pwd)) {  
