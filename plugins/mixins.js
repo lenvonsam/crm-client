@@ -163,7 +163,7 @@ const minixs = {
       return true
     },
     checkIfPass(pwd) {
-      if (pwd == null || pwd == ''||pwd.length <= 6) {  
+      if (pwd == null || pwd == ''||pwd.length < 6) {  
           return false;  
       } else { 
         var mark = passwordGrade(pwd);     
@@ -179,7 +179,7 @@ const minixs = {
       if (pwd == null || pwd == '') {  
         return '';
       } else {
-        if (pwd.length <= 6) { 
+        if (pwd.length < 6) { 
           return '弱';
         }  
         var levelStr;  
