@@ -81,8 +81,8 @@
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
           newPwd: [
-            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'blur'},
-            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'change'}
+            {validator: verifyPw, trigger: 'blur'},
+            {validator: verifyPw, trigger: 'change'}
           ],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
