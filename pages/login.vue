@@ -65,6 +65,7 @@
       }
     },
     beforeMount () {
+      this.isIE()
       this.configVal({key: 'globalErrorMsg', val: ''})
       this.code = this.getValidateCode()
     },
@@ -77,14 +78,16 @@
         this.code = this.getValidateCode()
       },
       submit (formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.login()
-          } else {
-            console.error('error submit!!')
-            return false
-          }
-        });
+        if (this.isIE()) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              this.login()
+            } else {
+              console.error('error submit!!')
+              return false
+            }
+          });
+        }        
       },
       async login () {
         let encodePwd = sha1(this.loginModel.pwd.trim())        

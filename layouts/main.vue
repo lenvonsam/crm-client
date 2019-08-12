@@ -97,7 +97,8 @@
         defaultAvatar: state => state.defaultAvatar
       })
     },
-    mounted() {
+    mounted() {      
+      this.isIE()
       if (this.currentUser.safeLevel === '弱') {
         this.pwDialogBox = true
       }
