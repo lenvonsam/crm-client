@@ -60,6 +60,10 @@
       }
       const verifyPw = (rule, value, cb) => {        
         this.pwMsg = this.pwStrengthStr(value.trim())
+        if(value.indexOf(" ")!=-1){
+          cb(new Error('存在非法字符‘空格’，请修改！'))
+          return
+        }
         if (this.checkIfPass(value.trim())) {
           cb()
         } else {
@@ -77,8 +81,8 @@
         pwdRules: {
           oldPwd: [{required: true, message: '不能为空', trigger: 'blur'}],
           newPwd: [
-            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'blur'},
-            {validator: verifyPw, message: '6-18位字母、数字、特殊字符、任意两种组合', trigger: 'change'}
+            {validator: verifyPw, trigger: 'blur'},
+            {validator: verifyPw, trigger: 'change'}
           ],
           confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
         }
@@ -93,7 +97,8 @@
         defaultAvatar: state => state.defaultAvatar
       })
     },
-    mounted() {
+    mounted() {      
+      this.isIE()
       if (this.currentUser.safeLevel === '弱') {
         this.pwDialogBox = true
       }

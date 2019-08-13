@@ -46,6 +46,8 @@ function passwordGrade(pwd) {
   //长度一个加一分，大于18按18算   
   var len = pwd.length
   score += len > 18 ? 18 : len
+  //长度必须大于等于6位
+  score += len < 6 ? -50: 0
   //字符类型多一个加4分   
   for (var i = 0, num = regexArr.length; i < num; i++) {  
     if (eval('/' + regexArr[i] + '/').test(pwd)) {  
@@ -147,6 +149,19 @@ const minixs = {
     }
   },
   methods: {
+    isIE() {
+      const userAgent = navigator.userAgent
+      const isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 //判断是否IE<11浏览器  
+      const isEdge = userAgent.indexOf("Edge") > -1 && !isIE //判断是否IE的Edge浏览器  
+      const isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1
+      console.log('userAgent', userAgent)
+      if(isIE || isEdge || isIE11) {
+        // this.$message.error('系统暂不支持ie浏览器，推荐使用chrome进行访问')
+        alert('系统暂不支持ie浏览器，推荐使用chrome进行访问')
+        return false
+      }
+      return true
+    },
     checkIfPass(pwd) {
       if (pwd == null || pwd == ''||pwd.length < 6) {  
           return false;  
