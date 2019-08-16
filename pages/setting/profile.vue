@@ -92,12 +92,11 @@
         }
       }
       var verifyPw = (rule, value, cb) => {
-        // if (value.trim().length < 6 || value.trim().length > 12) {
-        //   cb(new Error('请设置6-12位密码'))        
-        // } else {
-        //   cb()
-        // }
         this.pwMsg = this.pwStrengthStr(value.trim())
+        if(value.indexOf(" ")!=-1){
+          cb(new Error('存在非法字符‘空格’，请修改！'))
+          return
+        }
         if (this.checkIfPass(value.trim())) {
           cb()
         } else {
@@ -154,7 +153,7 @@
             {validator: verifyPw, trigger: 'blur'},
             {validator: verifyPw, trigger: 'change'}
           ],
-          confirmPwd: [{validator: confirmPwdValidate, trigger: 'blur'}]
+          confirmPwd: [{validator: confirmPwdValidate}]
         }
       }
     },
