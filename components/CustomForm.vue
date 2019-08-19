@@ -77,6 +77,21 @@ div
           el-select.full-width(v-model="form.workgroupName", placeholder="请选择工作组", clearable, @change="$forceUpdate()")
             el-option(v-for="item in workGroupList", :key="item.label", :label="item.label", :value="item.label")
     div(v-if="$route.query.type !== 'formalAdd'")
+      el-row.pr-10        
+        el-col(:span="12")
+          el-form-item.validFormal(label="开户银行：")
+            el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)
+        el-col(:span="12")
+          el-form-item.validFormal(label="税号：", prop="tfn")
+            el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
+      el-row.pr-10
+        el-col(:span="24")
+          el-form-item(label="开票地址：")           
+            .row
+              .col
+                el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
+              .col
+                el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)    
       el-row.pr-10
         el-col(:span="12")
           el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
@@ -91,16 +106,9 @@ div
             el-select.full-width(v-model="form.compType", placeholder="请选择公司类型", @change="$forceUpdate()")
               el-option(v-for="item in compTypeOpts", :key="item.value", :label="item.label", :value="item.value")
         el-col(:span="12")
-          el-form-item.validFormal(label="税号：", prop="tfn")
-            el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")        
-      el-row.pr-10
-        el-col(:span="12")
           el-form-item.validFormal(label="开户名称：", prop="openAcctName")
             //- el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable, @blur="isValid('openAcctName')")
-            el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)
-        el-col(:span="12")
-          el-form-item.validFormal(label="开户银行：")
-            el-input(v-model="form.openBank", placeholder="请输入开户银行", clearable)        
+            el-input(v-model="form.openAcctName", placeholder="请输入开户名称", clearable)              
       el-row.pr-10
         el-col(:span="12")
           el-form-item.validFormal(label="开户账号：", prop="openAcct")
@@ -201,17 +209,7 @@ div
             el-input(v-model="form.wbName", placeholder="请输入新浪微博昵称", clearable)
         el-col(:span="12")
           el-form-item(label="其他联系方式：")
-            el-input(v-model="form.otherLinkWay", placeholder="请输入其他联系方式", clearable)
-      el-row.pr-10
-        el-col(:span="24")
-          el-form-item(label="开票地址：")
-            //- el-input(v-model="form.billAddr", placeholder="请输入开票地址", clearable)
-            //- el-cascader.full-width(v-model="form.billAddr", placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
-            .row
-              .col
-                el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
-              .col
-                el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)    
+            el-input(v-model="form.otherLinkWay", placeholder="请输入其他联系方式", clearable)      
       el-row.pr-10
         el-col(:span="6")
           el-form-item(label="采购周期：")
@@ -881,11 +879,11 @@ export default {
     width: 200px
     margin: 0 auto
   .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+    border 1px dashed #d9d9d9
+    border-radius 6px
+    cursor pointer
+    position relative
+    overflow hidden
   }
   .avatar-uploader .el-upload:hover {
     border-color: #409EFF;
