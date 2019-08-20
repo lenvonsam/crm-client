@@ -89,14 +89,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "北京市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "北京市"
@@ -191,14 +188,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "天津市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "天津市"
@@ -323,7 +317,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "石家庄市"
@@ -409,7 +404,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "唐山市"
@@ -460,7 +456,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "秦皇岛市"
@@ -571,7 +568,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "邯郸市"
@@ -682,7 +680,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "邢台市"
@@ -813,7 +812,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "保定市"
@@ -909,7 +909,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "张家口市"
@@ -980,7 +981,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "承德市"
@@ -1076,7 +1078,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "沧州市"
@@ -1142,7 +1145,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "廊坊市"
@@ -1213,7 +1217,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "衡水市"
@@ -1234,14 +1239,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "省直辖县级行政区划"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "河北省"
@@ -1311,7 +1313,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "太原市"
@@ -1382,7 +1385,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "大同市"
@@ -1423,7 +1427,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "阳泉市"
@@ -1504,7 +1509,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "长治市"
@@ -1550,7 +1556,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "晋城市"
@@ -1596,7 +1603,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "朔州市"
@@ -1667,7 +1675,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "晋中市"
@@ -1748,7 +1757,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "运城市"
@@ -1834,7 +1844,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "忻州市"
@@ -1935,7 +1946,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "临汾市"
@@ -2016,14 +2028,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "吕梁市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "山西省"
@@ -2088,7 +2097,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "呼和浩特市"
@@ -2149,7 +2159,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "包头市"
@@ -2180,7 +2191,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "乌海市"
@@ -2256,7 +2268,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "赤峰市"
@@ -2312,7 +2325,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "通辽市"
@@ -2373,7 +2387,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鄂尔多斯市"
@@ -2459,7 +2474,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "呼伦贝尔市"
@@ -2510,7 +2526,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "巴彦淖尔市"
@@ -2581,7 +2598,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "乌兰察布市"
@@ -2622,7 +2640,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "兴安盟"
@@ -2693,7 +2712,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "锡林郭勒盟"
@@ -2719,14 +2739,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "阿拉善盟"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "内蒙古自治区"
@@ -2811,7 +2828,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "沈阳市"
@@ -2877,7 +2895,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "大连市"
@@ -2928,7 +2947,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鞍山市"
@@ -2979,7 +2999,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "抚顺市"
@@ -3025,7 +3046,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "本溪市"
@@ -3071,7 +3093,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "丹东市"
@@ -3122,7 +3145,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "锦州市"
@@ -3168,7 +3192,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "营口市"
@@ -3219,7 +3244,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "阜新市"
@@ -3270,7 +3296,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "辽阳市"
@@ -3306,7 +3333,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "盘锦市"
@@ -3357,7 +3385,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "铁岭市"
@@ -3408,7 +3437,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "朝阳市"
@@ -3454,14 +3484,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "葫芦岛市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "辽宁省"
@@ -3531,7 +3558,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "长春市"
@@ -3592,7 +3620,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "吉林市"
@@ -3638,7 +3667,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "四平市"
@@ -3674,7 +3704,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "辽源市"
@@ -3725,7 +3756,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "通化市"
@@ -3771,7 +3803,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "白山市"
@@ -3812,7 +3845,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "松原市"
@@ -3853,7 +3887,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "白城市"
@@ -3904,14 +3939,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "延边朝鲜族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "吉林省"
@@ -4021,7 +4053,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "哈尔滨市"
@@ -4117,7 +4150,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "齐齐哈尔市"
@@ -4178,7 +4212,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鸡西市"
@@ -4234,7 +4269,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鹤岗市"
@@ -4290,7 +4326,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "双鸭山市"
@@ -4351,7 +4388,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "大庆市"
@@ -4452,7 +4490,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "伊春市"
@@ -4518,7 +4557,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "佳木斯市"
@@ -4554,7 +4594,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "七台河市"
@@ -4620,7 +4661,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "牡丹江市"
@@ -4666,7 +4708,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "黑河市"
@@ -4732,7 +4775,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "绥化市"
@@ -4758,14 +4802,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "大兴安岭地区"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "黑龙江省"
@@ -4860,14 +4901,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "上海市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "上海市"
@@ -4942,7 +4980,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "南京市"
@@ -4993,7 +5032,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "无锡市"
@@ -5059,7 +5099,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "徐州市"
@@ -5110,7 +5151,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "常州市"
@@ -5171,7 +5213,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "苏州市"
@@ -5227,7 +5270,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "南通市"
@@ -5273,7 +5317,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "连云港市"
@@ -5324,7 +5369,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "淮安市"
@@ -5385,7 +5431,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "盐城市"
@@ -5431,7 +5478,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "扬州市"
@@ -5477,7 +5525,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "镇江市"
@@ -5523,7 +5572,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "泰州市"
@@ -5564,14 +5614,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宿迁市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "江苏省"
@@ -5656,7 +5703,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "杭州市"
@@ -5727,7 +5775,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宁波市"
@@ -5798,7 +5847,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "温州市"
@@ -5849,7 +5899,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "嘉兴市"
@@ -5890,7 +5941,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "湖州市"
@@ -5936,7 +5988,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "绍兴市"
@@ -5997,7 +6050,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "金华市"
@@ -6043,7 +6097,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "衢州市"
@@ -6079,7 +6134,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "舟山市"
@@ -6140,7 +6196,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "台州市"
@@ -6201,14 +6258,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "丽水市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "浙江省"
@@ -6273,7 +6327,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "合肥市"
@@ -6329,7 +6384,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "芜湖市"
@@ -6380,7 +6436,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "蚌埠市"
@@ -6431,7 +6488,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "淮南市"
@@ -6477,7 +6535,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "马鞍山市"
@@ -6513,7 +6572,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "淮北市"
@@ -6549,7 +6609,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "铜陵市"
@@ -6615,7 +6676,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "安庆市"
@@ -6666,7 +6728,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "黄山市"
@@ -6722,7 +6785,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "滁州市"
@@ -6778,7 +6842,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "阜阳市"
@@ -6819,7 +6884,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宿州市"
@@ -6870,7 +6936,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "六安市"
@@ -6906,7 +6973,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "亳州市"
@@ -6942,7 +7010,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "池州市"
@@ -6993,14 +7062,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宣城市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "安徽省"
@@ -7085,7 +7151,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "福州市"
@@ -7131,7 +7198,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "厦门市"
@@ -7172,7 +7240,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "莆田市"
@@ -7248,7 +7317,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "三明市"
@@ -7324,7 +7394,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "泉州市"
@@ -7395,7 +7466,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "漳州市"
@@ -7461,7 +7533,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "南平市"
@@ -7512,7 +7585,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "龙岩市"
@@ -7573,14 +7647,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宁德市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "福建省"
@@ -7645,7 +7716,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "南昌市"
@@ -7681,7 +7753,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "景德镇市"
@@ -7722,7 +7795,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "萍乡市"
@@ -7803,7 +7877,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "九江市"
@@ -7829,7 +7904,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "新余市"
@@ -7860,7 +7936,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鹰潭市"
@@ -7966,7 +8043,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "赣州市"
@@ -8047,7 +8125,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "吉安市"
@@ -8113,7 +8192,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宜春市"
@@ -8184,7 +8264,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "抚州市"
@@ -8260,14 +8341,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "上饶市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "江西省"
@@ -8337,7 +8415,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "济南市"
@@ -8403,7 +8482,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "青岛市"
@@ -8459,7 +8539,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "淄博市"
@@ -8505,7 +8586,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "枣庄市"
@@ -8546,7 +8628,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "东营市"
@@ -8622,7 +8705,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "烟台市"
@@ -8698,7 +8782,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "潍坊市"
@@ -8769,7 +8854,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "济宁市"
@@ -8815,7 +8901,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "泰安市"
@@ -8851,7 +8938,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "威海市"
@@ -8887,7 +8975,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "日照市"
@@ -8913,7 +9002,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "莱芜市"
@@ -8989,7 +9079,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "临沂市"
@@ -9060,7 +9151,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "德州市"
@@ -9116,7 +9208,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "聊城市"
@@ -9167,7 +9260,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "滨州市"
@@ -9228,14 +9322,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "菏泽市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "山东省"
@@ -9315,7 +9406,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "郑州市"
@@ -9381,7 +9473,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "开封市"
@@ -9472,7 +9565,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "洛阳市"
@@ -9538,7 +9632,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "平顶山市"
@@ -9599,7 +9694,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "安阳市"
@@ -9640,7 +9736,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鹤壁市"
@@ -9716,7 +9813,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "新乡市"
@@ -9782,7 +9880,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "焦作市"
@@ -9828,7 +9927,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "濮阳市"
@@ -9874,7 +9974,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "许昌市"
@@ -9915,7 +10016,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "漯河市"
@@ -9961,7 +10063,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "三门峡市"
@@ -10042,7 +10145,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "南阳市"
@@ -10103,7 +10207,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "商丘市"
@@ -10169,7 +10274,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "信阳市"
@@ -10235,7 +10341,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "周口市"
@@ -10301,7 +10408,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "驻马店市"
@@ -10317,14 +10425,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "省直辖县级行政区划"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "河南省"
@@ -10409,7 +10514,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "武汉市"
@@ -10455,7 +10561,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "黄石市"
@@ -10511,7 +10618,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "十堰市"
@@ -10592,7 +10700,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "宜昌市"
@@ -10653,7 +10762,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "襄阳市"
@@ -10684,7 +10794,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "鄂州市"
@@ -10725,7 +10836,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "荆门市"
@@ -10776,7 +10888,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "孝感市"
@@ -10832,7 +10945,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "荆州市"
@@ -10898,7 +11012,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "黄冈市"
@@ -10944,7 +11059,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "咸宁市"
@@ -10975,7 +11091,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "随州市"
@@ -11026,7 +11143,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "恩施土家族苗族自治州"
@@ -11057,14 +11175,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "省直辖县级行政区划"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "湖北省"
@@ -11129,7 +11244,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "长沙市"
@@ -11190,7 +11306,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "株洲市"
@@ -11231,7 +11348,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "湘潭市"
@@ -11307,7 +11425,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "衡阳市"
@@ -11383,7 +11502,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "邵阳市"
@@ -11444,7 +11564,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "岳阳市"
@@ -11505,7 +11626,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "常德市"
@@ -11541,7 +11663,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "张家界市"
@@ -11587,7 +11710,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "益阳市"
@@ -11658,7 +11782,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "郴州市"
@@ -11729,7 +11854,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "永州市"
@@ -11805,7 +11931,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "怀化市"
@@ -11846,7 +11973,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "娄底市"
@@ -11897,14 +12025,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "湘西土家族苗族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "湖南省"
@@ -11979,7 +12104,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "广州市"
@@ -12045,7 +12171,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "韶关市"
@@ -12091,7 +12218,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "深圳市"
@@ -12122,7 +12250,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "珠海市"
@@ -12173,7 +12302,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "汕头市"
@@ -12214,7 +12344,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "佛山市"
@@ -12265,7 +12396,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "江门市"
@@ -12326,7 +12458,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "湛江市"
@@ -12367,7 +12500,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "茂名市"
@@ -12423,7 +12557,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "肇庆市"
@@ -12464,7 +12599,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "惠州市"
@@ -12520,7 +12656,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "梅州市"
@@ -12556,7 +12693,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "汕尾市"
@@ -12602,7 +12740,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "河源市"
@@ -12638,7 +12777,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "阳江市"
@@ -12694,7 +12834,8 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", "value": "其他"
+            "label": "其他",
+            "value": "其他"
           }
         ],
         "value": "清远市"
@@ -12809,10 +12950,6 @@ const city = [
           }
         ],
         "value": "云浮市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "广东省"
@@ -13543,10 +13680,6 @@ const city = [
           }
         ],
         "value": "崇左市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "广西壮族自治区"
@@ -13710,10 +13843,6 @@ const city = [
           }
         ],
         "value": "省直辖县级行政区划"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "海南省"
@@ -13918,10 +14047,6 @@ const city = [
           }
         ],
         "value": "重庆市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "重庆市"
@@ -15081,10 +15206,6 @@ const city = [
           }
         ],
         "value": "凉山彝族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "四川省"
@@ -15620,10 +15741,6 @@ const city = [
           }
         ],
         "value": "黔南布依族苗族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "贵州省"
@@ -16428,10 +16545,6 @@ const city = [
           }
         ],
         "value": "迪庆藏族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "云南省"
@@ -16588,7 +16701,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -16655,7 +16768,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -16702,7 +16815,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -16779,7 +16892,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -16846,7 +16959,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -16893,15 +17006,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
         "value": "阿里地区"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "西藏自治区"
@@ -16986,7 +17095,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17023,7 +17132,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17100,7 +17209,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17187,7 +17296,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17259,7 +17368,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17341,7 +17450,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17413,7 +17522,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17490,7 +17599,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17557,7 +17666,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17609,15 +17718,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
         "value": "商洛市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "陕西省"
@@ -17677,7 +17782,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17694,7 +17799,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17721,7 +17826,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17763,7 +17868,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17815,7 +17920,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17852,7 +17957,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17899,7 +18004,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -17951,7 +18056,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18003,7 +18108,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18060,7 +18165,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18112,7 +18217,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18174,7 +18279,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18226,7 +18331,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18278,15 +18383,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
         "value": "甘南藏族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "甘肃省"
@@ -18341,7 +18442,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18383,7 +18484,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18415,7 +18516,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18447,7 +18548,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18484,7 +18585,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18526,7 +18627,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18568,7 +18669,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18605,10 +18706,6 @@ const city = [
           }
         ],
         "value": "海西蒙古族藏族自治州"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "青海省"
@@ -18658,7 +18755,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18690,7 +18787,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18732,7 +18829,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18774,7 +18871,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18806,10 +18903,6 @@ const city = [
           }
         ],
         "value": "中卫市"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", "value": "其他"
       }
     ],
     "value": "宁夏回族自治区"
@@ -18869,7 +18962,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18906,7 +18999,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18933,7 +19026,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -18960,7 +19053,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19007,7 +19100,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19039,7 +19132,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19096,7 +19189,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19153,7 +19246,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19185,7 +19278,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19257,7 +19350,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19309,7 +19402,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19376,7 +19469,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19423,7 +19516,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19470,7 +19563,7 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
@@ -19507,16 +19600,11 @@ const city = [
           },
           {
             "code": "00000000",
-            "label": "其他", 
+            "label": "其他",
             "value": "其他"
           }
         ],
         "value": "自治区直辖县级行政区划"
-      },
-      {
-        "code": "00000000",
-        "label": "其他", 
-        "value": "其他"
       }
     ],
     "value": "新疆维吾尔自治区"
