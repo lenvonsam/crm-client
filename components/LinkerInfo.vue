@@ -2,7 +2,19 @@
 div
   button-group(:btns="linkerAddInfo", @groupBtnClick="linkerAddClick")
   .mt-15
-    basic-table(:tableValue="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowEdit="rowEdit", @tableRowSave="rowSave", @tableRowCancel="rowCancel", @tableRowDelete="rowDelete")
+    basic-table(
+      ref="basicTable",
+      :tableValue="tableValue", 
+      :loading="loading", 
+      :currentPage="currentPage", 
+      :pageSize="pageSize", 
+      :total="totalCount", 
+      :showRowBtnFun="showRowBtnFun",
+      @tableRowEdit="rowEdit", 
+      @tableRowSave="rowSave", 
+      @tableRowCancel="rowCancel", 
+      @tableRowDelete="rowDelete",
+      @tableRowDefault="rowDefault")
     el-dialog(title="删除", :visible.sync="dialogDel", @close="delSubmit('cancel')")
       .row.flex-center
         .col.flex-80 删除理由：
@@ -43,13 +55,16 @@ export default{
           {lbl: '性别', prop: 'sex', type: 'edit', editType: 'select', selectList:[], required: true},
           {lbl: '年龄', prop: 'age', type: 'edit', editType: 'text'},
           {lbl: '学历', prop: 'edu', type: 'edit', editType: 'select', selectList:[]},
-          {type: 'action',
+          {type: 'action', width: '180px',
             actionBtns: [{
               lbl: '编辑',
               type: 'edit'
             },{
               lbl: '删除',
               type: 'delete'
+            },{
+              lbl: '设置默认',
+              type: 'default'
             }]
           }],
         page: true,
@@ -75,6 +90,13 @@ export default{
     })
   },
   methods: {
+    showRowBtnFun (scope, lbl) {
+      let isShow = true
+      if (scope.row.commMark === 1 && lbl === '设置默认') {
+        isShow = false
+      }
+      return isShow
+    },
     linkerAddClick (type) {
       if(this.isEdit){
         this.msgShow(this, '请先保存新增')
@@ -94,7 +116,6 @@ export default{
     tableHandler (obj) {
       let idx = obj.idx
       this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
-      console.log(this.tableValue.tableData[idx].edit)
     },
     delSubmit (flg) {
       if(flg == 'ok'){
@@ -105,6 +126,13 @@ export default{
         this.linkerDelete()
       }
       this.dialogDel = false
+    },
+    rowDefault (obj) {      
+      const params = {
+        linkId: obj.id,
+        cstmId: this.$route.query.id
+      }
+      this.linkerDefault(params)
     },
     rowDelete (obj) {
       this.dialogDel = true
@@ -120,15 +148,32 @@ export default{
       this.linkDateFilter()
       this.isEdit = true
     },
+    async linkerDefault (params) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/linker/'+params.linkId+'/common', params: params})
+          if (data.returnCode === 0) {
+            this.loadData()
+            this.$message.success('设置成功')            
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+          this.loading = false
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+        this.loading = false
+      }
+    },
     async loadData () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/linker/queryCombo', params: {cstmId: this.$route.query.id}})
           if (data.returnCode === 0) {
-            var arr = []
+            const arr = []
+            let idx = null
             data.list.map(itm => {
               itm.edit = false
               arr.push(itm)
-            })
+            })        
             this.tableValue.tableData = arr
           } else {
             this.msgShow(this, data.errMsg)
