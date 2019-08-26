@@ -126,6 +126,12 @@ div
       sumsFun: {
         type: Function,
         require: true
+      },
+      showRowBtnFun: {
+        type: Function,
+        default: () => {
+          return true
+        }
       }
     },
     methods: {
@@ -163,8 +169,8 @@ div
           condition = (scope.row.status == 1 && lbl == '地图')
         } else {
           condition = !((scope.row.mainStatus == 1 || scope.row.mainAcct == 1 || scope.row.del == false) && lbl == '删除')
-        }
-        return result && condition
+        }        
+        return result && condition && this.showRowBtnFun(scope, lbl)
       },
       handerRowBtn (idx, row, btnType) {
         row.idx = idx
