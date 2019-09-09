@@ -87,7 +87,8 @@ div
       el-row.pr-10
         el-col(:span="24")
           el-form-item(label="开票地址：")           
-            .row
+            el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)
+            //- .row
               .col
                 el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
               .col
