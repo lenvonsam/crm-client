@@ -98,7 +98,8 @@ export default {
           return row[idx].otherLinkWay
         }}, {lbl: '税号', key: 'tfn'}],
         [{lbl: '开户名称', key: 'openAcctName'}, {lbl: '开票地址', type: 'self', factValue: (row) => {
-          return `${row.billProv == null ? '' : row.billProv} ${row.billCity == null ? '' : row.billCity} ${row.billArea == null ? '' : row.billArea} ${row.billAddr == null ? '' : row.billAddr}`
+          return row.billAddr
+          // return `${row.billProv == null ? '' : row.billProv} ${row.billCity == null ? '' : row.billCity} ${row.billArea == null ? '' : row.billArea} ${row.billAddr == null ? '' : row.billAddr}`
         }}],
         [{lbl: '开户账号', key: 'openAcct'}, {lbl: '开户银行', key: 'openBank'}],
         [{lbl: '所处行业', key: 'industry', type: 'object', factValue: (row) => {
