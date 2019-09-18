@@ -85,7 +85,7 @@ div
           el-form-item.validFormal(label="税号：", prop="tfn")
             el-input(v-model="form.tfn", placeholder="请输入税号", clearable, minlength="15")
       el-row.pr-10
-        el-col(:span="24")
+        el-col(:span="12")
           el-form-item(label="开票地址：")           
             el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)
             //- .row
@@ -93,6 +93,10 @@ div
                 el-cascader.full-width(v-model="form.billAddrArr", clearable, placeholder="请输入开票地址", separator=" ", :options="addr", filterable, change-on-select)
               .col
                 el-input(v-model="form.billAddr", placeholder="请输入开票详细地址", clearable)    
+        el-col(:span="12")
+          el-form-item(label="是否后结算：")
+            el-radio(v-model="form.settleDelay",label="0") 否
+            el-radio(v-model="form.settleDelay", label="1") 是
       el-row.pr-10
         el-col(:span="12")
           el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
@@ -421,7 +425,8 @@ export default {
     return {
       form: {
         compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0',
-        workgroupName: ''
+        workgroupName: '',
+        settleDelay: '0'
       },
       rules: {
         compName: [
@@ -520,6 +525,7 @@ export default {
           this.form.billCity = this.form.billAddrArr[1]
           this.form.billArea = this.form.billAddrArr[2]
         }
+        this.form.settleDelay = Number(this.form.settleDelay)
         let url = 'customerManage/customer/create'
         if (this.$route.query.type === 'edit') {
           url = 'customerManage/customer/update'
@@ -777,6 +783,7 @@ export default {
       this.form.fkAcctId = newVal.fkAcct !== undefined ? newVal.fkAcct.id : this.form.fkAcctId
       this.form.fkAcctName = newVal.fkAcct !== undefined ? newVal.fkAcct.name : this.form.fkAcctName
       this.form.fkCustomPropertyId = newVal.fkCustomProperty !== undefined ? newVal.fkCustomProperty.id : this.form.fkCustomPropertyId
+      this.form.settleDelay = newVal.settleDelay.toString()
       if (newVal.busiRelation) this.form.fkRelation = newVal.busiRelation.map(itm => itm.id)
       if (firstTime) {
         newVal.linkers.map((item) => {

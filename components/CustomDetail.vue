@@ -119,7 +119,8 @@ export default {
         [{lbl: '采购用途', key: 'procurementPurpose', type:'object', factValue: (row) => {return row.map(itm => itm.name).join(',')}}, {lbl: '订金需求', key: 'depositRequirement'}],
         [{lbl: '经营用途', key: 'dealPurpose', type:'object', factValue: (row) => {return row.map(itm => itm.name).join(',')}}, {lbl: '常用开平尺寸', key: 'depositCycle'}],
         [{lbl: '订金金额', key: 'depositRate', type: 'object', factValue: (row) => {return row ? row + '%' : ''}}, {lbl: '加工需求', key: 'processRequirement', type:'object', factValue: (row) => {return row.map(itm => itm.name).join(',')}}],
-        [{lbl: '订金周期', key: 'depositCycle', type: 'object', factValue: (row) => {return row ? row + '天' : ''}}, {lbl: '备注信息', key: 'remark'}]
+        [{lbl: '订金周期', key: 'depositCycle', type: 'object', factValue: (row) => {return row ? row + '天' : ''}}, {lbl: '备注信息', key: 'remark'}],
+        [{lbl: '是否后结算', key: 'settleDelay', type: 'object', factValue: (row) => { return row == 1 ? '是' : '否'}}]
       ],
       isEdit: true
     }
