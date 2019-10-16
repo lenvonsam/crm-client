@@ -5,15 +5,11 @@ const router = express.Router()
 const app = express()
 
 const hptl = require('../utils/httpUtil')
-// const proxyUrl = 'https://showcase.thinkingsam.cn/syun-backend/api/'
-// const proxyUrl = 'http://deploy.thinkingsam.cn/syun-backend-dev/'
 // const proxyUrl = 'http://172.16.120.250:7786/'
-// const proxyUrl = 'http://localhost:7786/' 
-// const proxyUrl = 'http://172.16.16.193:7786/'
-// const proxyUrl = 'http://localhost:7786/'
-// const proxyUrl = 'http://172.16.120.225:7786/'
+const proxyUrl = 'http://localhost:7786/'
 // const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+// const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+const xyUrl = 'http://172.16.120.248//gzql'
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
@@ -152,13 +148,28 @@ router.post('/common/post', (req, res) => {
 
 router.post('/common/get', (req, res) => {
   const body = req.body
-  hptl.httpGet(proxyUrl + body.url).then(({data}) => {
+  // hptl.httpGet(proxyUrl + body.url).then(({data}) => {
+  //   res.json(data)
+  // }, err => {
+  //   console.log(err)
+  //   res.json({returnCode: -1, errMsg: '网络异常'})
+  // })
+  getMethod(req, res, proxyUrl)
+})
+
+router.post('/xy/get', (req, res) => {
+  getMethod(req, res, xyUrl)
+})
+
+function getMethod (req, res, proxy) {
+  const body = req.body
+  hptl.httpGet(proxy + body.url).then(({data}) => {
     res.json(data)
   }, err => {
     console.log(err)
     res.json({returnCode: -1, errMsg: '网络异常'})
   })
-})
+}
 
 router.post('/common/del', (req, res) => {
   const body = req.body
