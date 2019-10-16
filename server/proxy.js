@@ -6,10 +6,10 @@ const app = express()
 
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://172.16.120.250:7786/'
-const proxyUrl = 'http://localhost:7786/'
+// const proxyUrl = 'http://localhost:7786/'
 // const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-// const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
-const xyUrl = 'http://172.16.120.248//gzql'
+const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+const xyUrl = 'http://172.16.120.248/gzql'
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
