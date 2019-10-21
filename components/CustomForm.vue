@@ -514,12 +514,16 @@ export default {
           })
         })
         if (isValid) {
-          let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
-          if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
-            this.msgShow(this, '请选择工作组')
-            return
-          }          
-          this.customDetailCreate()
+          try {
+            let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
+            if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
+              this.msgShow(this, '请选择工作组')
+              return
+            }          
+            this.customDetailCreate()
+          } catch(e) {
+            this.msgShow(this, '业务部门不存在')
+          }
         } else {
           document.body.scrollTop = 150
           this.msgShow(this, '请规范输入必填项')
@@ -869,14 +873,23 @@ export default {
         if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
         if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
         if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
-        this.localDepositeRate = Number(newVal.depositRate)
-        // 客户单位性质 2 订金 3 白条
-        const idxDeposit = newVal.unitProperty.indexOf('2')
-        if (idxDeposit < 0) this.chooseDeposit = false
-        else this.chooseDeposit = true
-        const idxIous = newVal.unitProperty.indexOf('3')
-        if (idxIous < 0) this.chooseIous = false
-        else this.chooseIous = true
+        if (newVal.depositRate) {
+          this.localDepositeRate = Number(newVal.depositRate)
+        } else {
+          this.localDepositeRate = 20
+        }
+        if (newVal.unitProperty) {
+          // 客户单位性质 2 订金 3 白条
+          const idxDeposit = newVal.unitProperty.indexOf('2')
+          if (idxDeposit < 0) this.chooseDeposit = false
+          else this.chooseDeposit = true
+          const idxIous = newVal.unitProperty.indexOf('3')
+          if (idxIous < 0) this.chooseIous = false
+          else this.chooseIous = true
+        } else {
+          this.chooseDeposit = false
+          this.chooseIous = false
+        }
       }
       // if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
       // if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)

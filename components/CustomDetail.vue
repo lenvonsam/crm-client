@@ -124,12 +124,16 @@ export default {
           {
             lbl: '订金客户单位性质', type: 'self', factValue(row) {
               let info = ''
-              const arr = row.unitProperty.split(',')
-              arr.map(itm => {
-                if (itm === '1') info+= '全额支付 | '
-                if (itm === '2') info+= `订金支付(比例：${row.depositRate}%) | `
-                if (itm === '3') info+= '白条支付'
-              })
+              if (row.unitProperty) {
+                const arr = row.unitProperty.split(',')
+                arr.map(itm => {
+                  if (itm === '1') info+= '全额支付 | '
+                  if (itm === '2') info+= `订金支付(比例：${row.depositRate}%) | `
+                  if (itm === '3') info+= '白条支付'
+                })
+              } else {
+                info = '全额支付 | '
+              }
               return info
             }
           },
