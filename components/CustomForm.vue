@@ -105,7 +105,7 @@ div
               el-col(:span="12")
                 el-row
                   el-col(:span="8")
-                    el-checkbox(v-model="chooseDeposit") 订金支付（{{localDepositeRate}}%）
+                    el-checkbox(v-model="chooseDeposit") 定金支付（{{localDepositeRate}}%）
                   el-col(:span="12")
                     el-slider(v-model="localDepositeRate", :disabled="!chooseDeposit", :min="1")
               el-col(:span="6")
@@ -470,7 +470,7 @@ export default {
       cloneObj: {},
       cityAreaArr: cityArea,
       localDepositeRate: 20,
-      // 选择订金
+      // 选择定金
       chooseDeposit: true,
       // 选择白条
       chooseIous: false
@@ -878,18 +878,19 @@ export default {
         } else {
           this.localDepositeRate = 20
         }
-        if (newVal.unitProperty) {
-          // 客户单位性质 2 订金 3 白条
-          const idxDeposit = newVal.unitProperty.indexOf('2')
-          if (idxDeposit < 0) this.chooseDeposit = false
-          else this.chooseDeposit = true
-          const idxIous = newVal.unitProperty.indexOf('3')
-          if (idxIous < 0) this.chooseIous = false
-          else this.chooseIous = true
-        } else {
-          this.chooseDeposit = false
-          this.chooseIous = false
-        }
+        // FIXME 空值判断暂时保留 
+        // if (newVal.unitProperty) {
+        // 客户单位性质 2 订金 3 白条
+        const idxDeposit = newVal.unitProperty.indexOf('2')
+        if (idxDeposit < 0) this.chooseDeposit = false
+        else this.chooseDeposit = true
+        const idxIous = newVal.unitProperty.indexOf('3')
+        if (idxIous < 0) this.chooseIous = false
+        else this.chooseIous = true
+        // } else {
+          // this.chooseDeposit = true
+          // this.chooseIous = false
+        // }
       }
       // if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
       // if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
