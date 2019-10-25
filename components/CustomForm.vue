@@ -98,6 +98,19 @@ div
             el-radio(v-model="form.settleDelay",label="0") 否
             el-radio(v-model="form.settleDelay", label="1") 是
       el-row.pr-10
+        el-col(:span="24")
+          el-form-item(label="客户单位性质:")
+            el-row
+              el-col(:span="6") 全款支付
+              el-col(:span="12")
+                el-row
+                  el-col(:span="8")
+                    el-checkbox(v-model="chooseDeposit") 定金支付（{{localDepositeRate}}%）
+                  el-col(:span="12")
+                    el-slider(v-model="localDepositeRate", :disabled="!chooseDeposit", :min="1")
+              el-col(:span="6")
+                el-checkbox(v-model="chooseIous", @change="iousChange") 白条支付
+      el-row.pr-10
         el-col(:span="12")
           el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
             el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
@@ -270,7 +283,8 @@ div
           el-form-item(label="经营用途：")
             el-select.full-width(v-model="form.fkDealPurposeUse", multiple, filterable, default-first-option, placeholder="请选择经营用途", @change="$forceUpdate()")
               el-option(v-for="item in form.fkDealPurposeUseVal", :key="item.id", :label="item.name", :value="item.name")
-      el-row.pr-10
+      //- 订金金额、需求、周期暂时隐藏，2019/10/14
+      //- el-row.pr-10
         el-col(:span="8")
           el-form-item(label="订金需求：")
             el-select.full-width(v-model="form.depositRequirement", placeholder="请选择订金需求", @change="$forceUpdate()")
@@ -454,7 +468,12 @@ export default {
       addr: areaJson,
       customerSourceDisabled: false,
       cloneObj: {},
-      cityAreaArr: cityArea
+      cityAreaArr: cityArea,
+      localDepositeRate: 20,
+      // 选择定金
+      chooseDeposit: true,
+      // 选择白条
+      chooseIous: false
     }
   },
   computed: {
@@ -495,12 +514,16 @@ export default {
           })
         })
         if (isValid) {
-          let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
-          if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
-            this.msgShow(this, '请选择工作组')
-            return
-          }          
-          this.customDetailCreate()
+          try {
+            let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
+            if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
+              this.msgShow(this, '请选择工作组')
+              return
+            }          
+            this.customDetailCreate()
+          } catch(e) {
+            this.msgShow(this, '业务部门不存在')
+          }
         } else {
           document.body.scrollTop = 150
           this.msgShow(this, '请规范输入必填项')
@@ -588,6 +611,11 @@ export default {
             delete this.form[key]
           }
         }
+        if (this.localDepositeRate > 0 && this.chooseDeposit) this.form.depositRate = this.localDepositeRate.toString()
+        const unitPropertyArr = []
+        if (this.chooseDeposit) unitPropertyArr.push('2')
+        if (this.chooseIous) unitPropertyArr.push('3')
+        this.form.unitProperty = unitPropertyArr.join(',') 
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
         if (data.returnCode === 0) {
           this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
@@ -601,6 +629,32 @@ export default {
         console.error(e)
         this.msgShow(this)
         this.initform(this.cloneObj, false)
+      }
+    },
+    iousChange (val) {
+      // 白条选择
+      if (!val) {
+        const me = this
+        this.apiStreamPost('/proxy/xy/get', {url: '/crm/getDepositVirtual.shtml?cust_no=' + this.originObj.ebusiMemberCode}).then(res => {
+          console.log(res)
+          if (res.status === 200) {
+            // 保证金 depositMomeny
+            if (res.data.depositMoney > 0) {
+              me.msgShow(me, '该单位有锁定的保证金，不能取消！')
+              me.chooseIous = true
+            } 
+            if (res.data.virtualMoney > 0) {
+              me.msgShow(me, '该单位有欠款未还，不能取消！')
+              me.chooseIous = true
+            }
+          } else {
+            me.chooseIous = true
+              me.msgShow(me, '获取型云数据失败，暂无法取消')
+          }
+        }).catch(err => {
+          console.log(err)
+          me.msgShow(me, '获取型云数据失败，暂无法取消')
+        })
       }
     },
     async fkRelationCreate () {
@@ -819,6 +873,24 @@ export default {
         if (newVal.dealGoods) this.form.fkDealGoods = newVal.dealGoods.map(itm => itm.name)
         if (newVal.dealPurpose) this.form.fkDealPurposeUse = newVal.dealPurpose.map(itm => itm.name)
         if (newVal.industry) this.form.fkIndustry = newVal.industry.map(item => item.name)
+        if (newVal.depositRate) {
+          this.localDepositeRate = Number(newVal.depositRate)
+        } else {
+          this.localDepositeRate = 20
+        }
+        // FIXME 空值判断暂时保留 
+        // if (newVal.unitProperty) {
+        // 客户单位性质 2 订金 3 白条
+        const idxDeposit = newVal.unitProperty.indexOf('2')
+        if (idxDeposit < 0) this.chooseDeposit = false
+        else this.chooseDeposit = true
+        const idxIous = newVal.unitProperty.indexOf('3')
+        if (idxIous < 0) this.chooseIous = false
+        else this.chooseIous = true
+        // } else {
+          // this.chooseDeposit = true
+          // this.chooseIous = false
+        // }
       }
       // if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
       // if (newVal.procurementPurpose) this.form.fkPurchaseUse = newVal.procurementPurpose.map(item => item.name)
