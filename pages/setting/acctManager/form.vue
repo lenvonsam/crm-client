@@ -96,7 +96,8 @@
           birthday: '',
           inTime: '',
           workGroup: '',
-          remark: ''
+          remark: '',
+          idCardNo: ''
         },
         formItems: [
           [{lbl: '登录账号', key: 'loginAcct'}, {lbl: '姓名', key: 'name'}],
@@ -111,7 +112,7 @@
           [{lbl: '婚姻状况', key: 'maritalStatus', type: 'select', selectKey: 'maritalOpts'}, {lbl: '政治面貌', key: 'politicalLandscape', type: 'select', selectKey: 'politicalOpts'}],
           [{lbl: '生日', key: 'birthday', type: 'date'}, {lbl: '入职时间', type: 'date', key: 'inTime'}],
           [{lbl: '工作组', key: 'workGroup'}, {lbl: '民族', key: 'national'}],
-          [{lbl: '备注', key: 'remark'}]
+          [{lbl: '备注', key: 'remark'}, {lbl: '身份证', key: 'idCardNo'}]
         ],
         formRules: {
           loginAcct: [{required: true, message: '不能为空', trigger: 'blur'}],
@@ -223,6 +224,7 @@
             delete param.fkRole
             delete param.auths
           }
+          if (param.idCardNo && param.idCardNo !== '') param.idCardNo = param.idCardNo.trim()
           if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
           if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/createOrUpdate', params: param})

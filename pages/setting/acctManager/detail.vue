@@ -32,7 +32,8 @@
           [{lbl: '地址', key: 'addr'}, {lbl: '籍贯', key: 'nativePlace'}],
           [{lbl: '婚姻状况', key: 'maritalStatus'}, {lbl: '政治面貌', key: 'politicalLandscape'}],
           [{lbl: '生日', key: 'birthday'}, {lbl: '入职时间', key: 'inTime'}],
-          [{lbl: '工作组', key: 'workGroup'}, {lbl: '备注', key: 'remark'}]
+          [{lbl: '工作组', key: 'workGroup'}, {lbl: '备注', key: 'remark'}],
+          [{lbl: '身份证', key: 'idCardNo'}]
         ]
       }
     },
