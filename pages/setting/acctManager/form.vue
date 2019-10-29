@@ -224,7 +224,7 @@
             delete param.fkRole
             delete param.auths
           }
-          param.idCardNo = param.idCardNo.trim()
+          if (param.idCardNo && param.idCardNo !== '') param.idCardNo = param.idCardNo.trim()
           if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
           if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/createOrUpdate', params: param})
