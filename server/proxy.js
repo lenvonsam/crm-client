@@ -6,8 +6,8 @@ const app = express()
 
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://localhost:7786/'
-const proxyUrl = 'http://192.168.20.170:8080/crmserver/'
-// const proxyUrl = 'http://192.168.20.170:7786/'
+// const proxyUrl = 'http://192.168.20.170:8080/crmserver/'
+const proxyUrl = 'http://192.168.20.170:7786/'
 const xyUrl = 'http://192.168.20.130/gzql'
 
 
