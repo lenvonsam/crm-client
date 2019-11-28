@@ -923,6 +923,7 @@ export default {
       /**
        * ERP 有历史记录的客户不能修改抬头
        */
+      debugger
       if (this.$route.query.type === 'edit') {
         const me = this
         if (this.form.erpCode) {
@@ -956,6 +957,7 @@ export default {
       this.form.fkAcctId = this.currentUser.id
       this.form.fkAcctName = this.currentUser.name      
       this.form.fkRelation = [1]
+      this.compNameEditDisable = false
       if (this.$route.query.type == 'formalAdd') {
         this.form.fkRelation = [2]
         this.form.fkCustomPropertyId = 5
