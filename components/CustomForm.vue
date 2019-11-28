@@ -475,7 +475,7 @@ export default {
       // 选择白条
       chooseIous: false,
       // 客户名称是否可以修改
-      compNameEditDisable: false
+      compNameEditDisable: true
     }
   },
   computed: {
@@ -929,11 +929,15 @@ export default {
           this.apiStreamPost('/proxy/erp/get', {url: 'querySbillByCust2CRM.htm?body=' + this.form.erpCode, params: {}, method: 'get'}).then(res => {
             const result = JSON.parse(unescape(res.data.replace(/\\u/gi, '%u')))
             console.log(result)
-            if (result.success === '0' && result.body !== '0') {
-              me.compNameEditDisable = true
-            } 
+            if (!(result.success === '0' && result.body !== '0')) {
+              me.compNameEditDisable = false
+            }
           })
+        } else {
+          me.compNameEditDisable = false
         }
+      } else {
+        this.compNameEditDisable = false
       }
     }
   },
