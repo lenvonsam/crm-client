@@ -7,8 +7,8 @@ const app = express()
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://localhost:7786/'
 const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-const xyUrl = 'http://192.168.80.105:8080/gzql'
-
+const xyUrl = 'http://192.168.80.105/gzql'
+const erpUrl = 'http://192.168.80.103:8980/eep/interfacesAjax!'
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
@@ -137,6 +137,10 @@ router.post('/common/get', (req, res) => {
 
 router.post('/xy/get', (req, res) => {
   getMethod(req, res, xyUrl)
+})
+
+router.post('/erp/get', (req, res) => {
+  getMethod(req, res, erpUrl)
 })
 
 function getMethod (req, res, proxy) {

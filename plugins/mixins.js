@@ -1,6 +1,7 @@
 import Vue from 'vue'
-import httpUtil from '../utils/httpUtil'
+// import httpUtil from '../utils/httpUtil'
 import elementUtil from '../utils/elmtUtil'
+const httpUtil = require('../utils/httpUtil')
 // import { mapState } from 'vuex'
 
 function formatNumber (n) {

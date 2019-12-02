@@ -23,7 +23,7 @@ div
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司名称：", prop="compName")
-          el-input(v-model="form.compName", placeholder="请输入公司名称", clearable)
+          el-input(v-model="form.compName", placeholder="请输入公司名称", clearable, :disabled="compNameEditDisable")
       el-col(:span="12")
         el-form-item(label="简称：")
           el-input(v-model="form.compNameAb", placeholder="请输入简称", clearable)
@@ -473,7 +473,9 @@ export default {
       // 选择定金
       chooseDeposit: true,
       // 选择白条
-      chooseIous: false
+      chooseIous: false,
+      // 客户名称是否可以修改
+      compNameEditDisable: true
     }
   },
   computed: {
@@ -918,6 +920,26 @@ export default {
       if (this.form.ebusiAdminAcctNo) {
         this.customerSourceDisabled = true
       }
+      /**
+       * ERP 有历史记录的客户不能修改抬头
+       */
+      debugger
+      if (this.$route.query.type === 'edit') {
+        const me = this
+        if (this.form.erpCode) {
+          this.apiStreamPost('/proxy/erp/get', {url: 'querySbillByCust2CRM.htm?body=' + this.form.erpCode, params: {}, method: 'get'}).then(res => {
+            const result = JSON.parse(unescape(res.data.replace(/\\u/gi, '%u')))
+            console.log(result)
+            if (!(result.success === '0' && result.body !== '0')) {
+              me.compNameEditDisable = false
+            }
+          })
+        } else {
+          me.compNameEditDisable = false
+        }
+      } else {
+        this.compNameEditDisable = false
+      }
     }
   },
   mounted() {
@@ -935,6 +957,7 @@ export default {
       this.form.fkAcctId = this.currentUser.id
       this.form.fkAcctName = this.currentUser.name      
       this.form.fkRelation = [1]
+      this.compNameEditDisable = false
       if (this.$route.query.type == 'formalAdd') {
         this.form.fkRelation = [2]
         this.form.fkCustomPropertyId = 5
