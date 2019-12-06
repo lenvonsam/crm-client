@@ -940,6 +940,9 @@ export default {
       } else {
         this.compNameEditDisable = false
       }
+      if (this.currentUser.id === 1) {
+        this.compNameEditDisable = false
+      }
     }
   },
   mounted() {
