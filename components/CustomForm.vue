@@ -391,7 +391,7 @@ export default {
       // }
     }
     var faxNumValid = (rule, value, callback) => {
-        if (this.faxNumReg(value) || value.trim() == '') {
+        if (this.faxNumReg(value) || (value && value.trim() == '')) {
           callback()
         } else {
           callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
@@ -536,6 +536,7 @@ export default {
     },
     async customDetailCreate () {
       try {
+        this.pageShow(this, `${this.$route.query.type=='edit' ? '更新': '保存'}中，请耐心等待`)
         this.cloneObj = Object.assign({}, this.form)
         if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
@@ -619,6 +620,7 @@ export default {
         if (this.chooseIous) unitPropertyArr.push('3')
         this.form.unitProperty = unitPropertyArr.join(',') 
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
+        this.pageHide(this)
         if (data.returnCode === 0) {
           this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
           this.back()
@@ -628,6 +630,7 @@ export default {
           // this.$forceUpdate()
         }
       } catch (e) {
+        this.pageHide(this)
         console.error(e)
         this.msgShow(this)
         this.initform(this.cloneObj, false)
