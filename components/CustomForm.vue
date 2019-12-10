@@ -391,7 +391,7 @@ export default {
       // }
     }
     var faxNumValid = (rule, value, callback) => {
-        if (this.faxNumReg(value.trim()) || value.trim() == '') {
+        if (this.faxNumReg(value) || value.trim() == '') {
           callback()
         } else {
           callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
@@ -408,7 +408,7 @@ export default {
     var phoneValid = (rule, value, callback) => {
       let reg = this.phoneReg
       // console.log('phoneReg:>>' + reg + ';val:>>' + value)
-      if (value.trim().length === 0) {
+      if (!value || value.trim().length === 0) {
         callback(new Error('手机号不能为空'))
       } else if (value.trim().length != 11) {
         callback(new Error('手机号位数要是11位'))
@@ -420,7 +420,7 @@ export default {
     }
     var compNameValid = (rule, value, callback) => {
       let reg = /^[^\x00-\xff]+$/
-      if (value.trim().length === 0) {
+      if (!value || value.trim().length === 0) {
         callback(new Error('公司名称不能为空'))
       } else {
         callback()
@@ -430,7 +430,7 @@ export default {
       // }
     }
     var compAddrValid = (rule, value, callback) => {
-      if (!value[2]) {
+      if (!value || !value[2]) {
         callback(new Error('请完善公司地址'))
       } else {
         callback()
