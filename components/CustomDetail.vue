@@ -167,6 +167,7 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url:'customerManage/customer/' + this.$route.query.id})
         if (data.returnCode === 0) {
           this.obj = data.obj
+          this.obj.mainCustomer = data.mainCustomer
           this.obj.setUpDateStr = (data.obj.setUpDate) ? this.date2Str(new Date(data.obj.setUpDate)) : ''
           this.obj.startTime = (data.obj.startTime) ? this.date2Str(new Date(data.obj.startTime)) : ''          
           this.obj.cstmType = (data.obj.cstmType == 1) ? '老客户' : '新客户'

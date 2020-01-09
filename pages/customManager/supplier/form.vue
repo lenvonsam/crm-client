@@ -24,7 +24,10 @@ export default {
     async queryAcct () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'customerManage/customer/' + this.$route.query.id})
-        if (data.returnCode === 0) this.obj = data.obj
+        if (data.returnCode === 0){
+          this.obj = data.obj
+          this.obj.mainCustomer = data.mainCustomer
+        }
       } catch (e) {
         console.error(e)
       }
