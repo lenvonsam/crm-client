@@ -20,6 +20,9 @@
               el-date-picker.w-250(v-model="obj[fm[0].key]", type="date", size="small")
             template(v-else-if="fm[0].type == 'readOnly'")
               el-input.w-250(readOnly, :placeholder="fm[0].placeholder", v-model="obj[fm[0].key]", size="small")
+            template(v-else-if="fm[0].type == 'wxSelect'")
+              .w-250
+                wx-user-select(v-model="obj[fm[0].key]", :multiple="true", style="width: 100%", size="small", :defaultValue="wxUsersOpts", @change="wxSelectChange")
             template(v-else)
               el-input.w-250(size="small", v-model="obj[fm[0].key]")
         .col(v-if="fm.length == 2")
@@ -45,11 +48,13 @@
 
 <script>
   import breadcrumb from '@/components/Breadcrumb.vue'
+  import wxUserSelect from '@/components/WxUserSelector.vue'
   import { mapState, mapActions } from 'vuex'
   export default {
     layout: 'main',
     components: {
-      breadcrumb
+      breadcrumb,
+      wxUserSelect
     },
     data () {
       var phoneValid = (rule, value, callback) => {
@@ -72,7 +77,11 @@
         dptOpts: [],
         // 角色下拉
         roleOpts: [],
+        // 微信绑定
+        wxUsersOpts: [],
+        wxUserChangeValues: [],
         obj: {
+          wxUserId: [],
           loginAcct: '',
           name: '',
           orgName: '',
@@ -103,6 +112,7 @@
           [{lbl: '登录账号', key: 'loginAcct'}, {lbl: '姓名', key: 'name'}],
           [{lbl: '机构', key: 'orgName', type: 'readOnly', placeholder: '请选择部门'}, {lbl: '部门', key: 'dptId', type: 'remoteSelect', selectKey: 'dptOpts', valueKey: 'name'}],
           [{lbl: '手机号', key: 'phone'}, {lbl: '数据权限等级', key: 'dataLevel', type: 'select', selectKey: 'dataAuthOpts'}],
+          // [{lbl: '公众号绑定', key: 'wxUserId', type: 'wxSelect', selectKey: 'wxUsersOpts'}],
           [{lbl: '账号状态', key: 'status', type: 'radio', radios: [{lbl: '启用', val: 1}, {lbl: '停用', val: 0}]}, {lbl: '角色', key: 'roleId', type: 'remoteSelect', selectKey: 'roleOpts', valueKey: 'name'}],
           [{lbl: '职务状态', key: 'demission', type: 'radio', radios: [{lbl: '在职', val: 0}, {lbl: '离职', val: 1}]}, {lbl: '性别', key: 'sex', type: 'radio', radios: [{lbl: '男', val: 1}, {lbl: '女', val: 2}]}],
           [{lbl: '职位', key: 'position'}, {lbl: '学历', key: 'edu', type: 'select', selectKey: 'eduOpts'}],
@@ -129,6 +139,7 @@
       this.$nextTick(() => {
         this.dptCombo()
         this.roleCombo()
+        this.wxUsersCombo()
         if (this.$route.query.type && this.$route.query.type === 'new') {
           this.breadItems = ['系统设置', '账号管理','新增账号']
         } else {
@@ -157,6 +168,10 @@
       ...mapActions([
         'setUser'
       ]),
+      wxSelectChange (val) {
+        this.wxUserChangeValues = val
+        console.log(this.wxUserChangeValues)
+      },
       selectChange (val) {
         this.$forceUpdate()
       },
@@ -181,6 +196,24 @@
         // console.log(key)
         // console.log(this[key])
         return this[key]
+      },
+      async wxUsersCombo () {
+        try {
+          const { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/acct/'+this.$route.query.id+'/wxLinkers'})
+          console.log('wxuser list:>>', data.list)
+          if (data.returnCode === 0) {
+            this.obj.wxUserId = data.list.map(itm => itm.id)
+            const arr = []
+            data.list.map(itm => {
+              itm.nickname = itm.name
+              arr.push(itm)
+            })
+            this.wxUsersOpts = arr
+          }
+        } catch (e) {
+          console.error(e)
+          this.msgShow(this)
+        }
       },
       async dptCombo () {
         try {
@@ -227,6 +260,9 @@
           if (param.idCardNo && param.idCardNo !== '') param.idCardNo = param.idCardNo.trim()
           if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
           if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
+          if (this.wxUserChangeValues.length > 0) param.wxUsers = this.wxUserChangeValues.join('|**|')
+          // console.log('params:>>', param)
+          // console.log('wxchange:>>', this.wxUserChangeValues)
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/createOrUpdate', params: param})
           if (data.returnCode === 0) {
             if (this.currentUser.id === data.currentUser.id) this.setUser(data.currentUser)

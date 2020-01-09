@@ -112,6 +112,13 @@ div
                 el-checkbox(v-model="chooseIous", @change="iousChange") 白条支付
       el-row.pr-10
         el-col(:span="12")
+          el-form-item(label="关联主体抬头：")
+            el-select.full-width(v-model="form.mainCstmId", value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet", clearable, @change="$forceUpdate()")
+              el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
+
+        el-col(:span="12")
+      el-row.pr-10
+        el-col(:span="12")
           el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
             el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
         el-col(:span="12")
@@ -475,7 +482,9 @@ export default {
       // 选择白条
       chooseIous: false,
       // 客户名称是否可以修改
-      compNameEditDisable: true
+      compNameEditDisable: true,
+      // 主体客户ids
+      cstmIdList: []
     }
   },
   computed: {
@@ -602,6 +611,10 @@ export default {
         if (this.form.startTime) {
           this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))          
         }
+        if (this.form.mainCstmId) this.form.mainCstm = this.form.mainCstmId
+        else this.form.mainCstm = this.originObj.id
+        delete this.form.mainCustomer
+        delete this.form.mainCstmId
         delete this.form.startTime
         this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
@@ -660,6 +673,34 @@ export default {
           console.log(err)
           me.msgShow(me, '获取型云数据失败，暂无法取消')
         })
+      }
+    },
+    async customerGet (query) {
+      let params = {
+        uid: this.currentUser.id,
+        pageSize: 10,
+        compName: query ? query : ''
+      }
+      if(query !== ''){
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/queryCombo', params: params})
+            if (data.returnCode === 0) {
+              this.cstmIdList = data.list
+              const idx = this.cstmIdList.findIndex(itm => itm.id === this.originObj.mainCustomer.id)
+              console.log('customer get idx:>>', idx)
+              if (idx < 0) {
+                this.cstmIdList.push(this.originObj.mainCustomer)
+                this.$forceUpdate()
+              }
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+            // this.loading = false
+        } catch (e) {
+          console.error(e)
+          // this.msgShow(this)
+          // this.loading = false
+        }
       }
     },
     async fkRelationCreate () {
@@ -835,6 +876,7 @@ export default {
       console.log('init form')
       console.log(newVal)
       this.form = Object.assign(this.form, newVal)
+      this.form.mainCstmId = this.form.mainCustomer.id
       this.form.customerType = newVal.customerType.toString()
       this.form.cstmType = newVal.cstmType.toString()
       this.form.status = newVal.status.toString()
@@ -926,7 +968,6 @@ export default {
       /**
        * ERP 有历史记录的客户不能修改抬头
        */
-      // debugger
       if (this.$route.query.type === 'edit') {
         const me = this
         if (this.form.erpCode) {
@@ -957,6 +998,7 @@ export default {
     this.purposeCreate()
     this.processReqCreate()
     this.fkIndustryValCreate()
+    this.customerGet()
     // if (this.originObj) this.form = this.originObj
     if (this.$route.query.type == 'new' || this.$route.query.type == 'formalAdd') {
       this.form.fkDptId = this.currentUser.fkDpt.id
