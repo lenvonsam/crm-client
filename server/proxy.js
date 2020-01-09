@@ -10,6 +10,7 @@ const hptl = require('../utils/httpUtil')
 const proxyUrl = 'http://192.168.20.170:7786/'
 const xyUrl = 'http://192.168.20.130/gzql'
 const erpUrl = 'http://erpapp.xingyun361.com/eep/interfacesAjax!'
+const scpUrl = 'http://192.168.80.210:9901/api/'
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
@@ -143,6 +144,21 @@ router.post('/xy/get', (req, res) => {
 router.post('/erp/get', (req, res) => {
   getMethod(req, res, erpUrl)
 })
+
+router.post('/scp/post', (req, res) => {
+  postMethod(req, res, scpUrl)
+})
+
+function postMethod (req, res, proxy) {
+  const body = req.body
+  console.log(body)
+  hptl.httpPost(proxy + body.url, body.params).then(({data}) => {
+    res.json(data)
+  }, err => {
+    console.log(err)
+    res.json({returnCode: -1, errMsg: '网络异常'})
+  })
+}
 
 function getMethod (req, res, proxy) {
   const body = req.body

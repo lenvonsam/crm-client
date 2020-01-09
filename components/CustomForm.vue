@@ -112,6 +112,13 @@ div
                 el-checkbox(v-model="chooseIous", @change="iousChange") 白条支付
       el-row.pr-10
         el-col(:span="12")
+          el-form-item(label="关联主体抬头：")
+            el-select.full-width(v-model="form.mainCstmId", value-key, filterable, remote, placeholder="请输入关键词", :remote-method="customerGet", clearable, @change="$forceUpdate()")
+              el-option(v-for="item in cstmIdList", :key="item.id", :label="item.compName", :value="item.id")
+
+        el-col(:span="12")
+      el-row.pr-10
+        el-col(:span="12")
           el-form-item.validFormal(label="工商证照编码：", prop="busiLicenseCode")
             el-input(v-model="form.busiLicenseCode", placeholder="请输入工商证照编码", clearable, minlength="15")
         el-col(:span="12")
@@ -391,7 +398,7 @@ export default {
       // }
     }
     var faxNumValid = (rule, value, callback) => {
-        if (this.faxNumReg(value.trim()) || value.trim() == '') {
+        if (this.faxNumReg(value) || (value && value.trim() == '')) {
           callback()
         } else {
           callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
@@ -408,7 +415,7 @@ export default {
     var phoneValid = (rule, value, callback) => {
       let reg = this.phoneReg
       // console.log('phoneReg:>>' + reg + ';val:>>' + value)
-      if (value.trim().length === 0) {
+      if (!value || value.trim().length === 0) {
         callback(new Error('手机号不能为空'))
       } else if (value.trim().length != 11) {
         callback(new Error('手机号位数要是11位'))
@@ -420,7 +427,7 @@ export default {
     }
     var compNameValid = (rule, value, callback) => {
       let reg = /^[^\x00-\xff]+$/
-      if (value.trim().length === 0) {
+      if (!value || value.trim().length === 0) {
         callback(new Error('公司名称不能为空'))
       } else {
         callback()
@@ -430,7 +437,7 @@ export default {
       // }
     }
     var compAddrValid = (rule, value, callback) => {
-      if (!value[2]) {
+      if (!value || !value[2]) {
         callback(new Error('请完善公司地址'))
       } else {
         callback()
@@ -475,7 +482,9 @@ export default {
       // 选择白条
       chooseIous: false,
       // 客户名称是否可以修改
-      compNameEditDisable: true
+      compNameEditDisable: true,
+      // 主体客户ids
+      cstmIdList: []
     }
   },
   computed: {
@@ -536,6 +545,7 @@ export default {
     },
     async customDetailCreate () {
       try {
+        this.pageShow(this, `${this.$route.query.type=='edit' ? '更新': '保存'}中，请耐心等待`)
         this.cloneObj = Object.assign({}, this.form)
         if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
@@ -601,6 +611,10 @@ export default {
         if (this.form.startTime) {
           this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))          
         }
+        if (this.form.mainCstmId) this.form.mainCstm = this.form.mainCstmId
+        else this.form.mainCstm = this.originObj.id
+        delete this.form.mainCustomer
+        delete this.form.mainCstmId
         delete this.form.startTime
         this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
@@ -619,6 +633,7 @@ export default {
         if (this.chooseIous) unitPropertyArr.push('3')
         this.form.unitProperty = unitPropertyArr.join(',') 
         let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
+        this.pageHide(this)
         if (data.returnCode === 0) {
           this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
           this.back()
@@ -628,6 +643,7 @@ export default {
           // this.$forceUpdate()
         }
       } catch (e) {
+        this.pageHide(this)
         console.error(e)
         this.msgShow(this)
         this.initform(this.cloneObj, false)
@@ -657,6 +673,34 @@ export default {
           console.log(err)
           me.msgShow(me, '获取型云数据失败，暂无法取消')
         })
+      }
+    },
+    async customerGet (query) {
+      let params = {
+        uid: this.currentUser.id,
+        pageSize: 10,
+        compName: query ? query : ''
+      }
+      if(query !== ''){
+        try {
+          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/queryCombo', params: params})
+            if (data.returnCode === 0) {
+              this.cstmIdList = data.list
+              const idx = this.cstmIdList.findIndex(itm => itm.id === this.originObj.mainCustomer.id)
+              console.log('customer get idx:>>', idx)
+              if (idx < 0) {
+                this.cstmIdList.push(this.originObj.mainCustomer)
+                this.$forceUpdate()
+              }
+            } else {
+              this.msgShow(this, data.errMsg)
+            }
+            // this.loading = false
+        } catch (e) {
+          console.error(e)
+          // this.msgShow(this)
+          // this.loading = false
+        }
       }
     },
     async fkRelationCreate () {
@@ -832,6 +876,7 @@ export default {
       console.log('init form')
       console.log(newVal)
       this.form = Object.assign(this.form, newVal)
+      this.form.mainCstmId = this.form.mainCustomer.id
       this.form.customerType = newVal.customerType.toString()
       this.form.cstmType = newVal.cstmType.toString()
       this.form.status = newVal.status.toString()
@@ -923,7 +968,10 @@ export default {
       /**
        * ERP 有历史记录的客户不能修改抬头
        */
+<<<<<<< HEAD
       // debugger
+=======
+>>>>>>> 535ed19602c01c2319986742d621aa2a234420da
       if (this.$route.query.type === 'edit') {
         const me = this
         if (this.form.erpCode) {
@@ -954,6 +1002,7 @@ export default {
     this.purposeCreate()
     this.processReqCreate()
     this.fkIndustryValCreate()
+    this.customerGet()
     // if (this.originObj) this.form = this.originObj
     if (this.$route.query.type == 'new' || this.$route.query.type == 'formalAdd') {
       this.form.fkDptId = this.currentUser.fkDpt.id

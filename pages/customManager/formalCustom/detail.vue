@@ -11,6 +11,8 @@
         communication-info(v-if="tabName == '2'")
       el-tab-pane(label="联系人信息", name="3") 
         linker-info(v-if="tabName == '3'")
+      //- el-tab-pane(label="微信分享", name="6")
+        wechat-info(name="6", v-if="tabName=='6'")
       el-tab-pane(label="客户信息修改", name="4")
         custom-info(v-if="tabName == '4'")
       el-tab-pane(label="账户信息", name="5")
@@ -25,6 +27,7 @@ import linkerInfo from '@/components/LinkerInfo.vue'
 import communicationInfo from '@/components/CommunicationInfo.vue'
 import customInfo from '@/components/CustomInfo.vue'
 import accountInfo from '@/components/AccountInfo.vue'
+import wechatInfo from '@/components/WechatInfo.vue'
 export default {
   layout: 'main',
   components: {
@@ -34,7 +37,8 @@ export default {
     linkerInfo,
     communicationInfo,
     customInfo,
-    accountInfo
+    accountInfo,
+    wechatInfo
   },
   data () {
     return {

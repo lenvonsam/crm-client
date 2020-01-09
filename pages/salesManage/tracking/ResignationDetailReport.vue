@@ -178,7 +178,7 @@
         this.chooseArray = val
       },
       tableChange (val) {
-        debugger
+        // debugger
         this.loading = true
         this.currentPage = val
         this.queryObject.currentPage = this.currentPage - 1        
