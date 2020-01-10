@@ -580,6 +580,8 @@ export default {
           delete this.form.dealPurpose
           delete this.form.industry
           this.form.cstmId = this.$route.query.id
+          if (this.form.mainCstmId) this.form.mainCstm = this.form.mainCstmId
+          else this.form.mainCstm = this.originObj.id
         }
         if (this.$route.query.type === 'formalAdd') {
           this.form.specialMark = 0
@@ -611,8 +613,6 @@ export default {
         if (this.form.startTime) {
           this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))          
         }
-        if (this.form.mainCstmId) this.form.mainCstm = this.form.mainCstmId
-        else this.form.mainCstm = this.originObj.id
         delete this.form.mainCustomer
         delete this.form.mainCstmId
         delete this.form.startTime
@@ -873,10 +873,10 @@ export default {
       }
     },
     initform (newVal, firstTime = true) {
-      console.log('init form')
+      console.log('init form', 'first time:>>', firstTime)
       console.log(newVal)
       this.form = Object.assign(this.form, newVal)
-      this.form.mainCstmId = this.form.mainCustomer.id
+      if (this.form.mainCustomer) this.form.mainCstmId = this.form.mainCustomer.id
       this.form.customerType = newVal.customerType.toString()
       this.form.cstmType = newVal.cstmType.toString()
       this.form.status = newVal.status.toString()
