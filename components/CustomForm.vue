@@ -398,11 +398,11 @@ export default {
       // }
     }
     var faxNumValid = (rule, value, callback) => {
-        if (this.faxNumReg(value) || (value && value.trim() == '')) {
-          callback()
-        } else {
-          callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
-        }
+      if (this.faxNumReg(value) || (value && value.trim() == '')) {
+        callback()
+      } else {
+        callback(new Error('传真号码格式：888-1234567 / 8888-12345678'))
+      }
     }
     var openAcctValid = (rule, value, callback) => {
       let reg = /[\u4E00-\u9FA5]/
@@ -445,7 +445,7 @@ export default {
     }
     return {
       form: {
-        compAddr: '', compName: '', compNameAb: null,  memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity:'', compArea:'', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity:'', billArea:'', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0',depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '',  fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null,fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0',
+        compAddr: '', compName: '', compNameAb: null, memberCode: null, customerSource: '', customerChannel: null, erpCode: null, ebusiMemberCode: null, ebusiAdminAcctNo: null, customerType: '1', busiLicenseCode: null, registerCapital: null, legalRept: null, compLogoUrl: null, compAddrArr: [], faxNum: null, compSize: null, compType: null, region: null, fkSetUpDate: '', factController: null, factControllerIdno: null, tfn: null, compProv: '', compCity: '', compArea: '', openAcctName: null, openBank: null, openAcct: null, billAddr: '', billAddrArr: [], billProv: '', billCity: '', billArea: '', fkIndustry: [], fkIndustryVal: [], busiScope: null, purchaseCycle: null, weightPerMonth: '0.0', sellHighStatus: 0, creditStatus: null, annualSales: '0.0', taxPay: '0.0', depositRequirement: null, depositRate: '', depositCycle: '', kaipingSize: null, otherCooperateModel: null, remark: null, busiLicenseUrl: null, taxRegisterUrl: null, orgCertificateUrl: null, invoiceInfoUrl: null, status: '1', fkRelation: [], fkCustomPropertyId: '', fkDptId: '', fkAcctId: '', fkAcctName: '', fkPurchaseGoods: [], fkPurchaseUse: [], fkHopeAddGoods: [], fkDealGoods: [], fkDealPurposeUse: [], fkProcessingRequirements: [], name: '', phone: '', sex: 1, age: null, edu: null, nativePlace: null, wxNo: null, qqNo: null, wbName: null, otherLinkWay: null, fkRelationVal: [], fkCustomPropertyIdVal: null, fkDptIdVal: [], fkAcctIdVal: [], fkPurchaseGoodsVal: [], fkDealGoodsVal: [], fkPurchaseUseVal: [], fkDealPurposeUseVal: [], fkProcessingRequirementsVal: [], fkHopeAddGoodsVal: [], depositRateVal: [], depositCycleVal: [], createAt: new Date(), convertDate: '', startTime: new Date(), cstmType: '0',
         workgroupName: '',
         settleDelay: '0'
       },
@@ -460,15 +460,15 @@ export default {
         fkDptId: [{ required: true, message: '不能为空', trigger: 'change' }],
         fkAcctName: [{ required: true, message: '不能为空', trigger: 'change' }],
         name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        phone: [{ validator: phoneValid, trigger: 'blur', required: true}],
+        phone: [{ validator: phoneValid, trigger: 'blur', required: true }],
         // openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
-        openAcctName: [{validator: openAcctNameValid, trigger: 'blur'}],
-        faxNum: [{validator: faxNumValid, trigger: 'blur'}],
-        busiLicenseCode: [{min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur'}],
-        tfn: [{min: 15, max: 20, message: '税号必须大于15位小于20位', trigger: 'blur'}],
-        openAcct: [{validator: openAcctValid, trigger: 'blur'}],
+        openAcctName: [{ validator: openAcctNameValid, trigger: 'blur' }],
+        faxNum: [{ validator: faxNumValid, trigger: 'blur' }],
+        busiLicenseCode: [{ min: 15, max: 20, message: '公司证照编号必须大于15位小于20位', trigger: 'blur' }],
+        tfn: [{ min: 15, max: 20, message: '税号必须大于15位小于20位', trigger: 'blur' }],
+        openAcct: [{ validator: openAcctValid, trigger: 'blur' }],
         fkIndustry: [{ required: true, message: '不能为空', trigger: 'change' }],
-        region: [{required: true, message: '不能为空', trigger: 'change' }]
+        region: [{ required: true, message: '不能为空', trigger: 'change' }]
       },
       timeout: null,
       fileObj: {},
@@ -507,8 +507,8 @@ export default {
   },
   methods: {
     onSubmit (formStr) {
-      if(formStr == 'form') {
-        let valiArr = ['compName','fkRelation','fkCustomPropertyId','fkDptId','fkAcctName','name','phone','fkIndustry', 'region', 'compAddrArr']
+      if (formStr == 'form') {
+        let valiArr = ['compName', 'fkRelation', 'fkCustomPropertyId', 'fkDptId', 'fkAcctName', 'name', 'phone', 'fkIndustry', 'region', 'compAddrArr']
         let formalArr = ['openAcctName', 'faxNum', 'busiLicenseCode', 'tfn', 'openAcct']
         let that = this
         formalArr.map(itm => {
@@ -518,7 +518,7 @@ export default {
         })
         let isValid = true
         valiArr.map(itm => {
-          this.$refs[formStr].validateField(itm, function(msg){
+          this.$refs[formStr].validateField(itm, function (msg) {
             if (msg !== '') {
               isValid = false
             }
@@ -526,13 +526,13 @@ export default {
         })
         if (isValid) {
           try {
-            let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id})[0].name
+            let fkDptName = this.form.fkDptIdVal.filter((item) => { return this.form.fkDptId == item.id })[0].name
             if (this.form.fkRelation.indexOf(2) !== -1 && !this.form.workgroupName && (fkDptName.indexOf('供应') !== -1 || fkDptName.indexOf('采购') !== -1)) {
               this.msgShow(this, '请选择工作组')
               return
-            }          
+            }
             this.customDetailCreate()
-          } catch(e) {
+          } catch (e) {
             this.msgShow(this, '业务部门不存在')
           }
         } else {
@@ -545,7 +545,7 @@ export default {
     },
     async customDetailCreate () {
       try {
-        this.pageShow(this, `${this.$route.query.type=='edit' ? '更新': '保存'}中，请耐心等待`)
+        this.pageShow(this, `${this.$route.query.type == 'edit' ? '更新' : '保存'}中，请耐心等待`)
         this.cloneObj = Object.assign({}, this.form)
         if (this.form.compAddrArr[2] !== null) {
           this.form.compProv = this.form.compAddrArr[0]
@@ -586,6 +586,7 @@ export default {
         if (this.$route.query.type === 'formalAdd') {
           this.form.specialMark = 0
         }
+        if (this.form.mainCstmId && this.$route.query.type === 'new') this.form.mainCstm = this.form.mainCstmId
         delete this.form.compAddrArr
         delete this.form.billAddrArr
         delete this.form.billAddrDetail
@@ -606,22 +607,22 @@ export default {
         delete this.form.billDate
         delete this.form.convertDate
         if (this.form.phone !== ' ') this.form.phone = this.form.phone.trim()
-        if (typeof(this.form.fkAcctName) == 'number') {
+        if (typeof (this.form.fkAcctName) == 'number') {
           this.form.fkAcctId = this.form.fkAcctName
         }
         // delete this.form.fkAcctName
         if (this.form.startTime) {
-          this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))          
+          this.form['fkStartTime'] = this.date2Str(new Date(this.form.startTime))
         }
         delete this.form.mainCustomer
         delete this.form.mainCstmId
         delete this.form.startTime
         this.form.cstmType = Number(this.form.cstmType)
         this.form.uid = this.currentUser.id
-        this.form.sex = Number(this.form.sex)        
+        this.form.sex = Number(this.form.sex)
         // this.form.status = 1
         this.form.fkDptId = Number(this.form.fkDptId)
-        this.form.fkAcctId = Number(this.form.fkAcctId)        
+        this.form.fkAcctId = Number(this.form.fkAcctId)
         for (let key in this.form) {
           if (this.form[key] === null || this.form[key] === '') {
             delete this.form[key]
@@ -631,8 +632,8 @@ export default {
         const unitPropertyArr = []
         if (this.chooseDeposit) unitPropertyArr.push('2')
         if (this.chooseIous) unitPropertyArr.push('3')
-        this.form.unitProperty = unitPropertyArr.join(',') 
-        let { data } = await this.apiStreamPost('/proxy/common/post', {url: url, params: this.form})
+        this.form.unitProperty = unitPropertyArr.join(',')
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: url, params: this.form })
         this.pageHide(this)
         if (data.returnCode === 0) {
           this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
@@ -653,21 +654,21 @@ export default {
       // 白条选择
       if (!val) {
         const me = this
-        this.apiStreamPost('/proxy/xy/get', {url: '/crm/getDepositVirtual.shtml?cust_no=' + this.originObj.ebusiMemberCode}).then(res => {
+        this.apiStreamPost('/proxy/xy/get', { url: '/crm/getDepositVirtual.shtml?cust_no=' + this.originObj.ebusiMemberCode }).then(res => {
           console.log(res)
           if (res.status === 200) {
             // 保证金 depositMomeny
             if (res.data.depositMoney > 0) {
               me.msgShow(me, '该单位有锁定的保证金，不能取消！')
               me.chooseIous = true
-            } 
+            }
             if (res.data.virtualMoney > 0) {
               me.msgShow(me, '该单位有欠款未还，不能取消！')
               me.chooseIous = true
             }
           } else {
             me.chooseIous = true
-              me.msgShow(me, '获取型云数据失败，暂无法取消')
+            me.msgShow(me, '获取型云数据失败，暂无法取消')
           }
         }).catch(err => {
           console.log(err)
@@ -681,21 +682,23 @@ export default {
         pageSize: 10,
         compName: query ? query : ''
       }
-      if(query !== ''){
+      if (query !== '') {
         try {
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/queryCombo', params: params})
-            if (data.returnCode === 0) {
-              this.cstmIdList = data.list
+          let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'customerManage/customer/queryCombo', params: params })
+          if (data.returnCode === 0) {
+            this.cstmIdList = data.list
+            if (this.originObj && this.originObj.mainCustomer) {
               const idx = this.cstmIdList.findIndex(itm => itm.id === this.originObj.mainCustomer.id)
               console.log('customer get idx:>>', idx)
               if (idx < 0) {
                 this.cstmIdList.push(this.originObj.mainCustomer)
                 this.$forceUpdate()
               }
-            } else {
-              this.msgShow(this, data.errMsg)
             }
-            // this.loading = false
+          } else {
+            this.msgShow(this, data.errMsg)
+          }
+          // this.loading = false
         } catch (e) {
           console.error(e)
           // this.msgShow(this)
@@ -705,18 +708,18 @@ export default {
     },
     async fkRelationCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/busiRelation/queryCombo'})
-          if (data.returnCode === 0) {
-            let arr = []
-            data.list.map((item)=>{
-              if (item.status == 1) {
-                arr.push(item)
-              }
-            })
-            this.form.fkRelationVal = arr
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/busiRelation/queryCombo' })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkRelationVal = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
@@ -724,37 +727,37 @@ export default {
     },
     async fkIndustryValCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/industry/queryCombo'})
-          if (data.returnCode === 0) {
-            let arr = []
-            data.list.map((item)=>{
-              if (item.status == 1) {
-                arr.push(item)
-              }
-            })
-            this.form.fkIndustryVal = arr
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/industry/queryCombo' })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkIndustryVal = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
       }
-    },    
+    },
     async fkCustomPropertyCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/customProperty/queryCombo'})
-          if (data.returnCode === 0) {
-            let arr = []
-            data.list.map((item)=>{
-              if (item.status == 1) {
-                arr.push(item)
-              }
-            })
-            this.form.fkCustomPropertyIdVal = arr
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/customProperty/queryCombo' })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.form.fkCustomPropertyIdVal = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
@@ -762,10 +765,10 @@ export default {
     },
     async supplyCatalogCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/supplyCatalog/queryCombo'})
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/supplyCatalog/queryCombo' })
         if (data.returnCode === 0) {
           let arr = []
-          data.list.map((item)=>{
+          data.list.map((item) => {
             if (item.status == 1) {
               arr.push(item)
             }
@@ -783,10 +786,10 @@ export default {
     },
     async purposeCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/purpose/queryCombo'})
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/purpose/queryCombo' })
         if (data.returnCode === 0) {
           let arr = []
-          data.list.map((item)=>{
+          data.list.map((item) => {
             if (item.status == 1) {
               arr.push(item)
             }
@@ -803,10 +806,10 @@ export default {
     },
     async processReqCreate () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'basicData/processReq/queryCombo'})
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'basicData/processReq/queryCombo' })
         if (data.returnCode === 0) {
           let arr = []
-          data.list.map((item)=>{
+          data.list.map((item) => {
             if (item.status == 1) {
               arr.push(item)
             }
@@ -823,18 +826,18 @@ export default {
     async fkDptCreate () {
       let me = this
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/dpt/queryCombo'})
-          if (data.returnCode === 0) {
-            let arr = []
-            data.list.map((item)=>{
-              if (item.status == 1) {
-                arr.push(item)
-              }
-            })
-            me.form.fkDptIdVal = arr
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/dpt/queryCombo' })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          me.form.fkDptIdVal = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
@@ -847,18 +850,18 @@ export default {
       }
       let me = this
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/queryCombo', params: params})
-          if (data.returnCode === 0) {
-            let arr = []
-            data.list.map((item)=>{
-              if (item.status == 1) {
-                arr.push(item)
-              }
-            })
-            me.form.fkAcctIdVal = arr
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'setting/acct/queryCombo', params: params })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          me.form.fkAcctIdVal = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
@@ -868,7 +871,7 @@ export default {
       this.fileObj = file
     },
     compAddrArrChange () {
-      if (this.form.compAddrArr.length >= 2 ) {
+      if (this.form.compAddrArr.length >= 2) {
         this.form.region = this.form.compAddrArr[1].replace(/市|区/, '')
       }
     },
@@ -935,8 +938,8 @@ export default {
         if (idxIous < 0) this.chooseIous = false
         else this.chooseIous = true
         // } else {
-          // this.chooseDeposit = true
-          // this.chooseIous = false
+        // this.chooseDeposit = true
+        // this.chooseIous = false
         // }
       }
       // if (newVal.procurementGoods) this.form.fkPurchaseGoods = newVal.procurementGoods.map(item => item.name)
@@ -949,7 +952,7 @@ export default {
       this.form.sellHighStatus = newVal.sellHighStatus
       this.form.createAt = this.date2Str(new Date(newVal.createAt))
       this.form.startTime = (newVal.startTime) ? this.date2Str(new Date(newVal.startTime)) : null
-      
+
       this.form.compAddrArr.push(newVal.compProv)
       this.form.compAddrArr.push(newVal.compCity)
       this.form.compAddrArr.push(newVal.compArea)
@@ -971,7 +974,7 @@ export default {
       if (this.$route.query.type === 'edit') {
         const me = this
         if (this.form.erpCode) {
-          this.apiStreamPost('/proxy/erp/get', {url: 'querySbillByCust2CRM.htm?body=' + this.form.erpCode, params: {}, method: 'get'}).then(res => {
+          this.apiStreamPost('/proxy/erp/get', { url: 'querySbillByCust2CRM.htm?body=' + this.form.erpCode, params: {}, method: 'get' }).then(res => {
             const result = JSON.parse(unescape(res.data.replace(/\\u/gi, '%u')))
             console.log(result)
             if (!(result.success === '0' && result.body !== '0')) {
@@ -989,7 +992,7 @@ export default {
       }
     }
   },
-  mounted() {
+  mounted () {
     this.fkRelationCreate()
     this.fkCustomPropertyCreate()
     this.fkDptCreate()
@@ -1003,7 +1006,7 @@ export default {
     if (this.$route.query.type == 'new' || this.$route.query.type == 'formalAdd') {
       this.form.fkDptId = this.currentUser.fkDpt.id
       this.form.fkAcctId = this.currentUser.id
-      this.form.fkAcctName = this.currentUser.name      
+      this.form.fkAcctName = this.currentUser.name
       this.form.fkRelation = [1]
       this.compNameEditDisable = false
       if (this.$route.query.type == 'formalAdd') {
@@ -1011,7 +1014,7 @@ export default {
         this.form.fkCustomPropertyId = 5
         this.form.fkIndustry = ['生产/供应']
       }
-    }    
+    }
   },
   watch: {
     originObj (newVal, oldVal) {
