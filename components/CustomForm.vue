@@ -586,6 +586,7 @@ export default {
         if (this.$route.query.type === 'formalAdd') {
           this.form.specialMark = 0
         }
+        if (this.form.mainCstmId && this.$route.query.type === 'new') this.form.mainCstm = this.form.mainCstmId
         delete this.form.compAddrArr
         delete this.form.billAddrArr
         delete this.form.billAddrDetail
