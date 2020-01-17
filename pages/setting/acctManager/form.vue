@@ -112,7 +112,7 @@
           [{lbl: '登录账号', key: 'loginAcct'}, {lbl: '姓名', key: 'name'}],
           [{lbl: '机构', key: 'orgName', type: 'readOnly', placeholder: '请选择部门'}, {lbl: '部门', key: 'dptId', type: 'remoteSelect', selectKey: 'dptOpts', valueKey: 'name'}],
           [{lbl: '手机号', key: 'phone'}, {lbl: '数据权限等级', key: 'dataLevel', type: 'select', selectKey: 'dataAuthOpts'}],
-          // [{lbl: '公众号绑定', key: 'wxUserId', type: 'wxSelect', selectKey: 'wxUsersOpts'}],
+          [{lbl: '公众号绑定', key: 'wxUserId', type: 'wxSelect', selectKey: 'wxUsersOpts'}],
           [{lbl: '账号状态', key: 'status', type: 'radio', radios: [{lbl: '启用', val: 1}, {lbl: '停用', val: 0}]}, {lbl: '角色', key: 'roleId', type: 'remoteSelect', selectKey: 'roleOpts', valueKey: 'name'}],
           [{lbl: '职务状态', key: 'demission', type: 'radio', radios: [{lbl: '在职', val: 0}, {lbl: '离职', val: 1}]}, {lbl: '性别', key: 'sex', type: 'radio', radios: [{lbl: '男', val: 1}, {lbl: '女', val: 2}]}],
           [{lbl: '职位', key: 'position'}, {lbl: '学历', key: 'edu', type: 'select', selectKey: 'eduOpts'}],
