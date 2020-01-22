@@ -47,17 +47,17 @@
 </template>
 
 <script>
-  import breadcrumb from '@/components/Breadcrumb.vue'
-  import wxUserSelect from '@/components/WxUserSelector.vue'
-  import { mapState, mapActions } from 'vuex'
-  export default {
-    layout: 'main',
-    components: {
-      breadcrumb,
-      wxUserSelect
-    },
-    data () {
-      var phoneValid = (rule, value, callback) => {
+import breadcrumb from '@/components/Breadcrumb.vue'
+import wxUserSelect from '@/components/WxUserSelector.vue'
+import { mapState, mapActions } from 'vuex'
+export default {
+  layout: 'main',
+  components: {
+    breadcrumb,
+    wxUserSelect
+  },
+  data () {
+    var phoneValid = (rule, value, callback) => {
       let reg = this.phoneReg
       console.log('phoneReg:>>' + reg)
       console.log('len:>>' + value.trim().length)
@@ -71,217 +71,225 @@
         callback()
       }
     }
-      return {
-        breadItems: [],
-        // 部门下拉
-        dptOpts: [],
-        // 角色下拉
-        roleOpts: [],
-        // 微信绑定
-        wxUsersOpts: [],
-        wxUserChangeValues: [],
-        obj: {
-          wxUserId: [],
-          loginAcct: '',
-          name: '',
-          orgName: '',
-          dptId: '',
-          roleId: '',
-          phone: '',
-          dataLevel: '',
-          status: 1,
-          position: '',
-          sex: 1,
-          national: '',
-          edu: '',
-          professional: '',
-          email: '',
-          jobTitle: '',
-          telephone: '',
-          addr: '',
-          nativePlace: '',
-          maritalStatus: '',
-          politicalLandscape: '',
-          birthday: '',
-          inTime: '',
-          workGroup: '',
-          remark: '',
-          idCardNo: ''
-        },
-        formItems: [
-          [{lbl: '登录账号', key: 'loginAcct'}, {lbl: '姓名', key: 'name'}],
-          [{lbl: '机构', key: 'orgName', type: 'readOnly', placeholder: '请选择部门'}, {lbl: '部门', key: 'dptId', type: 'remoteSelect', selectKey: 'dptOpts', valueKey: 'name'}],
-          [{lbl: '手机号', key: 'phone'}, {lbl: '数据权限等级', key: 'dataLevel', type: 'select', selectKey: 'dataAuthOpts'}],
-          [{lbl: '公众号绑定', key: 'wxUserId', type: 'wxSelect', selectKey: 'wxUsersOpts'}],
-          [{lbl: '账号状态', key: 'status', type: 'radio', radios: [{lbl: '启用', val: 1}, {lbl: '停用', val: 0}]}, {lbl: '角色', key: 'roleId', type: 'remoteSelect', selectKey: 'roleOpts', valueKey: 'name'}],
-          [{lbl: '职务状态', key: 'demission', type: 'radio', radios: [{lbl: '在职', val: 0}, {lbl: '离职', val: 1}]}, {lbl: '性别', key: 'sex', type: 'radio', radios: [{lbl: '男', val: 1}, {lbl: '女', val: 2}]}],
-          [{lbl: '职位', key: 'position'}, {lbl: '学历', key: 'edu', type: 'select', selectKey: 'eduOpts'}],
-          [{lbl: '专业', key: 'professional'}, {lbl: '邮箱', key: 'email'}],
-          [{lbl: '职称', key: 'jobTitle'}, {lbl: '电话', key: 'telephone'}],
-          [{lbl: '地址', key: 'addr'}, {lbl: '籍贯', key: 'nativePlace'}],
-          [{lbl: '婚姻状况', key: 'maritalStatus', type: 'select', selectKey: 'maritalOpts'}, {lbl: '政治面貌', key: 'politicalLandscape', type: 'select', selectKey: 'politicalOpts'}],
-          [{lbl: '生日', key: 'birthday', type: 'date'}, {lbl: '入职时间', type: 'date', key: 'inTime'}],
-          [{lbl: '工作组', key: 'workGroup'}, {lbl: '民族', key: 'national'}],
-          [{lbl: '备注', key: 'remark'}, {lbl: '身份证', key: 'idCardNo'}]
-        ],
-        formRules: {
-          loginAcct: [{required: true, message: '不能为空', trigger: 'blur'}],
-          name: [{required: true, message: '不能为空', trigger: 'blur'}],
-          dptId: [{required: true, message: '不能为空', trigger: 'blur'}],
-          phone: [{required: true, validator: phoneValid, trigger: 'blur'}],
-          dataAuth: [{required: true, message: '不能为空', trigger: 'change'}],
-          roleId: [{required: true, message: '不能为空', trigger: 'change'}],
-          sex: [{required: true, message: '不能为空', trigger: 'blur'}]
+    return {
+      breadItems: [],
+      // 部门下拉
+      dptOpts: [],
+      // 角色下拉
+      roleOpts: [],
+      // 微信绑定
+      wxUsersOpts: [],
+      wxUserChangeValues: [],
+      obj: {
+        wxUserId: [],
+        loginAcct: '',
+        name: '',
+        orgName: '',
+        dptId: '',
+        roleId: '',
+        phone: '',
+        dataLevel: '',
+        status: 1,
+        position: '',
+        sex: 1,
+        national: '',
+        edu: '',
+        professional: '',
+        email: '',
+        jobTitle: '',
+        telephone: '',
+        addr: '',
+        nativePlace: '',
+        maritalStatus: '',
+        politicalLandscape: '',
+        birthday: '',
+        inTime: '',
+        workGroup: '',
+        remark: '',
+        idCardNo: ''
+      },
+      formItems: [
+        [{ lbl: '登录账号', key: 'loginAcct' }, { lbl: '姓名', key: 'name' }],
+        [{ lbl: '机构', key: 'orgName', type: 'readOnly', placeholder: '请选择部门' }, { lbl: '部门', key: 'dptId', type: 'remoteSelect', selectKey: 'dptOpts', valueKey: 'name' }],
+        [{ lbl: '手机号', key: 'phone' }, { lbl: '数据权限等级', key: 'dataLevel', type: 'select', selectKey: 'dataAuthOpts' }],
+        [{ lbl: '公众号绑定', key: 'wxUserId', type: 'wxSelect', selectKey: 'wxUsersOpts' }],
+        [{ lbl: '账号状态', key: 'status', type: 'radio', radios: [{ lbl: '启用', val: 1 }, { lbl: '停用', val: 0 }] }, { lbl: '角色', key: 'roleId', type: 'remoteSelect', selectKey: 'roleOpts', valueKey: 'name' }],
+        [{ lbl: '职务状态', key: 'demission', type: 'radio', radios: [{ lbl: '在职', val: 0 }, { lbl: '离职', val: 1 }] }, { lbl: '性别', key: 'sex', type: 'radio', radios: [{ lbl: '男', val: 1 }, { lbl: '女', val: 2 }] }],
+        [{ lbl: '职位', key: 'position' }, { lbl: '学历', key: 'edu', type: 'select', selectKey: 'eduOpts' }],
+        [{ lbl: '专业', key: 'professional' }, { lbl: '邮箱', key: 'email' }],
+        [{ lbl: '职称', key: 'jobTitle' }, { lbl: '电话', key: 'telephone' }],
+        [{ lbl: '地址', key: 'addr' }, { lbl: '籍贯', key: 'nativePlace' }],
+        [{ lbl: '婚姻状况', key: 'maritalStatus', type: 'select', selectKey: 'maritalOpts' }, { lbl: '政治面貌', key: 'politicalLandscape', type: 'select', selectKey: 'politicalOpts' }],
+        [{ lbl: '生日', key: 'birthday', type: 'date' }, { lbl: '入职时间', type: 'date', key: 'inTime' }],
+        [{ lbl: '工作组', key: 'workGroup' }, { lbl: '民族', key: 'national' }],
+        [{ lbl: '备注', key: 'remark' }, { lbl: '身份证', key: 'idCardNo' }]
+      ],
+      formRules: {
+        loginAcct: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        name: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        dptId: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        phone: [{ required: true, validator: phoneValid, trigger: 'blur' }],
+        dataAuth: [{ required: true, message: '不能为空', trigger: 'change' }],
+        roleId: [{ required: true, message: '不能为空', trigger: 'change' }],
+        sex: [{ required: true, message: '不能为空', trigger: 'blur' }]
+      }
+    }
+  },
+  beforeMount () {
+    this.$nextTick(() => {
+      this.dptCombo()
+      this.roleCombo()
+      this.wxUsersCombo()
+      if (this.$route.query.type && this.$route.query.type === 'new') {
+        this.breadItems = ['系统设置', '账号管理', '新增账号']
+      } else {
+        this.breadItems = ['系统设置', '账号管理', '编辑账号']
+        this.queryObj(this.$route.query.id)
+      }
+    })
+  },
+  computed: {
+    ...mapState({
+      dataAuthOpts: state => state.dataAuthOpts,
+      eduOpts: state => state.eduOpts,
+      politicalOpts: state => state.politicalOpts,
+      maritalOpts: state => state.maritalOpts,
+      currentUser: state => state.user.currentUser
+    })
+  },
+  watch: {
+    'obj.dptId' (newVal, oldVal) {
+      console.log('id:>>' + newVal)
+      let idx = this.dptOpts.findIndex(itm => itm.id === Number(newVal))
+      if (idx > -1) this.obj.orgName = this.dptOpts[idx].fkOrg.name
+    }
+  },
+  methods: {
+    ...mapActions([
+      'setUser'
+    ]),
+    wxSelectChange (val) {
+      this.wxUserChangeValues = val
+      this.wxUsersOpts = val
+      console.log(this.wxUserChangeValues)
+    },
+    selectChange (val) {
+      this.$forceUpdate()
+    },
+    async queryObj (id) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/acct/' + Number(id) })
+        if (data.returnCode === 0) {
+          this.obj = Object.assign({}, data.obj)
+          this.obj.dptId = this.obj.fkDpt.id
+          this.obj.roleId = this.obj.fkRole.id
+          this.obj.orgName = this.obj.fkDpt.fkOrg.name
+          if (this.obj.birthday) this.obj.birthday = new Date(this.obj.birthday)
+          if (this.obj.inTime) this.obj.inTime = new Date(this.obj.inTime)
         }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
       }
     },
-    beforeMount () {
-      this.$nextTick(() => {
-        this.dptCombo()
-        this.roleCombo()
-        this.wxUsersCombo()
-        if (this.$route.query.type && this.$route.query.type === 'new') {
-          this.breadItems = ['系统设置', '账号管理','新增账号']
+    getPageObj (key) {
+      // console.log('-------------')
+      // console.log(key)
+      // console.log(this[key])
+      return this[key]
+    },
+    async wxUsersCombo () {
+      try {
+        const { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/acct/' + this.$route.query.id + '/wxLinkers' })
+        console.log('wxuser list:>>', data.list)
+        if (data.returnCode === 0) {
+          this.obj.wxUserId = data.list.map(itm => itm.id)
+          const arr = []
+          data.list.map(itm => {
+            itm.nickname = itm.name
+            arr.push(itm)
+          })
+          this.wxUsersOpts = arr
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async dptCombo () {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/dpt/queryCombo' })
+        if (data.returnCode === 0) this.dptOpts = data.list
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async roleCombo () {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/role/queryCombo' })
+        if (data.returnCode === 0) this.roleOpts = data.list
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    subForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.saveOrUpdate()
         } else {
-          this.breadItems = ['系统设置', '账号管理','编辑账号']
-          this.queryObj(this.$route.query.id)
+          console.log('error submit!!');
+          return false;
         }
       })
     },
-    computed: {
-      ...mapState({
-        dataAuthOpts: state => state.dataAuthOpts,
-        eduOpts: state => state.eduOpts,
-        politicalOpts: state => state.politicalOpts,
-        maritalOpts: state => state.maritalOpts,
-        currentUser: state => state.user.currentUser
-      })
-    },
-    watch: {
-      'obj.dptId' (newVal, oldVal) {
-        console.log('id:>>' + newVal)
-        let idx = this.dptOpts.findIndex(itm => itm.id === Number(newVal))
-        if (idx > -1) this.obj.orgName = this.dptOpts[idx].fkOrg.name
-      }
-    },
-    methods: {
-      ...mapActions([
-        'setUser'
-      ]),
-      wxSelectChange (val) {
-        this.wxUserChangeValues = val
-        console.log(this.wxUserChangeValues)
-      },
-      selectChange (val) {
-        this.$forceUpdate()
-      },
-      async queryObj (id) {
-        try {
-          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/acct/' + Number(id)})
-          if (data.returnCode === 0) {
-            this.obj = Object.assign({}, data.obj)
-            this.obj.dptId = this.obj.fkDpt.id
-            this.obj.roleId = this.obj.fkRole.id
-            this.obj.orgName = this.obj.fkDpt.fkOrg.name
-            if (this.obj.birthday) this.obj.birthday = new Date(this.obj.birthday)
-            if (this.obj.inTime) this.obj.inTime = new Date(this.obj.inTime)
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
+    async saveOrUpdate () {
+      try {
+        let param = Object.assign({}, this.obj)
+        param.status = Number(param.status)
+        param.dptId = Number(param.dptId)
+        param.roleId = Number(param.roleId)
+        if (param.phone !== ' ') param.phone = param.phone.trim()
+        if (this.$route.query.type === 'edit') {
+          delete param.createAt
+          delete param.updateAt
+          delete param.fkDpt
+          delete param.fkRole
+          delete param.auths
         }
-      },
-      getPageObj (key) {
-        // console.log('-------------')
-        // console.log(key)
-        // console.log(this[key])
-        return this[key]
-      },
-      async wxUsersCombo () {
-        try {
-          const { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/acct/'+this.$route.query.id+'/wxLinkers'})
-          console.log('wxuser list:>>', data.list)
-          if (data.returnCode === 0) {
-            this.obj.wxUserId = data.list.map(itm => itm.id)
-            const arr = []
-            data.list.map(itm => {
-              itm.nickname = itm.name
-              arr.push(itm)
-            })
-            this.wxUsersOpts = arr
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
+        if (param.idCardNo && param.idCardNo !== '') param.idCardNo = param.idCardNo.trim()
+        if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
+        if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
+        console.log('wxchange:>>', this.wxUserChangeValues)
+        if (this.wxUserChangeValues.length > 0) {
+          const arr = this.wxUserChangeValues.map(item => {
+            if (item.acct) item.acct = item.acct.id || 1
+            return JSON.stringify(item)
+          })
+          param.wxUsers = arr.join('|**|')
         }
-      },
-      async dptCombo () {
-        try {
-          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/dpt/queryCombo'})
-          if (data.returnCode === 0) this.dptOpts = data.list
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
+        // console.log('params:>>', param)
+        console.log(param.wxUsers)
+        // return
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'setting/acct/createOrUpdate', params: param })
+        if (data.returnCode === 0) {
+          if (this.currentUser.id === data.currentUser.id) this.setUser(data.currentUser)
+          this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
+          this.back()
+        } else {
+          this.msgShow(this, data.errMsg)
         }
-      },
-      async roleCombo () {
-        try {
-          let { data } = await this.apiStreamPost('/proxy/common/get', {url: 'setting/role/queryCombo'})
-          if (data.returnCode === 0) this.roleOpts = data.list
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
-        }
-      },
-      subForm (formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.saveOrUpdate()
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        })
-      },
-      async saveOrUpdate() {
-        try {
-          let param = Object.assign({}, this.obj)
-          param.status = Number(param.status)
-          param.dptId = Number(param.dptId)
-          param.roleId = Number(param.roleId)
-          if (param.phone !== ' ') param.phone = param.phone.trim()
-          if (this.$route.query.type === 'edit') {
-            delete param.createAt
-            delete param.updateAt
-            delete param.fkDpt
-            delete param.fkRole
-            delete param.auths
-          }
-          if (param.idCardNo && param.idCardNo !== '') param.idCardNo = param.idCardNo.trim()
-          if (param.birthday && param.birthday !== '') param.birthday = this.date2Str(new Date(param.birthday))
-          if (param.inTime && param.inTime !== '') param.inTime = this.date2Str(new Date(param.inTime))
-          if (this.wxUserChangeValues.length > 0) param.wxUsers = this.wxUserChangeValues.join('|**|')
-          // console.log('params:>>', param)
-          // console.log('wxchange:>>', this.wxUserChangeValues)
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/acct/createOrUpdate', params: param})
-          if (data.returnCode === 0) {
-            if (this.currentUser.id === data.currentUser.id) this.setUser(data.currentUser)
-            this.msgShow(this, this.$route.query.type === 'new' ? '保存成功' : '更新成功', 'success')
-            this.back()
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
-        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
       }
     }
   }
+}
 </script>
 
 <style lang="stylus", scoped>
-  .w-250 {
-    width 250px
-  }
+.w-250
+  width 250px
 </style>
