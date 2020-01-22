@@ -210,6 +210,7 @@ export default {
             arr.push(itm)
           })
           this.wxUsersOpts = arr
+          this.wxUserChangeValues = arr
         }
       } catch (e) {
         console.error(e)
