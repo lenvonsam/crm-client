@@ -91,6 +91,10 @@ export default {
     },
     async wxUserAdd () {
       try {
+        if (!this.wxUser.id) {
+          this.msgShow(this, '请选择需要添加的微信用户')
+          return
+        }
         const { data } = await this.apiStreamPost('/proxy/common/post', { url: `customerManage/customer/${this.$route.query.id}/wxLinker`, params: { content: JSON.stringify(this.wxUser) } })
         if (data.returnCode === 0) {
           this.msgShow(this, '新增成功', 'success')
