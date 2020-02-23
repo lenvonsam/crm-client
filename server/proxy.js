@@ -102,34 +102,6 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
     }
   )
 })
-router.post('/uploadFile', multipartMiddleware, (req, res) => {
-  console.log(req)
-  console.log(res)
-  var currentProfile = ''
-  if (req.body.currentProfile) {
-    currentProfile = req.body.currentProfile
-  } else {
-    currentProfile = url_parts.query.currentProfile
-  }
-  const formData = {
-    currentProfile: currentProfile,
-    upfile: fs.createReadStream(req.files.upfile.path)
-  }
-  rqt.post(
-    {
-      url: 'http://192.168.20.170:8080/crmserver/file/uploadFile',
-      formData: formData,
-      headers: { 'zhdcrm-proxy-token': hptl.proxyToken('zhdcrm') }
-    },
-    function(err, resp, body) {
-      fs.unlink(req.files.upfile.path, function(err) {
-        if (err) console.error(err)
-        else console.log('temp file delete success')
-      })
-      res.send(body)
-    }
-  )
-})
 function getClientIP(req) {
   return (
     req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP

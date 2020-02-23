@@ -6,7 +6,6 @@ export default {
   qiniuOutlink: 'http://crm-cdn.xingyun361.com/',
   bdMapAk: 'IAGOe19VLRpolXruX6o6WGNoSFEP9Gwq',
   fileUploadUrl: '/proxy/fileUpload',
-  uploadFileUrl: '/proxy/uploadFile',
   searchParams: {},
   globalSuccessMsg: '',
   globalErrorMsg: '',
