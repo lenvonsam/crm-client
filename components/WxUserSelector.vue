@@ -32,7 +32,7 @@ export default {
       dataLoading: true
     }
   },
-  beforeMount() {
+  beforeMount () {
     console.log('select user:>>', this.value)
     this.loadAllWxUsers()
   },
@@ -40,8 +40,10 @@ export default {
     value: {
       handler (newVal, oldVal) {
         console.log('wx user newval:>>', newVal)
+        console.log('default values:>>', this.defaultValue)
         // this.usersChoosed = newVal
         if (this.defaultValue.length === newVal.length && this.multiple) {
+          this.usersValues = this.defaultValue
           this.defaultValue.map(itm => {
             const idx = this.users.findIndex(item => item.value === itm.id)
             if (idx < 0) {
@@ -61,14 +63,30 @@ export default {
   methods: {
     userChange (val) {
       console.log('user val:>>', val)
-      this.usersValues = []
+      // this.usersValues = []
       const me = this
       if (this.multiple) {
         console.log(this.usersInfo)
         val.map(itm => {
           const idx = me.usersInfo.findIndex(item => item.id === itm)
-          me.usersValues.push(JSON.stringify(me.usersInfo[idx]))
+          const valIdx = me.usersValues.findIndex(valItem => valItem.id === itm)
+          if (idx >= 0 && valIdx < 0) {
+            // me.usersValues.push(JSON.stringify(me.usersInfo[idx]))
+            me.usersValues.push(me.usersInfo[idx])
+          }
         })
+        if (me.usersValues.length !== val.length) {
+          const arr = []
+          me.usersValues.map(itm => {
+            const idx = val.findIndex(id => id === itm.id)
+            if (idx >= 0) {
+              arr.push(itm)
+            }
+          })
+          me.usersValues = arr
+        }
+        // debugger
+        Object.assign(me.usersInfo, me.usersValues)
       } else {
         const idx = me.usersInfo.findIndex(itm => itm.id === val)
         me.usersValues.push(me.usersInfo[idx])
@@ -81,7 +99,7 @@ export default {
       if (query !== '') {
         try {
           this.dataLoading = true
-          let { data } = await this.apiStreamPost('/proxy/scp/post', {url: 'wechat/wxUser/list', params: {'nickname': query}})
+          let { data } = await this.apiStreamPost('/proxy/scp/post', { url: 'wechat/wxUser/list', params: { 'nickname': query } })
           console.log(data)
           this.dataLoading = false
           if (data.return_code === 0) {

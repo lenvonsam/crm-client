@@ -31,7 +31,7 @@ import buttonGroup from '@/components/ButtonGroup.vue'
 import wxUserSelect from '@/components/WxUserSelector.vue'
 // import Clipboard from 'clipboard'
 import { mapState } from 'vuex'
-export default{
+export default {
   components: {
     basicTable,
     buttonGroup,
@@ -39,13 +39,13 @@ export default{
   },
   data () {
     return {
-      linkerAddInfo: [{lbl: '新增账户信息', type: 'add'}],
+      linkerAddInfo: [{ lbl: '新增账户信息', type: 'add' }],
       tableValue: {
         tableHead: [
-          {lbl: '微信昵称', prop: 'name'},
-          {lbl: '公众号名', prop: 'appName'},
-          {lbl: '是否关注', prop: 'subscribe'},
-          {type: 'action',
+          { lbl: '微信昵称', prop: 'name' },
+          { lbl: '公众号名', prop: 'appName' },
+          { lbl: '是否关注', prop: 'subscribe' },
+          {            type: 'action',
             actionBtns: [{
               lbl: '删除',
               type: 'delete'
@@ -72,16 +72,16 @@ export default{
       currentUser: state => state.user.currentUser
     })
   },
-  beforeMount() {
+  beforeMount () {
     this.getWxTicket('xy')
   },
   mounted () {
     this.loadData()
   },
   methods: {
-    async getWxTicket(prefix) {
+    async getWxTicket (prefix) {
       try {
-        const { data } = await this.apiStreamPost('/proxy/common/post', {url: `customerManage/customer/${this.$route.query.id}/wxTicket`, params: {appKey: this[`${prefix}Key`], appName: this[`${prefix}Name`]}})
+        const { data } = await this.apiStreamPost('/proxy/common/post', { url: `customerManage/customer/${this.$route.query.id}/wxTicket`, params: { appKey: this[`${prefix}Key`], appName: this[`${prefix}Name`] } })
         if (data.returnCode === 0) {
           this[`${prefix}Ticket`] = data.ticket
         }
@@ -91,7 +91,11 @@ export default{
     },
     async wxUserAdd () {
       try {
-        const { data } = await this.apiStreamPost('/proxy/common/post', {url: `customerManage/customer/${this.$route.query.id}/wxLinker`, params: {content: JSON.stringify(this.wxUser)}})
+        if (!this.wxUser.id) {
+          this.msgShow(this, '请选择需要添加的微信用户')
+          return
+        }
+        const { data } = await this.apiStreamPost('/proxy/common/post', { url: `customerManage/customer/${this.$route.query.id}/wxLinker`, params: { content: JSON.stringify(this.wxUser) } })
         if (data.returnCode === 0) {
           this.msgShow(this, '新增成功', 'success')
           this.currentPage = 1
@@ -110,18 +114,18 @@ export default{
       console.log('wxUser', this.wxUser)
     },
     linkerAddClick () {
-      if(this.isEdit){
+      if (this.isEdit) {
         this.msgShow(this, '请先保存新增')
         return
       }
       this.linkDateFilter()
-      let addData ={id: null, name: '',openBank: '',bankAcct: '', remark: '', edit: true}
+      let addData = { id: null, name: '', openBank: '', bankAcct: '', remark: '', edit: true }
       this.tableValue.tableData.push(addData)
       this.isEdit = true
     },
     linkDateFilter () {
       this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
-      this.snapData.map(item=>{
+      this.snapData.map(item => {
         item.linkDate = new Date(item.linkDate)
       })
     },
@@ -130,7 +134,7 @@ export default{
       this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
     },
     rowEdit (row) {
-      if(this.isEdit){
+      if (this.isEdit) {
         this.msgShow(this, '请先完成操作')
         return
       }
@@ -147,13 +151,14 @@ export default{
     },
     async loadData () {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/get', {url: `customerManage/customer/${this.$route.query.id}/wxLinkers?currentPage=${this.currentPage-1}&pageSize=${this.pageSize}`, params: {}})
-          if (data.returnCode === 0) {
-            this.tableValue.tableData = data.list
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
-          this.loading = false
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: `customerManage/customer/${this.$route.query.id}/wxLinkers?currentPage=${this.currentPage - 1}&pageSize=${this.pageSize}`, params: {} })
+        if (data.returnCode === 0) {
+          this.tableValue.tableData = data.list
+          this.totalCount = data.total
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+        this.loading = false
       } catch (e) {
         console.error(e)
         this.msgShow(this)
@@ -162,14 +167,14 @@ export default{
     },
     async wxUserDel (id) {
       try {
-        let { data } = await this.apiStreamPost('/proxy/common/del', {url: 'customerManage/wxLinker/' + id})
-          if (data.returnCode === 0) {
-            this.msgShow(this, '删除成功', 'success')
-            this.currentPage = 1
-            this.loadData()
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
+        let { data } = await this.apiStreamPost('/proxy/common/del', { url: 'customerManage/wxLinker/' + id })
+        if (data.returnCode === 0) {
+          this.msgShow(this, '删除成功', 'success')
+          this.currentPage = 1
+          this.loadData()
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
       } catch (e) {
         console.error(e)
         this.msgShow(this)
