@@ -10,7 +10,7 @@ const hptl = require('../utils/httpUtil')
 const proxyUrl = 'http://192.168.20.170:7786/'
 const xyUrl = 'http://192.168.20.130/gzql'
 const erpUrl = 'http://erpapp.xingyun361.com/eep/interfacesAjax!'
-const scpUrl = 'http://192.168.80.210:9901/api/'
+const scpUrl = 'http://192.168.20.40:9901/api/'
 
 router.use((req, res, next) => {
   Object.setPrototypeOf(req, app.request)
