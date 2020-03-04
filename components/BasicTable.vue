@@ -29,7 +29,7 @@ div
             el-select(v-else-if="head.editType == 'select'", v-model="scope.row[head.prop]", size="mini")
               el-option(v-for="item in head.selectList", :key="item.value", :label="item.label", :value="item.value")
             el-select.full-width(v-else-if="head.editType == 'gradingRegion'", v-model="scope.row[head.prop]", value-key, filterable, remote, multiple,  @focus="queryRegion", :remote-method="queryRegion", size="mini")
-              el-option(v-for="(item, idx) in regionOptions", :key="idx", :label="item", :value="item")
+              el-option(v-for="(item, idx) in regionOptions", :key="item", :label="item", :value="item")
             el-select.full-width(v-else-if="head.editType == 'gradingCategory'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="querySupplyCatalog", size="mini")
               el-option(v-for="(item, idx) in supplyCatalogOptions", :key="idx", :label="item", :value="item")
             el-select.full-width(v-else-if="head.editType == 'dpt'", v-model="scope.row[head.prop]", value-key, filterable, remote, @focus="queryDptCombo", size="mini")
