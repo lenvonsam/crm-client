@@ -40,7 +40,7 @@ function generatePickerOpts () {
  */
 //以下是密码强度校验  
 //计算分数
-function passwordGrade(pwd) {
+function passwordGrade (pwd) {
   var score = 0
   var regexArr = ['[0-9]', '[a-z]', '[A-Z]', '[\\W_]']
   var type = 0
@@ -48,80 +48,80 @@ function passwordGrade(pwd) {
   var len = pwd.length
   score += len > 18 ? 18 : len
   //长度必须大于等于6位
-  score += len < 6 ? -50: 0
+  score += len < 6 ? -50 : 0
   //字符类型多一个加4分   
-  for (var i = 0, num = regexArr.length; i < num; i++) {  
-    if (eval('/' + regexArr[i] + '/').test(pwd)) {  
+  for (var i = 0, num = regexArr.length; i < num; i++) {
+    if (eval('/' + regexArr[i] + '/').test(pwd)) {
       score += 4
       type++
-    }  
+    }
   }
   //单一类型不通过
-  if(type==1){
+  if (type == 1) {
     return 0;
   }
-  for (var i = 0, num = regexArr.length; i < num; i++) {  
-    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 2) {  
+  for (var i = 0, num = regexArr.length; i < num; i++) {
+    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 2) {
       score += 2
-    }  
-    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 5) {  
+    }
+    if (pwd.match(eval('/' + regexArr[i] + '/g')) && pwd.match(eval('/' + regexArr[i] + '/g')).length >= 5) {
       score += 2
-    }  
-  }  
+    }
+  }
   //重复一次减一分  
-  var repeatCount = 0;  
-  var prevChar = '';  
-  for (var i = 0, num = pwd.length; i < num; i++) {  
-    if (pwd.charAt(i) == prevChar) {  
+  var repeatCount = 0;
+  var prevChar = '';
+  for (var i = 0, num = pwd.length; i < num; i++) {
+    if (pwd.charAt(i) == prevChar) {
       repeatCount++
-    }  
-    else {  
+    }
+    else {
       prevChar = pwd.charAt(i)
-    }  
-  } 
+    }
+  }
   score -= repeatCount * 1
-  
+
   //10位以下纯数字
-  if(pwd.match(eval('/^[0-9]{0,10}$/'))){
+  if (pwd.match(eval('/^[0-9]{0,10}$/'))) {
     //6位以上递增
-    var tempNum=-10;
-    var continueCount=0;
-    for (var i = 0, num = pwd.length; i < num; i++) { 
-      if (pwd.charAt(i) == (tempNum+1+continueCount)) {
+    var tempNum = -10;
+    var continueCount = 0;
+    for (var i = 0, num = pwd.length; i < num; i++) {
+      if (pwd.charAt(i) == (tempNum + 1 + continueCount)) {
         continueCount++;
       } else {
-        if(continueCount>=5){//其中一段数字递增6位也算
+        if (continueCount >= 5) {//其中一段数字递增6位也算
           score -= 10;
           break;
         }
-        tempNum = pwd.charAt(i)-0;
-        continueCount=0;
+        tempNum = pwd.charAt(i) - 0;
+        continueCount = 0;
       }
     }
-    if(continueCount>=5){
+    if (continueCount >= 5) {
       score -= 10;
     }
-    
+
     //6位以上递减
-    tempNum=-10;
-    continueCount=0;
-    for (var i = 0, num = pwd.length; i < num; i++) { 
-      if (pwd.charAt(i) == (tempNum-(1+continueCount))) {
+    tempNum = -10;
+    continueCount = 0;
+    for (var i = 0, num = pwd.length; i < num; i++) {
+      if (pwd.charAt(i) == (tempNum - (1 + continueCount))) {
         continueCount++;
       } else {
-        if(continueCount>=5){
+        if (continueCount >= 5) {
           score -= 10;
           break;
         }
-        tempNum = pwd.charAt(i)-0;
-        continueCount=0;
-      }  
+        tempNum = pwd.charAt(i) - 0;
+        continueCount = 0;
+      }
     }
-    if(continueCount>=5){
+    if (continueCount >= 5) {
       score -= 10;
     }
   }
-  return score;  
+  return score;
 }
 
 const minixs = {
@@ -132,9 +132,9 @@ const minixs = {
     }
   },
   computed: {
-  //   ...mapState({
-  //     globalSuccessMsg: state => state.globalSuccessMsg
-  //   })
+    //   ...mapState({
+    //     globalSuccessMsg: state => state.globalSuccessMsg
+    //   })
     datePickerOpts () {
       return {
         shortcuts: generatePickerOpts()
@@ -150,58 +150,58 @@ const minixs = {
     }
   },
   methods: {
-    isIE() {
+    isIE () {
       const userAgent = navigator.userAgent
       const isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 //判断是否IE<11浏览器  
       const isEdge = userAgent.indexOf("Edge") > -1 && !isIE //判断是否IE的Edge浏览器  
       const isIE11 = userAgent.indexOf('Trident') > -1 && userAgent.indexOf("rv:11.0") > -1
       console.log('userAgent', userAgent)
-      if(isIE || isEdge || isIE11) {
+      if (isIE || isEdge || isIE11) {
         // this.$message.error('系统暂不支持ie浏览器，推荐使用chrome进行访问')
         alert('系统暂不支持ie浏览器，推荐使用chrome进行访问')
         return false
       }
       return true
     },
-    checkIfPass(pwd) {
-      if (pwd == null || pwd == ''||pwd.length < 6) {  
-          return false;  
-      } else { 
-        var mark = passwordGrade(pwd);     
-        if (mark<=10) {  
-          return false;  
-        }else{
+    checkIfPass (pwd) {
+      if (pwd == null || pwd == '' || pwd.length < 6) {
+        return false;
+      } else {
+        var mark = passwordGrade(pwd);
+        if (mark <= 10) {
+          return false;
+        } else {
           return true;
-        }  
+        }
       }
     },
     pwStrengthStr (pwd) {
       //pwStrength函数
-      if (pwd == null || pwd == '') {  
+      if (pwd == null || pwd == '') {
         return '';
       } else {
-        if (pwd.length < 6) { 
+        if (pwd.length < 6) {
           return '弱';
-        }  
-        var levelStr;  
-        var mark = passwordGrade(pwd);  
+        }
+        var levelStr;
+        var mark = passwordGrade(pwd);
         // 弱
-        if (mark <= 10) {  
+        if (mark <= 10) {
           levelStr = '弱';
-        }  
+        }
         //一般  
-        if (mark > 10 && mark <= 20) {  
+        if (mark > 10 && mark <= 20) {
           levelStr = '一般';
-        }  
+        }
         //很好  
-        if (mark > 20 && mark <= 30) {  
+        if (mark > 20 && mark <= 30) {
           levelStr = '很好';
-        }  
+        }
         //极佳  
-        if (mark > 30) {  
+        if (mark > 30) {
           levelStr = '极佳';
         }
-        return levelStr;  
+        return levelStr;
       }
     },
     jump (to) {
@@ -222,12 +222,28 @@ const minixs = {
     num2Str (num) {
       return num.toString()
     },
+    getPreMonth () {
+      var nowdate = new Date();
+      nowdate.setMonth(nowdate.getMonth() - 1);
+      var years = nowdate.getFullYear();
+      var month = nowdate.getMonth() + 1;
+      return [years, month].map(formatNumber).join('-')
+    },
     date2Str (date) {
       if (date) {
         let years = date.getFullYear()
         let month = date.getMonth() + 1
         let day = date.getDate()
         return [years, month, day].map(formatNumber).join('-')
+      } else {
+        return ''
+      }
+    },
+    dataMonthStr (date) {
+      if (date) {
+        let years = date.getFullYear()
+        let month = date.getMonth() + 1
+        return [years, month].map(formatNumber).join('-')
       } else {
         return ''
       }
@@ -257,18 +273,18 @@ const minixs = {
       }
     },
     getRandomColor () {
-      return '#'+(Math.random()*0xffffff<<0).toString(16)
+      return '#' + (Math.random() * 0xffffff << 0).toString(16)
     },
     apiGet: httpUtil.httpGet,
     apiPost: httpUtil.httpPost,
-    apiStreamPost: httpUtil.httpStreamPost,    
+    apiStreamPost: httpUtil.httpStreamPost,
     pageShow: elementUtil.pageShow,
     pageHide: elementUtil.pageHide,
     msgShow: elementUtil.msgShow,
     confirmDialog: elementUtil.confirmDialog,
     commonValidate (context, keyArr, errorInfo = '必填字段不能为空') {
       let result = true
-      for (let i=0; i < keyArr.length; i++) {
+      for (let i = 0; i < keyArr.length; i++) {
         if (context[keyArr[i]].toString().trim().length === 0) {
           result = false
           this.msgShow(context, errorInfo)
@@ -304,11 +320,11 @@ const minixs = {
       })
       return basiCode.join('')
     },
-    cstmListData(dataList, arrList) {
+    cstmListData (dataList, arrList) {
       let arr = []
       dataList.map(itm => {
         let obj = {}
-        for(let i=0; i<arrList.length; i++){
+        for (let i = 0; i < arrList.length; i++) {
           obj[arrList[i]] = itm[i]
         }
         arr.push(obj)
@@ -332,55 +348,55 @@ const minixs = {
     accAdd (a, b) {
       var c, d, e;
       try {
-          c = a.toString().split(".")[1].length;
+        c = a.toString().split(".")[1].length;
       } catch (f) {
-          c = 0;
+        c = 0;
       }
       try {
-          d = b.toString().split(".")[1].length;
+        d = b.toString().split(".")[1].length;
       } catch (f) {
-          d = 0;
+        d = 0;
       }
       return e = Math.pow(10, Math.max(c, d)), (this.accMul(a, e) + this.accMul(b, e)) / e;
     },
     // 减法
-    accSub(a, b) {
+    accSub (a, b) {
       var c, d, e;
       try {
-          c = a.toString().split(".")[1].length;
+        c = a.toString().split(".")[1].length;
       } catch (f) {
-          c = 0;
+        c = 0;
       }
       try {
-          d = b.toString().split(".")[1].length;
+        d = b.toString().split(".")[1].length;
       } catch (f) {
-          d = 0;
+        d = 0;
       }
       return e = Math.pow(10, Math.max(c, d)), (this.accMul(a, e) - this.accMul(b, e)) / e;
     },
     // 乘法
-    accMul(a, b) {
+    accMul (a, b) {
       var c = 0,
-          d = a.toString(),
-          e = b.toString();
+        d = a.toString(),
+        e = b.toString();
       try {
-          c += d.split(".")[1].length;
-      } catch (f) {}
+        c += d.split(".")[1].length;
+      } catch (f) { }
       try {
-          c += e.split(".")[1].length;
-      } catch (f) {}
+        c += e.split(".")[1].length;
+      } catch (f) { }
       return Number(d.replace(".", "")) * Number(e.replace(".", "")) / Math.pow(10, c);
     },
     // 除法
-    accDiv(a, b) {
+    accDiv (a, b) {
       var c, d, e = 0,
-          f = 0;
+        f = 0;
       try {
-          e = a.toString().split(".")[1].length;
-      } catch (g) {}
+        e = a.toString().split(".")[1].length;
+      } catch (g) { }
       try {
-          f = b.toString().split(".")[1].length;
-      } catch (g) {}
+        f = b.toString().split(".")[1].length;
+      } catch (g) { }
       return c = Number(a.toString().replace(".", "")), d = Number(b.toString().replace(".", "")), this.accMul(c / d, Math.pow(10, f - e));
     }
   }
