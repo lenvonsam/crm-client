@@ -86,7 +86,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.searchValStr = `nyStart=${this.getPreMonth()}&nyEnd=${this.dataMonthStr(new Date())}&orderType=1&orderColumn=直发重量&nameType=0`
+      this.searchValStr = `nyStart=${this.dataMonthStr(new Date())}&nyEnd=${this.dataMonthStr(new Date())}&orderType=1&orderColumn=直发重量&nameType=0`
       this.loadData()
     })
   },
@@ -97,7 +97,7 @@ export default {
     }),
     searchFormItems () {
       return [
-        [{ label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.getPreMonth() },
+        [{ label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
         ],

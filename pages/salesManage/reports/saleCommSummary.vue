@@ -88,7 +88,6 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      // this.searchFormItems[0][0].val = this.getPreMonth()
       this.ny = this.searchFormItems[0][0].val
       this.loadData()
     })
@@ -99,7 +98,7 @@ export default {
     }),
     searchFormItems () {
       return [
-        [{ label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.getPreMonth(), width: '200px' }]
+        [{ label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.dataMonthStr(new Date()), width: '200px' }]
       ]
     },
     tableConfig () {
@@ -109,7 +108,8 @@ export default {
           tableConfig.tableHead.unshift({
             lbl: '部门',
             prop: 'deptName',
-            minWidth: 150
+            minWidth: 150,
+            colspan: true
           }, {
             lbl: '业务员',
             prop: 'employeeName',
