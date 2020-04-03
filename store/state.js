@@ -649,19 +649,37 @@ export default {
       subItems: [
         {
           title: '销售报表',
-          url: '/salesManage/reports'
-        },
-        {
+          url: '/salesManage/salesReport'
+        }, {
           title: '交易跟踪',
           url: '/salesManage/tracking'
-        },
-        {
+        }, {
           title: '产品资源',
           url: '/salesManage/resources'
-        },
-        {
+        }, {
           title: '期货管理',
           url: '/salesManage/futures'
+        }, {
+          title: '营销中心业务员提成汇总表',
+          url: '/salesManage/reports/empCommSummary'
+        }, {
+          title: '营销中心销售专员提成汇总表',
+          url: '/salesManage/reports/saleCommSummary'
+        }, {
+          title: '直发调货明细表',
+          url: '/salesManage/reports/deliveryDetail'
+        }, {
+          title: '高卖明细表',
+          url: '/salesManage/reports/highSellDetail'
+        }, {
+          title: '新客户业务明细表',
+          url: '/salesManage/reports/newCustomer'
+        }, {
+          title: '销售专员新增客户明细表',
+          url: '/salesManage/reports/saleNewCustomer'
+        }, {
+          title: '业务员新增客户明细表',
+          url: '/salesManage/reports/empNewCustomer'
         }
       ]
     },
