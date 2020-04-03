@@ -155,7 +155,7 @@ export default {
   },
   methods: {
     spanMethod ({ row, column, rowIndex, columnIndex }) {
-      if (!this.tableValue.spanMethod) return { rowspan: 1, colspan: 1 }
+      if (!this.tableValue.spanMethod || !this.tableValue.tableHead[columnIndex].colspan) return { rowspan: 1, colspan: 1 }
       if (columnIndex === 0) {
         if (row.colspan) {
           return {

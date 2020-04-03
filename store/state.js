@@ -660,10 +660,10 @@ export default {
           title: '期货管理',
           url: '/salesManage/futures'
         }, {
-          title: '营销中心业务员提成汇总表',
+          title: '业务员提成汇总表',
           url: '/salesManage/reports/empCommSummary'
         }, {
-          title: '营销中心销售专员提成汇总表',
+          title: '销售专员提成汇总表',
           url: '/salesManage/reports/saleCommSummary'
         }, {
           title: '直发调货明细表',
