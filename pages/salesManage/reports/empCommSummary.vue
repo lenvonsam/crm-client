@@ -124,26 +124,23 @@ export default {
     },
     tableConfig () {
       const tableConfig = this.tableValue
-      switch (this.currentUser.dataLevel) {
-        case '公司':
-          tableConfig.tableHead.unshift({
-            lbl: '部门',
-            prop: 'deptName',
-            minWidth: 150,
-            colspan: true
-          }, {
-            lbl: '业务员',
-            prop: 'employeeName',
-            width: 150
-          })
-          break
-        case '部门':
-          tableConfig.tableHead.unshift({
-            lbl: '业务员',
-            prop: 'employeeName',
-            width: 150
-          })
-          break
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        tableConfig.tableHead.unshift({
+          lbl: '部门',
+          prop: 'deptName',
+          minWidth: 150,
+          colspan: true
+        }, {
+          lbl: '业务员',
+          prop: 'employeeName',
+          width: 150
+        })
+      } else if (this.currentUser.dataLevel === '部门') {
+        tableConfig.tableHead.unshift({
+          lbl: '业务员',
+          prop: 'employeeName',
+          width: 150
+        })
       }
       return tableConfig
     }
