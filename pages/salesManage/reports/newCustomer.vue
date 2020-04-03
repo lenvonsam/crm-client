@@ -41,7 +41,7 @@ export default {
           width: 150,
           type: 'object',
           factValue: (row) => {
-            return this.dataMonthStr(new Date(row))
+            return this.date2Str(new Date(row))
           }
         }, {
           lbl: '部门',

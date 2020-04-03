@@ -67,7 +67,7 @@ export default {
           prop: 'salesCount',
           sort: 'salesCount',
           type: 'linkRow',
-          linkUrl: '/salesManage/reports/detail',
+          linkUrl: '/salesManage/salesReport/detail',
           width: 150
         }, {
           lbl: '可卖库存量(吨)',
