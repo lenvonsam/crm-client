@@ -77,7 +77,7 @@ export default {
       currentUser: state => state.user.currentUser
     }),
     searchFormItems () {
-      return [
+      const searchForm = [
         [{ label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
@@ -96,6 +96,22 @@ export default {
           ], val: 1
         }]
       ]
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        searchForm[1].push({
+          label: '部门', model: 'dptName', type: 'selectDept',
+          list: [], val: ''
+        })
+        searchForm[2] = [{
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        }]
+      } else if (this.currentUser.dataLevel === '部门') {
+        searchForm[1].push({
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        })
+      }
+      return searchForm
     }
   },
   methods: {
