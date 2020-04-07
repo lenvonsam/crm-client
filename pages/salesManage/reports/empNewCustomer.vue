@@ -87,27 +87,46 @@ export default {
       currentUser: state => state.user.currentUser
     }),
     searchFormItems () {
-      return [
-        [{ label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
-        { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
-        { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
+      const searchForm = [
+        [
+          { label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
+          { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
+          { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
         ],
-        [{
-          label: '排序', model: 'orderColumn', type: 'select',
-          list: [
-            { label: '销量', value: '销量' },
-            { label: '高卖', value: '高卖' },
-            { label: '高卖提成', value: '高卖提成' }
-          ], val: '销量'
-        },
-        {
-          label: '方式', model: 'orderType', type: 'select',
-          list: [
-            { label: '降序', value: 1 },
-            { label: '升序', value: 0 }
-          ], val: 1
-        }]
+        [
+          {
+            label: '排序', model: 'orderColumn', type: 'select',
+            list: [
+              { label: '销量', value: '销量' },
+              { label: '高卖', value: '高卖' },
+              { label: '高卖提成', value: '高卖提成' }
+            ], val: '销量'
+          },
+          {
+            label: '方式', model: 'orderType', type: 'select',
+            list: [
+              { label: '降序', value: 1 },
+              { label: '升序', value: 0 }
+            ], val: 1
+          }
+        ]
       ]
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        searchForm[1].push({
+          label: '部门', model: 'dptName', type: 'selectDept',
+          list: [], val: ''
+        })
+        searchForm[2] = [{
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        }]
+      } else if (this.currentUser.dataLevel === '部门') {
+        searchForm[1].push({
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        })
+      }
+      return searchForm
     }
   },
   methods: {

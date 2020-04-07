@@ -17,6 +17,11 @@
               el-select.full-width(v-model="item.val", :placeholder="item.placeholder", v-else-if="item.type == 'select'", size="small")
                 el-option(v-for="itemIist in item.list", :key="itemIist.value", :label="itemIist.label", :value="itemIist.value")
                   span {{itemIist.label}}
+              el-select.full-width(v-model="item.val", :placeholder="item.placeholder", v-else-if="item.type == 'selectDept'", size="small", @focus="fkDptCreate", clearable)
+                el-option(v-for="itemIist in deptList", :key="itemIist.name", :label="item.name", :value="itemIist.name")
+                  span {{itemIist.name}}    
+              el-select.full-width(v-model="item.val", v-else-if="item.type == 'selectRemote'", value-key, filterable, remote, size="small", :placeholder="item.placeholder", :remote-method="selectRemote", clearable, @focus="selectRemoteFocus(item)", @blur="selectRemoteBlur")
+                el-option(v-for="item in item.list", :key="item.id", :label="item.name", :value="item.platformCode")    
               template(v-else-if="item.type == 'range'")
                 .row.flex-center
                   .col
@@ -36,7 +41,9 @@ export default {
   data () {
     return {
       copyItems: null,
-      selectIdxArr: []
+      selectIdxArr: [],
+      selectActive: {},
+      deptList: []
     }
   },
   computed: {
@@ -126,6 +133,37 @@ export default {
         this.$emit('search', searchParm)
       }
     },
+    selectRemoteFocus (item) {
+      this.selectActive = item
+    },
+    selectRemoteBlur () {
+      this.selectActive = {}
+    },
+    async selectRemote (val) {
+      const { url, queryKey, list } = this.selectActive
+      let params = {
+        pageSize: 10
+      }
+      params[queryKey] = val
+      let me = this
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: url, params: params })
+        if (data.returnCode === 0) {
+          let arr = []
+          data.list.map((item) => {
+            if (item.status == 1) {
+              arr.push(item)
+            }
+          })
+          this.selectActive.list = arr
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
     querySearchAsync (queryString, cb) {
       let copyItemsIdx = this.selectIdxArr[0]
       let itemsIdx = this.selectIdxArr[1]
@@ -143,7 +181,22 @@ export default {
     },
     selectIdx (index, idx) {
       this.selectIdxArr = [index, idx]
-    }
+    },
+    async fkDptCreate () {
+      let me = this
+      try {
+        if (this.deptList.length > 0) return false
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'setting/dpt/queryCombo' })
+        if (data.returnCode === 0) {
+          this.deptList = data.list
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
   }
 }
 </script>

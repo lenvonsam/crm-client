@@ -30,6 +30,9 @@ div
           //- a(:href="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}          
           router-link(:to="head.linkUrl + '?' + urlFun(head, scope)") {{scope.row[head.prop]}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
+      //- el-table-column(v-if="'multistage'", :label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'")
+        template(slot-scope="scope")
+
       el-table-column(v-else-if="head.type == 'linkObject'", :label="head.lbl", :width="head.width? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false")
         template(slot-scope="scope")
           //- a(:href="head.linkUrl + '?id=' + head.factValue(scope.row[head.prop]).id") {{head.factValue(scope.row[head.prop]).name}}
@@ -70,6 +73,8 @@ div
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") 
           .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
+            //- el-table-column(v-if="head.type === 'multistage'", v-for="(child, idx) in head.list", :key="idx", :label="child.lbl", :width="child.width ? child.width : 'auto'", :min-width="child.minWidth? child.minWidth : 'auto'", :prop="child.prop", :sortable="child.sort ? child.sort : false", :align="child.align ? child.align : 'left'")      
+              .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
             span(v-if="head.prop == 'billDateDays'") / 90
           //- span(v-if="head.prop == 'billDate'", @click="handerRowBtn(scope.$index, scope.row, 'lock')") / 90
@@ -431,4 +436,6 @@ export default {
         cursor pointer
     i.iconfont.icon-locka:hover, i.iconfont.icon-lockb:hover
       cursor pointer
+/deep/.el-table__row.current-row
+  font-weight bold
 </style>
