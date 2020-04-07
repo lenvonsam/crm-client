@@ -190,7 +190,6 @@ export default {
       }
     },
     searchForm (paramsObj) {
-      debugger
       this.loading = true
       this.ny = paramsObj.ny
       this.deptName = paramsObj.dptName
