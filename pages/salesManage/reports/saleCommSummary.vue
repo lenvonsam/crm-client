@@ -2,7 +2,7 @@
   .content
     breadcrumb(:breadItems="breadItems")
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm", className="")
+      search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
       basic-table(:tableValue="tableConfig", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount")
 </template>
@@ -62,13 +62,25 @@ export default {
           prop: 'newTc',
           width: 150
         }, {
-          lbl: '直发提成',
+          lbl: '直发调货高卖提成',
           prop: 'zfTc',
           width: 150
         }, {
-          lbl: '销量提成',
+          lbl: '其他销量提成',
           prop: 'xlTc',
-          width: 200
+          width: 150
+        }, {
+          lbl: '是否完成任务量',
+          prop: 'success',
+          width: 150
+        }, {
+          lbl: '实发高卖提成',
+          prop: 'gmTcReal',
+          width: 150
+        }, {
+          lbl: '高卖提成扣除部分',
+          prop: 'gmTcReduce',
+          width: 150
         }, {
           lbl: '高卖提成',
           prop: 'gmTc',
@@ -97,9 +109,22 @@ export default {
       currentUser: state => state.user.currentUser
     }),
     searchFormItems () {
-      return [
-        [{ label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.dataMonthStr(new Date()), width: '200px' }]
+      let searchFrom = [
+        [{ label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.dataMonthStr(new Date()) }]
       ]
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        searchFrom = [[
+          { label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.dataMonthStr(new Date()) },
+          { label: '部门', model: 'dptName', type: 'selectDept', list: [], val: '' },
+          { label: '业务员', model: 'platformCode', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' }
+        ]]
+      } else if (this.currentUser.dataLevel === '部门') {
+        searchFrom = [[
+          { label: '年份', model: 'ny', type: 'month', placeholder: '请选择月份', val: this.dataMonthStr(new Date()) },
+          { label: '业务员', model: 'platformCode', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' }
+        ]]
+      }
+      return searchFrom
     },
     tableConfig () {
       const tableConfig = this.tableValue
@@ -127,8 +152,10 @@ export default {
   methods: {
     async loadData () {
       try {
-        const url = `erpReport/saleCommSummary?pageSize=${this.pageSize}&page=0&uid=${this.currentUser.id}&ny=${this.ny}`
-        let { data } = await this.apiStreamPost('/proxy/common/get', { url: url })
+        let url = `erpReport/saleCommSummary?pageSize=${this.pageSize}&page=0&uid=${this.currentUser.id}&ny=${this.ny}`
+        if (this.deptName) url += `&dptName=${this.deptName}`
+        if (this.empCode) url += `&empCode=${this.empCode}`
+        let { data } = await this.apiStreamPost('/proxy/common/get', { url: encodeURI(url) })
         if (data.returnCode === 0) {
           const resData = data.list
           let listData = {}
@@ -157,6 +184,8 @@ export default {
     searchForm (paramsObj) {
       this.loading = true
       this.ny = paramsObj.ny
+      this.deptName = paramsObj.dptName
+      this.empCode = paramsObj.platformCode
       this.loadData()
     }
   }

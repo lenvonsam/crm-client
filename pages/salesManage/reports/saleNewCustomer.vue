@@ -48,28 +48,18 @@ export default {
           prop: 'employeeName',
           width: 120
         }, {
-          lbl: '高卖销量',
+          lbl: '平均、高卖重量',
           prop: 'weightGm',
           summary: true,
           width: 120
         }, {
-          lbl: '高卖',
-          prop: 'moneyGm',
-          summary: true,
-          width: 120
-        }, {
-          lbl: '高卖提成',
+          lbl: '平均、高卖提成',
           prop: 'tcGm',
           summary: true,
           width: 120
         }, {
           lbl: '低卖销量',
           prop: 'weightDm',
-          summary: true,
-          width: 120
-        }, {
-          lbl: '低卖',
-          prop: 'moneyDm',
           summary: true,
           width: 120
         }, {
@@ -112,7 +102,7 @@ export default {
       currentUser: state => state.user.currentUser
     }),
     searchFormItems () {
-      return [
+      const searchForm = [
         [{ label: '起始年月', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
@@ -137,6 +127,22 @@ export default {
           ], val: 1
         }]
       ]
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        searchForm[1].push({
+          label: '部门', model: 'dptName', type: 'selectDept',
+          list: [], val: ''
+        })
+        searchForm[2] = [{
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        }]
+      } else if (this.currentUser.dataLevel === '部门') {
+        searchForm[1].push({
+          label: '业务员', model: 'empCode', type: 'selectRemote',
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+        })
+      }
+      return searchForm
     }
   },
   methods: {
@@ -186,12 +192,12 @@ export default {
     tabSumFun (sums) {
       sums[5] = this.totalSum.weightGmSum
       sums[6] = this.totalSum.moneyGmSum
-      sums[7] = this.totalSum.tcGmSum
-      sums[8] = this.totalSum.weightDmSum
-      sums[9] = this.totalSum.moneyDmSum
-      sums[10] = this.totalSum.tcDmSum
-      sums[11] = this.totalSum.weightSumSum
-      sums[12] = this.totalSum.tcSumSum
+      // sums[7] = this.totalSum.tcGmSum
+      sums[7] = this.totalSum.weightDmSum
+      sums[8] = this.totalSum.moneyDmSum
+      // sums[10] = this.totalSum.tcDmSum
+      sums[9] = this.totalSum.weightSumSum
+      sums[10] = this.totalSum.tcSumSum
     }
   }
 }
