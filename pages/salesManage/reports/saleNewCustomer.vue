@@ -53,7 +53,7 @@ export default {
           summary: true,
           width: 120
         }, {
-          lbl: '平均、高卖提成',
+          lbl: '平价、高卖提成',
           prop: 'tcGm',
           summary: true,
           width: 120
