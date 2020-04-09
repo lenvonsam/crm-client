@@ -48,17 +48,17 @@ export default {
           prop: 'employeeName',
           width: 120
         }, {
-          lbl: '平均、高卖重量',
+          lbl: '平价、高卖重量',
           prop: 'weightGm',
           summary: true,
           width: 120
         }, {
-          lbl: '平均、高卖提成',
+          lbl: '平价、高卖提成',
           prop: 'tcGm',
           summary: true,
           width: 120
         }, {
-          lbl: '低卖销量',
+          lbl: '低卖重量',
           prop: 'weightDm',
           summary: true,
           width: 120
@@ -148,7 +148,7 @@ export default {
   methods: {
     async loadData () {
       try {
-        let url = `erpReport/saleNewCustomer?pageSize=${this.pageSize}&page=${this.currentPage - 1}&uid=${this.currentUser.id}&nameType=0`
+        let url = `erpReport/saleNewCustomer?pageSize=${this.pageSize}&currentPage=${this.currentPage - 1}&uid=${this.currentUser.id}&nameType=0`
         url += `&${this.searchValStr}`
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: encodeURI(url) })
         if (data.returnCode === 0) {
@@ -170,7 +170,7 @@ export default {
         this.loading = true
         const searchValList = []
         Object.keys(paramsObj).forEach(key => {
-          if (paramsObj[key].toString().trim() != '') {
+          if (paramsObj[key]) {
             searchValList.push(`${key}=${paramsObj[key]}`)
           } else if (this.searchRule[key]) {
             throw new Error(this.searchRule[key])
@@ -191,11 +191,11 @@ export default {
     },
     tabSumFun (sums) {
       sums[5] = this.totalSum.weightGmSum
-      sums[6] = this.totalSum.moneyGmSum
-      // sums[7] = this.totalSum.tcGmSum
+      // sums[6] = this.totalSum.moneyGmSum
+      sums[6] = this.totalSum.tcGmSum
       sums[7] = this.totalSum.weightDmSum
-      sums[8] = this.totalSum.moneyDmSum
-      // sums[10] = this.totalSum.tcDmSum
+      // sums[8] = this.totalSum.moneyDmSum
+      sums[8] = this.totalSum.tcDmSum
       sums[9] = this.totalSum.weightSumSum
       sums[10] = this.totalSum.tcSumSum
     }
