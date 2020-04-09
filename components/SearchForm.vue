@@ -48,7 +48,8 @@ export default {
   },
   computed: {
     ...mapState({
-      searchParams: state => state.searchParams
+      searchParams: state => state.searchParams,
+      currentUser: state => state.user.currentUser
     })
   },
   beforeMount () {
@@ -142,7 +143,8 @@ export default {
     async selectRemote (val) {
       const { url, queryKey, list } = this.selectActive
       let params = {
-        pageSize: 10
+        pageSize: 10,
+        uid: this.currentUser.id
       }
       params[queryKey] = val
       let me = this

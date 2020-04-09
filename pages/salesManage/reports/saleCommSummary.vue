@@ -152,7 +152,7 @@ export default {
   methods: {
     async loadData () {
       try {
-        let url = `erpReport/saleCommSummary?pageSize=${this.pageSize}&page=0&uid=${this.currentUser.id}&ny=${this.ny}`
+        let url = `erpReport/saleCommSummary?pageSize=${this.pageSize}&currentPage=0&uid=${this.currentUser.id}&ny=${this.ny}`
         if (this.deptName) url += `&dptName=${this.deptName}`
         if (this.empCode) url += `&empCode=${this.empCode}`
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: encodeURI(url) })
