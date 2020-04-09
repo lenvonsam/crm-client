@@ -170,7 +170,7 @@ export default {
         this.loading = true
         const searchValList = []
         Object.keys(paramsObj).forEach(key => {
-          if (paramsObj[key].toString().trim() != '') {
+          if (paramsObj[key]) {
             searchValList.push(`${key}=${paramsObj[key]}`)
           } else if (this.searchRule[key]) {
             throw new Error(this.searchRule[key])
