@@ -138,7 +138,7 @@ export default {
   methods: {
     async loadData () {
       try {
-        let url = `erpReport/deliveryDetail?pageSize=${this.pageSize}&page=${this.currentPage - 1}&uid=${this.currentUser.id}&nameType=0`
+        let url = `erpReport/deliveryDetail?pageSize=${this.pageSize}&currentPage=${this.currentPage - 1}&uid=${this.currentUser.id}&nameType=0`
         url += `&${this.searchValStr}`
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: encodeURI(url) })
         if (data.returnCode === 0) {
@@ -160,11 +160,12 @@ export default {
         this.loading = true
         const searchValList = []
         Object.keys(paramsObj).forEach(key => {
-          if (paramsObj[key].toString().trim() != '') {
+          if (paramsObj[key]) {
             searchValList.push(`${key}=${paramsObj[key]}`)
-          } else if (this.searchRule[key]) {
-            throw new Error(this.searchRule[key])
           }
+          //  else if (this.searchRule[key]) {
+          //   throw new Error(this.searchRule[key])
+          // }
         })
         this.currentPage = 1
         this.searchValStr = searchValList.toString().replace(/,/g, '&')
