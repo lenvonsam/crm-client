@@ -156,9 +156,10 @@ export default {
         Object.keys(paramsObj).forEach(key => {
           if (paramsObj[key]) {
             searchValList.push(`${key}=${paramsObj[key]}`)
-          } else if (this.searchRule[key]) {
-            throw new Error(this.searchRule[key])
           }
+          //  else if (this.searchRule[key]) {
+          //   throw new Error(this.searchRule[key])
+          // }
         })
         this.currentPage = 1
         this.searchValStr = searchValList.toString().replace(/,/g, '&')
