@@ -977,7 +977,7 @@ export default {
           this.apiStreamPost('/proxy/erp/get', { url: 'querySbillByCust2CRM.htm?body=' + this.form.erpCode, params: {}, method: 'get' }).then(res => {
             const result = JSON.parse(unescape(res.data.replace(/\\u/gi, '%u')))
             console.log(result)
-            if (!(result.success === '0' && result.body !== '0')) {
+            if (!(result.success === '0' && result.body === '0')) {
               me.compNameEditDisable = false
             }
           })
