@@ -6,9 +6,17 @@ const app = express()
 
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://localhost:7786/'
+<<<<<<< HEAD
 const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
 const xyUrl = 'http://192.168.80.105/gzql'
 const erpUrl = 'http://192.168.80.103:8980/eep/interfacesAjax!'
+=======
+// const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
+const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
+// const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
+const xyUrl = 'http://192.168.80.249/gzql'
+const erpUrl = 'http://192.168.80.147:8980/eep/interfacesAjax!'
+>>>>>>> e1ac4fb0f77673da4d6736a3ca48e5ed8a20c979
 const scpUrl = 'http://192.168.80.210:9901/api/'
 
 router.use((req, res, next) => {
@@ -89,10 +97,10 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
       formData: formData,
       headers: { 'zhdcrm-proxy-token': hptl.proxyToken('zhdcrm') }
     },
-    function (err, resp, body) {
+    function(err, resp, body) {
       console.log('err:>>', err)
       console.log('body:>>', typeof body)
-      fs.unlink(req.files.upfile.path, function (err) {
+      fs.unlink(req.files.upfile.path, function(err) {
         if (err) console.error(err)
         else console.log('temp file delete success')
       })
@@ -100,7 +108,7 @@ router.post('/fileUpload', multipartMiddleware, (req, res) => {
     }
   )
 })
-function getClientIP (req) {
+function getClientIP(req) {
   return (
     req.headers['x-forwarded-for'] || // 判断是否有反向代理 IP
     req.connection.remoteAddress || // 判断 connection 的远程 IP
@@ -162,7 +170,7 @@ router.post('/scp/post', (req, res) => {
   postMethod(req, res, scpUrl)
 })
 
-function postMethod (req, res, proxy) {
+function postMethod(req, res, proxy) {
   const body = req.body
   console.log(body)
   hptl.httpPost(proxy + body.url, body.params).then(
@@ -176,7 +184,7 @@ function postMethod (req, res, proxy) {
   )
 }
 
-function getMethod (req, res, proxy) {
+function getMethod(req, res, proxy) {
   const body = req.body
   hptl.httpGet(proxy + body.url).then(
     ({ data }) => {

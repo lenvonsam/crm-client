@@ -94,6 +94,14 @@ export default {
       'clearSearchParams'
     ]),
     search (type) {
+      const searchParm = this.getSearchParm(type)
+      if (type == 'submit') {
+        let searchParamsObj = { url: this.$route.path, params: searchParm }
+        this.setSearchParams(searchParamsObj)
+        this.$emit('search', searchParm)
+      }
+    },
+    getSearchParm (type) {
       let itemLength = this.copyItems.length
       let searchParm = {}
       for (let i = 0; i < itemLength; i++) {
@@ -128,11 +136,7 @@ export default {
           }
         }
       }
-      if (type == 'submit') {
-        let searchParamsObj = { url: this.$route.path, params: searchParm }
-        this.setSearchParams(searchParamsObj)
-        this.$emit('search', searchParm)
-      }
+      return searchParm
     },
     selectRemoteFocus (item) {
       this.selectActive = item
