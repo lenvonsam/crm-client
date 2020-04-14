@@ -6,17 +6,9 @@ const app = express()
 
 const hptl = require('../utils/httpUtil')
 // const proxyUrl = 'http://localhost:7786/'
-<<<<<<< HEAD
 const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
 const xyUrl = 'http://192.168.80.105/gzql'
 const erpUrl = 'http://192.168.80.103:8980/eep/interfacesAjax!'
-=======
-// const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-const proxyUrl = 'http://192.168.80.200:8080/crmserver/'
-// const proxyUrl = 'http://192.168.80.91:8080/crmserver/'
-const xyUrl = 'http://192.168.80.249/gzql'
-const erpUrl = 'http://192.168.80.147:8980/eep/interfacesAjax!'
->>>>>>> e1ac4fb0f77673da4d6736a3ca48e5ed8a20c979
 const scpUrl = 'http://192.168.80.210:9901/api/'
 
 router.use((req, res, next) => {
