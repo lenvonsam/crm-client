@@ -32,170 +32,170 @@
 </template>
 
 <script>
-  import graphicCode from '@/components/GraphicCode.vue'
-  import sha1 from 'sha1'
-  import { mapActions } from 'vuex'
-  import _ from 'lodash'
-  export default {
-    components: {
-      graphicCode
-    },
-    data () {
-      var codeValidate = (rule, value, cb) => {
-        if (value.trim() === '') {
-          cb(new Error('不能为空'))
-        } else if (this.loginModel.codeConfirm.trim().toLocaleLowerCase() !== this.code.toLocaleLowerCase()) {
-          cb(new Error('验证码输入错误'))
-        } else {
-          cb()
-        }
-      }
-      return {
-        code: '',
-        loginModel: {
-          acct: '',
-          pwd: '',
-          codeConfirm: ''
-        },
-        loginRules: {
-          acct: [{required: true, message: '不能为空', trigger: 'blur'}],
-          pwd: [{required: true, message: '不能为空', trigger: 'blur'}],
-          codeConfirm: [{validator: codeValidate, trigger: 'blur'}]
-        }
-      }
-    },
-    beforeMount () {
-      this.isIE()
-      this.configVal({key: 'globalErrorMsg', val: ''})
-      this.code = this.getValidateCode()
-    },
-    methods: {
-      ...mapActions([
-        'configVal',
-        'setUser'
-      ]),
-      refreshCode () {
-        this.code = this.getValidateCode()
-      },
-      submit (formName) {
-        if (this.isIE()) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              this.login()
-            } else {
-              console.error('error submit!!')
-              return false
-            }
-          });
-        }        
-      },
-      async login () {
-        let encodePwd = sha1(this.loginModel.pwd.trim())        
-        let now = this.date2Str(new Date())
-        let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'login', params: {code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now+this.code)}})
-        if (data.returnCode === 0) {
-          let params = {
-            loginAcct: this.loginModel.acct.trim(),
-            ip: data.currentUser.ipAddress,
-            deviceType: navigator.userAgent.toLowerCase()
-          }
-          data.currentUser['safeLevel'] = this.pwStrengthStr(this.loginModel.pwd.trim())
-          this.createLoginMsg(params)
-          this.setUser(data.currentUser)
-          this.refreshUser(data.currentUser)
-          this.configVal({key: 'globalSuccessMsg', val: '登录成功'})
-          let pageUrl = '/'
-          if (data.currentUser.id !== 1) {
-            const userAuthGroup = _.groupBy(data.currentUser.auths, (itm) => {
-              return itm.fkMenu.parent.factOrder
-            })
-            const firstKey = Object.keys(userAuthGroup)[0]
-            pageUrl = (userAuthGroup[firstKey][0]).fkMenu.pageUrl
-          }
-          this.jump({path: data.currentUser.id !== 1 ? pageUrl : '/'})
-          setTimeout(() => {
-            this.visitDialogData(data.currentUser.id)
-          }, 6000);
-        } else {
-          this.msgShow(this, data.errMsg)
-          this.refreshCode()
-        }
-      },
-      async refreshUser (usr) {
-        try {
-          let { data } = await this.apiStreamPost('/proxy/refreshUser', {user: usr})
-          console.log('data:>>', data)
-        } catch(e) {
-          console.log(e)
-        }
-      },
-      async createLoginMsg (params) {
-        try {
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'setting/loginMsg/create', params: params})
-          if (data.returnCode === 0) {
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
-        } 
-      },
-      async visitDialogData (uid) {
-        try {
-          let params = {
-            currentPage: 0,
-            pageSize: 3,
-            mark: '1',
-            uid: uid
-            // startTime: this.date2Str(new Date()),
-            // endTime: this.date2Str(new Date())
-          }
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/cstmCall', params: params})
-          if (data.returnCode === 0) {
-            if(data.list.length>0){
-              let temp = ''
-              data.list.map(itm => {
-                itm[0].planVisitTime = this.datetime2Str(new Date(itm[0].planVisitTime))
-                itm[0].compName = itm[0].customer.compName
-                // temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>' + itm[0].planVisitTime + '</div>'+ itm[0].compName + '</div>'
-                temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>名称：' + itm[0].compName + '</div><div>拜访时间：' + itm[0].planVisitTime + '</div>'
-              })
-              this.visitNotify(temp)
-            }
-          } else {
-            this.msgShow(this, data.errMsg)
-          }
-        } catch (e) {
-          console.error(e)
-          this.msgShow(this)
-        }
-      },
-      visitNotify(temp) {
-        let me = this
-        this.$notify({
-          title: '您有以下客户需要拜访：',
-          dangerouslyUseHTMLString: true,
-          message: temp,
-          onClick: function(){
-            me.jump({path: '/customManager/customerVisit'})
-          }
-        })
+import graphicCode from '@/components/GraphicCode.vue'
+import sha1 from 'sha1'
+import { mapActions } from 'vuex'
+import _ from 'lodash'
+export default {
+  components: {
+    graphicCode
+  },
+  data () {
+    var codeValidate = (rule, value, cb) => {
+      if (value.trim() === '') {
+        cb(new Error('不能为空'))
+      } else if (this.loginModel.codeConfirm.trim().toLocaleLowerCase() !== this.code.toLocaleLowerCase()) {
+        cb(new Error('验证码输入错误'))
+      } else {
+        cb()
       }
     }
+    return {
+      code: '',
+      loginModel: {
+        acct: '',
+        pwd: '',
+        codeConfirm: ''
+      },
+      loginRules: {
+        acct: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        pwd: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        codeConfirm: [{ validator: codeValidate, trigger: 'blur' }]
+      }
+    }
+  },
+  beforeMount () {
+    // this.excelExport(['测试'], [['123'], ['233']])
+    this.isIE()
+    this.configVal({ key: 'globalErrorMsg', val: '' })
+    this.code = this.getValidateCode()
+  },
+  methods: {
+    ...mapActions([
+      'configVal',
+      'setUser'
+    ]),
+    refreshCode () {
+      this.code = this.getValidateCode()
+    },
+    submit (formName) {
+      if (this.isIE()) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.login()
+          } else {
+            console.error('error submit!!')
+            return false
+          }
+        });
+      }
+    },
+    async login () {
+      let encodePwd = sha1(this.loginModel.pwd.trim())
+      let now = this.date2Str(new Date())
+      let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'login', params: { code: this.code, acct: this.loginModel.acct.trim(), pwd: encodePwd, hashCode: sha1(now + this.code) } })
+      if (data.returnCode === 0) {
+        let params = {
+          loginAcct: this.loginModel.acct.trim(),
+          ip: data.currentUser.ipAddress,
+          deviceType: navigator.userAgent.toLowerCase()
+        }
+        data.currentUser['safeLevel'] = this.pwStrengthStr(this.loginModel.pwd.trim())
+        this.createLoginMsg(params)
+        this.setUser(data.currentUser)
+        this.refreshUser(data.currentUser)
+        this.configVal({ key: 'globalSuccessMsg', val: '登录成功' })
+        let pageUrl = '/'
+        if (data.currentUser.id !== 1) {
+          const userAuthGroup = _.groupBy(data.currentUser.auths, (itm) => {
+            return itm.fkMenu.parent.factOrder
+          })
+          const firstKey = Object.keys(userAuthGroup)[0]
+          pageUrl = (userAuthGroup[firstKey][0]).fkMenu.pageUrl
+        }
+        this.jump({ path: data.currentUser.id !== 1 ? pageUrl : '/' })
+        setTimeout(() => {
+          this.visitDialogData(data.currentUser.id)
+        }, 6000);
+      } else {
+        this.msgShow(this, data.errMsg)
+        this.refreshCode()
+      }
+    },
+    async refreshUser (usr) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/refreshUser', { user: usr })
+        console.log('data:>>', data)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    async createLoginMsg (params) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'setting/loginMsg/create', params: params })
+        if (data.returnCode === 0) {
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async visitDialogData (uid) {
+      try {
+        let params = {
+          currentPage: 0,
+          pageSize: 3,
+          mark: '1',
+          uid: uid
+          // startTime: this.date2Str(new Date()),
+          // endTime: this.date2Str(new Date())
+        }
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'customerManage/cstmCall', params: params })
+        if (data.returnCode === 0) {
+          if (data.list.length > 0) {
+            let temp = ''
+            data.list.map(itm => {
+              itm[0].planVisitTime = this.datetime2Str(new Date(itm[0].planVisitTime))
+              itm[0].compName = itm[0].customer.compName
+              // temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>' + itm[0].planVisitTime + '</div>'+ itm[0].compName + '</div>'
+              temp += '<div style="cursor: pointer; margin-bottom: 15px;"><div>名称：' + itm[0].compName + '</div><div>拜访时间：' + itm[0].planVisitTime + '</div>'
+            })
+            this.visitNotify(temp)
+          }
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    visitNotify (temp) {
+      let me = this
+      this.$notify({
+        title: '您有以下客户需要拜访：',
+        dangerouslyUseHTMLString: true,
+        message: temp,
+        onClick: function () {
+          me.jump({ path: '/customManager/customerVisit' })
+        }
+      })
+    }
   }
+}
 </script>
 
 <style lang="stylus">
-* {
-  -webkit-top-highlight-color: transparent;
-  -webkit-box-sizing: border-box !important;
-  box-sizing: border-box !important;
-}
-body,html
-  font-family: 'PingFang SC', 'Microsoft Yahei', 'SimSun', 'Helvetica', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback'
-  font-size: 14px
-  color: #262626
+*
+  -webkit-top-highlight-color transparent
+  -webkit-box-sizing border-box !important
+  box-sizing border-box !important
+body, html
+  font-family 'PingFang SC', 'Microsoft Yahei', 'SimSun', 'Helvetica', 'STHeitiSC-Light', 'Helvetica-Light', arial, sans-serif, 'Droid Sans Fallback'
+  font-size 14px
+  color #262626
 .login-container
   position fixed
   top 0
@@ -218,7 +218,7 @@ body,html
     position relative
     width 1400px
     height 600px
-    top calc((100% - 600px) / 2)
+    top calc(((100% - 600px) / 2))
     align-items center
     .logo
       flex 0 0 450px
@@ -251,7 +251,6 @@ body,html
               background #fff
               left -18px
               top 14px
-
       .two
         padding-top 30px
         font-size 54px
@@ -290,5 +289,4 @@ body,html
               &.code
                 flex 0 0 180px
                 padding-left 20px
-
 </style>
