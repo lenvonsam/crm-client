@@ -4,7 +4,7 @@
     .pt-15
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm")
+      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
     .pt-15
       basic-table(:tableValue="tableConfig", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount")
 </template>
@@ -26,7 +26,7 @@ export default {
   data () {
     return {
       btnGroups: [{ lbl: '导出', type: 'export' }],
-      breadItems: ['销售管理', '营销中心业务员提成汇总表'],
+      breadItems: ['销售管理', '业务员提成汇总表'],
       currentPage: 1,
       totalCount: 0,
       pageSize: 100,
@@ -176,12 +176,12 @@ export default {
           const prop = item.prop === 'deptName' ? 'dptName' : item.prop
           tempProp.push(prop)
         })
+        const searchFrom = this.$refs.searchFrom.getSearchParm('submit')
         const params = {
-          ny: this.ny,
-          deptName: this.deptName,
-          empCode: this.empCode,
-          uid: this.currentUser.id,
-          columnOrder: JSON.stringify(tempProp)
+          ny: searchFrom.ny,
+          dptName: searchFrom.dptName,
+          empCode: searchFrom.platformCode,
+          uid: this.currentUser.id
         }
         const { data } = await this.apiStreamPost('/proxy/common/post', { url: 'erpReport/export/empCommSummary', params: params })
         if (!data.list) {
