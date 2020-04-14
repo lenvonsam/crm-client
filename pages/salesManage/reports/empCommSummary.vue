@@ -1,6 +1,8 @@
   <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
+    .pt-15
+      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm")
     .pt-15
@@ -11,17 +13,19 @@
 import breadcrumb from '@/components/Breadcrumb.vue'
 import basicTable from '@/components/BasicTable.vue'
 import searchForm from '@/components/SearchForm.vue'
-// import buttonGroup from '@/components/ButtonGroup.vue'
+import buttonGroup from '@/components/ButtonGroup.vue'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
     breadcrumb,
     basicTable,
-    searchForm
+    searchForm,
+    buttonGroup
   },
   data () {
     return {
+      btnGroups: [{ lbl: '导出', type: 'export' }],
       breadItems: ['销售管理', '营销中心业务员提成汇总表'],
       currentPage: 1,
       totalCount: 0,
@@ -159,6 +163,38 @@ export default {
     }
   },
   methods: {
+    groupBtnClick () {
+      this.pageShow(this)
+      this.exportExcel()
+    },
+    async exportExcel () {
+      try {
+        const tempHead = []
+        const tempProp = []
+        this.tableValue.tableHead.map(item => {
+          tempHead.push(item.lbl)
+          const prop = item.prop === 'deptName' ? 'dptName' : item.prop
+          tempProp.push(prop)
+        })
+        const params = {
+          ny: this.ny,
+          deptName: this.deptName,
+          empCode: this.empCode,
+          uid: this.currentUser.id,
+          columnOrder: JSON.stringify(tempProp)
+        }
+        const { data } = await this.apiStreamPost('/proxy/common/post', { url: 'erpReport/export/empCommSummary', params: params })
+        if (!data.list) {
+          this.msgShow('导出失败')
+          return false
+        }
+        this.excelExport(tempHead, data.list, this.breadItems[1])
+        this.pageHide(this)
+      } catch (e) {
+        this.pageHide(this)
+        console.error(e)
+      }
+    },
     async loadData () {
       try {
         let url = `erpReport/empCommSummary?pageSize=${this.pageSize}&currentPage=0&uid=${this.currentUser.id}`
