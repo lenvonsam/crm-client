@@ -102,6 +102,18 @@ export default {
           prop: 'zfTc',
           width: 150
         }, {
+          lbl: '是否完成任务量',
+          prop: 'success',
+          width: 150
+        }, {
+          lbl: '实发高卖提成',
+          prop: 'gmTcReal',
+          width: 150
+        }, {
+          lbl: '高卖提成扣除部分',
+          prop: 'gmTcReduce',
+          width: 150
+        }, {
           lbl: '提成合计',
           prop: 'hjTc',
           width: 150
