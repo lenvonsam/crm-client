@@ -1,8 +1,10 @@
   <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
+    //- .pt-15(v-if="currentUser.loginAcct === 'zq' || currentUser.loginAcct === 'admin'")
+      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm")
+      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
     .pt-15
       basic-table(:tableValue="tableValue", :sumsFun="tabSumFun", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange")
 </template>
@@ -11,17 +13,19 @@
 import breadcrumb from '@/components/Breadcrumb.vue'
 import basicTable from '@/components/BasicTable.vue'
 import searchForm from '@/components/SearchForm.vue'
-// import buttonGroup from '@/components/ButtonGroup.vue'
+import buttonGroup from '@/components/ButtonGroup.vue'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
   components: {
     breadcrumb,
     basicTable,
-    searchForm
+    searchForm,
+    buttonGroup
   },
   data () {
     return {
+      btnGroups: [{ lbl: '导出', type: 'export' }],
       breadItems: ['销售管理', '直发调货明细表'],
       currentPage: 1,
       totalCount: 0,
@@ -136,6 +140,38 @@ export default {
     }
   },
   methods: {
+    groupBtnClick () {
+      this.pageShow(this)
+      this.exportExcel()
+    },
+    async exportExcel () {
+      try {
+        const tempHead = []
+        this.tableValue.tableHead.map(item => {
+          tempHead.push(item.lbl)
+        })
+        const searchFrom = this.$refs.searchFrom.getSearchParm('submit')
+        const params = {
+          nyStart: searchFrom.nyStart,
+          nyEnd: searchFrom.nyEnd,
+          customer: searchFrom.customer,
+          dptName: searchFrom.dptName,
+          empCode: searchFrom.empCode,
+          nameType: 0,
+          uid: this.currentUser.id
+        }
+        const { data } = await this.apiStreamPost('/proxy/common/post', { url: 'erpReport/export/deliveryDetail', params: params })
+        if (!data.list) {
+          this.msgShow('导出失败')
+          return false
+        }
+        this.excelExport(tempHead, data.list, this.breadItems[1])
+        this.pageHide(this)
+      } catch (e) {
+        this.pageHide(this)
+        console.error(e)
+      }
+    },
     async loadData () {
       try {
         let url = `erpReport/deliveryDetail?pageSize=${this.pageSize}&currentPage=${this.currentPage - 1}&uid=${this.currentUser.id}&nameType=0`
