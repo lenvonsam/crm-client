@@ -680,6 +680,9 @@ export default {
         }, {
           title: '业务员新增客户明细表',
           url: '/salesManage/reports/empNewCustomer'
+        }, {
+          title: '销售其他销量',
+          url: '/salesManage/reports/saleOtherWeight'
         }
       ]
     },
