@@ -56,7 +56,11 @@ export default {
         }, {
           lbl: '其他销量',
           prop: 'otherWeight',
-          width: 120
+          width: 120,
+          type: 'object',
+          factValue (val) {
+            return val ? val : 0
+          }
         }, {
           lbl: '实际销量',
           prop: 'realWeight',
@@ -147,10 +151,10 @@ export default {
           minWidth: 150,
           colspan: true
         }, {
-          lbl: '业务员',
-          prop: 'employeeName',
-          width: 150
-        })
+            lbl: '业务员',
+            prop: 'employeeName',
+            width: 150
+          })
       } else if (this.currentUser.dataLevel === '部门') {
         tableConfig.tableHead.unshift({
           lbl: '业务员',
