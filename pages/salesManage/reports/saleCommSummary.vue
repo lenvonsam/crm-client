@@ -50,8 +50,16 @@ export default {
           prop: 'rwweight',
           width: 170
         }, {
-          lbl: '实际销量',
+          lbl: 'ERP销量',
           prop: 'dataBweight',
+          width: 120
+        }, {
+          lbl: '其他销量',
+          prop: 'otherWeight',
+          width: 120
+        }, {
+          lbl: '实际销量',
+          prop: 'realWeight',
           width: 120
         }, {
           lbl: '直发销量',
