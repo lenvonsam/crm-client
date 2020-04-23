@@ -1,7 +1,7 @@
   <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    //- .pt-15(v-if="currentUser.loginAcct === 'zq' || currentUser.loginAcct === 'admin'")
+    .pt-15(v-if="currentUser.loginAcct === 'zq' || currentUser.loginAcct === 'admin'")
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
