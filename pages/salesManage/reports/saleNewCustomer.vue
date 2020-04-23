@@ -4,7 +4,7 @@
     .pt-15(v-if="currentUser.loginAcct === 'zq' || currentUser.loginAcct === 'admin'")
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm")
+      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
     .pt-15
       basic-table(:tableValue="tableValue", :sumsFun="tabSumFun", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount", @pageChange="tableChange")
 </template>
