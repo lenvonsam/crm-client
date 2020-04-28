@@ -80,8 +80,8 @@ export default {
       searchRule: {
         nyStart: '请输入起始日期',
         nyEnd: '请输入结束日期',
-        orderColumn: '请选择排序',
-        orderType: '请选择排序方式'
+        // orderColumn: '请选择排序',
+        // orderType: '请选择排序方式'
       },
       searchValStr: '',
       loading: true,
@@ -90,7 +90,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.searchValStr = `nyStart=${this.dataMonthStr(new Date())}&nyEnd=${this.dataMonthStr(new Date())}&orderType=1&orderColumn=直发重量&nameType=0`
+      this.searchValStr = `nyStart=${this.dataMonthStr(new Date())}&nyEnd=${this.dataMonthStr(new Date())}&nameType=0`
       this.loadData()
     })
   },
@@ -105,36 +105,35 @@ export default {
         { label: '结束年月', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: this.dataMonthStr(new Date()) },
         { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' }
         ],
-        [{
-          label: '排序', model: 'orderColumn', type: 'select',
-          list: [
-            { label: '直发重量', value: '直发重量' },
-            { label: '调货重量', value: '调货重量' },
-            { label: '提成金额', value: '提成金额' },
-          ], val: '直发重量'
-        },
-        {
-          label: '方式', model: 'orderType', type: 'select',
-          list: [
-            { label: '降序', value: 1 },
-            { label: '升序', value: 0 }
-          ], val: 1
-        }]
+        // [{
+        //   label: '排序', model: 'orderColumn', type: 'select',
+        //   list: [
+        //     { label: '直发重量', value: '直发重量' },
+        //     { label: '调货重量', value: '调货重量' },
+        //     { label: '提成金额', value: '提成金额' },
+        //   ], val: '直发重量'
+        // },
+        // {
+        //   label: '方式', model: 'orderType', type: 'select',
+        //   list: [
+        //     { label: '降序', value: 1 },
+        //     { label: '升序', value: 0 }
+        //   ], val: 1
+        // }]
       ]
       if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
-        searchForm[1].push({
+        searchForm[1] = [{
           label: '部门', model: 'dptName', type: 'selectDept',
           list: [], val: ''
-        })
-        searchForm[2] = [{
+        }, {
           label: '业务员', model: 'empCode', type: 'selectRemote',
           list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
         }]
       } else if (this.currentUser.dataLevel === '部门') {
-        searchForm[1].push({
+        searchForm[1] = [{
           label: '业务员', model: 'empCode', type: 'selectRemote',
           list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
-        })
+        }]
       }
       return searchForm
     }
