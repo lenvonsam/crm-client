@@ -72,6 +72,11 @@ export default {
           summary: true,
           width: 120
         }, {
+          lbl: '新客户直发重量',
+          prop: 'zfBweight',
+          summary: true,
+          width: 120
+        }, {
           lbl: '销量合计',
           prop: 'weightSum',
           summary: true,
@@ -230,8 +235,9 @@ export default {
       sums[7] = this.totalSum.weightDmSum
       // sums[8] = this.totalSum.moneyDmSum
       sums[8] = this.totalSum.tcDmSum
-      sums[9] = this.totalSum.weightSumSum
-      sums[10] = this.totalSum.tcSumSum
+      sums[9] = this.totalSum.zfBweightSum
+      sums[10] = this.totalSum.weightSumSum
+      sums[11] = this.totalSum.tcSumSum
     }
   }
 }
