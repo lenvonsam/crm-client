@@ -9,7 +9,7 @@ div
     el-row.pr-10
       el-col(:span="7")
         el-form-item(label="客户类型：")
-          el-radio-group(v-model="form.cstmType")
+          el-radio-group(v-model="form.cstmType", :disabled="compStartTimeDisable")
             el-radio(label= 0) 新客户
             el-radio(label= 1) 老客户
       el-col(:span="5")
