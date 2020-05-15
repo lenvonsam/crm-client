@@ -9,7 +9,7 @@ div
     el-row.pr-10
       el-col(:span="7")
         el-form-item(label="客户类型：")
-          el-radio-group(v-model="form.cstmType")
+          el-radio-group(v-model="form.cstmType", :disabled="compStartTimeDisable")
             el-radio(label= 0) 新客户
             el-radio(label= 1) 老客户
       el-col(:span="5")
@@ -19,7 +19,7 @@ div
               el-radio(label= 0) 停用
       el-col(:span="12")
         el-form-item(label="起始日期")          
-          el-date-picker.full-width(v-model="form.startTime", placeholder="请选择起始日期")
+          el-date-picker.full-width(v-model="form.startTime", placeholder="请选择起始日期", :disabled="compStartTimeDisable")
     el-row.pr-10
       el-col(:span="12")
         el-form-item(label="公司名称：", prop="compName")
@@ -483,6 +483,8 @@ export default {
       chooseIous: false,
       // 客户名称是否可以修改
       compNameEditDisable: true,
+      //起始时间是否可以修改
+      compStartTimeDisable: false,
       // 主体客户ids
       cstmIdList: []
     }
@@ -990,6 +992,14 @@ export default {
       if (this.currentUser.id === 1) {
         this.compNameEditDisable = false
       }
+
+      /**
+       * 编辑不可修改起始时间
+       */
+      if (this.$route.query.type === 'edit') {
+        this.compStartTimeDisable = true
+      }
+
     }
   },
   mounted () {
