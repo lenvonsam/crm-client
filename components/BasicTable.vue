@@ -46,7 +46,7 @@ div
           span(v-if="!scope.row.edit") {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="(scope.row.mainStatus == 1 || scope.row.mainAcct == 1) && head.prop == 'name'")
           template(v-else)
-            el-input(size="mini", v-if="head.editType == 'text'", v-model="scope.row[head.prop]", @blur="verifyInput(head.prop, scope.row[head.prop], head.lbl)")
+            el-input(size="mini", v-if="head.editType == 'text'", v-model="scope.row[head.prop]", @blur="verifyInput(head.prop, scope.row[head.prop], head.lbl)", :placeholder="head.placeholder")
             el-date-picker.full-width(v-else-if="head.editType == 'date'", type="date", v-model="scope.row[head.prop]", size="small", format="yyyy-MM-dd", value-format="yyyy-MM-dd")
             el-select(v-else-if="head.editType == 'select'", v-model="scope.row[head.prop]", size="mini")
               el-option(v-for="item in head.selectList", :key="item.value", :label="item.label", :value="item.value")
