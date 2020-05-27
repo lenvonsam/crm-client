@@ -162,6 +162,7 @@
         this.dialogMap = true
       },
       async loadData () {
+        debugger
         this.queryObject.uid = this.currentUser.id
         try {
           let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer', params: this.queryObject})

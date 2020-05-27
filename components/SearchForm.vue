@@ -21,7 +21,9 @@
                 el-option(v-for="itemIist in deptList", :key="itemIist.name", :label="item.name", :value="itemIist.name")
                   span {{itemIist.name}}    
               el-select.full-width(v-model="item.val", v-else-if="item.type == 'selectRemote'", value-key, filterable, remote, size="small", :placeholder="item.placeholder", :remote-method="selectRemote", clearable, @focus="selectRemoteFocus(item)", @blur="selectRemoteBlur")
-                el-option(v-for="item in item.list", :key="item.id", :label="item.name", :value="item.platformCode")    
+                el-option(v-for="item in item.list", :key="item.id", :label="item.name", :value="item.platformCode")
+              el-select.full-width(v-model="item.val", v-else-if="item.type == 'selectArea'", value-key, filterable, size="small", :placeholder="item.placeholder", clearable, @focus="selectRemoteFocus(item)", @blur="selectRemoteBlur")
+                el-option(v-for="item in item.list", :key="item.value", :label="item.name", :value="item.value")       
               template(v-else-if="item.type == 'range'")
                 .row.flex-center
                   .col
@@ -31,6 +33,10 @@
                   .col
                     el-input(v-model="item.max", :placeholder="item.maxPlaceholder", size="small")
               el-input.full-width(v-model="item.val", v-else, :placeholder="item.placeholder", size="small")
+          .row.mb-15.flex-center(v-if="item.model == 'showUpdate'",style="padding-left: 30px;")
+            el-col(:span="8")
+              el-checkbox(v-model="item.val == '1'" @change="getcheckboxval") 仅展示未评估的公司
+
     .text-center(style="flex: 0 0 200px")
       el-button(size="small", type="primary", @click="search('submit')") 查询
       el-button(size="small", @click="search('reset')") 重置
@@ -100,6 +106,9 @@ export default {
         this.setSearchParams(searchParamsObj)
         this.$emit('search', searchParm)
       }
+    },
+    getcheckboxval(val){
+      this.$emit('changeCheckVal', val)
     },
     getSearchParm (type) {
       let itemLength = this.copyItems.length

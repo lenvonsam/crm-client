@@ -631,6 +631,89 @@ export default {
       label: '协标组'
     }
   ],
+  // 归属性质
+  propertyMark: [
+    {
+      value: '',
+      label: '全部'
+    },
+    {
+      value: '0',
+      label: '长期维护'
+    },
+    {
+      value: '1',
+      label: '二次开发'
+    }
+  ],
+  // 客户状态
+  clientStatus: [
+    {
+      value: '',
+      label: '全部'
+    },
+    {
+      value: '1',
+      label: '潜在客户'
+    },
+    {
+      value: '2',
+      label: '正式客户'
+    },
+    {
+      value: '3',
+      label: '公共客户'
+    }
+  ],
+  // 客户性质
+  cstmPropertyIds: [
+    {
+      value: '',
+      label: '贸易商'
+    },
+    {
+      value: '1',
+      label: '终端客户'
+    },
+    {
+      value: '2',
+      label: '加工单位'
+    },
+    {
+      value: '3',
+      label: '物流单位'
+    }
+  ],
+  // 主要物流现状
+  logisticsStat: [
+    {
+      value: '本地物流发达',
+      label: '本地物流发达'
+    },
+    {
+      value: '有专线物流商',
+      label: '有专线物流商'
+    },
+    {
+      value: '客户自有运力居多',
+      label: '客户自有运力居多'
+    }
+  ],
+  // 物流对销量的影响
+  logisticsInflu: [
+    {
+      value: '物流与销量无关系',
+      label: '物流与销量无关系'
+    },
+    {
+      value: '提升物流服务可增加销量',
+      label: '提升物流服务可增加销量'
+    },
+    {
+      value: '降低运费可增加销量',
+      label: '降低运费可增加销量'
+    }
+  ],
   currentMenus: [],
   allMenus: [
     {
@@ -754,6 +837,10 @@ export default {
         {
           title: '采购供应商',
           url: '/customManager/supplier'
+        },
+        {
+          title: '客户评估',
+          url: '/customManager/customerEvalution'
         }
       ]
     },

@@ -8,7 +8,10 @@
     .mt-15
       .text-red.ft-15 *橙色代表快流失客户，绿色代表建议沟通客户，白色为正常客户
     .mt-5
-      basic-table(:tableValue="tableValue", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @chooseData="selectData", @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", @tableRowLock="rowLock", @tableRowMap = "rowMap", @sort="sortHandler")
+      basic-table(:tableValue="tableValue", :currentPage="currentPage", 
+      :pageSize="pageSize", :total="totalCount", @chooseData="selectData", 
+      @pageChange="tableChange", :loading="loading", @tableRowEdit="rowEdit", 
+      @tableRowLock="rowLock", @tableRowMap = "rowMap", @sort="sortHandler")
     baidu-map(v-if="dialogMap", :baiduMapData= "baiduMapData", :cb="baiduMapCb")
 </template>
 
@@ -214,7 +217,8 @@
       async loadData () {
         this.queryObject.uid = this.currentUser.id
         try {
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer', params: this.queryObject})
+          let { data } = await this.apiStreamPost('/proxy/common/post',
+           {url: 'customerManage/customer', params: this.queryObject})
           if (data.returnCode === 0) {
             let arr = []
             let endDate = new Date(this.date2Str(new Date()) + ' 02:00:00')
@@ -245,7 +249,8 @@
       },
       async updateLock (params) {
         try {
-          let { data } = await this.apiStreamPost('/proxy/common/post', {url: 'customerManage/customer/updateLock', params: params})
+          let { data } = await this.apiStreamPost('/proxy/common/post', 
+          {url: 'customerManage/customer/updateLock', params: params})
           if (data.returnCode === 0) {
             return true
           } else {
