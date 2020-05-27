@@ -682,7 +682,43 @@ export default {
     {
       value: '3',
       label: '物流单位'
+    },
+    {
+      value: '4',
+      label: '其他'
     }
+  ],
+  // 流失原因
+  lossReasonList: [
+    { label: '维护/沟通问题', value: '维护/沟通问题' },
+    { label: '我司经营管控', value: '我司经营管控' },
+    { label: '我司禁止合作', value: '我司禁止合作' },
+    { label: '公司关停/注销', value: '公司关停/注销' },
+    { label: '其他原因', value: '其他原因' }
+  ],
+  // 有无库存
+  hasStorageList: [
+    { label: '无', value: '无' },
+    { label: '有', value: '有' }
+  ],
+  // 主要运力方式
+  mainDeliveryWayList: [ 
+    { label: '自有运力', value: '自有运力' },
+    { label: '我司配送', value: '我司配送' },
+    { label: '固定三方物流', value: '固定三方物流' },
+    { label: '非固定三方物流', value: '非固定三方物流' },
+  ],
+  // 物流偏好
+  deliveryPreferList1: [
+    { label: '拼车/顺风车', value: '拼车/顺风车' },
+    { label: '等返程车', value: '等返程车' },
+    { label: '保运输时效，不计较运费', value: '保运输时效，不计较运费' },
+    { label: '低运费，保运输时效', value: '低运费，保运输时效' },
+    { label: '看重运费，运输可延缓', value: '看重运费，运输可延缓' }
+  ],
+  deliveryPreferList2: [
+    { label: '有单即派车', value: '有单即派车' },
+    { label: '固定车次按期配送', value: '固定车次按期配送' }
   ],
   // 主要物流现状
   logisticsStat: [

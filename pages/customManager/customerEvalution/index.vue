@@ -181,16 +181,22 @@ export default {
     })
   },
   mounted () {
-    console.log('logisticsStat------>' + JSON.stringify(this.logisticsStat))
-
+    this.tableValue2.tableHead.map(item => {
+      if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
+      if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
+    })
+    console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
+    this.searchFormItems1[1][1]['list'] = this.propertyMark
+    this.searchFormItems1[2][0]['list'] = this.clientStatus
+    console.log('this.searchFormItems1------>' + JSON.stringify(this.searchFormItems1))
     this.$nextTick(() => {
-      this.tableValue2.tableHead.map(item => {
-        if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
-        if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
-      })
-      console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
-      this.searchFormItems1[1][1]['list'] = this.propertyMark
-      this.searchFormItems1[2][0]['list'] = this.clientStatus
+      // this.tableValue2.tableHead.map(item => {
+      //   if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
+      //   if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
+      // })
+      // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
+      // this.searchFormItems1[1][1]['list'] = this.propertyMark
+      // this.searchFormItems1[2][0]['list'] = this.clientStatus
       this.clientObject = {
         currentPage: this.currentPage1 - 1,
         pageSize: this.pageSize,
