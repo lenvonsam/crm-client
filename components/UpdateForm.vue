@@ -257,28 +257,22 @@ export default {
     })
   },
   mounted () {
+    this.initform(this.originObj)
     this.getGoodsNames()
     this.getAreaNames()
     // this.getCustomProperty()
   },
   watch: {
-    originObj (newVal, oldVal) {
-      this.initform(newVal)
-    },
-    selectCstmPropertyIdsList: function (val, oldval) {
-      console.log('selectCstmPropertyIdsList_val=====' + val)
-      if (val.length > 2) {
-        this.msgShow(this, '最多可选择两项主要客户性质')
-      }
-      this.postForm.cstmPropertyIds = val.toString()
-    },
-    selectGoodsNamesList: function (val, oldval) {
-      console.log('selectGoodsNamesList_val=====' + val)
-      this.postForm.goodsNames = val.toString()
-    },
-    // selectAreaNamesList: function (val, oldval) {
-    //   console.log('selectAreaNamesList_val=====' + val)
-    //   this.postForm.areaName = val
+    // selectCstmPropertyIdsList: function (val, oldval) {
+    //   console.log('selectCstmPropertyIdsList_val=====' + val)
+    //   if (val.length > 2) {
+    //     this.msgShow(this, '最多可选择两项主要客户性质')
+    //   }
+    //   this.postForm.cstmPropertyIds = val.toString()
+    // },
+    // selectGoodsNamesList: function (val, oldval) {
+    //   console.log('selectGoodsNamesList_val=====' + val)
+    //   this.postForm.goodsNames = val.toString()
     // },
   },
   methods: {
@@ -317,7 +311,7 @@ export default {
         this.showReason = this.form.reason ? true : false
         // 判断有无库存显示
         this.showHasStorage = this.form.hasStorage ? true : false
-        if(this.form.cstmPropertyIds){
+        if (this.form.cstmPropertyIds) {
           this.getHasStorageValue(this.form.cstmPropertyIds)
         }
         // 判断库存规模显示与否
@@ -375,7 +369,7 @@ export default {
         this.showStorageCapacity = false
       } else {
         this.form.cstmPropertyIds = label
-        this.postForm.cstmPropertyIds = label
+        this.postForm.cstmPropertyIds = label.toString()
         if (label.toString().indexOf('贸易商') !== -1 || label.toString().indexOf('终端客户') !== -1 || label.toString().indexOf('加工单位') !== -1) {
           this.showHasStorage = true
           this.showStorageCapacity = false
@@ -518,11 +512,11 @@ export default {
         delete this.postForm.dataStr
       }
       if (this.selectCstmPropertyIdsList.length === 0) {
-        this.$message.error('请选择客户性质！');
+        this.msgShow(this, '请选择客户性质！');
         return false
       }
       if (this.selectGoodsNamesList.length === 0) {
-        this.$message.error('请选择主要需求物资品名！');
+        this.msgShow(this, '请选择主要需求物资品名！');
         return false
       }
       return true
@@ -532,7 +526,7 @@ export default {
         let resoult = this.beforeSubmit()
         if (resoult) {
           this.loading = true
-          console.log('入参_Submit_this.postForm------------' + JSON.stringify(this.postForm))
+          console.log('入参_Submit_this.postForm------------' ,this.postForm)
           let { data } = await this.apiStreamPost('/proxy/common/post',
             { url: 'customerManage/evaluation/', params: this.postForm })
           if (data.returnCode === 0) {
