@@ -142,6 +142,9 @@ export default {
               this.copyItems[i][n].min = ''
               this.copyItems[i][n].max = ''
             }
+            if (this.copyItems[i][n].model == 'showUpdate') {
+              this.copyItems[i][n].val = '1'
+            }
           }
         }
       }
