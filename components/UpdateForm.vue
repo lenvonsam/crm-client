@@ -53,7 +53,7 @@
       el-row.pr-10(type="flex")
         el-col(:span="8" :hidden="!showStorageCapacity")
           el-form-item.is-required(label="库存规模：", prop="storageCapacity")
-            el-input(v-model="form.storageCapacity" type="number")
+            el-input(v-model="form.storageCapacity" type="number" @change="storageCapacityInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主营业务：", prop="mainBusi")
             el-input(v-model="form.mainBusi" maxlength="50")
@@ -68,34 +68,37 @@
       el-button(type="primary", :icon="showAllBtnIsEdit ? 'el-icon-arrow-up' : 'el-icon-arrow-down'", @click="showAll") {{showAllBtnIsEdit ? '收起' : '展示全部'}}
   .pt-20
     el-form(ref="form", show-message, :model="form", label-width="145px", label-position="right")
-      div(v-for="ys,index in yearSaleList" :key="index")
-        el-row.pr-10(type="flex", justify="space-between")
-          el-col(:span="7")
-            el-form-item(:label="ys.yearStr+'提单量：'", prop="billWeight")
-              el-input(v-model="ys.billWeight", :disabled="formDisabled")
-          el-col(:span="7")
-            el-form-item(:label="ys.yearStr+'实提量：'", prop="ladWeight")
-              el-input(v-model="ys.ladWeight", :disabled="formDisabled")
-          el-col(:span="7")
-            el-form-item(label="年度高卖金额：", prop="highSale")
-              el-input(v-model="ys.highSale", :disabled="formDisabled")
-        el-row.pr-10(type="flex", justify="space-between")
-          el-col(:span="7")
-            el-form-item(label="成交物资NO.1品名：", prop="goods1")
-              el-input(v-model="ys.goods1", :disabled="formDisabled")
-          el-col(:span="7")
-            el-form-item(label="成交物资NO.2品名：", prop="goods2")
-              el-input(v-model="ys.goods2", :disabled="formDisabled")
-          el-col(:span="7")
-            el-form-item(label="成交物资NO.3品名：", prop="goods3")
-              el-input(v-model="ys.goods3", :disabled="formDisabled")
+      div(v-if="yearSaleList.length != 0")
+        div(v-for="ys,index in yearSaleList" :key="index")
+          el-row.pr-10(type="flex", justify="space-between")
+            el-col(:span="7")
+              el-form-item(:label="ys.yearStr+'提单量：'", prop="billWeight")
+                el-input(v-model="ys.billWeight", :disabled="formDisabled")
+            el-col(:span="7")
+              el-form-item(:label="ys.yearStr+'实提量：'", prop="ladWeight")
+                el-input(v-model="ys.ladWeight", :disabled="formDisabled")
+            el-col(:span="7")
+              el-form-item(label="年度高卖金额：", prop="highSale")
+                el-input(v-model="ys.highSale", :disabled="formDisabled")
+          el-row.pr-10(type="flex", justify="space-between")
+            el-col(:span="7")
+              el-form-item(label="成交物资NO.1品名：", prop="goods1")
+                el-input(v-model="ys.goods1", :disabled="formDisabled")
+            el-col(:span="7")
+              el-form-item(label="成交物资NO.2品名：", prop="goods2")
+                el-input(v-model="ys.goods2", :disabled="formDisabled")
+            el-col(:span="7")
+              el-form-item(label="成交物资NO.3品名：", prop="goods3")
+                el-input(v-model="ys.goods3", :disabled="formDisabled")
+      div(v-else) 
+         el-row(style="color: #c0c0c0;text-align: center;") 暂无数据
   breadcrumb(:breadItems="breadItemList[2]")
   .pt-20
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="160px", label-position="right")
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="7")
-          el-form-item.is-required(label="全年需求数量评估：", prop="yearSaleWeight", placeholder="单位‘吨’")
-            el-input(v-model="form.yearSaleWeight")
+          el-form-item.is-required(label="全年需求数量评估：", prop="yearSaleWeight")
+            el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
             el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple @change="getGoodsNameValue")
@@ -110,11 +113,12 @@
          el-row.pr-10(type="flex")
           el-col(:span="8")
             el-form-item.is-required(:label='"其他主要供应商"+(index+1)+"："', prop="supplyName")
-              el-input(v-model="item.supplyName")
+              el-input(v-model="item.supplyName" maxlength="50")
           el-col(:span="16")
             el-form-item.is-required(label="其他供应商优势：", prop="supplyPrefer")
-              el-input(v-model="item.supplyPrefer")
-      el-row.pr-10(type="flex" justify="end")
+              el-input(v-model="item.supplyPrefer" maxlength="50")
+                el-button(slot="append" icon="el-icon-delete" @click="deleteBtn(index)")
+      el-row.pr-10(type="flex" justify="end" v-if="showAddMoreBtn")
         el-button(type="primary", plain, @click="addMore") 新增
   breadcrumb(:breadItems="breadItemList[3]")
   .pt-20
@@ -124,7 +128,7 @@
           el-form-item.is-required(label="主要运力实现方式：", prop="mainDeliveryWay")
             el-select.full-width(v-model="form.mainDeliveryWay" filterable placeholder="" @change="getDeliveryPrefer")
               el-option(v-for="item in mainDeliveryWayList", :key="item.label", :label="item.label", :value="item.value")
-        el-col(:span="8")
+        el-col(:span="8" :hidden="!showDeliveryName")
           el-form-item.is-required(label="三方物流单位名称或组织者，司机姓名：", prop="deliveryName")
             el-input(v-model="form.deliveryName") 
         el-col(:span="8" :hidden="!showDeliveryPrefer")
@@ -188,7 +192,7 @@ export default {
         areaName: '',
         hasStorageShow: '',
         hasStorage: '',
-        storageCapacity: 0,
+        storageCapacity: '',
         mainBusi: '',
         busiScope: '',
         yearSaleWeight: 0,
@@ -208,6 +212,7 @@ export default {
       goodsNamesList: [],
       selectGoodsNamesList: [],
       areaNamesList: [],
+      showDeliveryName: false,
       deliveryPreferList: [], // 主要物流偏好
       showDeliveryPrefer: false, // 主要物流偏好显示与否
       showOtherProvider: false, // 其他供应商1显示与否
@@ -215,6 +220,7 @@ export default {
       yearSaleList: [], //历史交易数据
       selectCstmPropertyIdsList: [],
       i: 0,
+      showAddMoreBtn: false,
       rules: {
         busiScope: [
           { required: true, message: '请输入内容', trigger: 'blur' },
@@ -256,6 +262,7 @@ export default {
       deliveryPreferList2: state => state.deliveryPreferList2, // 物流偏好
     })
   },
+  created(){},
   mounted () {
     this.initform(this.originObj)
     this.getGoodsNames()
@@ -263,17 +270,6 @@ export default {
     // this.getCustomProperty()
   },
   watch: {
-    // selectCstmPropertyIdsList: function (val, oldval) {
-    //   console.log('selectCstmPropertyIdsList_val=====' + val)
-    //   if (val.length > 2) {
-    //     this.msgShow(this, '最多可选择两项主要客户性质')
-    //   }
-    //   this.postForm.cstmPropertyIds = val.toString()
-    // },
-    // selectGoodsNamesList: function (val, oldval) {
-    //   console.log('selectGoodsNamesList_val=====' + val)
-    //   this.postForm.goodsNames = val.toString()
-    // },
   },
   methods: {
     initform (newVal) {
@@ -285,22 +281,27 @@ export default {
         this.form.firstBillTime = newVal.firstBillTime
         if (newVal.dataList) {
           this.form.dataStr = newVal.dataList
+          this.i = newVal.dataList.length
         }
+        console.log('this.i======>' + this.i)
         if (newVal.yearSaleList) {
           this.yearSaleList = newVal.yearSaleList
         }
-
-
         if (newVal.obj.yearPercent) {
           this.form.yearPercent = parseInt(newVal.obj.yearPercent)
+          if(this.form.yearPercent !== 100){
+            this.showAddMoreBtn = true
+          }
         }
-
         this.form.customerPropertyMark = this.form.customerPropertyMark === '0' ? '长期维护' : '二次开发'
         if (newVal.obj.cstmPropertyIds) { //客户性质转为数组类型
           this.selectCstmPropertyIdsList = newVal.obj.cstmPropertyIds.split(',')
         }
         if (newVal.obj.goodsNames) { //品名转为数组类型
           this.selectGoodsNamesList = newVal.obj.goodsNames.split(',')
+        }
+        if (newVal.obj.areaName) {
+          this.form.areaName = newVal.obj.areaName
         }
         this.erpCode = this.form.erpCode
         // 判断流失原因显示与否
@@ -320,6 +321,17 @@ export default {
         this.form.hasStorageShow = this.form.hasStorage === '1' ? '有' : '无'
         // 判断其他供应商显示
         this.showOtherProvider = this.form.dataStr ? true : false
+        // 判断司机名显示
+        this.showDeliveryName = this.form.deliveryName ? true : false
+        if (this.form.mainDeliveryWay) {
+          if (this.form.mainDeliveryWay.toString().trim() === '固定三方物流') {
+            this.showDeliveryName = true
+          } else {
+            this.showDeliveryName = false
+          }
+        } else {
+          this.showDeliveryName = false
+        }
         // 判断物流偏好显示
         this.showDeliveryPrefer = this.form.deliveryPrefer ? true : false
         // 判断物流偏好选框是否显示，显示哪个option
@@ -337,16 +349,18 @@ export default {
           this.showDeliveryPrefer = false
         }
 
-
         this.showOtherProvider = this.form.yearPercent === '100' ? false : true
         console.log('initform_this.form========>' + JSON.stringify(this.form))
         this.postForm.cstmId = newVal.obj.id
         this.postForm.lossReason = newVal.obj.lossReason
         this.postForm.reason = newVal.obj.reason
-        this.postForm.yearPercent = this.form.yearPercent
+        this.postForm.areaName = newVal.obj.areaName
+        this.postForm.yearPercent = parseInt(newVal.obj.yearPercent)
         this.postForm.hasStorage = newVal.obj.hasStorage
         this.postForm.mainDeliveryWay = newVal.obj.mainDeliveryWay
         this.postForm.deliveryPrefer = newVal.obj.deliveryPrefer
+        this.postForm.goodsNames = newVal.obj.goodsNames
+        this.postForm.cstmPropertyIds = newVal.obj.cstmPropertyIds
         console.log('initform_this.postForm========>' + JSON.stringify(this.postForm))
         this.loading = false
       }
@@ -363,27 +377,49 @@ export default {
     // 根据select客户性质判断有无库存显示与否：客户性质含有“贸易商、终端客户、加工单位”时显示
     getHasStorageValue (label) {
       console.log('getHasStorageValue(label)========>' + label)
-      if (label.toString().indexOf('其他') !== -1) {
-        this.selectCstmPropertyIdsList = ['其他']
+      this.form.cstmPropertyIds = label
+      this.postForm.cstmPropertyIds = label.toString()
+      if (label.toString().indexOf('贸易商') !== -1 || label.toString().indexOf('终端客户') !== -1 || label.toString().indexOf('加工单位') !== -1) {
+        this.showHasStorage = true
+        this.showStorageCapacity = false
+        if (this.form.hasStorage) {
+          this.form.hasStorageShow = this.form.hasStorage.toString() === '1' ? '有' : '无'
+          this.showStorageCapacity = this.form.hasStorage.toString() === '1' ? true : false
+        } else {
+          this.form.hasStorageShow = '无'
+        }
+      } else {
         this.showHasStorage = false
         this.showStorageCapacity = false
-      } else {
-        this.form.cstmPropertyIds = label
-        this.postForm.cstmPropertyIds = label.toString()
-        if (label.toString().indexOf('贸易商') !== -1 || label.toString().indexOf('终端客户') !== -1 || label.toString().indexOf('加工单位') !== -1) {
-          this.showHasStorage = true
-          this.showStorageCapacity = false
-          if (this.form.hasStorage) {
-            this.form.hasStorageShow = this.form.hasStorage.toString() === '1' ? '有' : '无'
-          } else {
-            this.form.hasStorageShow = '无'
-          }
-        } else {
-          this.showHasStorage = false
-        }
-        this.postForm.hasStorage = this.form.hasStorage
       }
-
+      this.postForm.hasStorage = this.form.hasStorage
+    },
+    // 限制输入数字不可为负，最多两位小数
+    storageCapacityInput (val) {
+      if (val > 0) {
+        // 通过正则过滤小数点后两位
+        val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null
+        console.log('storageCapacityInput(val)======>', val)
+        this.form.storageCapacity = val
+        this.postForm.storageCapacity = val
+      } else {
+        this.msgShow(this, '请输入正确的数量！')
+        this.form.yearSaleWeight = 0
+        this.postForm.yearSaleWeight = 0
+      }
+    },
+    yearSaleWeightInput (val) {
+      console.log('yearSaleWeightInput(val)======>', val)
+      if (val >= 0) {
+        // 通过正则过滤小数点后两位
+        val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null      
+        this.form.yearSaleWeight = val
+        this.postForm.yearSaleWeight = val
+      } else {
+        this.msgShow(this, '请输入正确的数量！')
+        this.form.yearSaleWeight = 0
+        this.postForm.yearSaleWeight = 0
+      }
     },
     getGoodsNameValue (label) {
       console.log('getGoodsNameValue(label)=====' + label)
@@ -410,31 +446,50 @@ export default {
     },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {
+      this.i = 0
+      this.form.dataStr = []
       console.log('getOtherProvider(label)========>' + label)
       if (label !== 100) {
+        this.showAddMoreBtn = true
         this.showOtherProvider = true
         this.addMore()
       } else {
         this.showOtherProvider = false
+        this.showAddMoreBtn = false
       }
     },
-    // 主要运力实现方式选择“我司配送，固定三方物流，非固定物流三方”展示该字段
+    deleteBtn(index){
+      if(this.i > 1){
+        this.form.dataStr.splice(index,1)
+        this.i = this.i - 1
+        console.log('this.i========>' + this.i)
+        console.log('this.form.dataStr========>' + JSON.stringify(this.form.dataStr))
+        this.postForm.dataStr = JSON.stringify(this.form.dataStr)
+      }else{
+        this.msgShow(this,'我司占比不足100%时，最少填写一个供应商！')
+      }
+    },
+    // 主要运力实现方式选择“我司配送，固定三方物流，非固定物流三方”展示物流偏好
+    // 主要运力实现方式选择“固定三方物流”，展示司机名字段
     getDeliveryPrefer (label) {
       console.log('getDeliveryPrefer(label)========>' + label)
       this.form.deliveryPrefer = ''
       if (label.toString().indexOf('我司配送') !== -1 || label.toString().indexOf('非固定三方物流') !== -1) {
+        this.showDeliveryName = false
+        this.form.deliveryName = ''
         this.showDeliveryPrefer = true
         this.deliveryPreferList = this.deliveryPreferList1
       } else if (label.toString().trim() === '固定三方物流') {
+        this.showDeliveryName = true
         this.showDeliveryPrefer = true
         this.deliveryPreferList = this.deliveryPreferList2
       } else {
+        this.showDeliveryName = false
+        this.form.deliveryName = ''
         this.showDeliveryPrefer = false
       }
       if (label.length != 0) {
         this.postForm.mainDeliveryWay = label
-      } else {
-        delete this.postForm.mainDeliveryWay
       }
     },
     // 接口获取需求物资品名列表
@@ -493,9 +548,50 @@ export default {
       }
       if (this.form.yearPercent) {
         this.postForm.yearPercent = this.form.yearPercent
+        if(this.form.yearPercent !== 100){
+          for(let i = 0; i < this.form.dataStr.length; i++){
+            if(typeof this.form.dataStr[i].supplyName  == "undefined" || this.form.dataStr[i].supplyName == null || this.form.dataStr[i].supplyName == ""){
+              this.msgShow(this,'请输入其他供应商信息！')
+              return false
+            }
+            if(typeof this.form.dataStr[i].supplyPrefer == "undefined" || this.form.dataStr[i].supplyPrefer == null || this.form.dataStr[i].supplyPrefer == ""){
+              this.msgShow(this,'请输入其他供应商优势！')
+              return false
+            }
+          }
+        }
       } else {
         delete this.postForm.yearPercent
       }
+      if (this.form.mainDeliveryWay){
+        this.postForm.mainDeliveryWay = this.form.mainDeliveryWay
+        if (this.form.mainDeliveryWay.toString().trim() === '固定三方物流') {
+          if(this.form.deliveryName){
+            this.postForm.deliveryName = this.form.deliveryName
+          }else{
+           this.msgShow(this,'请输入三方物流单位名称或组织者，司机姓名！')
+           return false 
+          }
+          if(this.form.deliveryPrefer){
+            this.postForm.deliveryPrefer = this.form.deliveryPrefer
+          }else{
+            this.msgShow(this,'请选择主要物流偏好！')
+            return false 
+          }
+        }
+        if(this.form.mainDeliveryWay.toString().indexOf('我司配送') !== -1 || this.form.mainDeliveryWay.toString().indexOf('非固定三方物流') !== -1){
+          if(this.form.deliveryPrefer){
+            this.postForm.deliveryPrefer = this.form.deliveryPrefer
+          }else{
+            this.msgShow(this,'请选择主要物流偏好！')
+            return false 
+          }
+        }
+      }else{
+        this.msgShow(this,'请输入主要运力实现方式！')
+        return false
+      }
+
       if (this.form.deliveryName) {
         this.postForm.deliveryName = this.form.deliveryName
       } else {
@@ -506,11 +602,12 @@ export default {
       } else {
         delete this.postForm.deliveryPrefer
       }
-      if (this.form.dataStr.length != 0) {
-        this.postForm.dataStr = JSON.stringify(this.form.dataStr)
-      } else {
-        delete this.postForm.dataStr
-      }
+      // if (this.form.dataStr.length != 0) {
+      //   this.postForm.dataStr = JSON.stringify(this.form.dataStr)
+      // } else {
+      //   delete this.postForm.dataStr
+      // }
+      this.postForm.dataStr = JSON.stringify(this.form.dataStr)
       if (this.selectCstmPropertyIdsList.length === 0) {
         this.msgShow(this, '请选择客户性质！');
         return false
@@ -526,7 +623,7 @@ export default {
         let resoult = this.beforeSubmit()
         if (resoult) {
           this.loading = true
-          console.log('入参_Submit_this.postForm------------' ,this.postForm)
+          console.log('入参_Submit_this.postForm------------', this.postForm)
           let { data } = await this.apiStreamPost('/proxy/common/post',
             { url: 'customerManage/evaluation/', params: this.postForm })
           if (data.returnCode === 0) {
@@ -538,7 +635,8 @@ export default {
             });
           } else {
             this.loading = false
-            this.$message.error('更新失败，请重试！');
+            this.msgShow(this,data.errMsg)
+            //this.$message.error('更新失败，请确认数据是否填写准确！');
           }
         }
 
@@ -565,7 +663,7 @@ export default {
       }
     },
     addMore (val) {
-      if (this.i > 4) {
+      if (this.i > 3) {
         this.$message({
           message: '最多增加五项',
           type: 'warning'

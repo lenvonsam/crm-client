@@ -60,7 +60,7 @@ export default {
           lbl: '公司名称',
           prop: 'compName',
           // type: 'link',
-          // linkUrl: '/customManager/supplier/detail',
+          // linkUrl: '/customManager/customerEvalution/detail',
           minWidth: '340px'
         }, {
           lbl: '主联系人',
@@ -153,7 +153,7 @@ export default {
         currentPage: this.currentPage1 - 1,
         pageSize: this.pageSize,
         compName: '',
-        linkName: '',
+        linkerName: '',
         dptName: '',
         employeeName: '',
         showUpdate: '1', // 1仅展示未评估的公司
@@ -180,28 +180,31 @@ export default {
       logisticsInflu: state => state.logisticsInflu,
     })
   },
-  mounted () {
+  created () {
     this.tableValue2.tableHead.map(item => {
       if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
       if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
     })
-    console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
-    this.searchFormItems1[1][1]['list'] = this.propertyMark
-    this.searchFormItems1[2][0]['list'] = this.clientStatus
-    console.log('this.searchFormItems1------>' + JSON.stringify(this.searchFormItems1))
+  },
+  mounted () {
+
+    // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
+    // this.searchFormItems1[1][1]['list'] = this.propertyMark
+    // this.searchFormItems1[2][0]['list'] = this.clientStatus
+    // console.log('this.searchFormItems1------>' + JSON.stringify(this.searchFormItems1))
     this.$nextTick(() => {
-      // this.tableValue2.tableHead.map(item => {
-      //   if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
-      //   if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
-      // })
-      // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
-      // this.searchFormItems1[1][1]['list'] = this.propertyMark
-      // this.searchFormItems1[2][0]['list'] = this.clientStatus
+      this.tableValue2.tableHead.map(item => {
+        if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
+        if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
+      })
+      console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
+      this.searchFormItems1[1][1]['list'] = this.propertyMark
+      this.searchFormItems1[2][0]['list'] = this.clientStatus
       this.clientObject = {
         currentPage: this.currentPage1 - 1,
         pageSize: this.pageSize,
         compName: '',
-        linkName: '',
+        linkerName: '',
         dptName: '',
         employeeName: '',
         showUpdate: '1', // 1仅展示未评估的公司

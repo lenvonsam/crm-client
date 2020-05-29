@@ -1,5 +1,5 @@
 <template lang="pug">
-.content
+.content(v-loading="loadingF")
   update-form(:originObj="obj", v-if="load")
 </template>
 
@@ -13,7 +13,8 @@ export default {
   data () {
     return {
       obj: {},
-      load: false
+      load: false,
+      loadingF: true
     }
   },
   methods: {
@@ -29,9 +30,11 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'customerManage/evaluation/' + this.$route.query.id })
         if (data.returnCode === 0) {
           this.load = true
+          this.loadingF = false
           this.obj = data
         } else {
           this.load = true
+          this.loadingF = false
           this.msgShow(this, data.errMsg)
         }
       } catch (e) {
@@ -42,33 +45,4 @@ export default {
 }
 </script>
 <style lang="styl", scoped>
-.label-style
-    label
-      width: 100%!important
-  .avatar-uploader
-    width: 200px
-    margin: 0 auto
-  .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409eff;
-}
-.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
 </style>
