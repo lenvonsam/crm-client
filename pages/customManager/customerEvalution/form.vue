@@ -1,5 +1,5 @@
 <template lang="pug">
-.content(v-loading="loadingF")
+.content
   update-form(:originObj="obj", v-if="load")
 </template>
 
@@ -13,8 +13,7 @@ export default {
   data () {
     return {
       obj: {},
-      load: false,
-      loadingF: true
+      load: false
     }
   },
   methods: {
@@ -22,22 +21,24 @@ export default {
   },
   mounted () {
     this.obj.id = this.$route.query.id
+    this.pageShow(this)
     this.loadClientEvalData()
   },
   methods: {
     async loadClientEvalData () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: 'customerManage/evaluation/' + this.$route.query.id })
+        this.pageHide()
         if (data.returnCode === 0) {
           this.load = true
-          this.loadingF = false
           this.obj = data
         } else {
-          this.load = true
-          this.loadingF = false
+          this.load = false
           this.msgShow(this, data.errMsg)
         }
       } catch (e) {
+        this.pageHide()
+        this.load = false
         this.msgShow(this, e.message || '网络异常')
       }
     }
