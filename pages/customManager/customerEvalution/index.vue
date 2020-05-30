@@ -50,7 +50,7 @@ export default {
       searchFormItems2: [
         [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
         { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: '' },
-        { label: '业务员', model: 'employeeName', val: '', placeholder: '请输入业务员', val: '' }]
+        { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '' }]
       ],
       tableValue1: {
         tableData: [],
@@ -304,20 +304,30 @@ export default {
       this.linkerDefault(params)
     },
     areaEvalRowSave (row) {
-      this.loading = true
-      console.log('areaEvalRowSave (row)======>' + JSON.stringify(row))
-      let params = {
-        id: row.id,
-        areaName: row.areaName,
-        saleEvaluationWeight: row.saleEvaluationWeight,
-        deliveryStatusInfo: row.deliveryStatusInfo,
-        effectForSale: row.effectForSale,
-        acctId: row.acctId
+      let numbTest = /^[0-9]+\.?[0-9]*$/
+      if (numbTest.test(row.saleEvaluationWeight)) {
+        if (row.saleEvaluationWeight >= 0) {
+          row.saleEvaluationWeight = (row.saleEvaluationWeight.match(/^\d*(\.?\d{0,3})/g)[0]) || null
+          this.loading = true
+          console.log('areaEvalRowSave (row)======>' + JSON.stringify(row))
+          let params = {
+            id: row.id,
+            areaName: row.areaName,
+            saleEvaluationWeight: row.saleEvaluationWeight,
+            deliveryStatusInfo: row.deliveryStatusInfo,
+            effectForSale: row.effectForSale,
+            acctId: row.acctId
+          }
+          console.log('保存==》params------->' + JSON.stringify(params) + 'row------->' + JSON.stringify(row))
+          this.createOrUpdate(params, 'areaEval')
+          this.isEdit = false
+          // this.tableHandler(row)
+        }else{
+          this.msgShow(this, '请输入正确的数量！')
+        }
+      }else{
+        this.msgShow(this, '请输入正确的数量！')
       }
-      console.log('保存==》params------->' + JSON.stringify(params) + 'row------->' + JSON.stringify(row))
-      this.createOrUpdate(params, 'areaEval')
-      this.isEdit = false
-      // this.tableHandler(row)
     },
     tableChange1 (val) {
       this.loading = true
@@ -351,11 +361,14 @@ export default {
           console.error(data.errMsg)
           this.msgShow(this, data.errMsg)
         }
+        console.log('this.searchFormItems2[0][2].val=====>' + this.searchFormItems2[0][2].val)
+        this.searchFormItems2[0][2].val = ''
       } catch (e) {
         console.error(e)
         this.msgShow(this)
         this.loading = false
       }
+
     },
     // 接口获取地区评估列表数据
     async loadAreaEvalData () {
