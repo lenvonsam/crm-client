@@ -35,7 +35,7 @@
               el-input.full-width(v-model="item.val", v-else, :placeholder="item.placeholder", size="small")
           .row.mb-15.flex-center(v-if="item.model == 'showUpdate'",style="padding-left: 30px;")
             el-col(:span="8")
-              el-checkbox(v-model="item.val == '1'" @change="getCheckboxVal") 仅展示未评估的公司
+              el-checkbox(v-model="checked" @change="getCheckboxVal") 仅展示未评估的公司
 
     .text-center(style="flex: 0 0 200px")
       el-button(size="small", type="primary", @click="search('submit')") 查询
@@ -49,7 +49,8 @@ export default {
       copyItems: null,
       selectIdxArr: [],
       selectActive: {},
-      deptList: []
+      deptList: [],
+      checked: true
     }
   },
   computed: {
@@ -108,6 +109,8 @@ export default {
       }
     },
     getCheckboxVal(val){
+      console.log('getCheckboxVal(val)=====>' + val)
+      this.checked = val
       this.$emit('changeCheckVal', val)
     },
     getSearchParm (type) {

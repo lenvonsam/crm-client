@@ -110,14 +110,16 @@
         el-col.pt-8(:span="7")
           label 占比（{{form.yearPercent}}%）
       div(v-for="item,index in form.dataStr" :key="index" :hidden="!showOtherProvider")
-         el-row.pr-10(type="flex")
+        el-row.pr-10(type="flex" justify="space-between")
           el-col(:span="8")
             el-form-item.is-required(:label='"其他主要供应商"+(index+1)+"："', prop="supplyName")
               el-input(v-model="item.supplyName" maxlength="50")
-          el-col(:span="16")
+          el-col(:span="14")
             el-form-item.is-required(label="其他供应商优势：", prop="supplyPrefer")
               el-input(v-model="item.supplyPrefer" maxlength="50")
-                el-button(slot="append" icon="el-icon-delete" @click="deleteBtn(index)")
+                //- el-button(slot="append" icon="el-icon-delete" @click="deleteBtn(index)")              
+          el-col(:span="1")
+            el-button(@click.prevent="deleteBtn(index)") 删除
       el-row.pr-10(type="flex" justify="end" v-if="showAddMoreBtn")
         el-button(type="primary", plain, @click="addMore") 新增
   breadcrumb(:breadItems="breadItemList[3]")
@@ -285,7 +287,28 @@ export default {
         }
         console.log('this.i======>' + this.i)
         if (newVal.yearSaleList) {
-          this.yearSaleList = newVal.yearSaleList
+          newVal.yearSaleList.map(item =>{
+            if(item.billWeight == "undefined" || item.billWeight == null || item.billWeight.trim() == ""){
+              item.billWeight = '--'
+            }  
+            if(item.ladWeight == "undefined" || item.ladWeight == null || item.ladWeight.trim() == ""){
+              item.ladWeight = '--'
+            } 
+            if(item.highSale == "undefined" || item.highSale == null || item.highSale == ""){
+              item.highSale = '--'
+            } 
+            if(item.goods1 == "undefined" || item.goods1 == null || item.goods1.trim() == ""){
+              item.goods1 = '--'
+            } 
+            if(item.goods2 == "undefined" || item.goods2 == null || item.goods2.trim() == ""){
+              item.goods2 = '--'
+            } 
+            if(item.goods3 == "undefined" || item.goods3 == null || item.goods3.trim() == ""){
+              item.goods3 = '--'
+            } 
+          })
+          console.log('newVal.yearSaleList======>' + JSON.stringify(newVal.yearSaleList))
+          this.yearSaleList = newVal.yearSaleList          
         }
         if (newVal.obj.yearPercent) {
           this.form.yearPercent = parseInt(newVal.obj.yearPercent)
@@ -396,29 +419,39 @@ export default {
     },
     // 限制输入数字不可为负，最多两位小数
     storageCapacityInput (val) {
-      if (val > 0) {
-        // 通过正则过滤小数点后两位
-        val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null
-        console.log('storageCapacityInput(val)======>', val)
-        this.form.storageCapacity = val
-        this.postForm.storageCapacity = val
-      } else {
+      let numbTest = /^[0-9]+\.?[0-9]*$/
+      if(numbTest.test(val)){
+        if (val > 0) {
+          // 通过正则过滤小数点后两位
+          val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null
+          console.log('storageCapacityInput(val)======>', val)
+          this.form.storageCapacity = val
+          this.postForm.storageCapacity = val
+        } else {
+          this.msgShow(this, '请输入正确的数量！')
+          this.form.storageCapacity = 0
+          this.postForm.storageCapacity = 0
+        }
+      }else{
         this.msgShow(this, '请输入正确的数量！')
-        this.form.yearSaleWeight = 0
-        this.postForm.yearSaleWeight = 0
-      }
+      }     
     },
     yearSaleWeightInput (val) {
       console.log('yearSaleWeightInput(val)======>', val)
-      if (val >= 0) {
-        // 通过正则过滤小数点后两位
-        val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null      
-        this.form.yearSaleWeight = val
-        this.postForm.yearSaleWeight = val
-      } else {
+      let numbTest = /^[0-9]+\.?[0-9]*$/
+      if(numbTest.test(val)){
+        if (val >= 0) {
+          // 通过正则过滤小数点后两位
+          val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null      
+          this.form.yearSaleWeight = val
+          this.postForm.yearSaleWeight = val
+        } else {
+          this.msgShow(this, '请输入正确的数量！')
+          this.form.yearSaleWeight = 0
+          this.postForm.yearSaleWeight = 0
+        }
+      }else{
         this.msgShow(this, '请输入正确的数量！')
-        this.form.yearSaleWeight = 0
-        this.postForm.yearSaleWeight = 0
       }
     },
     getGoodsNameValue (label) {
@@ -446,17 +479,39 @@ export default {
     },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {
-      this.i = 0
-      this.form.dataStr = []
-      console.log('getOtherProvider(label)========>' + label)
-      if (label !== 100) {
-        this.showAddMoreBtn = true
-        this.showOtherProvider = true
-        this.addMore()
-      } else {
-        this.showOtherProvider = false
-        this.showAddMoreBtn = false
+      let dl =  0
+      let da = []
+      this.form.dataStr.map(item =>{
+        if(item.supplyName  != "undefined" && item.supplyName != null && item.supplyName.trim() != "" && item.supplyPrefer  != "undefined" && item.supplyPrefer != null && item.supplyPrefer.trim() != ""){
+          dl ++
+          da.push(item)
+        }       
+      })
+      console.log('da=========>' + JSON.stringify(da))
+      if(dl === 0){
+        this.i = 0
+        this.form.dataStr = []
+        console.log('getOtherProvider(label)========>' + label)
+        if (label !== 100) {
+          this.showAddMoreBtn = true
+          this.showOtherProvider = true
+          this.addMore()
+        } else {
+          this.showOtherProvider = false
+          this.showAddMoreBtn = false
+        }
+      }else{
+        this.i = dl
+        console.log('this.form.dataStr=========>' + JSON.stringify(this.form.dataStr))
+        this.form.dataStr = da
+        if (label === 100) {
+          this.i = 0
+          this.form.dataStr = []
+          this.showOtherProvider = false
+          this.showAddMoreBtn = false
+        }
       }
+      
     },
     deleteBtn(index){
       if(this.i > 1){
@@ -468,6 +523,9 @@ export default {
       }else{
         this.msgShow(this,'我司占比不足100%时，最少填写一个供应商！')
       }
+    },
+    removeDomain(domain){
+      console.log('removeDomain(domain)=====>' + JSON.stringify(domain))
     },
     // 主要运力实现方式选择“我司配送，固定三方物流，非固定物流三方”展示物流偏好
     // 主要运力实现方式选择“固定三方物流”，展示司机名字段
@@ -505,13 +563,13 @@ export default {
         this.areaNamesList = data.list
       }
     },
-    beforeSubmit () {
+    beforeSubmit () {      
       if (this.form.lossReason) {
         this.postForm.lossReason = this.form.lossReason
       } else {
         delete this.postForm.lossReason
       }
-      if (this.form.reason) {
+      if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
         this.postForm.reason = this.form.reason
       } else {
         delete this.postForm.reason
@@ -531,12 +589,12 @@ export default {
       } else {
         delete this.postForm.areaName
       }
-      if (this.form.mainBusi) {
+      if (this.form.mainBusi != 'undefined' && this.form.mainBusi != null && this.form.mainBusi.trim() != '') {
         this.postForm.mainBusi = this.form.mainBusi
       } else {
         delete this.postForm.mainBusi
       }
-      if (this.form.busiScope) {
+      if (this.form.busiScope != 'undefined' && this.form.busiScope != null && this.form.busiScope.trim() != '') {
         this.postForm.busiScope = this.form.busiScope
       } else {
         delete this.postForm.busiScope
@@ -550,11 +608,11 @@ export default {
         this.postForm.yearPercent = this.form.yearPercent
         if(this.form.yearPercent !== 100){
           for(let i = 0; i < this.form.dataStr.length; i++){
-            if(typeof this.form.dataStr[i].supplyName  == "undefined" || this.form.dataStr[i].supplyName == null || this.form.dataStr[i].supplyName == ""){
+            if(typeof this.form.dataStr[i].supplyName  == "undefined" || this.form.dataStr[i].supplyName == null || this.form.dataStr[i].supplyName.trim() == ""){
               this.msgShow(this,'请输入其他供应商信息！')
               return false
             }
-            if(typeof this.form.dataStr[i].supplyPrefer == "undefined" || this.form.dataStr[i].supplyPrefer == null || this.form.dataStr[i].supplyPrefer == ""){
+            if(typeof this.form.dataStr[i].supplyPrefer == "undefined" || this.form.dataStr[i].supplyPrefer == null || this.form.dataStr[i].supplyPrefer.trim() == ""){
               this.msgShow(this,'请输入其他供应商优势！')
               return false
             }
@@ -566,7 +624,7 @@ export default {
       if (this.form.mainDeliveryWay){
         this.postForm.mainDeliveryWay = this.form.mainDeliveryWay
         if (this.form.mainDeliveryWay.toString().trim() === '固定三方物流') {
-          if(this.form.deliveryName){
+          if(this.form.deliveryName != 'undefined' && this.form.deliveryName != null && this.form.deliveryName.trim() != ''){
             this.postForm.deliveryName = this.form.deliveryName
           }else{
            this.msgShow(this,'请输入三方物流单位名称或组织者，司机姓名！')
@@ -663,7 +721,7 @@ export default {
       }
     },
     addMore (val) {
-      if (this.i > 3) {
+      if (this.i > 4) {
         this.$message({
           message: '最多增加五项',
           type: 'warning'
