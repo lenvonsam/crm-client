@@ -267,7 +267,7 @@ export default {
       deliveryPreferList2: state => state.deliveryPreferList2, // 物流偏好
     })
   },
-  created(){},
+  created () { },
   mounted () {
     this.initform(this.originObj)
     this.getGoodsNames()
@@ -290,32 +290,32 @@ export default {
         }
         console.log('this.i======>' + this.i)
         if (newVal.yearSaleList) {
-          newVal.yearSaleList.map(item =>{
-            if(item.billWeight == "undefined" || item.billWeight == null || item.billWeight.trim() == ""){
+          newVal.yearSaleList.map(item => {
+            if (item.billWeight == "undefined" || item.billWeight == null || item.billWeight.trim() == "") {
               item.billWeight = '--'
-            }  
-            if(item.ladWeight == "undefined" || item.ladWeight == null || item.ladWeight.trim() == ""){
+            }
+            if (item.ladWeight == "undefined" || item.ladWeight == null || item.ladWeight.trim() == "") {
               item.ladWeight = '--'
-            } 
-            if(item.highSale == "undefined" || item.highSale == null || item.highSale == ""){
+            }
+            if (item.highSale == "undefined" || item.highSale == null || item.highSale == "") {
               item.highSale = '--'
-            } 
-            if(item.goods1 == "undefined" || item.goods1 == null || item.goods1.trim() == ""){
+            }
+            if (item.goods1 == "undefined" || item.goods1 == null || item.goods1.trim() == "") {
               item.goods1 = '--'
-            } 
-            if(item.goods2 == "undefined" || item.goods2 == null || item.goods2.trim() == ""){
+            }
+            if (item.goods2 == "undefined" || item.goods2 == null || item.goods2.trim() == "") {
               item.goods2 = '--'
-            } 
-            if(item.goods3 == "undefined" || item.goods3 == null || item.goods3.trim() == ""){
+            }
+            if (item.goods3 == "undefined" || item.goods3 == null || item.goods3.trim() == "") {
               item.goods3 = '--'
-            } 
+            }
           })
           console.log('newVal.yearSaleList======>' + JSON.stringify(newVal.yearSaleList))
-          this.yearSaleList = newVal.yearSaleList          
+          this.yearSaleList = newVal.yearSaleList
         }
         if (newVal.obj.yearPercent) {
           this.form.yearPercent = parseInt(newVal.obj.yearPercent)
-          if(this.form.yearPercent !== 100){
+          if (this.form.yearPercent !== 100) {
             this.showAddMoreBtn = true
           }
         }
@@ -423,7 +423,7 @@ export default {
     // 限制输入数字不可为负，最多两位小数
     storageCapacityInput (val) {
       let numbTest = /^[0-9]+\.?[0-9]*$/
-      if(numbTest.test(val)){
+      if (numbTest.test(val)) {
         if (val > 0) {
           // 通过正则过滤小数点后两位
           val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null
@@ -435,19 +435,19 @@ export default {
           this.form.storageCapacity = 0
           this.postForm.storageCapacity = 0
         }
-      }else{
+      } else {
         this.form.storageCapacity = ''
         this.postForm.storageCapacity = ''
         this.msgShow(this, '请输入正确的数量！')
-      }     
+      }
     },
     yearSaleWeightInput (val) {
       console.log('yearSaleWeightInput(val)======>', val)
       let numbTest = /^[0-9]+\.?[0-9]*$/
-      if(numbTest.test(val)){
+      if (numbTest.test(val)) {
         if (val >= 0) {
           // 通过正则过滤小数点后两位
-          val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null      
+          val = (val.match(/^\d*(\.?\d{0,3})/g)[0]) || null
           this.form.yearSaleWeight = val
           this.postForm.yearSaleWeight = val
         } else {
@@ -455,7 +455,7 @@ export default {
           this.form.yearSaleWeight = 0
           this.postForm.yearSaleWeight = 0
         }
-      }else{
+      } else {
         this.form.yearSaleWeight = ''
         this.postForm.yearSaleWeight = ''
         this.msgShow(this, '请输入正确的数量！')
@@ -486,18 +486,18 @@ export default {
     },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {
-      let dl =  0
+      let dl = 0
       let da = []
-      this.form.dataStr.map(item =>{
+      this.form.dataStr.map(item => {
         // if(item.supplyName  != "undefined" && item.supplyName != null && item.supplyName.trim() != ""){
         //   dl ++
         //   da.push(item)
         // } 
-        dl ++
-        da.push(item)      
+        dl++
+        da.push(item)
       })
       console.log('da=========>' + JSON.stringify(da))
-      if(dl === 0){
+      if (dl === 0) {
         this.i = 0
         this.form.dataStr = []
         console.log('getOtherProvider(label)========>' + label)
@@ -509,7 +509,7 @@ export default {
           this.showOtherProvider = false
           this.showAddMoreBtn = false
         }
-      }else{
+      } else {
         this.i = dl
         console.log('this.form.dataStr=========>' + JSON.stringify(this.form.dataStr))
         this.form.dataStr = da
@@ -520,20 +520,20 @@ export default {
           this.showAddMoreBtn = false
         }
       }
-      
+
     },
-    deleteBtn(index){
-      if(this.i > 1){
-        this.form.dataStr.splice(index,1)
+    deleteBtn (index) {
+      if (this.i > 1) {
+        this.form.dataStr.splice(index, 1)
         this.i = this.i - 1
         console.log('this.i========>' + this.i)
         console.log('this.form.dataStr========>' + JSON.stringify(this.form.dataStr))
         this.postForm.dataStr = JSON.stringify(this.form.dataStr)
-      }else{
-        this.msgShow(this,'我司占比不足100%时，最少填写一个供应商！')
+      } else {
+        this.msgShow(this, '我司占比不足100%时，最少填写一个供应商！')
       }
     },
-    removeDomain(domain){
+    removeDomain (domain) {
       console.log('removeDomain(domain)=====>' + JSON.stringify(domain))
     },
     // 主要运力实现方式选择“我司配送，固定三方物流，非固定物流三方”展示物流偏好
@@ -572,19 +572,23 @@ export default {
         this.areaNamesList = data.list
       }
     },
-    beforeSubmit () {      
+    beforeSubmit () {
       if (this.form.lossReason) {
         this.postForm.lossReason = this.form.lossReason
       } else {
         delete this.postForm.lossReason
       }
-      if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
-        this.postForm.reason = this.form.reason
-      } else {
-        this.msgShow(this, '请输入原因！')
-        return false
+      if (this.form.lossReason.toString().trim() === '其他原因') {
+        if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
+          this.postForm.reason = this.form.reason
+        } else {
+          this.msgShow(this, '请输入原因！')
+          return false
+        }
+      }else{
         delete this.postForm.reason
       }
+
       if (this.form.hasStorage) {
         this.postForm.hasStorage = this.form.hasStorage
       } else {
@@ -621,14 +625,14 @@ export default {
       }
       if (this.form.yearPercent) {
         this.postForm.yearPercent = this.form.yearPercent
-        if(this.form.yearPercent !== 100){
-          for(let i = 0; i < this.form.dataStr.length; i++){
-            if(typeof this.form.dataStr[i].supplyName  == "undefined" || this.form.dataStr[i].supplyName == null || this.form.dataStr[i].supplyName.trim() == ""){
-              this.msgShow(this,'请输入其他供应商信息！')
+        if (this.form.yearPercent !== 100) {
+          for (let i = 0; i < this.form.dataStr.length; i++) {
+            if (typeof this.form.dataStr[i].supplyName == "undefined" || this.form.dataStr[i].supplyName == null || this.form.dataStr[i].supplyName.trim() == "") {
+              this.msgShow(this, '请输入其他供应商信息！')
               return false
             }
-            if(typeof this.form.dataStr[i].supplyPrefer == "undefined" || this.form.dataStr[i].supplyPrefer == null || this.form.dataStr[i].supplyPrefer.trim() == ""){
-              this.msgShow(this,'请输入其他供应商优势！')
+            if (typeof this.form.dataStr[i].supplyPrefer == "undefined" || this.form.dataStr[i].supplyPrefer == null || this.form.dataStr[i].supplyPrefer.trim() == "") {
+              this.msgShow(this, '请输入其他供应商优势！')
               return false
             }
           }
@@ -636,32 +640,32 @@ export default {
       } else {
         delete this.postForm.yearPercent
       }
-      if (this.form.mainDeliveryWay){
+      if (this.form.mainDeliveryWay) {
         this.postForm.mainDeliveryWay = this.form.mainDeliveryWay
         if (this.form.mainDeliveryWay.toString().trim() === '固定三方物流') {
-          if(this.form.deliveryName != 'undefined' && this.form.deliveryName != null && this.form.deliveryName.trim() != ''){
+          if (this.form.deliveryName != 'undefined' && this.form.deliveryName != null && this.form.deliveryName.trim() != '') {
             this.postForm.deliveryName = this.form.deliveryName
-          }else{
-           this.msgShow(this,'请输入三方物流单位名称或组织者，司机姓名！')
-           return false 
+          } else {
+            this.msgShow(this, '请输入三方物流单位名称或组织者，司机姓名！')
+            return false
           }
-          if(this.form.deliveryPrefer){
+          if (this.form.deliveryPrefer) {
             this.postForm.deliveryPrefer = this.form.deliveryPrefer
-          }else{
-            this.msgShow(this,'请选择主要物流偏好！')
-            return false 
+          } else {
+            this.msgShow(this, '请选择主要物流偏好！')
+            return false
           }
         }
-        if(this.form.mainDeliveryWay.toString().indexOf('我司配送') !== -1 || this.form.mainDeliveryWay.toString().indexOf('非固定三方物流') !== -1){
-          if(this.form.deliveryPrefer){
+        if (this.form.mainDeliveryWay.toString().indexOf('我司配送') !== -1 || this.form.mainDeliveryWay.toString().indexOf('非固定三方物流') !== -1) {
+          if (this.form.deliveryPrefer) {
             this.postForm.deliveryPrefer = this.form.deliveryPrefer
-          }else{
-            this.msgShow(this,'请选择主要物流偏好！')
-            return false 
+          } else {
+            this.msgShow(this, '请选择主要物流偏好！')
+            return false
           }
         }
-      }else{
-        this.msgShow(this,'请输入主要运力实现方式！')
+      } else {
+        this.msgShow(this, '请输入主要运力实现方式！')
         return false
       }
 
@@ -708,7 +712,7 @@ export default {
             });
           } else {
             this.loading = false
-            this.msgShow(this,data.errMsg)
+            this.msgShow(this, data.errMsg)
             //this.$message.error('更新失败，请确认数据是否填写准确！');
           }
         }
