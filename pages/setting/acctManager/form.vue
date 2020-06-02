@@ -63,11 +63,19 @@ export default {
       console.log('len:>>' + value.trim().length)
       if (value.trim().length === 0) {
         callback(new Error('手机号不能为空'))
-      } else if (value.trim().length != 11) {
-        callback(new Error('手机号位数要是11位'))
-      } else if (!reg.test(value.trim())) {
-        callback(new Error('请输入正确的手机号'))
-      } else {
+      }
+      /**
+       * 去掉手机号校验
+       * @author samy
+       * @date 2020/05/30
+       * @source 曹周坤需求(内部有短号的存在)
+       */
+      // else if (value.trim().length != 11) {
+      //   callback(new Error('手机号位数要是11位'))
+      // } else if (!reg.test(value.trim())) {
+      //   callback(new Error('请输入正确的手机号'))
+      // } 
+      else {
         callback()
       }
     }

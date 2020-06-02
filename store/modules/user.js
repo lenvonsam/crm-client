@@ -2,13 +2,14 @@ export default {
   actions: {
     nuxtServerInit ({commit}, {req}) {
       if (req.session && req.session.currentUser) {
-        console.log(req.session.currentUser)
+        console.log('req.session.currentUser----->' + JSON.stringify(req.session.currentUser))
         commit('SETUSER', req.session.currentUser)
       } else {
         commit('EXITUSER')
       }
     },
-    setUser ({commit}, usr) {
+    setUser ({ commit }, usr) {
+      console.log('SETUSER----->' + JSON.stringify(usr))
       commit('SETUSER', usr)
     },
     exitUser ({commit}) {
