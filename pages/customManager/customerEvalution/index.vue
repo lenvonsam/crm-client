@@ -19,7 +19,7 @@
             basic-table(:tableValue="tableValue2", :currentPage="currentPage2", 
             :pageSize="pageSize", :total="areaTotalCount", :loading="loading", 
             @tableRowEdit="areaEvalRowEdit",@tableRowSave="areaEvalRowSave", 
-            @tableRowCancel="rowCancel", @tableRowDefault="rowDefault",@pageChange="tableChange2")  
+            @tableRowCancel="rowCancel", @tableRowDefault="rowDefault",@pageChange="tableChange2", v-if="tabName == '2'")  
 </template>
 <script>
 import breadcrumb from '@/components/Breadcrumb.vue'
@@ -45,7 +45,7 @@ export default {
         { label: '归属性质', model: 'customerPropertyMark', type: 'select', placeholder: '请选择归属性质', val: '', list: [] },
         { label: '抬头创建日期', model: 'createAt', type: 'timeLimit', val: '' }],
         [{ label: '客户状态', model: 'mark', type: 'select', placeholder: '请选择状态类型', val: '', list: [] },
-        { label: '', model: 'showUpdate', type: 'radio', val: '1' }]
+        { label: '', model: 'showUpdate', type: 'radio', val: '0' }]
       ],
       searchFormItems2: [
         [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
@@ -183,10 +183,6 @@ export default {
   created () {
   },
   beforeMount () {
-    this.tableValue2.tableHead.map(item => {
-      if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
-      if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
-    })
     console.log('beforeMount_tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
     this.searchFormItems1[1][1]['list'] = this.propertyMark
     this.searchFormItems1[2][0]['list'] = this.clientStatus
@@ -216,13 +212,20 @@ export default {
         dptName: '',
         employeeName: ''
       }
-      this.loadAreaEvalData()
     })
-    this.getAreaList()
   },
   methods: {
     handleClick (tab, event) {
       this.tabName = tab.name
+      if (this.tabName == '2') {
+        this.tableValue2.tableHead.map(item => {
+          if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
+          if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
+        })
+        this.$forceUpdate()
+        this.loadAreaEvalData()
+        this.getAreaList()
+      }
     },
     changeCheckVal (flag) {
       if (flag === true) {
@@ -233,6 +236,7 @@ export default {
         this.clientObject.showUpdate = '0'
       }
       console.log('changeCheckVal (flag)======>' + this.searchFormItems1[2][1].val)
+      console.log('changeCheckVal (flag)======>' + JSON.stringify(this.clientObject))
     },
     clientSearchForm (paramsObj) {
       console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
@@ -248,7 +252,7 @@ export default {
             delete this.clientObject.startDate
             delete this.clientObject.endDate
           }
-        } else {
+        } else if (key != 'showUpdate') {
           this.clientObject[key] = paramsObj[key].trim()
         }
       })
@@ -322,10 +326,10 @@ export default {
           this.createOrUpdate(params, 'areaEval')
           this.isEdit = false
           // this.tableHandler(row)
-        }else{
+        } else {
           this.msgShow(this, '请输入正确的数量！')
         }
-      }else{
+      } else {
         this.msgShow(this, '请输入正确的数量！')
       }
     },

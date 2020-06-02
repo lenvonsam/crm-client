@@ -433,6 +433,8 @@ export default {
           this.postForm.storageCapacity = 0
         }
       }else{
+        this.form.storageCapacity = ''
+        this.postForm.storageCapacity = ''
         this.msgShow(this, '请输入正确的数量！')
       }     
     },
@@ -451,6 +453,8 @@ export default {
           this.postForm.yearSaleWeight = 0
         }
       }else{
+        this.form.yearSaleWeight = ''
+        this.postForm.yearSaleWeight = ''
         this.msgShow(this, '请输入正确的数量！')
       }
     },
@@ -482,10 +486,12 @@ export default {
       let dl =  0
       let da = []
       this.form.dataStr.map(item =>{
-        if(item.supplyName  != "undefined" && item.supplyName != null && item.supplyName.trim() != "" && item.supplyPrefer  != "undefined" && item.supplyPrefer != null && item.supplyPrefer.trim() != ""){
-          dl ++
-          da.push(item)
-        }       
+        // if(item.supplyName  != "undefined" && item.supplyName != null && item.supplyName.trim() != ""){
+        //   dl ++
+        //   da.push(item)
+        // } 
+        dl ++
+        da.push(item)      
       })
       console.log('da=========>' + JSON.stringify(da))
       if(dl === 0){
@@ -582,6 +588,8 @@ export default {
       if (this.form.storageCapacity) {
         this.postForm.storageCapacity = this.form.storageCapacity
       } else {
+        this.msgShow(this, '请输入正确的数量！')
+        return false
         delete this.postForm.storageCapacity
       }
       if (this.form.areaName) {
@@ -602,6 +610,8 @@ export default {
       if (this.form.yearSaleWeight) {
         this.postForm.yearSaleWeight = parseInt(this.form.yearSaleWeight)
       } else {
+        this.msgShow(this, '请输入正确的数量！')
+        return false
         delete this.postForm.yearSaleWeight
       }
       if (this.form.yearPercent) {
