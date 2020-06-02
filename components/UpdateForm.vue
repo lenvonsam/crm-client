@@ -224,6 +224,9 @@ export default {
       i: 0,
       showAddMoreBtn: false,
       rules: {
+        reason: [
+          { required: true, message: '请输入内容', trigger: 'blur' },
+        ],
         busiScope: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ],
@@ -578,6 +581,8 @@ export default {
       if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
         this.postForm.reason = this.form.reason
       } else {
+        this.msgShow(this, '请输入原因！')
+        return false
         delete this.postForm.reason
       }
       if (this.form.hasStorage) {
