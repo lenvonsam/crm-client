@@ -573,22 +573,27 @@ export default {
       }
     },
     beforeSubmit () {
-      if (this.form.lossReason) {
-        this.postForm.lossReason = this.form.lossReason
-      } else {
-        delete this.postForm.lossReason
-      }
-      if (this.form.lossReason.toString().trim() === '其他原因') {
-        if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
-          this.postForm.reason = this.form.reason
+      if (this.form.mark === '公共') {
+        if (this.form.lossReason) {
+          this.postForm.lossReason = this.form.lossReason
+          if (this.form.lossReason === '其他原因') {
+            if (this.form.reason != 'undefined' && this.form.reason != null && this.form.reason.trim() != '') {
+              this.postForm.reason = this.form.reason
+            } else {
+              this.msgShow(this, '请输入原因！')
+              return false
+            }
+          } else {
+            delete this.postForm.reason
+          }
         } else {
-          this.msgShow(this, '请输入原因！')
+          this.msgShow(this, '请选择流失原因！')
           return false
         }
       }else{
+        delete this.postForm.lossReason
         delete this.postForm.reason
       }
-
       if (this.form.hasStorage) {
         this.postForm.hasStorage = this.form.hasStorage
       } else {
