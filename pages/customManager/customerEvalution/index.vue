@@ -186,6 +186,7 @@ export default {
     console.log('beforeMount_tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
     this.searchFormItems1[1][1]['list'] = this.propertyMark
     this.searchFormItems1[2][0]['list'] = this.clientStatus
+    this.isEdit = false
   },
   mounted () {
     // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
@@ -217,6 +218,7 @@ export default {
   methods: {
     handleClick (tab, event) {
       this.tabName = tab.name
+      this.isEdit = false
       if (this.tabName == '2') {
         this.tableValue2.tableHead.map(item => {
           if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
@@ -261,6 +263,7 @@ export default {
     },
     areaSearchForm (paramsObj) {
       console.log('areaSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
+      this.isEdit = false
       this.loading = true
       this.currentPage2 = 1
       this.areaObject.currentPage = this.currentPage2 - 1
