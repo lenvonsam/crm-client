@@ -118,9 +118,16 @@ export default {
     'tableValue.tableData': {
       handler (newVal, oldVal) {
         this.currentData = Object.assign([], newVal)
+        console.log('origin:>>', newVal)
       },
       deep: true
     }
+    // 'tableValue.tableHead': {
+    //   handler (newVal, oldVal) {
+    //     console.log('origin head:>>', newVal)
+    //   },
+    //   immediate: true
+    // }
   },
   props: {
     tableValue: {

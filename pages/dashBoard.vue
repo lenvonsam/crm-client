@@ -28,13 +28,20 @@
         i.icon-qianmoney125.iconfont.ft-24
         span.pl-5 销售额（元）
   .full-width.bg-f9.mt-20.p-15
-    .ft-16.border-bottom-line.pb-10 今日待拜访客户
-    .bg-white.row.mt-10.p-10.ft-666
-      .col
-        span.text-red *
-        span 您今日有 {{totalCount}} 位客户待拜访，请注意及时拜访并签到。
-      .col.text-right
-        router-link.ft-666(to="/customManager/customerVisit") 管理拜访计划
+    .flex-row.jc-sb
+      .w-48
+        .ft-16.border-bottom-line.pb-10 待办任务
+        .bg-white.row.mt-10.p-10.ft-666
+          .col
+            router-link.ft-666(to="/customManager/customerEvalution") 客户评估表填写
+      .w-48
+        .ft-16.border-bottom-line.pb-10 今日待拜访客户
+        .bg-white.row.mt-10.p-10.ft-666
+          .col
+            span.text-red *
+            span 您今日有 {{totalCount}} 位客户待拜访，请注意及时拜访并签到。
+          .col.text-right
+            router-link.ft-666(to="/customManager/customerVisit") 管理拜访计划
     .mt-15
       //- el-table(:data="tableValue.tableData", border)
       //-   template(v-for="head in tableValue.tableHead")
@@ -365,4 +372,10 @@
   .elTabPaneTask {
     height: 600px;
   }
+  .flex-row.jc-sb
+    display flex
+    flex-direction row
+    justify-content space-between
+  .w-48
+    width 48%
 </style>
