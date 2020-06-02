@@ -121,13 +121,13 @@ export default {
         console.log('origin:>>', newVal)
       },
       deep: true
-    },
-    'tableValue.tableHead': {
-      handler (newVal, oldVal) {
-        console.log('origin head:>>', newVal)
-      },
-      immediate: true
     }
+    // 'tableValue.tableHead': {
+    //   handler (newVal, oldVal) {
+    //     console.log('origin head:>>', newVal)
+    //   },
+    //   immediate: true
+    // }
   },
   props: {
     tableValue: {
