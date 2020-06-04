@@ -101,7 +101,7 @@
             el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
-            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple @change="getGoodsNameValue")
+            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple filterable @change="getGoodsNameValue")
               el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10(:gutter="30")
         el-col(:span="7")
