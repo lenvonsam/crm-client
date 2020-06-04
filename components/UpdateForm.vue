@@ -60,7 +60,7 @@
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="24")
           el-form-item.is-required(label="经营区域覆盖：", prop="busiScope")
-            el-input(v-model="form.busiScope" maxlength="50")
+            el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
   el-row(type="flex", justify="space-between")
     el-col.mt-10(:span="22")
       breadcrumb(:breadItems="breadItemList[1]")
