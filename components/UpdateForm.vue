@@ -97,7 +97,7 @@
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="160px", label-position="right")
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="7")
-          el-form-item.is-required(label="全年需求数量评估：", prop="yearSaleWeight")
+          el-form-item.is-required(label="全年需求重量评估：", prop="yearSaleWeight")
             el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
