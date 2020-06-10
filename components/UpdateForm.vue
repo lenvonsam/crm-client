@@ -56,7 +56,10 @@
             el-input(v-model="form.storageCapacity" type="number" @change="storageCapacityInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主营业务：", prop="mainBusi")
-            el-input(v-model="form.mainBusi" maxlength="50")
+            //- el-input(v-model="form.mainBusi" maxlength="50")
+            el-select.full-width(v-model="form.mainBusi" filterable placeholder="" @change="getMainBusi")
+              el-option(v-for="item,index in busiScopeList", :key="index", :label="item.label", :value="item.value")
+              el-option(v-if="busiScopeSonList" v-for="item,index in busiScopeSonList", :key="index", :label="item.label", :value="item.value")
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="24")
           el-form-item.is-required(label="经营区域覆盖：", prop="busiScope")
@@ -254,7 +257,8 @@ export default {
         deliveryPrefer: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ]
-      }
+      },
+      busiScopeSonList: []
     }
   },
   computed: {
@@ -265,6 +269,7 @@ export default {
       mainDeliveryWayList: state => state.mainDeliveryWayList, // 主要运力方式
       deliveryPreferList1: state => state.deliveryPreferList1, // 物流偏好
       deliveryPreferList2: state => state.deliveryPreferList2, // 物流偏好
+      busiScopeList: state => state.busiScopeList, // 主营业务
     })
   },
   created () { },
@@ -483,6 +488,16 @@ export default {
         this.form.hasStorage = 0
         this.postForm.hasStorage = 0
       }
+    },
+    // 获取主营业务
+    getMainBusi(label){
+      let arr = []
+      this.busiScopeList.map(item =>{
+        if(item.label = label){
+          arr = item.list
+        }        
+      })
+      this.busiScopeSonList = arr
     },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {

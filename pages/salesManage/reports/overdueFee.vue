@@ -12,7 +12,7 @@
       span.text-bule {{feePrice}}
         span.text-black 元/天/吨
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage", :loading="loading", 
+      basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage + 1", :loading="loading", 
       :pageSize="paramsObj.pageSize", :total="totalCount", @pageChange="tableChange", 
       @tableRowViodFee="rowViodFee", @tableRowPaying="rowPaying", @tableRowDelete="rowDelete")
 </template>
@@ -65,7 +65,8 @@ export default {
           width: '200px'
         }, {
           lbl: '联系电话',
-          prop: 'linkmobile'
+          prop: 'linkmobile',
+          width: '130px'
         }, {
           lbl: '提货状态',
           prop: 'goodsFlag',
@@ -78,10 +79,12 @@ export default {
           prop: 'realUndelivery'
         }, {
           lbl: '开始时间',
-          prop: 'startDate'
+          prop: 'startDate',
+          width: '130px'
         }, {
           lbl: '提货截止时间',
-          prop: 'endDate'
+          prop: 'endDate',
+          width: '130px'
         }, {
           lbl: '超期时间',
           prop: 'overdueDate'
@@ -181,6 +184,7 @@ export default {
     },
     getTab (tab) {
       if (this.canClick) {
+        this.paramsObj.currentPage = 0
         if (tab === 0) {
           this.tab = 0
           this.tableValue.tableHead = [
@@ -302,9 +306,8 @@ export default {
     },
     tableChange (val) {
       this.loading = true
-      this.currentPage = val
-      this.paramsObj.currentPage = this.currentPage
-      this.loadData()
+      this.paramsObj.currentPage = val - 1
+      this.loadData(this.tab)
     },
     async loadData (tab) {
       this.canClick = false
