@@ -802,6 +802,9 @@ export default {
         }, {
           title: '销售其他销量',
           url: '/salesManage/reports/saleOtherWeight'
+        }, {
+          title: '超期未提仓储费',
+          url: '/salesManage/reports/overdueFee'
         }
       ]
     },
