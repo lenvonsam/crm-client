@@ -73,6 +73,7 @@ div
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") 
           .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
+          //- (:class="scope.row.goodsFlag == '已完成' ? 'text-green' : 'text-red'")
             //- el-table-column(v-if="head.type === 'multistage'", v-for="(child, idx) in head.list", :key="idx", :label="child.lbl", :width="child.width ? child.width : 'auto'", :min-width="child.minWidth? child.minWidth : 'auto'", :prop="child.prop", :sortable="child.sort ? child.sort : false", :align="child.align ? child.align : 'left'")      
               .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
@@ -445,4 +446,10 @@ export default {
       cursor pointer
 /deep/.el-table__row.current-row
   font-weight bold
+.text-orange
+  color $color-orange
+.text-red
+  color $color-red
+.text-green
+  color $color-green
 </style>
