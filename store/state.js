@@ -750,6 +750,77 @@ export default {
       label: '降低运费可增加销量'
     }
   ],
+  // 主营业务
+  busiScopeList: [
+    {
+      value: '',
+      label: '结构性金属制品制造',
+      list: [
+        {
+          value: '',
+          label: '金属结构制造',
+        }
+      ]
+    },
+    {
+      value: '1',
+      label: '金属工具制造',
+      list: [
+        {
+          value: '',
+          label: '金属结构制造',
+        }
+      ]
+    },
+    {
+      value: '2',
+      label: '集装箱及金属包装容器制造'
+    },
+    {
+      value: '3',
+      label: '锅炉及设备制造'
+    },
+    {
+      value: '4',
+      label: '金属加工机械制造'
+    },
+    {
+      value: '5',
+      label: '物料搬运设备制造'
+    },
+    {
+      value: '6',
+      label: '烘炉、风机、包装等设备制造'
+    },
+    {
+      value: '7',
+      label: '通用零部件制造'
+    },
+    {
+      value: '8',
+      label: '汽车制造'
+    },
+    {
+      value: '9',
+      label: '铁路运输设备制造'
+    },
+    {
+      value: '10',
+      label: '船舶及相关装置制造'
+    },
+    {
+      value: '11',
+      label: '航空、航天器及设备制造'
+    },
+    {
+      value: '12',
+      label: '其他'
+    },
+    {
+      value: '13',
+      label: '钢材贸易'
+    }
+  ],
   currentMenus: [],
   allMenus: [
     {
