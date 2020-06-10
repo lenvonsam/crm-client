@@ -491,7 +491,6 @@ export default {
     },
     // 获取主营业务
     getMainBusi(label){
-      debugger
       let arr = []
       this.busiScopeList.map(item =>{
         if(item.label = label){
