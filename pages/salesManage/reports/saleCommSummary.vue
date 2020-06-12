@@ -207,7 +207,8 @@ export default {
         let { data } = await this.apiStreamPost('/proxy/common/get', { url: encodeURI(url) })
         if (data.returnCode === 0) {
           const resData = data.list
-          let listData = {}
+          let listData = {}        
+          debugger
           resData.map((item, index) => {
             if (!listData[item.deptName]) listData[item.deptName] = []
             listData[item.deptName].push(item)

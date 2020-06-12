@@ -56,14 +56,15 @@
             el-input(v-model="form.storageCapacity" type="number" @change="storageCapacityInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主营业务：", prop="mainBusi")
-            //- el-input(v-model="form.mainBusi" maxlength="50")
-            el-select.full-width(v-model="form.mainBusi" filterable placeholder="" @change="getMainBusi")
-              el-option(v-for="item,index in busiScopeList", :key="index", :label="item.label", :value="item.value")
-              el-option(v-if="busiScopeSonList" v-for="item,index in busiScopeSonList", :key="index", :label="item.label", :value="item.value")
+            el-cascader.full-width(v-model="form.mainBusi", :show-all-levels="false", placeholder="请选择主营业务", :props="propsRule", :options="busiScopeList", @change="getMainBusi")
+            //- el-select.full-width(v-model="form.mainBusi" filterable placeholder="" @change="getMainBusi"){ multiple: true, expandTrigger: 'hover' }
+            //-   el-option(v-for="item,index in busiScopeList", :key="index", :label="item.label", :value="item.value")
+            //-   el-option(v-if="busiScopeSonList" v-for="item,index in busiScopeSonList", :key="index", :label="item.label", :value="item.value")
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="24")
           el-form-item.is-required(label="经营区域覆盖：", prop="busiScope")
-            el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
+            el-cascader.full-width(v-model="form.busiScope", :show-all-levels="false", placeholder="请选择经营区域", :options="areaList", :props="propsRule", @change="getBusiScope")           
+            //- el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
   el-row(type="flex", justify="space-between")
     el-col.mt-10(:span="22")
       breadcrumb(:breadItems="breadItemList[1]")
@@ -102,10 +103,7 @@
         el-col(:span="7")
           el-form-item.is-required(label="全年需求重量评估：", prop="yearSaleWeight")
             el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
-        el-col(:span="16")
-          el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
-            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple @change="getGoodsNameValue")
-              el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
+
       el-row.pr-10(:gutter="30")
         el-col(:span="7")
           el-form-item.is-required(label="我司供应占比：", prop="yearPercent")
@@ -125,6 +123,19 @@
             el-button(@click.prevent="deleteBtn(index)") 删除
       el-row.pr-10(type="flex" justify="end" v-if="showAddMoreBtn")
         el-button(type="primary", plain, @click="addMore") 新增
+      el-row.pr-10(type="flex", justify="space-between")
+        el-col(:span="16")
+          el-form-item.is-required(label="主要购买物资：", prop="mainGoods")
+            el-input(v-model="form.mainGoods", :disabled="formDisabled")
+      el-row.pr-10(type="flex", justify="space-between")
+        el-col(:span="12")
+          el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
+            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple @change="getGoodsNameValue")
+              el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
+        el-col(:span="12")
+          el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
+            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple @change="getGoodsNameValue")
+              el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
   breadcrumb(:breadItems="breadItemList[3]")
   .pt-20
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="160px", label-position="right")
@@ -145,6 +156,7 @@
       el-button(@click="onSubmit('cancel')") 取消
 </template>
 <script>
+import areaJson from '@/components/AreaJson.js'
 import breadcrumb from '@/components/Breadcrumb.vue'
 import { mapState } from 'vuex'
 export default {
@@ -160,6 +172,9 @@ export default {
   },
   data () {
     return {
+      propsRule: { multiple: true, expandTrigger: 'hover' },
+      mainBusi: [],
+      areaList: areaJson,
       breadItemList: [['基本信息'], ['历史交易数据'], ['2020需求评估数据'], ['物流评估数据']],
       formDisabled: true,
       chooseDisabled: false,
@@ -173,8 +188,8 @@ export default {
         cstmPropertyIds: '',
         hasStorage: 0,
         storageCapacity: '',
-        mainBusi: '',
-        busiScope: '',
+        mainBusi: [],
+        busiScope: [],
         yearSaleWeight: '',
         yearPercent: 0,
         goodsNames: '',
@@ -198,10 +213,11 @@ export default {
         hasStorageShow: '',
         hasStorage: '',
         storageCapacity: '',
-        mainBusi: '',
-        busiScope: '',
+        mainBusi: [],
+        busiScope: [],
         yearSaleWeight: 0,
         yearPercent: 0,
+        mainGoods: '',
         goodsNames: '',
         mainDeliveryWay: '',
         deliveryName: '',
@@ -240,9 +256,6 @@ export default {
           { required: true, message: '请选择', trigger: 'blur' },
         ],
         storageCapacity: [
-          { required: true, message: '请输入内容', trigger: 'blur' },
-        ],
-        mainBusi: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ],
         yearSaleWeight: [
@@ -491,13 +504,15 @@ export default {
     },
     // 获取主营业务
     getMainBusi(label){
-      let arr = []
-      this.busiScopeList.map(item =>{
-        if(item.label = label){
-          arr = item.list
-        }        
-      })
-      this.busiScopeSonList = arr
+      console.log(label)
+      // debugger
+      // let arr = []
+      // this.busiScopeList.map(item =>{
+      //   if(item.label = label){
+      //     arr = item.list
+      //   }        
+      // })
+      // this.busiScopeSonList = arr
     },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {

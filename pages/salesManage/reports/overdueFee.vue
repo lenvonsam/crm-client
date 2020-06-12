@@ -15,15 +15,15 @@
       basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage + 1", :loading="loading", 
       :pageSize="paramsObj.pageSize", :total="totalCount", @pageChange="tableChange", 
       @tableRowViodFee="rowViodFee", @tableRowPaying="rowPaying", @tableRowDelete="rowDelete")
-    el-dialog(title="待付款" :visible.sync="dialogFormVisible")
+    el-dialog(title="待收款" :visible.sync="dialogFormVisible", width="25%", @close="dialogClose")
       el-form(:model="form")
-        el-form-item(label="实际待收金额：")
-          el-input(v-model="form.money")
+        el-form-item.is-required(label="实际待收金额：")
+          el-input(v-model="form.money", placeholder="请输入金额")
         el-form-item(label="备注：")
           el-input(v-model="form.remark")
       div(slot="footer" class="dialog-footer")
-        el-button(@click="dialogFormVisible = false") 取消
-        el-button(type="primary" @click="getOverdueMoney") 确定
+        el-button(@click="getOverdueMoney('cancel')") 取消
+        el-button(type="primary" @click="getOverdueMoney('confirm')") 确定
 </template>
 
 <script>
@@ -346,6 +346,7 @@ export default {
           this.canClick = true
         } else {
           this.msgShow(this, data.errMsg)
+          this.canClick = true
         }
         this.loading = false
       } catch (e) {
@@ -464,21 +465,34 @@ export default {
       this.dialogFormVisible = true
       this.rowPayingBillcode = obj.billcode
     },
-    getOverdueMoney () {
-      if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
-        let params = {}
-        params.uid = this.currentUser.id
-        params.billCode = this.rowPayingBillcode
-        params.overdueMoney = this.form.money
-        params.remark = this.form.remark
-        params.dealType = 1
+    getOverdueMoney (flag) {
+      if (flag === 'cancel') {
         this.dialogFormVisible = false
-        this.overdueDeal(params)
-      } else {
-        this.msgShow(this, '请输入正确的金额')
         this.form.money = ''
+        this.form.remark = ''
+      } else {
+        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
+          if(this.form.remark.length > 50){
+            this.msgShow(this, '备注最多输入50个字')
+          }else{
+            let params = {}
+            params.uid = this.currentUser.id
+            params.billCode = this.rowPayingBillcode
+            params.overdueMoney = this.form.money
+            params.remark = this.form.remark
+            params.dealType = 1
+            this.dialogFormVisible = false
+            this.overdueDeal(params) 
+          }          
+        } else {
+          this.msgShow(this, '请输入正确的金额')
+          this.form.money = ''
+        }
       }
-
+    },
+    dialogClose(){
+      this.form.money = ''
+      this.form.remark = ''
     },
     rowDelete (obj) {
       this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {

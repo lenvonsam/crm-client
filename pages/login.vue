@@ -104,6 +104,7 @@ export default {
         this.createLoginMsg(params)
         this.setUser(data.currentUser)
         this.refreshUser(data.currentUser)
+        debugger
         this.configVal({ key: 'globalSuccessMsg', val: '登录成功' })
         let pageUrl = '/'
         if (data.currentUser.id !== 1) {
