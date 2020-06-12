@@ -103,7 +103,6 @@
         el-col(:span="7")
           el-form-item.is-required(label="全年需求重量评估：", prop="yearSaleWeight")
             el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
-
       el-row.pr-10(:gutter="30")
         el-col(:span="7")
           el-form-item.is-required(label="我司供应占比：", prop="yearPercent")
