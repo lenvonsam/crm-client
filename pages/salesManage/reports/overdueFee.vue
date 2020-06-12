@@ -15,6 +15,15 @@
       basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage + 1", :loading="loading", 
       :pageSize="paramsObj.pageSize", :total="totalCount", @pageChange="tableChange", 
       @tableRowViodFee="rowViodFee", @tableRowPaying="rowPaying", @tableRowDelete="rowDelete")
+    el-dialog(title="待付款" :visible.sync="dialogFormVisible")
+      el-form(:model="form")
+        el-form-item(label="实际待收金额：")
+          el-input(v-model="form.money")
+        el-form-item(label="备注：")
+          el-input(v-model="form.remark")
+      div(slot="footer" class="dialog-footer")
+        el-button(@click="dialogFormVisible = false") 取消
+        el-button(type="primary" @click="getOverdueMoney") 确定
 </template>
 
 <script>
@@ -47,11 +56,15 @@ export default {
         goodsFlag: '',
       },
       tableValue: {
+        tableName: 'overdue',
         height: 640,
-        numShow: true,
+        numShow: false,
         hasCbx: false,
         rowClassName: false,
+        spanMethod: true,
         tableData: [],
+        provinceArr: [],
+        OrderIndexArr: [],
         tableHead: [{
           lbl: '来源',
           prop: 'wsFlag'
@@ -69,13 +82,12 @@ export default {
           width: '130px'
         }, {
           lbl: '提货状态',
-          prop: 'goodsFlag',
-          class: 'text-green'
+          prop: 'goodsFlag'
         }, {
           lbl: '预计未提',
           prop: 'preUndelivery'
         }, {
-          lbl: '实超未提',
+          lbl: '超期吨位(吨)',
           prop: 'realUndelivery'
         }, {
           lbl: '开始时间',
@@ -86,7 +98,7 @@ export default {
           prop: 'endDate',
           width: '130px'
         }, {
-          lbl: '超期时间',
+          lbl: '超期时间(天)',
           prop: 'overdueDate'
         }, {
           lbl: '超期金额',
@@ -117,7 +129,13 @@ export default {
       },
       loading: false,
       canClick: false,
-      tab: 0
+      tab: 0,
+      dialogFormVisible: false,
+      form: {
+        money: '',
+        remark: ''
+      },
+      rowPayingBillcode: '',
     }
   },
   mounted () {
@@ -210,7 +228,7 @@ export default {
               lbl: '预计未提',
               prop: 'preUndelivery'
             }, {
-              lbl: '实超未提',
+              lbl: '超期吨位(吨)',
               prop: 'realUndelivery'
             }, {
               lbl: '开始时间',
@@ -219,7 +237,7 @@ export default {
               lbl: '提货截止时间',
               prop: 'endDate'
             }, {
-              lbl: '超期时间',
+              lbl: '超期时间(天)',
               prop: 'overdueDate'
             }, {
               lbl: '超期金额',
@@ -273,7 +291,7 @@ export default {
               lbl: '预计未提',
               prop: 'preUndelivery'
             }, {
-              lbl: '实超未提',
+              lbl: '超期吨位(吨)',
               prop: 'realUndelivery'
             }, {
               lbl: '开始时间',
@@ -282,7 +300,7 @@ export default {
               lbl: '提货截止时间',
               prop: 'endDate'
             }, {
-              lbl: '超期时间',
+              lbl: '超期时间(天)',
               prop: 'overdueDate'
             }, {
               lbl: '超期金额',
@@ -320,10 +338,14 @@ export default {
         if (data.returnCode === 0) {
           this.totalCount = data.total
           this.tableValue.tableData = data.list
+          this.merge()
+          console.log(JSON.stringify(this.tableValue.tableData))
           this.feePrice = data.feePrice
           this.tableValue.tableHead[4].class = this.tableValue.tableData.goodsFlag === '已完成' ? 'text-green' : 'text-red'
-          console.log('this.tableValue.tableHead[4]===========>',JSON.stringify(this.tableValue.tableHead[4]))
+          console.log('this.tableValue.tableHead[4]===========>', JSON.stringify(this.tableValue.tableHead[4]))
           this.canClick = true
+        } else {
+          this.msgShow(this, data.errMsg)
         }
         this.loading = false
       } catch (e) {
@@ -331,6 +353,85 @@ export default {
         this.loading = false
         this.canClick = true
         this.msgShow(this)
+      }
+    },
+    merge () {
+      let OrderObj = {};
+      let provinceObj = {};
+      this.tableValue.tableData.forEach((item, index) => {
+        item.rowIndex = index;
+        if (OrderObj[item.billcode]) {
+          let nextItem = this.tableValue.tableData[index] //为防止报错，先判断this.tableData[index+1]项是否存在，否则js会报错
+            ? this.tableValue.tableData[index].billcode
+            : undefined;
+          let prevItem = this.tableValue.tableData[index - 1].billcode
+            ? this.tableValue.tableData[index - 1].billcode
+            : undefined;
+          if (item.billcode == nextItem) {
+            OrderObj[item.billcode].push(index);
+          } else if (item.billcode == prevItem) {
+            OrderObj[item.billcode].push(index);
+          }
+        } else {
+          OrderObj[item.billcode] = [];
+          OrderObj[item.billcode].push(index);
+        }
+        console.log(OrderObj)
+        if (provinceObj[item.province]) {
+          let nextPro = this.tableValue.tableData[index + 1]
+            ? this.tableValue.tableData[index + 1].province
+            : undefined;
+          let prevPro = this.tableValue.tableData[index - 1].province
+            ? this.tableValue.tableData[index - 1].province
+            : undefined;
+          if (item.province == nextPro) {
+            provinceObj[item.province].push(index);
+          } else if (item.province == prevPro) {
+            provinceObj[item.province].push(index);
+          }
+        } else {
+          provinceObj[item.province] = [];
+          provinceObj[item.province].push(index);
+        }
+        console.log(provinceObj)
+      });
+      // 将数组长度大于1的值 存储到this.OrderIndexArr（也就是需要合并的项）
+      for (let k in OrderObj) {
+        if (OrderObj[k].length > 1) {
+          this.tableValue.OrderIndexArr.push(OrderObj[k]);
+        }
+      }
+      for (let i in provinceObj) {
+        if (provinceObj[i].length > 1) {
+          this.handleData(provinceObj[i])
+        }
+      }
+    },
+    handleData (data) {
+      let temp = data;
+      let itemArr = [];
+      let itemArrNew = [];
+      let resArr = [];
+      if (data.length > 2) {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i + 1]) {
+            if (data[i + 1] - data[i] > 1) {
+              itemArr = data.slice(0, i + 1)
+              itemArrNew = temp.slice(i + 1, temp.length)
+              break;
+            } else {
+              resArr = data
+            }
+          }
+        }
+        if (itemArr.length > 0 || itemArrNew.length > 0) {
+          this.tableValue.provinceArr.push(itemArr)
+          this.tableValue.provinceArr.push(itemArrNew)
+        } else {
+          this.tableValue.provinceArr.push(data)
+        }
+      } else {
+        this.tableValue.provinceArr.push(data)
       }
     },
     async overdueDeal (params) {
@@ -360,53 +461,24 @@ export default {
       })
     },
     rowPaying (obj) {
-      let overdueMoney = ''
-      this.$alert('<form>实际待收金额：<input id="money"></input><br />备注：<input id="remark"></input></form>', 'HTML 片段', {
-        dangerouslyUseHTMLString: true
-      }).then((res) => {
-        let money = document.getElementById('money').value
-        let remark = document.getElementById('remark').value
-        if(money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(money)){
-          console.log(money)
-          console.log(remark)
-          let params = {}
-          params.uid = this.currentUser.id
-          params.billCode = obj.billcode
-          params.overdueMoney = money
-          params.remark = remark
-          params.dealType = 1
-          this.overdueDeal(params)
-        }else{
-          this.msgShow(this,'请输入正确的金额')
-          document.getElementById('money').value = ''
-          document.getElementById('remark').value = ''
-        }
-        // if(/^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(money)){
-          
-        // }else{
-          
-        // }
-      })
-      // this.$prompt('实际待收金额：', '提示', {
-      //   confirmButtonText: '确定',
-      //   cancelButtonText: '取消',
-      //   inputPattern: /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/,
-      //   inputErrorMessage: '请输入正确的金额'
-      // }).then(({ value }) => {
-      //   overdueMoney = value
-      // }).catch((e) => {
-      //   console.log(e)
-      // });
-      // this.confirmDialog(this, '实际待收金额：xxx（必填），备注：xxx(选填)', '提示').then(() => {
-      //   let params = {}
-      //   params.uid = this.currentUser.id
-      //   params.billCode = obj.billcode
-      //   params.overdueMoney = obj.overdueMoney
-      //   params.dealType = 1
-      //   this.overdueDeal(params)
-      // }, (e) => {
-      //   console.log(e)
-      // })
+      this.dialogFormVisible = true
+      this.rowPayingBillcode = obj.billcode
+    },
+    getOverdueMoney () {
+      if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
+        let params = {}
+        params.uid = this.currentUser.id
+        params.billCode = this.rowPayingBillcode
+        params.overdueMoney = this.form.money
+        params.remark = this.form.remark
+        params.dealType = 1
+        this.dialogFormVisible = false
+        this.overdueDeal(params)
+      } else {
+        this.msgShow(this, '请输入正确的金额')
+        this.form.money = ''
+      }
+
     },
     rowDelete (obj) {
       this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
