@@ -751,73 +751,197 @@ export default {
     }
   ],
   // 主营业务
-  busiScopeList: [
+  mainBusiList: [
     {
-      value: '',
+      value: '结构性金属制品制造',
       label: '结构性金属制品制造',
-      list: [
+      children: [
         {
-          value: '',
+          value: '金属结构制造',
           label: '金属结构制造',
         }
       ]
     },
     {
-      value: '1',
+      value: '金属工具制造',
       label: '金属工具制造',
-      list: [
+      children: [
         {
-          value: '',
-          label: '金属结构制造',
+          value: '切削工具制造',
+          label: '切削工具制造',
+        },
+        {
+          value: '其他金属工具制造',
+          label: '其他金属工具制造',
         }
       ]
     },
     {
-      value: '2',
-      label: '集装箱及金属包装容器制造'
+      value: '集装箱及金属包装容器制造',
+      label: '集装箱及金属包装容器制造',
+      children: [
+        {
+          value: '集装箱制造',
+          label: '集装箱制造',
+        },
+        {
+          value: '金属压力容器制造',
+          label: '金属压力容器制造',
+        },
+        {
+          value: '金属包装容器及材料制造',
+          label: '金属包装容器及材料制造',
+        }
+      ]
     },
     {
-      value: '3',
-      label: '锅炉及设备制造'
+      value: '锅炉及设备制造',
+      label: '锅炉及设备制造',
+      children: [
+        {
+          value: '发动机及配件制造',
+          label: '发动机及配件制造',
+        },
+        {
+          value: '动力和发电设备制造',
+          label: '动力和发电设备制造',
+        }
+      ]
     },
     {
-      value: '4',
-      label: '金属加工机械制造'
+      value: '金属加工机械制造',
+      label: '金属加工机械制造',
+      children: [
+        {
+          value: '加工机床及附件制造',
+          label: '加工机床及附件制造',
+        },
+        {
+          value: '其他金属加工机械制造',
+          label: '其他金属加工机械制造',
+        }
+      ]
     },
     {
-      value: '5',
-      label: '物料搬运设备制造'
+      value: '物料搬运设备制造',
+      label: '物料搬运设备制造',
+      children: [
+        {
+          value: '起重机制造',
+          label: '起重机制造',
+        },
+        {
+          value: '叉车等搬运设备及机械式停车设备制造',
+          label: '叉车等搬运设备及机械式停车设备制造',
+        },
+        {
+          value: '电梯、自动扶梯及升降机制造',
+          label: '电梯、自动扶梯及升降机制造',
+        },
+        {
+          value: '客运索道制造',
+          label: '客运索道制造',
+        }
+      ]
     },
     {
-      value: '6',
-      label: '烘炉、风机、包装等设备制造'
+      value: '烘炉、风机、包装等设备制造',
+      label: '烘炉、风机、包装等设备制造',
+      children: [
+        {
+          value: '风机、风扇制造',
+          label: '风机、风扇制造',
+        },
+        {
+          value: '制冷、空调设备制造',
+          label: '制冷、空调设备制造',
+        },
+        {
+          value: '包装专用设备制造',
+          label: '包装专用设备制造',
+        }
+      ]
     },
     {
-      value: '7',
-      label: '通用零部件制造'
+      value: '通用零部件制造',
+      label: '通用零部件制造',
+      children: [
+        {
+          value: '紧固件制造',
+          label: '紧固件制造',
+        },
+        {
+          value: '机械零部件加工',
+          label: '机械零部件加工',
+        }
+      ]
     },
     {
-      value: '8',
-      label: '汽车制造'
+      value: '汽车制造',
+      label: '汽车制造',
+      children: [
+        {
+          value: '汽车车身、挂车制造',
+          label: '汽车车身、挂车制造',
+        },
+        {
+          value: '汽车零部件及配件制造',
+          label: '汽车零部件及配件制造',
+        }
+      ]
     },
     {
-      value: '9',
-      label: '铁路运输设备制造'
+      value: '铁路运输设备制造',
+      label: '铁路运输设备制造',
+      children: [
+        {
+          value: '高铁车组制造',
+          label: '高铁车组制造',
+        },
+        {
+          value: '轨道机车车辆制造',
+          label: '轨道机车车辆制造',
+        },
+        {
+          value: '铁路设备、配件制造',
+          label: '铁路设备、配件制造',
+        }
+      ]
     },
     {
-      value: '10',
-      label: '船舶及相关装置制造'
+      value: '船舶及相关装置制造',
+      label: '船舶及相关装置制造',
+      children: [
+        {
+          value: '金属船舶制造',
+          label: '金属船舶制造',
+        },
+        {
+          value: '船用配套设备制造',
+          label: '船用配套设备制造',
+        },
+        {
+          value: '海洋工程装备制造',
+          label: '海洋工程装备制造',
+        }
+      ]
     },
     {
-      value: '11',
-      label: '航空、航天器及设备制造'
+      value: '航空、航天器及设备制造',
+      label: '航空、航天器及设备制造',
+      children: [
+        {
+          value: '飞机制造',
+          label: '飞机制造',
+        }
+      ]
     },
     {
-      value: '12',
+      value: '其他',
       label: '其他'
     },
     {
-      value: '13',
+      value: '钢材贸易',
       label: '钢材贸易'
     }
   ],
