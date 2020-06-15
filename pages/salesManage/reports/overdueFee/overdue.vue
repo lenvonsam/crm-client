@@ -1,20 +1,13 @@
-
-  <template lang="pug">
+<template lang="pug">
   .content
-    breadcrumb(:breadItems="breadItems")
-    .pt-15
-      el-row
-        el-button(:type="tab === 0 ? 'primary' : 'default'" @click="getTab(0)") 超期未提
-        el-button(:type="tab === 1 ? 'primary' : 'default'" @click="getTab(1)") 历史记录
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
-    .mt-15(v-if="tab === 0") 超期未提，费用单价为
+      search-form(:searchFormItems="searchFormItems", @search="searchForm")
+    .mt-15 超期未提，费用单价为
       span.text-bule {{feePrice}}
         span.text-black 元/天/吨
     .pt-15
-      basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage + 1", :loading="loading", 
-      :pageSize="paramsObj.pageSize", :total="totalCount", @pageChange="tableChange", 
-      @tableRowViodFee="rowViodFee", @tableRowPaying="rowPaying", @tableRowDelete="rowDelete")
+      basic-table(:tableValue="tableValue", :currentPage="paramsObj.currentPage + 1", :loading="loading", :pageSize="paramsObj.pageSize", 
+      :total="totalCount", @pageChange="tableChange", @tableRowViodFee="rowViodFee", @tableRowPaying="rowPaying", @tableRowDelete="rowDelete")
     el-dialog(title="待收款" :visible.sync="dialogFormVisible", width="25%", @close="dialogClose")
       el-form(:model="form")
         el-form-item.is-required(label="实际待收金额：")
@@ -30,6 +23,7 @@
 import breadcrumb from '@/components/Breadcrumb.vue'
 import basicTable from '@/components/BasicTable.vue'
 import searchForm from '@/components/SearchForm.vue'
+// import buttonGroup from '@/components/ButtonGroup.vue'
 import { mapState } from 'vuex'
 export default {
   layout: 'main',
@@ -40,7 +34,6 @@ export default {
   },
   data () {
     return {
-      breadItems: ['销售管理', '超期未提仓储费'],
       feePrice: '*',
       totalCount: 100,
       paramsObj: {
@@ -128,8 +121,6 @@ export default {
         }]
       },
       loading: false,
-      canClick: false,
-      tab: 0,
       dialogFormVisible: false,
       form: {
         money: '',
@@ -139,9 +130,8 @@ export default {
     }
   },
   mounted () {
-    this.tab = 0
     this.$nextTick(() => {
-      this.loadData(0)
+      this.loadData()
     })
   },
   computed: {
@@ -177,6 +167,7 @@ export default {
         ]
       ]
       return searchFrom
+
     }
   },
   methods: {
@@ -198,151 +189,98 @@ export default {
       }
       this.paramsObj.currentPage = 0
       this.paramsObj.pageSize = 20
-      this.loadData(this.tab)
-    },
-    getTab (tab) {
-      if (this.canClick) {
-        this.paramsObj.currentPage = 0
-        if (tab === 0) {
-          this.tab = 0
-          this.tableValue.tableHead = [
-            {
-              lbl: '来源',
-              prop: 'wsFlag'
-            }, {
-              lbl: '单号',
-              prop: 'billcode',
-              width: '150px'
-            }, {
-              lbl: '客户名称',
-              prop: 'datasCustomername',
-              width: '200px'
-            }, {
-              lbl: '联系电话',
-              prop: 'linkmobile'
-            }, {
-              lbl: '提货状态',
-              prop: 'goodsFlag',
-              class: 'text-green'
-            }, {
-              lbl: '预计未提',
-              prop: 'preUndelivery'
-            }, {
-              lbl: '超期吨位(吨)',
-              prop: 'realUndelivery'
-            }, {
-              lbl: '开始时间',
-              prop: 'startDate'
-            }, {
-              lbl: '提货截止时间',
-              prop: 'endDate'
-            }, {
-              lbl: '超期时间(天)',
-              prop: 'overdueDate'
-            }, {
-              lbl: '超期金额',
-              prop: 'undeliveryMoney'
-            }, {
-              lbl: '业务员',
-              prop: 'employeeName'
-            }, {
-              lbl: '部门',
-              prop: 'deptName'
-            }, {
-              type: 'action',
-              width: '150px',
-              fixed: 'right',
-              actionBtns: [{
-                lbl: '免收',
-                type: 'viodFee',
-                class: 'text-orange'
-              }, {
-                lbl: '待收款',
-                type: 'paying'
-              }, {
-                lbl: '删除',
-                type: 'delete',
-                class: 'text-red'
-              }]
-            }]
-        }
-        if (tab === 1) {
-          this.tab = 1
-          this.tableValue.tableHead = [
-            {
-              lbl: '来源',
-              prop: 'wsFlag'
-            }, {
-              lbl: '单号',
-              prop: 'billcode',
-              width: '150px'
-            }, {
-              lbl: '客户名称',
-              prop: 'datasCustomername',
-              width: '200px'
-            }, {
-              lbl: '联系电话',
-              prop: 'linkmobile'
-            }, {
-              lbl: '提货状态',
-              prop: 'goodsFlag',
-              class: 'text-green'
-            }, {
-              lbl: '预计未提',
-              prop: 'preUndelivery'
-            }, {
-              lbl: '超期吨位(吨)',
-              prop: 'realUndelivery'
-            }, {
-              lbl: '开始时间',
-              prop: 'startDate'
-            }, {
-              lbl: '提货截止时间',
-              prop: 'endDate'
-            }, {
-              lbl: '超期时间(天)',
-              prop: 'overdueDate'
-            }, {
-              lbl: '超期金额',
-              prop: 'undeliveryMoney'
-            }, {
-              lbl: '业务员',
-              prop: 'employeeName'
-            }, {
-              lbl: '部门',
-              prop: 'deptName'
-            }, {
-              lbl: '状态',
-              prop: 'state'
-            }]
-        }
-        this.loadData(tab)
-      } else {
-        this.msgShow(this, '点击过于频繁，请稍后再试！')
-      }
-
+      this.loadData()
     },
     tableChange (val) {
       this.loading = true
       this.paramsObj.currentPage = val - 1
-      this.loadData(this.tab)
+      this.loadData()
     },
-    async loadData (tab) {
+    rowViodFee (obj) {
+      console.log(JSON.stringify(obj))
+      this.confirmDialog(this, '是否免收该单位超期未提仓储费？', '提示').then(() => {
+        let params = {}
+        params.uid = this.currentUser.id
+        params.billCode = obj.billcode
+        params.dealType = 0
+        this.overdueDeal(params)
+      }, (e) => {
+        console.log(e)
+      })
+    },
+    rowPaying (obj) {
+      this.dialogFormVisible = true
+      this.rowPayingBillcode = obj.billcode
+    },
+    getOverdueMoney (flag) {
+      if (flag === 'cancel') {
+        this.dialogFormVisible = false
+        this.form.money = ''
+        this.form.remark = ''
+      } else {
+        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
+          if (this.form.remark.length > 50) {
+            this.msgShow(this, '备注最多输入50个字')
+          } else {
+            let params = {}
+            params.uid = this.currentUser.id
+            params.billCode = this.rowPayingBillcode
+            params.overdueMoney = this.form.money
+            params.remark = this.form.remark
+            params.dealType = 1
+            this.dialogFormVisible = false
+            this.overdueDeal(params)
+          }
+        } else {
+          this.msgShow(this, '请输入正确的金额')
+          this.form.money = ''
+        }
+      }
+    },
+    dialogClose () {
+      this.form.money = ''
+      this.form.remark = ''
+    },
+    rowDelete (obj) {
+      this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
+        // 删除接口
+        let params = {}
+        params.uid = this.currentUser.id
+        params.billCode = obj.billcode
+        params.dealType = 2
+        this.overdueDeal(params)
+      }, (e) => {
+        console.log(e)
+      })
+    },
+    async overdueDeal (params) {
+      try {
+        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'overdue/dealOverdueReport', params: params })
+        if (data.returnCode === 0) {
+          this.msgShow(this, '操作成功', 'success')
+          this.loadData()
+        } else {
+          this.msgShow(this, data.errMsg)
+        }
+      } catch (e) {
+        console.error(e)
+        this.msgShow(this)
+      }
+    },
+    async loadData () {
       this.canClick = false
       this.loading = true
       this.paramsObj.uid = this.currentUser.id
       console.log('入参========>' + JSON.stringify(this.paramsObj))
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
-          { url: tab === 0 ? 'overdue/overdueReport' : 'overdue/findOverdueDealHistory', params: this.paramsObj })
+          { url:'overdue/overdueReport', params: this.paramsObj })
         if (data.returnCode === 0) {
           this.totalCount = data.total
           this.tableValue.tableData = data.list
           this.merge()
-          console.log(JSON.stringify(this.tableValue.tableData))
+          // console.log(JSON.stringify(this.tableValue.tableData))
           this.feePrice = data.feePrice
-          this.tableValue.tableHead[4].class = this.tableValue.tableData.goodsFlag === '已完成' ? 'text-green' : 'text-red'
-          console.log('this.tableValue.tableHead[4]===========>', JSON.stringify(this.tableValue.tableHead[4]))
           this.canClick = true
         } else {
           this.msgShow(this, data.errMsg)
@@ -359,6 +297,7 @@ export default {
     merge () {
       let OrderObj = {};
       let provinceObj = {};
+      this.tableValue.OrderIndexArr = []
       this.tableValue.tableData.forEach((item, index) => {
         item.rowIndex = index;
         if (OrderObj[item.billcode]) {
@@ -377,7 +316,7 @@ export default {
           OrderObj[item.billcode] = [];
           OrderObj[item.billcode].push(index);
         }
-        console.log(OrderObj)
+        // console.log(OrderObj)
         if (provinceObj[item.province]) {
           let nextPro = this.tableValue.tableData[index + 1]
             ? this.tableValue.tableData[index + 1].province
@@ -394,7 +333,7 @@ export default {
           provinceObj[item.province] = [];
           provinceObj[item.province].push(index);
         }
-        console.log(provinceObj)
+        // console.log(provinceObj)
       });
       // 将数组长度大于1的值 存储到this.OrderIndexArr（也就是需要合并的项）
       for (let k in OrderObj) {
@@ -435,84 +374,10 @@ export default {
         this.tableValue.provinceArr.push(data)
       }
     },
-    async overdueDeal (params) {
-      try {
-        let { data } = await this.apiStreamPost('/proxy/common/post', { url: 'overdue/dealOverdueReport', params: params })
-        if (data.returnCode === 0) {
-          this.msgShow(this, '操作成功', 'success')
-          this.loadData(0)
-        } else {
-          this.msgShow(this, data.errMsg)
-        }
-      } catch (e) {
-        console.error(e)
-        this.msgShow(this)
-      }
-    },
-    rowViodFee (obj) {
-      console.log(JSON.stringify(obj))
-      this.confirmDialog(this, '是否免收该单位超期未提仓储费？', '提示').then(() => {
-        let params = {}
-        params.uid = this.currentUser.id
-        params.billCode = obj.billcode
-        params.dealType = 0
-        this.overdueDeal(params)
-      }, (e) => {
-        console.log(e)
-      })
-    },
-    rowPaying (obj) {
-      this.dialogFormVisible = true
-      this.rowPayingBillcode = obj.billcode
-    },
-    getOverdueMoney (flag) {
-      if (flag === 'cancel') {
-        this.dialogFormVisible = false
-        this.form.money = ''
-        this.form.remark = ''
-      } else {
-        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
-          if(this.form.remark.length > 50){
-            this.msgShow(this, '备注最多输入50个字')
-          }else{
-            let params = {}
-            params.uid = this.currentUser.id
-            params.billCode = this.rowPayingBillcode
-            params.overdueMoney = this.form.money
-            params.remark = this.form.remark
-            params.dealType = 1
-            this.dialogFormVisible = false
-            this.overdueDeal(params) 
-          }          
-        } else {
-          this.msgShow(this, '请输入正确的金额')
-          this.form.money = ''
-        }
-      }
-    },
-    dialogClose(){
-      this.form.money = ''
-      this.form.remark = ''
-    },
-    rowDelete (obj) {
-      this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
-        // 删除接口
-        let params = {}
-        params.uid = this.currentUser.id
-        params.billCode = obj.billcode
-        params.dealType = 2
-        this.overdueDeal(params)
-      }, (e) => {
-        console.log(e)
-      })
-    }
   }
-
 }
 </script>
-<style lang="stylus", scoped>
-.width-input-250
-  width 250px
+<style scoped lang="stylus">
 .text-bule
   color blue
 .text-black

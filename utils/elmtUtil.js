@@ -1,15 +1,16 @@
 let load = null
 let msgInstance = null
 module.exports = {
-  msgShow(context, text = '网络异常', type = 'error') {
+  msgShow(context, text = '网络异常', type = 'error', duration = 3000) {
     if (msgInstance) return
     msgInstance = context.$message({
       message: text,
-      type
+      type,
+      duration
     })
-    msgInstance.onClose(() => {
+    setTimeout(function () {
       msgInstance = null
-    })
+     }, duration - 100)
   },
   confirmDialog(
     context,
