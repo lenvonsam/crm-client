@@ -6,7 +6,7 @@
       el-tab-pane(label="客户评估", name="1")
         div(v-if="tabName == '1'")
           .mt-15
-            search-form(:searchFormItems="searchFormItems1", @search="clientSearchForm",@changeCheckVal="changeCheckVal")
+            search-form(:searchFormItems="searchFormItems1", @search="clientSearchForm")
           .mt-5
             basic-table(:tableValue="tableValue1", :currentPage="currentPage1", 
             :pageSize="pageSize", :total="clientTotalCount", :loading="loading", 
@@ -45,7 +45,7 @@ export default {
         { label: '归属性质', model: 'customerPropertyMark', type: 'select', placeholder: '请选择归属性质', val: '', list: [] },
         { label: '抬头创建日期', model: 'createAt', type: 'timeLimit', val: '' }],
         [{ label: '客户状态', model: 'mark', type: 'select', placeholder: '请选择状态类型', val: '', list: [] },
-        { label: '', model: 'showUpdate', type: 'radio', val: '0' }]
+        { label: '评估状态', model: 'showUpdate', type: 'select', placeholder: '请选择评估状态', val: '0', list: [] }]
       ],
       searchFormItems2: [
         [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
@@ -81,6 +81,10 @@ export default {
         }, {
           lbl: '客户状态',
           prop: 'mark',
+          width: '150px'
+        }, {
+          lbl: '评估状态',
+          prop: 'showUpdate',
           width: '150px'
         }, {
           lbl: '抬头创建日期',
@@ -176,6 +180,7 @@ export default {
       currentUser: state => state.user.currentUser,
       propertyMark: state => state.propertyMark,
       clientStatus: state => state.clientStatus,
+      showUpdateList: state => state.showUpdateList,
       logisticsStat: state => state.logisticsStat,
       logisticsInflu: state => state.logisticsInflu,
     })
@@ -186,6 +191,7 @@ export default {
     console.log('beforeMount_tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
     this.searchFormItems1[1][1]['list'] = this.propertyMark
     this.searchFormItems1[2][0]['list'] = this.clientStatus
+    this.searchFormItems1[2][1]['list'] = this.showUpdateList
     this.isEdit = false
   },
   mounted () {
@@ -201,7 +207,7 @@ export default {
         linkerName: '',
         dptName: '',
         employeeName: '',
-        showUpdate: '1', // 1仅展示未评估的公司
+        showUpdate: '', // 1仅展示未评估的公司
         customerPropertyMark: '', // 归属性质
         mark: '' //客户状态
       }
@@ -224,22 +230,28 @@ export default {
           if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
           if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
         })
-        this.$forceUpdate()
+        
         this.loadAreaEvalData()
         this.getAreaList()
-      }
-    },
-    changeCheckVal (flag) {
-      if (flag === true) {
-        this.searchFormItems1[2][1].val = '1'
-        this.clientObject.showUpdate = '1'
       } else {
-        this.searchFormItems1[2][1].val = '0'
-        this.clientObject.showUpdate = '0'
+        // debugger
+        this.searchFormItems1[1][1]['list'] = this.propertyMark
+        this.searchFormItems1[2][0]['list'] = this.clientStatus
+        this.searchFormItems1[2][1]['list'] = this.showUpdateList
       }
-      console.log('changeCheckVal (flag)======>' + this.searchFormItems1[2][1].val)
-      console.log('changeCheckVal (flag)======>' + JSON.stringify(this.clientObject))
+      this.$forceUpdate()
     },
+    // changeCheckVal (flag) {
+    //   if (flag === true) {
+    //     this.searchFormItems1[2][1].val = '1'
+    //     this.clientObject.showUpdate = '1'
+    //   } else {
+    //     this.searchFormItems1[2][1].val = '0'
+    //     this.clientObject.showUpdate = '0'
+    //   }
+    //   console.log('changeCheckVal (flag)======>' + this.searchFormItems1[2][1].val)
+    //   console.log('changeCheckVal (flag)======>' + JSON.stringify(this.clientObject))
+    // },
     clientSearchForm (paramsObj) {
       console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
@@ -254,7 +266,7 @@ export default {
             delete this.clientObject.startDate
             delete this.clientObject.endDate
           }
-        } else if (key != 'showUpdate') {
+        } else {
           this.clientObject[key] = paramsObj[key].trim()
         }
       })
@@ -360,6 +372,7 @@ export default {
           data.list.map(item => {
             item.mark = (item.mark === '1' ? '潜在' : (item.mark === '2' ? '正式' : '公共'))
             item.customerPropertyMark = item.customerPropertyMark === '0' ? '长期维护' : '二次开发'
+            item.showUpdate = item.cstmId === 0 ? '未评估' : '已评估'
           })
           this.tableValue1.tableData = data.list
           this.clientTotalCount = data.total

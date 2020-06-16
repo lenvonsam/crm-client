@@ -665,6 +665,19 @@ export default {
       label: '公共客户'
     }
   ],
+  // 评估状态
+  showUpdateList: [
+    {
+      value: '0',
+      label: '全部'
+    }, {
+      value: '1',
+      label: '未评估'
+    }, {
+      value: '2',
+      label: '已评估'
+    }
+  ],
   // 客户性质
   cstmPropertyIds: [
     {
@@ -702,7 +715,7 @@ export default {
     { label: '有', value: '有' }
   ],
   // 主要运力方式
-  mainDeliveryWayList: [ 
+  mainDeliveryWayList: [
     { label: '自有运力', value: '自有运力' },
     { label: '我司配送', value: '我司配送' },
     { label: '固定三方物流', value: '固定三方物流' },

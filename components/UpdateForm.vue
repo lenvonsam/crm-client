@@ -4,6 +4,10 @@
   .pt-20
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="145px", label-position="right")
       el-row.pr-10(type="flex")
+        el-col(:span="16")
+          el-form-item(label="公司名称：", prop="compName")
+            el-input(v-model="form.compName", :disabled="formDisabled")
+      el-row.pr-10(type="flex")
         el-col(:span="8")
           el-form-item(label="业务部门：", prop="dptName")
             el-input(v-model="form.dptName", :disabled="formDisabled")
@@ -63,7 +67,7 @@
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="24")
           el-form-item.is-required(label="经营区域覆盖：", prop="busiScope")
-            el-select.full-width(v-model="form.busiScope", filterable, remote, :remote-method="selectRemote", placeholder="", multiple, @change="getBusiScope")
+            el-select.full-width(v-model="form.busiScope", filterable, remote, :remote-method="selectRemote", placeholder="请输入经营区域", multiple, @change="getBusiScope")
               el-option(v-for="item in busiScopeList", :key="item.id", :label="item.name", :value="item.name")       
             //- el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
   el-row(type="flex", justify="space-between")
@@ -200,6 +204,7 @@ export default {
         dataStr: []
       },
       form: {
+        compName: '',
         dptName: '',
         employeeName: '',
         mark: '',
@@ -302,8 +307,16 @@ export default {
       // 数据格式化处理
       if (newVal.obj) {
         this.form = Object.assign(this.form, newVal.obj)
-        this.form.firstLadTime = newVal.firstLadTime
-        this.form.firstBillTime = newVal.firstBillTime
+        if(newVal.firstBillTime){
+          this.form.firstBillTime = newVal.firstBillTime.split(' ')[0]
+        }else{
+          this.form.firstBillTime = '--'
+        }
+        if(newVal.firstLadTime){
+          this.form.firstLadTime = newVal.firstLadTime.split(' ')[0]
+        }else{
+          this.form.firstLadTime = '--'
+        }
         if (newVal.purchaseGoods == "undefined" || newVal.purchaseGoods == null || newVal.purchaseGoods.trim() == "") {
           this.purchaseGoods = '--'
         } else {
@@ -345,10 +358,14 @@ export default {
           }
         }
         if(newVal.obj.mainBusi){
-          this.form.mainBusi = JSON.parse(newVal.obj.mainBusi)
+          if(newVal.obj.mainBusi.trim() != ''){
+            this.form.mainBusi = JSON.parse(newVal.obj.mainBusi)
+          }          
         }
         if(newVal.obj.busiScope){
-          this.form.busiScope = JSON.parse(newVal.obj.busiScope)
+          if(newVal.obj.busiScope.trim() != ''){
+            this.form.busiScope = JSON.parse(newVal.obj.busiScope)
+          }
         }
         this.form.extraGoodsRequirement = newVal.obj.extraGoodsRequirement
         this.form.customerPropertyMark = this.form.customerPropertyMark === '0' ? '长期维护' : '二次开发'
