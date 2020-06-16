@@ -98,10 +98,15 @@ export default {
       loading: false,
     }
   },
-  mounted () {
+  beforeMount() {
     this.$nextTick(() => {
-      this.loadData()
+      this.searchFormItems[0][2].val = '全部'
+      this.searchFormItems[1][3].val = '全部'     
     })
+  },
+  mounted () {
+      this.loadData()
+      console.log('searchFormItem:>>', this.searchFormItems)    
   },
   computed: {
     ...mapState({
@@ -113,32 +118,35 @@ export default {
           [
             { label: '起始年月', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
             { label: '结束年月', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
-            {              label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+            { label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
               list: [
                 { label: '全部', value: '全部' },
                 { label: 'ERP', value: 'ERP' },
                 { label: '型云', value: '型云' }
-              ], val: ''            },
+              ], val: '全部'            
+            },
             { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
           ],
           [
             { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
             { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
-            {              label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept',
-              list: [], val: ''            },
+            { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept',
+              list: [], val: ''            
+            },
             {
               label: '提货状态', model: 'goodsFlag', type: 'select',
               list: [
                 { label: '全部', value: '全部' },
                 { label: '已完成', value: '已完成' },
                 { label: '未完成', value: '未完成' }
-              ], val: ''
+              ], val: '全部'
             }
           ],
           [
             {
               label: '状态', model: 'dealTypeStr', type: 'select',
               list: [
+                { label: '全部', value: '' },
                 { label: '已免收', value: '已免收' },
                 { label: '已收款', value: '已收款' },
                 { label: '已删除', value: '已删除' }
@@ -147,15 +155,12 @@ export default {
           ]
         ]
         return searchFrom
-      },
-      set (val) {
-        console.log('set (val) ======>' + JSON.stringify(val))
       }
     }
   },
   methods: {
     searchForm (obj) {
-      this.paramsObj = obj
+      this.paramsObj = Object.assign({}, obj)
       if (obj.source == 'ERP') {
         this.paramsObj.source = 0
       } else if (obj.source == '型云') {
