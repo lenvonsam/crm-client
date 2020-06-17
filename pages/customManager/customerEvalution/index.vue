@@ -45,7 +45,7 @@ export default {
         { label: '归属性质', model: 'customerPropertyMark', type: 'select', placeholder: '请选择归属性质', val: '', list: [] },
         { label: '抬头创建日期', model: 'createAt', type: 'timeLimit', val: '' }],
         [{ label: '客户状态', model: 'mark', type: 'select', placeholder: '请选择状态类型', val: '', list: [] },
-        { label: '评估状态', model: 'showUpdate', type: 'select', placeholder: '请选择评估状态', val: '0', list: [] }]
+        { label: '评估状态', model: 'showUpdate', type: 'select', placeholder: '请选择评估状态', val: '1', list: [] }]
       ],
       searchFormItems2: [
         [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
@@ -207,7 +207,7 @@ export default {
         linkerName: '',
         dptName: '',
         employeeName: '',
-        showUpdate: '', // 1仅展示未评估的公司
+        showUpdate: '1', // 1仅展示未评估的公司
         customerPropertyMark: '', // 归属性质
         mark: '' //客户状态
       }
