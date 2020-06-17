@@ -132,6 +132,7 @@ export default {
   beforeMount() {
     this.$nextTick(() => {
       this.searchFormItems[0][2].val = '全部'
+      this.searchFormItems[1][1].val = ''
       this.searchFormItems[1][3].val = '全部'     
     })
   },
@@ -146,8 +147,8 @@ export default {
     searchFormItems () {
       let searchFrom = [
         [
-          { label: '起始年月', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
-          { label: '结束年月', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
           { label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
             list: [
               { label: '全部', value: '全部' },
