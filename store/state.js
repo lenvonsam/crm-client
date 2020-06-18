@@ -998,6 +998,10 @@ export default {
           url: '/salesManage/reports/saleCommSummary'
         },
         {
+          title: '销售绩效提成表',
+          url: '/salesManage/reports/salePerformance'
+        },
+        {
           title: '直发调货明细表',
           url: '/salesManage/reports/deliveryDetail'
         },
