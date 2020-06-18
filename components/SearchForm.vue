@@ -14,7 +14,7 @@
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="daterange", v-else-if="item.type == 'timeLimit'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd")
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="datetimerange", v-else-if="item.type == 'datetimerange'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd HH:mm")
               el-autocomplete.full-width(v-model="item.val", v-else-if="item.type == 'autocomplete'", @focus="selectIdx(index, idx)", :fetch-suggestions="querySearchAsync", :placeholder="item.placeholder", size="small")
-              el-select.full-width(v-model="item.val", :placeholder="item.placeholder", v-else-if="item.type == 'select'", size="small")
+              el-select.full-width(v-model="item.val",:filterable="item.filter || false" :placeholder="item.placeholder", v-else-if="item.type == 'select'", size="small")
                 el-option(v-for="itemIist in item.list", :key="itemIist.value", :label="itemIist.label", :value="itemIist.value")
                   span {{itemIist.label}}
               el-select.full-width(v-model="item.val", :placeholder="item.placeholder", v-else-if="item.type == 'selectDept'", size="small", @focus="fkDptCreate", clearable)
@@ -108,7 +108,7 @@ export default {
         this.$emit('search', searchParm)
       }
     },
-    getCheckboxVal(val){
+    getCheckboxVal (val) {
       console.log('getCheckboxVal(val)=====>' + val)
       this.checked = val
       this.$emit('changeCheckVal', val)
