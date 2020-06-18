@@ -61,24 +61,36 @@ export default {
         }, {
           lbl: '新客户销量',
           prop: 'newWeight'
+        },{
+          lbl: '新客户提成',
+          prop: 'newTc'
         }, {
           lbl: '直发单价',
           prop: 'zfPrice'
         }, {
           lbl: '直发销量',
           prop: 'zfBweight'
+        },{
+          lbl: '直发提成',
+          prop: 'zfTc'
         }, {
           lbl: '调货单价',
           prop: 'dhPrice'
         }, {
           lbl: '调货销量',
           prop: 'dhBweight'
+        },{
+          lbl: '调货提成',
+          prop: 'dhTc'
         }, {
           lbl: '老客户单价',
           prop: 'oldPrice'
         }, {
           lbl: '老客户销量',
           prop: 'oldWeight'
+        }, {
+          lbl: '老客户提成',
+          prop: 'oldTc'
         }, {
           lbl: '提成合计',
           prop: 'tcje'
