@@ -65,9 +65,6 @@ export default {
           prop: 'goodsFlag',
           class: 'text-green'
         }, {
-          lbl: '预计未提',
-          prop: 'preUndelivery'
-        }, {
           lbl: '超期吨位(吨)',
           prop: 'realUndelivery'
         }, {

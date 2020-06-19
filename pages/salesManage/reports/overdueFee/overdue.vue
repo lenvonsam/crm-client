@@ -77,9 +77,6 @@ export default {
           lbl: '提货状态',
           prop: 'goodsFlag'
         }, {
-          lbl: '预计未提',
-          prop: 'preUndelivery'
-        }, {
           lbl: '超期吨位(吨)',
           prop: 'realUndelivery'
         }, {
@@ -113,10 +110,6 @@ export default {
           }, {
             lbl: '待收款',
             type: 'paying'
-          }, {
-            lbl: '删除',
-            type: 'delete',
-            class: 'text-red'
           }]
         }]
       },
@@ -129,16 +122,30 @@ export default {
       rowPayingBillcode: '',
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.$nextTick(() => {
       this.searchFormItems[0][2].val = '全部'
       this.searchFormItems[1][1].val = ''
-      this.searchFormItems[1][3].val = '全部'     
+      this.searchFormItems[1][3].val = '全部'
+      if (this.currentUser.id == 1) {
+        this.tableValue.tableHead[12].actionBtns = [{
+          lbl: '免收',
+          type: 'viodFee',
+          class: 'text-orange'
+        }, {
+          lbl: '待收款',
+          type: 'paying'
+        }, {
+          lbl: '删除',
+          type: 'delete',
+          class: 'text-red'
+        }]
+      }
     })
   },
   mounted () {
-      this.loadData()
-      console.log('searchFormItem:>>', this.searchFormItems)    
+    this.loadData()
+    console.log('searchFormItem:>>', this.searchFormItems)
   },
   computed: {
     ...mapState({
@@ -149,7 +156,7 @@ export default {
         [
           { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
           { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
-          { label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+          {            label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
             list: [
               { label: '全部', value: '全部' },
               { label: 'ERP', value: 'ERP' },
@@ -161,8 +168,8 @@ export default {
         [
           { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
           { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
-          { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: ''},
-          { label: '提货状态', model: 'goodsFlag', type: 'select',
+          { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: '' },
+          {            label: '提货状态', model: 'goodsFlag', type: 'select',
             list: [
               { label: '全部', value: '全部' },
               { label: '已完成', value: '已完成' },
@@ -278,7 +285,7 @@ export default {
       console.log('入参========>' + JSON.stringify(this.paramsObj))
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
-          { url:'overdue/overdueReport', params: this.paramsObj })
+          { url: 'overdue/overdueReport', params: this.paramsObj })
         if (data.returnCode === 0) {
           this.totalCount = data.total
           this.tableValue.tableData = data.list
