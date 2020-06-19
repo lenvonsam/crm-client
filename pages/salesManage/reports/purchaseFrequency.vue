@@ -2,10 +2,10 @@
 .content
   breadcrumb(:breadItems="breadItems")
   search-form.mt-15(:searchFormItems="searchFormItems", @search="searchForm")
-  basic-table.mt-15(:tableValue="tableValue", :currentPage="currentPage", 
+  basic-table.mt-15(:tableValue.sync="tableValue", :currentPage="currentPage", 
   :pageSize="pageSize", :total="total", :loading="loading", 
-  @tableRowEdit="areaEvalRowEdit",@tableRowSave="areaEvalRowSave", 
-  @tableRowCancel="rowCancel", @tableRowDefault="rowDefault",@pageChange="tableChange")  
+  @tableRowSave="rowSave", 
+  @pageChange="tableChange")  
 </template>
 
 <script>
@@ -49,23 +49,24 @@ export default {
         }, {
           lbl: '电话',
           prop: 'phone',
-          width: '150px'
+          width: '120px'
         }, {
           lbl: '未交易天数',
           prop: 'unDealDays',
+          width: '100px'
         }, {
           lbl: '平均购买周期',
           prop: 'period',
-          type: 'edit',
           width: '110px',
-          editType: 'text'
         }, {
           lbl: '超期天数',
           prop: 'overDays',
         }, {
           lbl: '联系反馈',
           prop: 'feedBack',
-          width: '220px'
+          width: '220px',
+          type: 'edit',
+          editType: 'text'
         }, {
           type: 'action',
           fixed: 'right',
@@ -76,15 +77,18 @@ export default {
           }]
         }]
       },
-      currentPage: 0,
+      currentPage: 1,
       total: 0,
       loading: true,
-      queryObject: {}
+      queryObject: {},
+      originData: [],
+      isEdit: false,
+      editObj: {}
     }
   },
   beforeMount () {
     this.queryObject = {
-      currentPage: this.currentPage,
+      currentPage: this.currentPage - 1,
       pageSize: this.pageSize,
       uid: this.currentUser.id
     }
@@ -100,28 +104,19 @@ export default {
     searchForm (paramsObj) {
       console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
-      this.currentPage1 = 1
-      this.queryObject.currentPage = this.currentPage1 - 1
+      this.currentPage = 1
+      this.queryObject.currentPage = this.currentPage - 1
       Object.keys(paramsObj).map(key => {
-        if (key == 'createAt') {
-          if (paramsObj.createAt !== null) {
-            this.queryObject.startDate = paramsObj.createAt[0]
-            this.queryObject.endDate = paramsObj.createAt[1]
-          } else {
-            delete this.queryObject.startDate
-            delete this.queryObject.endDate
-          }
-        } else {
-          this.queryObject[key] = paramsObj[key].trim()
-        }
+        if (paramsObj[key] && paramsObj[key].toString().trim().length > 0)
+          this.queryObject[key] = paramsObj[key]
       })
       console.log('clientSearchForm_queryObject=====>' + JSON.stringify(this.queryObject))
-      this.loadClientEvalData()
+      this.loadData()
     },
     tableChange (val) {
       this.loading = true
       this.currentPage = val
-      this.queryObject.currentPage = this.currentPage1 - 1
+      this.queryObject.currentPage = this.currentPage - 1
       this.loadData()
     },
     async loadData () {
@@ -131,11 +126,6 @@ export default {
         //console.log('loadClientEvalData_data.list----------' + JSON.stringify(data.list))
         this.loading = false
         if (data.returnCode === 0) {
-          data.list.map(item => {
-            item.mark = (item.mark === '1' ? '潜在' : (item.mark === '2' ? '正式' : '公共'))
-            item.customerPropertyMark = item.customerPropertyMark === '0' ? '长期维护' : '二次开发'
-            item.showUpdate = item.cstmId === 0 ? '未评估' : '已评估'
-          })
           this.tableValue.tableData = data.list
           this.total = data.total
         } else {
@@ -147,6 +137,32 @@ export default {
         this.msgShow(this)
         this.loading = false
       }
+    },
+    rowEdit (obj) {
+      console.log('areaEvalRowEdit(obj)======>' + JSON.stringify(obj))
+      // if (this.isEdit) {
+      //   this.msgShow(this, '请先完成操作')
+      //   return
+      // }
+      let idx = obj.idx
+      this.tableValue.tableData[idx].edit = true
+      this.originData = JSON.parse(JSON.stringify(this.tableValue.tableData))
+      this.editObj = Object.assign({}, this.tableValue.tableData[idx])
+      this.isEdit = true
+    },
+    rowSave (row) {
+      debugger
+      console.log('row save:>>', row)
+      this.isEdit = false
+      let idx = this.tableValue.tableData.indexOf(row)
+      row.edit = false
+      this.tableValue.tableData[idx] = row
+    },
+    rowCancel (row) {
+      this.isEdit = false
+      let idx = this.tableValue.tableData.indexOf(row)
+      this.tableValue.tableData = this.originData
+      this.tableValue.tableData[idx].edit = false
     }
   }
 

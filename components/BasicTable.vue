@@ -64,7 +64,7 @@ div
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
-              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{scope.row.btnLbl ? scope.row.btnLbl : btn.lbl}}
+              el-button(:disabled="rowKey !== '' && btn.type ==='edit'",type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{scope.row.btnLbl ? scope.row.btnLbl : btn.lbl}}
           template(v-else)
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
@@ -99,7 +99,9 @@ export default {
       comboOptions: [],
       acctOptions: [],
       orgOptions: [],
-      isVerify: true
+      isVerify: true,
+      rowKey: '',
+      originRow: {}
     }
   },
   computed: {
@@ -118,10 +120,26 @@ export default {
   watch: {
     'tableValue.tableData': {
       handler (newVal, oldVal) {
-        this.currentData = Object.assign([], newVal)
+        // 判断是否是新增
+        let newArr = newVal.filter(item => item.id == null)
+        let editArr = this.currentData.filter(item => item.edit == true)
+        console.log('newArr length:>>', newArr.length, ';eidtArr:>>', editArr.length)
+        if (newArr.length > 0 && editArr.length > 0) {
+          this.msgShow(this, '请先保存新增')
+          const data = this.tableValue
+          data.tableData = this.currentData
+          this.$emit('update:tableValue', data)
+        } else {
+          this.currentData = Object.assign([], newVal)
+        }
       },
       deep: true
-    }
+    },
+    loading (newVal) {
+      if (newVal) {
+        this.rowKey = ''
+      }
+    },
     // 'tableValue.tableHead': {
     //   handler (newVal, oldVal) {
     //     console.log('origin head:>>', newVal)
@@ -169,7 +187,7 @@ export default {
     spanMethod ({ row, column, rowIndex, columnIndex }) {
       if (this.tableValue.tableName == 'overdue') {
         if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 ||
-           columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
+          columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
           for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
             let element = this.tableValue.OrderIndexArr[i];
             for (let j = 0; j < element.length; j++) {
@@ -285,7 +303,24 @@ export default {
         }
       }
       if (this.isVerify) {
-        this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
+        if (btnType === 'edit') {
+          this.rowKey = row.idx + ''
+          this.originRow = Object.assign({}, row)
+          row.edit = true
+          this.currentData[idx] = row
+        } else {
+          this.rowKey = ''
+        }
+        if (btnType === 'cancel') {
+          this.originRow.edit = false
+          this.currentData[idx] = this.originRow
+        }
+        if (btnType === 'cancel' || btnType === 'edit') {
+          const data = this.tableValue
+          data.tableData = this.currentData
+          this.$emit('update:tableValue', data)
+        }
+        if (!(btnType === 'cancel' || btnType === 'edit')) this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
       }
     },
     handleSelectionChange (rows) {
