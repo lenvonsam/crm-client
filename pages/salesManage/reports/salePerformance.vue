@@ -4,7 +4,7 @@
     .pt-15
       button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
-      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom")
+      search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom", :pickerDisable="pickerDisable")
     .pt-15
       basic-table(:tableValue="tableValue", :currentPage="currentPage", :loading="loading", :pageSize="pageSize", :total="totalCount")
 </template>
@@ -32,6 +32,11 @@ export default {
       pageSize: 100,
       ny: '',
       loading: true,
+      pickerDisable: {
+        disabledDate (time) {
+          return time.getTime() > Date.now() - 8.64e7;
+        }
+      },
       tableValue: {
         height: 640,
         page: true,
