@@ -4,6 +4,10 @@
   .pt-20
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="145px", label-position="right")
       el-row.pr-10(type="flex")
+        el-col(:span="16")
+          el-form-item(label="公司名称：", prop="compName")
+            el-input(v-model="form.compName", :disabled="formDisabled")
+      el-row.pr-10(type="flex")
         el-col(:span="8")
           el-form-item(label="业务部门：", prop="dptName")
             el-input(v-model="form.dptName", :disabled="formDisabled")
@@ -56,11 +60,16 @@
             el-input(v-model="form.storageCapacity" type="number" @change="storageCapacityInput" placeholder="单位‘吨’")
         el-col(:span="16")
           el-form-item.is-required(label="主营业务：", prop="mainBusi")
-            el-input(v-model="form.mainBusi" maxlength="50")
+            el-cascader.full-width(v-model="form.mainBusi", :show-all-levels="false", placeholder="请选择主营业务", :props="propsRule", :options="mainBusiList", @change="getMainBusi")
+            //- el-select.full-width(v-model="form.mainBusi" filterable placeholder="" @change="getMainBusi"){ multiple: true, expandTrigger: 'hover' }
+            //-   el-option(v-for="item,index in busiScopeList", :key="index", :label="item.label", :value="item.value")
+            //-   el-option(v-if="busiScopeSonList" v-for="item,index in busiScopeSonList", :key="index", :label="item.label", :value="item.value")
       el-row.pr-10(type="flex", justify="space-between")
         el-col(:span="24")
           el-form-item.is-required(label="经营区域覆盖：", prop="busiScope")
-            el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
+            el-select.full-width(v-model="form.busiScope", filterable, remote, :remote-method="selectRemote", placeholder="请输入经营区域", multiple, @change="getBusiScope")
+              el-option(v-for="item in busiScopeList", :key="item.id", :label="item.name", :value="item.name")       
+            //- el-input(v-model="form.busiScope" maxlength="50", placeholder="请按地级市或县级市进行填写，填写内容用空格隔开")
   el-row(type="flex", justify="space-between")
     el-col.mt-10(:span="22")
       breadcrumb(:breadItems="breadItemList[1]")
@@ -99,10 +108,6 @@
         el-col(:span="7")
           el-form-item.is-required(label="全年需求重量评估：", prop="yearSaleWeight")
             el-input(v-model="form.yearSaleWeight" type="number" @change="yearSaleWeightInput" placeholder="单位‘吨’")
-        el-col(:span="16")
-          el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
-            el-select.full-width(v-model="selectGoodsNamesList" placeholder="" multiple filterable @change="getGoodsNameValue")
-              el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
       el-row.pr-10(:gutter="30")
         el-col(:span="7")
           el-form-item.is-required(label="我司供应占比：", prop="yearPercent")
@@ -122,6 +127,20 @@
             el-button(@click.prevent="deleteBtn(index)") 删除
       el-row.pr-10(type="flex" justify="end" v-if="showAddMoreBtn")
         el-button(type="primary", plain, @click="addMore") 新增
+      el-row.pr-10(type="flex", justify="space-between")
+        el-col(:span="16")
+          el-form-item.is-required(label="主要购买物资：")
+            el-input(v-model="purchaseGoods", :disabled="formDisabled")
+      el-row.pr-10(type="flex", justify="space-between")
+        el-col(:span="12")
+          el-form-item.is-required(label="主要需求物资品名：", prop="goodsNames")
+            el-select.full-width(v-model="selectGoodsNamesList" placeholder="该企业有需求且未在我司采购的物资" multiple @change="getGoodsNameValue")
+              el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
+        el-col(:span="12")
+          el-form-item.is-required(label="主要需求物资品名：", prop="extraGoodsRequirement")
+            el-input(v-model="form.extraGoodsRequirement", placeholder="该企业有需求且我司没有的物资(空格隔开)")
+            //- el-select.full-width(v-model="mianNeeds" placeholder="" multiple @change="getGoodsNameValue")
+            //-   el-option(v-for="item in goodsNamesList", :key="item.id", :label="item.name", :value="item.name")
   breadcrumb(:breadItems="breadItemList[3]")
   .pt-20
     el-form(ref="form", show-message, :model="form", :rules="rules", label-width="160px", label-position="right")
@@ -142,6 +161,7 @@
       el-button(@click="onSubmit('cancel')") 取消
 </template>
 <script>
+import areaJson from '@/components/AreaJson.js'
 import breadcrumb from '@/components/Breadcrumb.vue'
 import { mapState } from 'vuex'
 export default {
@@ -157,6 +177,8 @@ export default {
   },
   data () {
     return {
+      propsRule: { multiple: true, expandTrigger: 'hover' },
+      busiScopeList: [],
       breadItemList: [['基本信息'], ['历史交易数据'], ['2020需求评估数据'], ['物流评估数据']],
       formDisabled: true,
       chooseDisabled: false,
@@ -170,10 +192,11 @@ export default {
         cstmPropertyIds: '',
         hasStorage: 0,
         storageCapacity: '',
-        mainBusi: '',
-        busiScope: '',
+        mainBusi: [],
+        busiScope: [],
         yearSaleWeight: '',
         yearPercent: 0,
+        extraGoodsRequirement: '',
         goodsNames: '',
         mainDeliveryWay: '',
         deliveryName: '',
@@ -181,6 +204,7 @@ export default {
         dataStr: []
       },
       form: {
+        compName: '',
         dptName: '',
         employeeName: '',
         mark: '',
@@ -195,10 +219,11 @@ export default {
         hasStorageShow: '',
         hasStorage: '',
         storageCapacity: '',
-        mainBusi: '',
-        busiScope: '',
+        mainBusi: [],
+        busiScope: [],
         yearSaleWeight: 0,
         yearPercent: 0,
+        extraGoodsRequirement: '',
         goodsNames: '',
         mainDeliveryWay: '',
         deliveryName: '',
@@ -239,9 +264,6 @@ export default {
         storageCapacity: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ],
-        mainBusi: [
-          { required: true, message: '请输入内容', trigger: 'blur' },
-        ],
         yearSaleWeight: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ],
@@ -254,7 +276,9 @@ export default {
         deliveryPrefer: [
           { required: true, message: '请输入内容', trigger: 'blur' },
         ]
-      }
+      },
+      busiScopeSonList: [],
+      purchaseGoods: '',
     }
   },
   computed: {
@@ -265,6 +289,7 @@ export default {
       mainDeliveryWayList: state => state.mainDeliveryWayList, // 主要运力方式
       deliveryPreferList1: state => state.deliveryPreferList1, // 物流偏好
       deliveryPreferList2: state => state.deliveryPreferList2, // 物流偏好
+      mainBusiList: state => state.mainBusiList, // 主营业务
     })
   },
   created () { },
@@ -282,8 +307,21 @@ export default {
       // 数据格式化处理
       if (newVal.obj) {
         this.form = Object.assign(this.form, newVal.obj)
-        this.form.firstLadTime = newVal.firstLadTime
-        this.form.firstBillTime = newVal.firstBillTime
+        if(newVal.firstBillTime){
+          this.form.firstBillTime = newVal.firstBillTime.split(' ')[0]
+        }else{
+          this.form.firstBillTime = '--'
+        }
+        if(newVal.firstLadTime){
+          this.form.firstLadTime = newVal.firstLadTime.split(' ')[0]
+        }else{
+          this.form.firstLadTime = '--'
+        }
+        if (newVal.purchaseGoods == "undefined" || newVal.purchaseGoods == null || newVal.purchaseGoods.trim() == "") {
+          this.purchaseGoods = '--'
+        } else {
+          this.purchaseGoods = newVal.purchaseGoods
+        }
         if (newVal.dataList) {
           this.form.dataStr = newVal.dataList
           this.i = newVal.dataList.length
@@ -319,6 +357,17 @@ export default {
             this.showAddMoreBtn = true
           }
         }
+        if(newVal.obj.mainBusi){
+          if(newVal.obj.mainBusi.trim() != ''){
+            this.form.mainBusi = JSON.parse(newVal.obj.mainBusi)
+          }          
+        }
+        if(newVal.obj.busiScope){
+          if(newVal.obj.busiScope.trim() != ''){
+            this.form.busiScope = JSON.parse(newVal.obj.busiScope)
+          }
+        }
+        this.form.extraGoodsRequirement = newVal.obj.extraGoodsRequirement
         this.form.customerPropertyMark = this.form.customerPropertyMark === '0' ? '长期维护' : '二次开发'
         if (newVal.obj.cstmPropertyIds) { //客户性质转为数组类型
           this.selectCstmPropertyIdsList = newVal.obj.cstmPropertyIds.split(',')
@@ -484,6 +533,16 @@ export default {
         this.postForm.hasStorage = 0
       }
     },
+    // 获取主营业务
+    getMainBusi (val) {
+      this.form.mainBusi = []
+      console.log(JSON.stringify(val))
+      this.form.mainBusi = val
+    },
+    getBusiScope (val) {
+      console.log(JSON.stringify(val))
+      this.form.busiScope = val
+    },
     // 根据我司占比数量判断是否显示其他供应商
     getOtherProvider (label) {
       let dl = 0
@@ -590,7 +649,7 @@ export default {
           this.msgShow(this, '请选择流失原因！')
           return false
         }
-      }else{
+      } else {
         delete this.postForm.lossReason
         delete this.postForm.reason
       }
@@ -611,15 +670,17 @@ export default {
       } else {
         delete this.postForm.areaName
       }
-      if (this.form.mainBusi != 'undefined' && this.form.mainBusi != null && this.form.mainBusi.trim() != '') {
-        this.postForm.mainBusi = this.form.mainBusi
-      } else {
-        delete this.postForm.mainBusi
+      if(this.form.mainBusi &&this.form.mainBusi.length > 0){
+        this.postForm.mainBusi = JSON.stringify(this.form.mainBusi)
+      }else{
+        this.msgShow(this, '请选择主营业务！')
+        return false
       }
-      if (this.form.busiScope != 'undefined' && this.form.busiScope != null && this.form.busiScope.trim() != '') {
-        this.postForm.busiScope = this.form.busiScope
-      } else {
-        delete this.postForm.busiScope
+      if(this.form.busiScope.length > 0){
+        this.postForm.busiScope = JSON.stringify(this.form.busiScope)
+      }else{
+        this.msgShow(this, '请选择经营区域！')
+        return false
       }
       if (this.form.yearSaleWeight) {
         this.postForm.yearSaleWeight = parseInt(this.form.yearSaleWeight)
@@ -644,6 +705,12 @@ export default {
         }
       } else {
         delete this.postForm.yearPercent
+      }
+      if (this.form.extraGoodsRequirement != 'undefined' && this.form.extraGoodsRequirement != null && this.form.extraGoodsRequirement.trim() != '') {
+        this.postForm.extraGoodsRequirement = this.form.extraGoodsRequirement
+      } else {
+        this.msgShow(this, '请输入主要需求物资品名！')
+        return false
       }
       if (this.form.mainDeliveryWay) {
         this.postForm.mainDeliveryWay = this.form.mainDeliveryWay
@@ -684,11 +751,6 @@ export default {
       } else {
         delete this.postForm.deliveryPrefer
       }
-      // if (this.form.dataStr.length != 0) {
-      //   this.postForm.dataStr = JSON.stringify(this.form.dataStr)
-      // } else {
-      //   delete this.postForm.dataStr
-      // }
       this.postForm.dataStr = JSON.stringify(this.form.dataStr)
       if (this.selectCstmPropertyIdsList.length === 0) {
         this.msgShow(this, '请选择客户性质！');
@@ -770,6 +832,22 @@ export default {
         this.cstmPropertyIdsList = data.list
       }
       console.log(JSON.stringify(data))
+    },
+    async getCity (name) {
+      let params = {
+        currentPage: 0,
+        pageSize: 20,
+        name: name
+      }
+      let { data } = await this.apiStreamPost('/proxy/common/post',
+        { url: 'setting/address/city/list', params: params })
+      console.log(data)
+      if (data.returnCode === 0) {
+        this.busiScopeList = data.list
+      }
+    },
+    selectRemote (query) {
+      this.getCity(query)
     }
   }
 }

@@ -73,6 +73,7 @@ div
       el-table-column(v-else,:label="head.lbl", :width="head.width ? head.width : 'auto'", :min-width="head.minWidth? head.minWidth : 'auto'", :prop="head.prop", :sortable="head.sort ? head.sort : false", :align="head.align ? head.align : 'left'")
         template(slot-scope="scope") 
           .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
+          //- (:class="scope.row.goodsFlag == '已完成' ? 'text-green' : 'text-red'")
             //- el-table-column(v-if="head.type === 'multistage'", v-for="(child, idx) in head.list", :key="idx", :label="child.lbl", :width="child.width ? child.width : 'auto'", :min-width="child.minWidth? child.minWidth : 'auto'", :prop="child.prop", :sortable="child.sort ? child.sort : false", :align="child.align ? child.align : 'left'")      
               .ellps-row.full-width {{scope.row[head.prop] | rowData(head.prop)}}
             el-badge.mark(value="主", v-if="scope.row.mainStatus == 1 && head.prop == 'name'")
@@ -118,7 +119,6 @@ export default {
     'tableValue.tableData': {
       handler (newVal, oldVal) {
         this.currentData = Object.assign([], newVal)
-        console.log('origin:>>', newVal)
       },
       deep: true
     }
@@ -167,20 +167,69 @@ export default {
   },
   methods: {
     spanMethod ({ row, column, rowIndex, columnIndex }) {
-      if (!this.tableValue.spanMethod || !this.tableValue.tableHead[columnIndex].colspan) return { rowspan: 1, colspan: 1 }
-      if (columnIndex === 0) {
-        if (row.colspan) {
-          return {
-            rowspan: row.colspan,
-            colspan: 1
-          };
-        } else {
-          return {
-            rowspan: 0,
-            colspan: 0
-          };
+      if (this.tableValue.tableName == 'overdue') {
+        if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 ||
+           columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
+          for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
+            let element = this.tableValue.OrderIndexArr[i];
+            for (let j = 0; j < element.length; j++) {
+              let item = element[j];
+              if (rowIndex === item) {
+                if (j === 0) {
+                  return {
+                    rowspan: element.length,
+                    colspan: 1
+                  };
+                } else if (j !== 0) {
+                  return {
+                    rowspan: 0,
+                    colspan: 0
+                  };
+                }
+              }
+            }
+          }
+        }
+      } else {
+        if (!this.tableValue.spanMethod || !this.tableValue.tableHead[columnIndex].colspan) return { rowspan: 1, colspan: 1 }
+        if (columnIndex === 0) {
+          if (row.colspan) {
+            return {
+              rowspan: row.colspan,
+              colspan: 1
+            };
+          } else {
+            return {
+              rowspan: 0,
+              colspan: 0
+            };
+          }
         }
       }
+
+
+      //因为需求是前两列中有相同的就合并，所以需要再次判断出来第一列中哪些行需要合并；
+      // if (columnIndex === 2) {
+      //   for (let j = 0; j < this.tableValue.provinceArr.length; j++) {
+      //     let element = this.tableValue.provinceArr[j];
+      //     for (let k = 0; k < element.length; k++) {
+      //       let item = element[k];
+      //       if (rowIndex === item) {
+      //         if (k === 0) {
+      //           return {
+      //             rowspan: element.length,
+      //             colspan: 1
+      //           };
+      //         } else if (k !== 0) {
+      //           return {
+      //             rowspan: 0,
+      //             colspan: 0
+      //           };
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     },
     tableRowClassName ({ row, rowIndex }) {
       if (this.tableValue.rowClassName) {
@@ -445,4 +494,10 @@ export default {
       cursor pointer
 /deep/.el-table__row.current-row
   font-weight bold
+.text-orange
+  color $color-orange
+.text-red
+  color $color-red
+.text-green
+  color $color-green
 </style>

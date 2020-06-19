@@ -1,12 +1,24 @@
 let load = null
+let msgInstance = null
 module.exports = {
-  msgShow (context, text = '网络异常', type = 'error') {
-    context.$message({
+  msgShow(context, text = '网络异常', type = 'error', duration = 3000) {
+    if (msgInstance) return
+    msgInstance = context.$message({
       message: text,
-      type
+      type,
+      duration
     })
+    setTimeout(function () {
+      msgInstance = null
+     }, duration - 100)
   },
-  confirmDialog(context, text, manConfig = {}, type = 'warning', title = '提示') {
+  confirmDialog(
+    context,
+    text,
+    manConfig = {},
+    type = 'warning',
+    title = '提示'
+  ) {
     let defaultConfig = {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -17,7 +29,7 @@ module.exports = {
     }
     return context.$confirm(text, title, defaultConfig)
   },
-  pageShow (context, loadText = '加载中...') {
+  pageShow(context, loadText = '加载中...') {
     if (load) this.pageHide()
     load = context.$loading({
       lock: true,
@@ -26,7 +38,7 @@ module.exports = {
       background: 'rgba(0,0,0,.7)'
     })
   },
-  pageHide () {
+  pageHide() {
     if (load) {
       load.close()
       load = null

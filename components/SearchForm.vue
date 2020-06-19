@@ -10,7 +10,7 @@
               label {{item.label}}：
             .col
               el-date-picker.full-width(v-model="item.val", type="date",v-if="item.type == 'date'", :placeholder="item.placeholder",size="small", value-format="yyyy-MM-dd")
-              el-date-picker.full-width(v-model="item.val", type="month", v-else-if="item.type === 'month'", :placeholder="item.placeholder", size="small", value-format="yyyy-MM")
+              el-date-picker.full-width(v-model="item.val", type="month", v-else-if="item.type === 'month'", :placeholder="item.placeholder", size="small", value-format="yyyy-MM", :picker-options="pickerDisable")
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="daterange", v-else-if="item.type == 'timeLimit'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd")
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="datetimerange", v-else-if="item.type == 'datetimerange'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd HH:mm")
               el-autocomplete.full-width(v-model="item.val", v-else-if="item.type == 'autocomplete'", @focus="selectIdx(index, idx)", :fetch-suggestions="querySearchAsync", :placeholder="item.placeholder", size="small")
@@ -33,9 +33,9 @@
                   .col
                     el-input(v-model="item.max", :placeholder="item.maxPlaceholder", size="small")
               el-input.full-width(v-model="item.val", v-else, :placeholder="item.placeholder", size="small")
-          .row.mb-15.flex-center(v-if="item.model == 'showUpdate'",style="padding-left: 30px;")
-            el-col(:span="8")
-              el-checkbox(v-model="checked" @change="getCheckboxVal") 仅展示未评估的公司
+          //- .row.mb-15.flex-center(v-if="item.model == 'showUpdate'",style="padding-left: 30px;")
+          //-   el-col(:span="8")
+          //-     el-checkbox(v-model="checked" @change="getCheckboxVal") 仅展示未评估的公司
 
     .text-center(style="flex: 0 0 200px")
       el-button(size="small", type="primary", @click="search('submit')") 查询
@@ -93,6 +93,10 @@ export default {
     className: {
       type: String,
       default: 'col'
+    },
+    pickerDisable: {
+      type: Object,
+      default: () => ({})
     }
   },
   methods: {
@@ -108,7 +112,7 @@ export default {
         this.$emit('search', searchParm)
       }
     },
-    getCheckboxVal(val){
+    getCheckboxVal (val) {
       console.log('getCheckboxVal(val)=====>' + val)
       this.checked = val
       this.$emit('changeCheckVal', val)
