@@ -2,8 +2,8 @@
 .content
   breadcrumb(:breadItems="breadItems")
   search-form.mt-15(:searchFormItems="searchFormItems", @search="searchForm")
-  basic-table.mt-15(:tableValue="tableValue2", :currentPage="currentPage2", 
-  :pageSize="pageSize", :total="areaTotalCount", :loading="loading", 
+  basic-table.mt-15(:tableValue="tableValue", :currentPage="currentPage", 
+  :pageSize="pageSize", :total="total", :loading="loading", 
   @tableRowEdit="areaEvalRowEdit",@tableRowSave="areaEvalRowSave", 
   @tableRowCancel="rowCancel", @tableRowDefault="rowDefault",@pageChange="tableChange")  
 </template>
@@ -39,35 +39,33 @@ export default {
           // linkUrl: '/customManager/customerEvalution/detail',
           minWidth: '340px'
         }, {
-          lbl: '主联系人',
-          prop: 'linkerName',
+          lbl: '业务员',
+          prop: 'employeeName',
           width: '150px'
         }, {
           lbl: '业务部门',
           prop: 'dptName',
           width: '150px'
         }, {
-          lbl: '业务员',
-          prop: 'employeeName',
+          lbl: '电话',
+          prop: 'phone',
           width: '150px'
         }, {
-          lbl: '归属性质',
-          prop: 'customerPropertyMark',
-          width: '150px'
+          lbl: '未交易天数',
+          prop: 'unDealDays',
         }, {
-          lbl: '客户状态',
-          prop: 'mark',
-          width: '150px'
-        }, {
-          lbl: '评估状态',
-          prop: 'showUpdate',
-          width: '150px',
+          lbl: '平均购买周期',
+          prop: 'period',
           type: 'edit',
+          width: '110px',
           editType: 'text'
         }, {
-          lbl: '抬头创建日期',
-          prop: 'createAt',
-          width: '200px'
+          lbl: '超期天数',
+          prop: 'overDays',
+        }, {
+          lbl: '联系反馈',
+          prop: 'feedBack',
+          width: '220px'
         }, {
           type: 'action',
           fixed: 'right',
@@ -78,7 +76,7 @@ export default {
           }]
         }]
       },
-      currentPage: 1,
+      currentPage: 0,
       total: 0,
       loading: true,
       queryObject: {}
@@ -129,7 +127,7 @@ export default {
     async loadData () {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
-          { url: 'customerManage/evaluation/list', params: this.queryObject })
+          { url: 'salesManage/customerPurchaseFrequency', params: this.queryObject })
         //console.log('loadClientEvalData_data.list----------' + JSON.stringify(data.list))
         this.loading = false
         if (data.returnCode === 0) {
