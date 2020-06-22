@@ -987,14 +987,14 @@ export default {
           title: '期货管理',
           url: '/salesManage/futures'
         }, {
+          title: '销售绩效提成表',
+          url: '/salesManage/reports/salePerformance'
+        }, {
           title: '业务员提成汇总表',
           url: '/salesManage/reports/empCommSummary'
         }, {
           title: '销售专员提成汇总表',
           url: '/salesManage/reports/saleCommSummary'
-        }, {
-          title: '销售绩效提成表',
-          url: '/salesManage/reports/salePerformance'
         }, {
           title: '直发调货明细表',
           url: '/salesManage/reports/deliveryDetail'

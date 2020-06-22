@@ -168,8 +168,8 @@ export default {
   methods: {
     spanMethod ({ row, column, rowIndex, columnIndex }) {
       if (this.tableValue.tableName == 'overdue') {
-        if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 ||
-           columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
+        if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 6 ||
+           columnIndex === 7 || columnIndex === 10 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
           for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
             let element = this.tableValue.OrderIndexArr[i];
             for (let j = 0; j < element.length; j++) {
@@ -190,7 +190,30 @@ export default {
             }
           }
         }
-      } else {
+      } else if (this.tableValue.tableName == 'overdueHistory') {
+        if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 6 ||
+           columnIndex === 7 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
+          for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
+            let element = this.tableValue.OrderIndexArr[i];
+            for (let j = 0; j < element.length; j++) {
+              let item = element[j];
+              if (rowIndex === item) {
+                if (j === 0) {
+                  return {
+                    rowspan: element.length,
+                    colspan: 1
+                  };
+                } else if (j !== 0) {
+                  return {
+                    rowspan: 0,
+                    colspan: 0
+                  };
+                }
+              }
+            }
+          }
+        }
+      }else {
         if (!this.tableValue.spanMethod || !this.tableValue.tableHead[columnIndex].colspan) return { rowspan: 1, colspan: 1 }
         if (columnIndex === 0) {
           if (row.colspan) {

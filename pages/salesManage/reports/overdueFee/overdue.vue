@@ -124,9 +124,9 @@ export default {
   },
   beforeMount () {
     this.$nextTick(() => {
-      this.searchFormItems[0][2].val = '全部'
+      this.searchFormItems[0][2].val = ''
       this.searchFormItems[1][1].val = ''
-      this.searchFormItems[1][3].val = '全部'
+      this.searchFormItems[1][3].val = ''
       if (this.currentUser.id == 1) {
         this.tableValue.tableHead[12].actionBtns = [{
           lbl: '免收',
@@ -158,10 +158,10 @@ export default {
           { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
           {            label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
             list: [
-              { label: '全部', value: '全部' },
-              { label: 'ERP', value: 'ERP' },
-              { label: '型云', value: '型云' }
-            ], val: '全部'
+              { label: '全部', value: '' },
+              { label: 'ERP', value: 0 },
+              { label: '型云', value: 1 }
+            ], val: ''
           },
           { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
         ],
@@ -171,10 +171,10 @@ export default {
           { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: '' },
           {            label: '提货状态', model: 'goodsFlag', type: 'select',
             list: [
-              { label: '全部', value: '全部' },
-              { label: '已完成', value: '已完成' },
-              { label: '未完成', value: '未完成' }
-            ], val: '全部'
+              { label: '全部', value: '' },
+              { label: '未完成', value: 0 },
+              { label: '已完成', value: 1 }
+            ], val: ''
           }
         ]
       ]
@@ -184,20 +184,6 @@ export default {
   methods: {
     searchForm (obj) {
       this.paramsObj = Object.assign({}, obj)
-      if (obj.source == 'ERP') {
-        this.paramsObj.source = 0
-      } else if (obj.source == '型云') {
-        this.paramsObj.source = 1
-      } else {
-        this.paramsObj.source = ''
-      }
-      if (obj.goodsFlag == '未完成') {
-        this.paramsObj.goodsFlag = 0
-      } else if (obj.goodsFlag == '已完成') {
-        this.paramsObj.goodsFlag = 1
-      } else {
-        this.paramsObj.goodsFlag = ''
-      }
       this.paramsObj.currentPage = 0
       this.paramsObj.pageSize = 20
       this.loadData()
@@ -229,7 +215,7 @@ export default {
         this.form.money = ''
         this.form.remark = ''
       } else {
-        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
+        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d{2})|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
           if (this.form.remark.length > 50) {
             this.msgShow(this, '备注最多输入50个字')
           } else {
