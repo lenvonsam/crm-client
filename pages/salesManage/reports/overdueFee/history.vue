@@ -36,7 +36,7 @@ export default {
         dealTypeStr: ''
       },
       tableValue: {
-        tableName: 'overdue',
+        tableName: 'overdueHistory',
         height: 640,
         numShow: false,
         hasCbx: false,
@@ -74,6 +74,10 @@ export default {
         }, {
           lbl: '提货截止时间',
           prop: 'endDate',
+          width: '130px'
+        }, {
+          lbl: '操作时间',
+          prop: 'operateTime',
           width: '130px'
         }, {
           lbl: '超期时间(天)',

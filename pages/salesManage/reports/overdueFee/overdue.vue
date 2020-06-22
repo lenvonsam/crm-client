@@ -229,7 +229,7 @@ export default {
         this.form.money = ''
         this.form.remark = ''
       } else {
-        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
+        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d{2})|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
           if (this.form.remark.length > 50) {
             this.msgShow(this, '备注最多输入50个字')
           } else {

@@ -151,7 +151,7 @@
               el-option(v-for="item in mainDeliveryWayList", :key="item.label", :label="item.label", :value="item.value")
         el-col(:span="8" :hidden="!showDeliveryName")
           el-form-item.is-required(label="三方物流单位名称或组织者，司机姓名：", prop="deliveryName")
-            el-input(v-model="form.deliveryName") 
+            el-input(v-model="form.deliveryName" maxlength="50") 
         el-col(:span="8" :hidden="!showDeliveryPrefer")
           el-form-item.is-required(label="主要物流偏好：", prop="deliveryPrefer")
             el-select.full-width(v-model="form.deliveryPrefer" filterable placeholder="")
@@ -307,14 +307,14 @@ export default {
       // 数据格式化处理
       if (newVal.obj) {
         this.form = Object.assign(this.form, newVal.obj)
-        if(newVal.firstBillTime){
+        if (newVal.firstBillTime) {
           this.form.firstBillTime = newVal.firstBillTime.split(' ')[0]
-        }else{
+        } else {
           this.form.firstBillTime = '--'
         }
-        if(newVal.firstLadTime){
+        if (newVal.firstLadTime) {
           this.form.firstLadTime = newVal.firstLadTime.split(' ')[0]
-        }else{
+        } else {
           this.form.firstLadTime = '--'
         }
         if (newVal.purchaseGoods == "undefined" || newVal.purchaseGoods == null || newVal.purchaseGoods.trim() == "") {
@@ -357,14 +357,16 @@ export default {
             this.showAddMoreBtn = true
           }
         }
-        if(newVal.obj.mainBusi){
-          if(newVal.obj.mainBusi.trim() != ''){
+        if (newVal.obj.mainBusi) {
+          if (newVal.obj.mainBusi.trim() != '') {
             this.form.mainBusi = JSON.parse(newVal.obj.mainBusi)
-          }          
+          }
         }
-        if(newVal.obj.busiScope){
-          if(newVal.obj.busiScope.trim() != ''){
+        if (newVal.obj.busiScope) {
+          if (newVal.obj.busiScope.trim() != '') {
             this.form.busiScope = JSON.parse(newVal.obj.busiScope)
+          } else {
+            this.form.busiScope = null
           }
         }
         this.form.extraGoodsRequirement = newVal.obj.extraGoodsRequirement
@@ -536,10 +538,16 @@ export default {
     // 获取主营业务
     getMainBusi (val) {
       this.form.mainBusi = []
-      console.log(JSON.stringify(val))
-      this.form.mainBusi = val
+      if (val.length > 5) {
+        this.msgShow(this, '主营业务最多选择五项')
+        this.form.mainBusi = val.slice(0,5)
+      } else {
+        console.log(JSON.stringify(val))
+        this.form.mainBusi = val
+      }
     },
     getBusiScope (val) {
+      this.form.busiScope = []
       console.log(JSON.stringify(val))
       this.form.busiScope = val
     },
@@ -670,15 +678,15 @@ export default {
       } else {
         delete this.postForm.areaName
       }
-      if(this.form.mainBusi &&this.form.mainBusi.length > 0){
+      if (this.form.mainBusi && this.form.mainBusi.length > 0) {
         this.postForm.mainBusi = JSON.stringify(this.form.mainBusi)
-      }else{
+      } else {
         this.msgShow(this, '请选择主营业务！')
         return false
       }
-      if(this.form.busiScope.length > 0){
+      if (this.form.busiScope && this.form.busiScope.length > 0) {
         this.postForm.busiScope = JSON.stringify(this.form.busiScope)
-      }else{
+      } else {
         this.msgShow(this, '请选择经营区域！')
         return false
       }
