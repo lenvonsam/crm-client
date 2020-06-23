@@ -2,9 +2,13 @@
 .content
   breadcrumb(:breadItems="breadItems")
   search-form.mt-15(:searchFormItems="searchFormItems", @search="searchForm")
-  basic-table.mt-15(:tableValue.sync="tableValue", :currentPage="currentPage", rowEdit,
-  :pageSize="pageSize", :total="total", :loading="loading", 
-  @tableRowSave="rowSave", 
+  basic-table.mt-15(:tableValue.sync="tableValue",
+  :currentPage="currentPage",
+  rowEdit,
+  :pageSize="pageSize",
+  :total="total",
+  :loading="loading",
+  @tableRowSave="rowSave",
   @pageChange="tableChange")  
 </template>
 
@@ -67,23 +71,12 @@ export default {
           width: '220px',
           type: 'edit',
           editType: 'text'
-        }, {
-          type: 'action',
-          fixed: 'right',
-          width: '100px',
-          actionBtns: [{
-            lbl: '编辑',
-            type: 'edit'
-          }]
         }]
       },
       currentPage: 1,
       total: 0,
       loading: true,
-      queryObject: {},
-      originData: [],
-      isEdit: false,
-      editObj: {}
+      queryObject: {}
     }
   },
   beforeMount () {
@@ -91,6 +84,17 @@ export default {
       currentPage: this.currentPage - 1,
       pageSize: this.pageSize,
       uid: this.currentUser.id
+    }
+    if (this.currentUser.dataLevel === '业务员' || this.currentUser.id === 1) {
+      this.tableValue.tableHead.push({
+        type: 'action',
+        fixed: 'right',
+        width: '100px',
+        actionBtns: [{
+          lbl: '编辑',
+          type: 'edit'
+        }]
+      })
     }
     this.loadData()
   },
@@ -105,7 +109,11 @@ export default {
       console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
       this.currentPage = 1
-      this.queryObject.currentPage = this.currentPage - 1
+      this.queryObject = {
+        currentPage: this.currentPage - 1,
+        pageSize: this.pageSize,
+        uid: this.currentUser.id
+      }
       Object.keys(paramsObj).map(key => {
         if (paramsObj[key] && paramsObj[key].toString().trim().length > 0)
           this.queryObject[key] = paramsObj[key]
@@ -138,31 +146,30 @@ export default {
         this.loading = false
       }
     },
-    rowEdit (obj) {
-      console.log('areaEvalRowEdit(obj)======>' + JSON.stringify(obj))
-      // if (this.isEdit) {
-      //   this.msgShow(this, '请先完成操作')
-      //   return
-      // }
-      let idx = obj.idx
-      this.tableValue.tableData[idx].edit = true
-      this.originData = JSON.parse(JSON.stringify(this.tableValue.tableData))
-      this.editObj = Object.assign({}, this.tableValue.tableData[idx])
-      this.isEdit = true
+    async savePurchaseFrequency (params) {
+      this.currentPage = 1
+      this.queryObject.currentPage = this.currentPage - 1
+      try {
+        const { data } = await this.apiStreamPost('/proxy/common/post',
+          { url: 'salesManage/customerPurchaseFrequency/save', params: params })
+        this.loading = false
+        if (data.returnCode === 0) {
+          this.msgShow(this, '保存成功', 'success')
+        } else {
+          console.error(data.errMsg)
+          this.msgShow(this, data.errMsg)
+        }
+        this.loadData()
+      } catch (e) {
+        this.loading = false
+        this.msgShow(this, e.message || '网络异常')
+        this.loadData()
+      }
     },
     rowSave (row) {
-      debugger
       console.log('row save:>>', row)
-      this.isEdit = false
-      let idx = this.tableValue.tableData.indexOf(row)
-      row.edit = false
-      this.tableValue.tableData[idx] = row
-    },
-    rowCancel (row) {
-      this.isEdit = false
-      let idx = this.tableValue.tableData.indexOf(row)
-      this.tableValue.tableData = this.originData
-      this.tableValue.tableData[idx].edit = false
+      delete row.id
+      this.savePurchaseFrequency(row)
     }
   }
 

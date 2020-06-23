@@ -148,6 +148,9 @@ export default {
             if (this.copyItems[i][n].model == 'showUpdate') {
               this.copyItems[i][n].val = '1'
             }
+            if (this.copyItems[i][n].type === 'select') {
+              this.copyItems[i][n].val = this.copyItems[i][n].list[0].value
+            }
           }
         }
       }

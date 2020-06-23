@@ -132,7 +132,7 @@ export default {
               this.originRow = editArr[0]
             }
             if (editArr.length == 2) {
-              const originArr = this.currentData.filter(item => item.edit == false)
+              const originArr = this.currentData.filter(item => item.edit !== true)
               originArr.push(editArr[0])
               this.currentData = originArr
             }
@@ -143,6 +143,7 @@ export default {
             this.currentData = Object.assign([], newVal)
             if (newArr.length === 1) {
               this.rowKey = 'newRow'
+              this.originRow = Object.assign({}, newArr[0])
             }
           }
         } else {
@@ -153,7 +154,7 @@ export default {
     },
     loading (newVal) {
       if (newVal) {
-        this.rowKey = ''
+        if(this.rowEdit) this.rowKey = ''
       }
     },
     // 'tableValue.tableHead': {
@@ -333,7 +334,7 @@ export default {
             this.rowKey = ''
           }
           if (btnType === 'cancel') {
-            if (!this.originRow.id) {
+            if (this.originRow.id == null) {
               this.currentData = this.currentData.filter(item => item.edit !== true)
               console.log('row id null', this.currentData)
             } else {

@@ -54,33 +54,8 @@ export default {
   },
   methods: {
     linkerAddClick () {
-      // if(this.isEdit){
-      //   this.msgShow(this, '请先保存新增')
-      //   return
-      // }
-      // this.linkDateFilter()
       let addData = { id: null, name: '', openBank: '', bankAcct: '', remark: '', edit: true }
       this.tableValue.tableData.push(addData)
-      // this.isEdit = true
-    },
-    linkDateFilter () {
-      this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
-      this.snapData.map(item => {
-        item.linkDate = new Date(item.linkDate)
-      })
-    },
-    tableHandler (row) {
-      let idx = this.tableValue.tableData.indexOf(row)
-      this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
-    },
-    rowEdit (row) {
-      if (this.isEdit) {
-        this.msgShow(this, '请先完成操作')
-        return
-      }
-      this.isEdit = true
-      this.tableHandler(row)
-      this.linkDateFilter()
     },
     rowDelete (row) {
       this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
@@ -102,7 +77,6 @@ export default {
         this.msgShow(this, '银行账号不能为空')
         return
       }
-      this.tableHandler(row)
       let params = {
         id: row.id,
         name: row.name,
@@ -118,7 +92,6 @@ export default {
       this.tableValue.tableData = this.snapData
       if (this.tableValue.tableData.length > idx + 1 || this.tableValue.tableData.length == idx + 1)
         this.tableValue.tableData[idx].edit = false
-      this.isEdit = false
     },
     async loadData () {
       try {
@@ -133,7 +106,6 @@ export default {
             arr.push(itm)
           })
           this.tableValue.tableData = arr
-          this.isEdit = false
         } else {
           this.msgShow(this, data.errMsg)
         }
