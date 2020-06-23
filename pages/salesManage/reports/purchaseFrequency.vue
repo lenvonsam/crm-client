@@ -30,7 +30,7 @@ export default {
       searchFormItems: [
         [{ label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: '' },
         { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: '' }, { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '' }],
-        [{ label: '跟踪状态', model: 'status', type: 'select', val: 0, list: [{ label: '全部', value: 0 }, { label: '未跟踪', value: 1 }, { label: '已跟踪', value: 2 }] }]
+        [{ label: '跟踪状态', model: 'status', type: 'select', val: 0, list: [{ label: '全部', value: 0 }, { label: '未跟踪', value: 1 }, { label: '已跟踪', value: 2 }] }, { label: '起始日期', model: 'startDate', val: '', type: 'date' }, { label: '结束日期', model: 'endDate', val: '', type: 'date' }]
       ],
       tableValue: {
         tableData: [],
@@ -71,6 +71,10 @@ export default {
           width: '220px',
           type: 'edit',
           editType: 'text'
+        }, {
+          lbl: '反馈时间',
+          prop: 'updateAt',
+          width: '200px'
         }]
       },
       currentPage: 1,
@@ -80,23 +84,25 @@ export default {
     }
   },
   beforeMount () {
-    this.queryObject = {
-      currentPage: this.currentPage - 1,
-      pageSize: this.pageSize,
-      uid: this.currentUser.id
-    }
-    if (this.currentUser.dataLevel === '业务员' || this.currentUser.id === 1) {
-      this.tableValue.tableHead.push({
-        type: 'action',
-        fixed: 'right',
-        width: '100px',
-        actionBtns: [{
-          lbl: '编辑',
-          type: 'edit'
-        }]
-      })
-    }
-    this.loadData()
+    this.$nextTick(function () {
+      this.queryObject = {
+        currentPage: this.currentPage - 1,
+        pageSize: this.pageSize,
+        uid: this.currentUser.id
+      }
+      if (this.currentUser.dataLevel === '业务员' || this.currentUser.id === 1) {
+        this.tableValue.tableHead.push({
+          type: 'action',
+          fixed: 'right',
+          width: '100px',
+          actionBtns: [{
+            lbl: '编辑',
+            type: 'edit'
+          }]
+        })
+      }
+      this.loadData()
+    })
   },
   computed: {
     ...mapState({
@@ -129,6 +135,7 @@ export default {
     },
     async loadData () {
       try {
+        console.log('this.queryObject:>>', this.queryObject)
         let { data } = await this.apiStreamPost('/proxy/common/post',
           { url: 'salesManage/customerPurchaseFrequency', params: this.queryObject })
         //console.log('loadClientEvalData_data.list----------' + JSON.stringify(data.list))
@@ -169,6 +176,8 @@ export default {
     rowSave (row) {
       console.log('row save:>>', row)
       delete row.id
+      delete row.updateAt
+      row.uid = this.currentUser.id
       this.savePurchaseFrequency(row)
     }
   }
