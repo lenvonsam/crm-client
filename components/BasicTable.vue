@@ -121,14 +121,30 @@ export default {
     'tableValue.tableData': {
       handler (newVal, oldVal) {
         // 判断是否是新增
-        let newArr = newVal.filter(item => item.id == null)
-        let editArr = this.currentData.filter(item => item.edit == true)
-        console.log('newArr length:>>', newArr.length, ';eidtArr:>>', editArr.length)
-        if (newArr.length > 0 && editArr.length > 0) {
-          this.msgShow(this, '请先保存新增')
-          const data = this.tableValue
-          data.tableData = this.currentData
-          this.$emit('update:tableValue', data)
+        if (this.rowEdit) {
+          let newArr = newVal.filter(item => item.id == null)
+          let editArr = this.currentData.filter(item => item.edit == true)
+          console.log('newArr length:>>', newArr.length, ';eidtArr:>>', editArr.length)
+          if (newArr.length > 0 && editArr.length > 0) {
+            if ((newArr.length != editArr.length) || ((newArr.length === editArr.length) && newArr.length > 1)) this.msgShow(this, '请先保存新增')
+            const data = this.tableValue
+            if (editArr.length == 1) {
+              this.originRow = editArr[0]
+            }
+            if (editArr.length == 2) {
+              const originArr = this.currentData.filter(item => item.edit == false)
+              originArr.push(editArr[0])
+              this.currentData = originArr
+            }
+            data.tableData = this.currentData
+            // console.log('currentData:>>', JSON.stringify(this.currentData))
+            this.$emit('update:tableValue', data)
+          } else {
+            this.currentData = Object.assign([], newVal)
+            if (newArr.length === 1) {
+              this.rowKey = 'newRow'
+            }
+          }
         } else {
           this.currentData = Object.assign([], newVal)
         }
@@ -148,6 +164,10 @@ export default {
     // }
   },
   props: {
+    rowEdit: {
+      type: Boolean,
+      default: false
+    },
     tableValue: {
       type: null,
       default: false
@@ -303,24 +323,31 @@ export default {
         }
       }
       if (this.isVerify) {
-        if (btnType === 'edit') {
-          this.rowKey = row.idx + ''
-          this.originRow = Object.assign({}, row)
-          row.edit = true
-          this.currentData[idx] = row
-        } else {
-          this.rowKey = ''
+        if (this.rowEdit) {
+          if (btnType === 'edit') {
+            this.rowKey = row.idx + ''
+            this.originRow = Object.assign({}, row)
+            row.edit = true
+            this.currentData[idx] = row
+          } else {
+            this.rowKey = ''
+          }
+          if (btnType === 'cancel') {
+            if (!this.originRow.id) {
+              this.currentData = this.currentData.filter(item => item.edit !== true)
+              console.log('row id null', this.currentData)
+            } else {
+              this.originRow.edit = false
+              this.currentData[idx] = this.originRow
+            }
+          }
+          if (btnType === 'cancel' || btnType === 'edit') {
+            const data = this.tableValue
+            data.tableData = this.currentData
+            this.$emit('update:tableValue', data)
+          }
         }
-        if (btnType === 'cancel') {
-          this.originRow.edit = false
-          this.currentData[idx] = this.originRow
-        }
-        if (btnType === 'cancel' || btnType === 'edit') {
-          const data = this.tableValue
-          data.tableData = this.currentData
-          this.$emit('update:tableValue', data)
-        }
-        if (!(btnType === 'cancel' || btnType === 'edit')) this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
+        if ((!(btnType === 'cancel' || btnType === 'edit') && this.rowEdit) || !this.rowEdit) this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
       }
     },
     handleSelectionChange (rows) {

@@ -2,7 +2,7 @@
 .content
   breadcrumb(:breadItems="breadItems")
   search-form.mt-15(:searchFormItems="searchFormItems", @search="searchForm")
-  basic-table.mt-15(:tableValue.sync="tableValue", :currentPage="currentPage", 
+  basic-table.mt-15(:tableValue.sync="tableValue", :currentPage="currentPage", rowEdit,
   :pageSize="pageSize", :total="total", :loading="loading", 
   @tableRowSave="rowSave", 
   @pageChange="tableChange")  

@@ -2,7 +2,7 @@
 div
   button-group(:btns="linkerAddInfo", @groupBtnClick="linkerAddClick")
   .mt-15
-    basic-table(:tableValue.sync="tableValue", :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowSave="rowSave", @tableRowDelete="rowDelete")
+    basic-table(:tableValue.sync="tableValue",rowEdit, :loading="loading", :currentPage="currentPage", :pageSize="pageSize", :total="totalCount", @tableRowSave="rowSave", @tableRowDelete="rowDelete")
 </template>
 
 <script>
