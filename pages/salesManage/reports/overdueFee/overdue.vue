@@ -131,7 +131,7 @@ export default {
       // this.searchFormItems[1][1].val = ''
       // this.searchFormItems[1][3].val = ''
       if (this.currentUser.id == 1) {
-        this.tableValue.tableHead[12].actionBtns = [{
+        this.tableValue.tableHead[13].actionBtns = [{
           lbl: '免收',
           type: 'viodFee',
           class: 'text-orange'
