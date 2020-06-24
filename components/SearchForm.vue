@@ -10,7 +10,7 @@
               label {{item.label}}：
             .col
               el-date-picker.full-width(v-model="item.val", type="date",v-if="item.type == 'date'", :placeholder="item.placeholder",size="small", value-format="yyyy-MM-dd")
-              el-date-picker.full-width(v-model="item.val", type="month", v-else-if="item.type === 'month'", :placeholder="item.placeholder", size="small", value-format="yyyy-MM")
+              el-date-picker.full-width(v-model="item.val", type="month", v-else-if="item.type === 'month'", :placeholder="item.placeholder", size="small", value-format="yyyy-MM", :picker-options="pickerDisable")
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="daterange", v-else-if="item.type == 'timeLimit'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd")
               el-date-picker.full-width.crm-timeLimit(v-model="item.val", type="datetimerange", v-else-if="item.type == 'datetimerange'", range-separator="-", start-placeholder="开始日期", end-placeholder="结束日期", size="small", value-format="yyyy-MM-dd HH:mm")
               el-autocomplete.full-width(v-model="item.val", v-else-if="item.type == 'autocomplete'", @focus="selectIdx(index, idx)", :fetch-suggestions="querySearchAsync", :placeholder="item.placeholder", size="small")
@@ -91,6 +91,10 @@ export default {
     className: {
       type: String,
       default: 'col'
+    },
+    pickerDisable: {
+      type: Object,
+      default: () => ({})
     }
   },
   methods: {

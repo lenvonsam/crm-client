@@ -11,7 +11,7 @@
     el-dialog(title="待收款" :visible.sync="dialogFormVisible", width="25%", @close="dialogClose")
       el-form(:model="form")
         el-form-item.is-required(label="实际待收金额：")
-          el-input(v-model="form.money", placeholder="请输入金额")
+          el-input(v-model="form.money", placeholder="请输入金额", @input="getMoney")
         el-form-item(label="备注：")
           el-input(v-model="form.remark")
       div(slot="footer" class="dialog-footer")
@@ -74,11 +74,11 @@ export default {
           prop: 'linkmobile',
           width: '130px'
         }, {
+          lbl: '联系人',
+          prop: 'linkman'
+        }, {
           lbl: '提货状态',
           prop: 'goodsFlag'
-        }, {
-          lbl: '预计未提',
-          prop: 'preUndelivery'
         }, {
           lbl: '超期吨位(吨)',
           prop: 'realUndelivery'
@@ -113,10 +113,6 @@ export default {
           }, {
             lbl: '待收款',
             type: 'paying'
-          }, {
-            lbl: '删除',
-            type: 'delete',
-            class: 'text-red'
           }]
         }]
       },
@@ -129,16 +125,30 @@ export default {
       rowPayingBillcode: '',
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.$nextTick(() => {
-      this.searchFormItems[0][2].val = '全部'
-      this.searchFormItems[1][1].val = ''
-      this.searchFormItems[1][3].val = '全部'     
+      this.searchFormItems[0][2].val = ''
+      // this.searchFormItems[1][1].val = ''
+      // this.searchFormItems[1][3].val = ''
+      if (this.currentUser.id == 1) {
+        this.tableValue.tableHead[13].actionBtns = [{
+          lbl: '免收',
+          type: 'viodFee',
+          class: 'text-orange'
+        }, {
+          lbl: '待收款',
+          type: 'paying'
+        }, {
+          lbl: '删除',
+          type: 'delete',
+          class: 'text-red'
+        }]
+      }
     })
   },
   mounted () {
-      this.loadData()
-      console.log('searchFormItem:>>', this.searchFormItems)    
+    this.loadData()
+    console.log('searchFormItem:>>', this.searchFormItems)
   },
   computed: {
     ...mapState({
@@ -149,48 +159,82 @@ export default {
         [
           { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
           { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
-          { label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+          {            label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
             list: [
-              { label: '全部', value: '全部' },
-              { label: 'ERP', value: 'ERP' },
-              { label: '型云', value: '型云' }
-            ], val: '全部'
+              { label: '全部', value: '' },
+              { label: 'ERP', value: 0 },
+              { label: '型云', value: 1 }
+            ], val: ''
+          },
+          { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
+        ],
+        [
+          { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
+          {            label: '提货状态', model: 'goodsFlag', type: 'select',
+            list: [
+              { label: '全部', value: '' },
+              { label: '未完成', value: 0 },
+              { label: '已完成', value: 1 }
+            ], val: ''
+          }
+        ]
+      ]
+      if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+        searchFrom = [[
+          { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
+          {            label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+            list: [
+              { label: '全部', value: '' },
+              { label: 'ERP', value: 0 },
+              { label: '型云', value: 1 }
+            ], val: ''
           },
           { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
         ],
         [
           { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
           { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
-          { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: ''},
-          { label: '提货状态', model: 'goodsFlag', type: 'select',
+          { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: '' },
+          {            label: '提货状态', model: 'goodsFlag', type: 'select',
             list: [
-              { label: '全部', value: '全部' },
-              { label: '已完成', value: '已完成' },
-              { label: '未完成', value: '未完成' }
-            ], val: '全部'
+              { label: '全部', value: '' },
+              { label: '未完成', value: 0 },
+              { label: '已完成', value: 1 }
+            ], val: ''
           }
-        ]
-      ]
+        ]]
+      } else if (this.currentUser.dataLevel === '部门') {
+        searchFrom = [[
+          { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
+          {            label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+            list: [
+              { label: '全部', value: '' },
+              { label: 'ERP', value: 0 },
+              { label: '型云', value: 1 }
+            ], val: ''
+          },
+          { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
+        ],
+        [
+          { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
+          { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
+          {            label: '提货状态', model: 'goodsFlag', type: 'select',
+            list: [
+              { label: '全部', value: '' },
+              { label: '未完成', value: 0 },
+              { label: '已完成', value: 1 }
+            ], val: ''
+          }
+        ]]
+      }
       return searchFrom
     }
   },
   methods: {
     searchForm (obj) {
       this.paramsObj = Object.assign({}, obj)
-      if (obj.source == 'ERP') {
-        this.paramsObj.source = 0
-      } else if (obj.source == '型云') {
-        this.paramsObj.source = 1
-      } else {
-        this.paramsObj.source = ''
-      }
-      if (obj.goodsFlag == '未完成') {
-        this.paramsObj.goodsFlag = 0
-      } else if (obj.goodsFlag == '已完成') {
-        this.paramsObj.goodsFlag = 1
-      } else {
-        this.paramsObj.goodsFlag = ''
-      }
       this.paramsObj.currentPage = 0
       this.paramsObj.pageSize = 20
       this.loadData()
@@ -222,24 +266,53 @@ export default {
         this.form.money = ''
         this.form.remark = ''
       } else {
-        if (this.form.money.trim() != '' && /^(?!0$|0\.00|0\.0|0\d+$)([1-9]?\d+(\.\d*)|(\\s&&[^\\f\\n\\r\\t\\v])|([1-9]*[1-9][0-9]*)?)$/.test(this.form.money)) {
-          if (this.form.remark.length > 50) {
-            this.msgShow(this, '备注最多输入50个字')
-          } else {
-            let params = {}
-            params.uid = this.currentUser.id
-            params.billCode = this.rowPayingBillcode
-            params.overdueMoney = this.form.money
-            params.remark = this.form.remark
-            params.dealType = 1
-            this.dialogFormVisible = false
-            this.overdueDeal(params)
-          }
+        if (this.form.remark.length > 50) {
+          this.msgShow(this, '备注最多输入50个字')
         } else {
-          this.msgShow(this, '请输入正确的金额')
-          this.form.money = ''
+          let params = {}
+          if (this.form.money.toString() == '0.00' || this.form.money.toString() == '0.0' || this.form.money.toString() == '0.' || this.form.money.toString() == '0') {
+            this.msgShow(this, '请输入正确的金额')
+            this.form.money = ''
+          } else {
+            if (this.form.remark.length > 50) {
+              this.msgShow(this, '备注最多输入50个字')
+            } else {
+              params.uid = this.currentUser.id
+              params.billCode = this.rowPayingBillcode
+              params.overdueMoney = this.form.money
+              params.remark = this.form.remark
+              params.dealType = 1
+              this.dialogFormVisible = false
+              this.overdueDeal(params)
+            }
+          }
         }
       }
+    },
+    getMoney (val) {
+      this.dialogFormVisible = true
+      if (/^[0-9]+.?[0-9]*/.test(val)) {
+        this.form.money = this.limitFloat(val)
+      } else {
+        this.msgShow(this, '请输入正确的金额')
+        this.form.money = ''
+      }
+    },
+    limitFloat (val) {
+      let sNum = val.toString(); //先转换成字符串类型
+      if (sNum.indexOf('.') == 0) {//第一位就是 .
+        console.log('first str is .')
+        sNum = '0' + sNum
+      }
+      sNum = sNum.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+      sNum = sNum.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的
+      sNum = sNum.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+      sNum = sNum.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3');//只能输入两个小数
+      //以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+      if (sNum.indexOf(".") < 0 && sNum != "") {
+        sNum = parseFloat(sNum);
+      }
+      return sNum
     },
     dialogClose () {
       this.form.money = ''
@@ -278,7 +351,7 @@ export default {
       console.log('入参========>' + JSON.stringify(this.paramsObj))
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
-          { url:'overdue/overdueReport', params: this.paramsObj })
+          { url: 'overdue/overdueReport', params: this.paramsObj })
         if (data.returnCode === 0) {
           this.totalCount = data.total
           this.tableValue.tableData = data.list

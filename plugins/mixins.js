@@ -362,7 +362,8 @@ const minixs = {
       return reg.test(val)
     },
     mobileReg(mobile) {
-      var reg = /^1[3|4|5|7|8|9][0-9]\d{4,8}$/
+      // var reg = /^1[3|4|5|8|9][0-9]\d{4,8}$/
+      var reg = /^[1][3,4,5,7,8][0-9]{9}$/
       return reg.test(mobile)
     },
     // 解决js计算误差问题

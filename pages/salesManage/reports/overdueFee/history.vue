@@ -36,7 +36,7 @@ export default {
         dealTypeStr: ''
       },
       tableValue: {
-        tableName: 'overdue',
+        tableName: 'overdueHistory',
         height: 640,
         numShow: false,
         hasCbx: false,
@@ -61,12 +61,12 @@ export default {
           prop: 'linkmobile',
           width: '130px'
         }, {
+          lbl: '联系人',
+          prop: 'linkman'
+        }, {
           lbl: '提货状态',
           prop: 'goodsFlag',
           class: 'text-green'
-        }, {
-          lbl: '预计未提',
-          prop: 'preUndelivery'
         }, {
           lbl: '超期吨位(吨)',
           prop: 'realUndelivery'
@@ -77,6 +77,10 @@ export default {
         }, {
           lbl: '提货截止时间',
           prop: 'endDate',
+          width: '130px'
+        }, {
+          lbl: '操作时间',
+          prop: 'operateTime',
           width: '130px'
         }, {
           lbl: '超期时间(天)',
@@ -98,16 +102,16 @@ export default {
       loading: false,
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.$nextTick(() => {
-      this.searchFormItems[0][2].val = '全部'
-      this.searchFormItems[1][1].val = ''
-      this.searchFormItems[1][3].val = '全部'     
+      this.searchFormItems[0][2].val = ''
+      // this.searchFormItems[1][1].val = ''
+      // this.searchFormItems[1][3].val = ''     
     })
   },
   mounted () {
-      this.loadData()
-      console.log('searchFormItem:>>', this.searchFormItems)    
+    this.loadData()
+    console.log('searchFormItem:>>', this.searchFormItems)
   },
   computed: {
     ...mapState({
@@ -119,28 +123,62 @@ export default {
           [
             { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
             { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
-            { label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+            {              label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
               list: [
-                { label: '全部', value: '全部' },
-                { label: 'ERP', value: 'ERP' },
-                { label: '型云', value: '型云' }
-              ], val: '全部'            
+                { label: '全部', value: '' },
+                { label: 'ERP', value: 0 },
+                { label: '型云', value: 1 }
+              ], val: ''
+            },
+            { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
+          ],
+          [
+            { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
+            {
+              label: '提货状态', model: 'goodsFlag', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: '未完成', value: 0 },
+                { label: '已完成', value: 1 }
+              ], val: ''
+            },
+            {
+              label: '状态', model: 'dealTypeStr', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: '已免收', value: '已免收' },
+                { label: '已收款', value: '已收款' },
+                { label: '已删除', value: '已删除' }
+              ], val: ''
+            }
+          ]
+        ]
+        if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
+          searchFrom = [[
+            { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
+            { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
+            {              label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: 'ERP', value: 0 },
+                { label: '型云', value: 1 }
+              ], val: ''
             },
             { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
           ],
           [
             { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
             { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
-            { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept',
-              list: [], val: ''            
+            {              label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept',
+              list: [], val: ''
             },
             {
               label: '提货状态', model: 'goodsFlag', type: 'select',
               list: [
-                { label: '全部', value: '全部' },
-                { label: '已完成', value: '已完成' },
-                { label: '未完成', value: '未完成' }
-              ], val: '全部'
+                { label: '全部', value: '' },
+                { label: '未完成', value: 0 },
+                { label: '已完成', value: 1 }
+              ], val: ''
             }
           ],
           [
@@ -153,8 +191,44 @@ export default {
                 { label: '已删除', value: '已删除' }
               ], val: ''
             }
-          ]
-        ]
+          ]]
+        } else if (this.currentUser.dataLevel === '部门') {
+          searchFrom = [[
+            { label: '开始时间起', model: 'startTime', type: 'month', placeholder: '请选择年月', val: '' },
+            { label: '开始时间止', model: 'endTime', type: 'month', placeholder: '请选择年月', val: '' },
+            {              label: '来源', model: 'source', placeholder: '请选择来源', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: 'ERP', value: 0 },
+                { label: '型云', value: 1 }
+              ], val: ''
+            },
+            { label: '单号', model: 'billCode', placeholder: '请输入单号', val: '' }
+          ],
+          [
+            { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
+            { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
+            {
+              label: '提货状态', model: 'goodsFlag', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: '未完成', value: 0 },
+                { label: '已完成', value: 1 }
+              ], val: ''
+            }
+          ],
+          [
+            {
+              label: '状态', model: 'dealTypeStr', type: 'select',
+              list: [
+                { label: '全部', value: '' },
+                { label: '已免收', value: '已免收' },
+                { label: '已收款', value: '已收款' },
+                { label: '已删除', value: '已删除' }
+              ], val: ''
+            }
+          ]]
+        }
         return searchFrom
       }
     }
@@ -162,20 +236,6 @@ export default {
   methods: {
     searchForm (obj) {
       this.paramsObj = Object.assign({}, obj)
-      if (obj.source == 'ERP') {
-        this.paramsObj.source = 0
-      } else if (obj.source == '型云') {
-        this.paramsObj.source = 1
-      } else {
-        this.paramsObj.source = ''
-      }
-      if (obj.goodsFlag == '未完成') {
-        this.paramsObj.goodsFlag = 0
-      } else if (obj.goodsFlag == '已完成') {
-        this.paramsObj.goodsFlag = 1
-      } else {
-        this.paramsObj.goodsFlag = ''
-      }
       this.paramsObj.currentPage = 0
       this.paramsObj.pageSize = 20
       this.loadData()
@@ -192,7 +252,7 @@ export default {
       console.log('入参========>' + JSON.stringify(this.paramsObj))
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
-          { url:'overdue/findOverdueDealHistory', params: this.paramsObj })
+          { url: 'overdue/findOverdueDealHistory', params: this.paramsObj })
         if (data.returnCode === 0) {
           this.totalCount = data.total
           this.tableValue.tableData = data.list

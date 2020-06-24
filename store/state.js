@@ -988,20 +988,31 @@ export default {
         {
           title: '期货管理',
           url: '/salesManage/futures'
+<<<<<<< HEAD
         },
         {
+=======
+        }, {
+          title: '销售绩效提成表',
+          url: '/salesManage/reports/salePerformance'
+        }, {
+>>>>>>> f38a87368a5d70dc9c3083ef6adaa431f4524e0e
           title: '业务员提成汇总表',
           url: '/salesManage/reports/empCommSummary'
         },
         {
           title: '销售专员提成汇总表',
           url: '/salesManage/reports/saleCommSummary'
+<<<<<<< HEAD
         },
         {
           title: '销售绩效提成表',
           url: '/salesManage/reports/salePerformance'
         },
         {
+=======
+        }, {
+>>>>>>> f38a87368a5d70dc9c3083ef6adaa431f4524e0e
           title: '直发调货明细表',
           url: '/salesManage/reports/deliveryDetail'
         },
