@@ -113,35 +113,6 @@ export default {
       this.wxUser = val[0]
       console.log('wxUser', this.wxUser)
     },
-    linkerAddClick () {
-      if (this.isEdit) {
-        this.msgShow(this, '请先保存新增')
-        return
-      }
-      this.linkDateFilter()
-      let addData = { id: null, name: '', openBank: '', bankAcct: '', remark: '', edit: true }
-      this.tableValue.tableData.push(addData)
-      this.isEdit = true
-    },
-    linkDateFilter () {
-      this.snapData = JSON.parse(JSON.stringify(this.tableValue.tableData))
-      this.snapData.map(item => {
-        item.linkDate = new Date(item.linkDate)
-      })
-    },
-    tableHandler (row) {
-      let idx = this.tableValue.tableData.indexOf(row)
-      this.tableValue.tableData[idx].edit = !this.tableValue.tableData[idx].edit
-    },
-    rowEdit (row) {
-      if (this.isEdit) {
-        this.msgShow(this, '请先完成操作')
-        return
-      }
-      this.isEdit = true
-      this.tableHandler(row)
-      this.linkDateFilter()
-    },
     rowDelete (row) {
       this.confirmDialog(this, '您确认要删掉本行记录吗？').then(() => {
         this.wxUserDel(row.id)
