@@ -154,7 +154,7 @@ export default {
     },
     loading (newVal) {
       if (newVal) {
-        if(this.rowEdit) this.rowKey = ''
+        if (this.rowEdit) this.rowKey = ''
       }
     },
     // 'tableValue.tableHead': {
@@ -463,6 +463,10 @@ export default {
       this.$emit('sort', obj)
     },
     verifyInput (prop, val, lbl) {
+      if (val && val.length > 200) {
+        this.msgShow(this, '不能超过200个字符')
+        this.isVerify = false
+      }
       if (prop == 'phone') {
         if (!this.mobileReg(val)) {
           this.msgShow(this, '手机号码格式错误')

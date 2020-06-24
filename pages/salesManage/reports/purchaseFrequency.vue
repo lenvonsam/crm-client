@@ -28,9 +28,14 @@ export default {
     return {
       breadItems: ['销售管理', '超期客户'],
       searchFormItems: [
-        [{ label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: '' },
-        { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: '' }, { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '' }],
-        [{ label: '跟踪状态', model: 'status', type: 'select', val: 0, list: [{ label: '全部', value: 0 }, { label: '未跟踪', value: 1 }, { label: '已跟踪', value: 2 }] }, { label: '起始日期', model: 'startDate', val: '', type: 'date' }, { label: '结束日期', model: 'endDate', val: '', type: 'date' }]
+        [
+          { label: '公司名称', model: 'compName', type: 'text', placeholder: '请输入公司名称', val: '' },
+          { label: '业务部门', model: 'dptName', type: 'selectDept', placeholder: '请输入业务部门', val: '' },
+          { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '', type: 'selectRemote', list: [], url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'name', init: true }
+        ], [
+          { label: '跟踪状态', model: 'status', type: 'select', val: 0, list: [{ label: '全部', value: 0 }, { label: '未跟踪', value: 1 }, { label: '已跟踪', value: 2 }] },
+          { label: '起始日期', model: 'startDate', val: '', type: 'date' }, { label: '结束日期', model: 'endDate', val: '', type: 'date' }
+        ]
       ],
       tableValue: {
         tableData: [],

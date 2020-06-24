@@ -52,7 +52,7 @@ export default {
         { label: '评估状态', model: 'showUpdate', type: 'select', placeholder: '请选择评估状态', val: '1', list: [] }]
       ],
       searchFormItems2: [
-        [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
+        [{ label: '地区', model: 'areaName', type: 'select', placeholder: '', val: '', list: [], filter: true, clearable: true },
         { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: '' },
         { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '' }]
       ],

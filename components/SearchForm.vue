@@ -21,9 +21,7 @@
                 el-option(v-for="itemIist in deptList", :key="itemIist.name", :label="item.name", :value="itemIist.name")
                   span {{itemIist.name}}    
               el-select.full-width(v-model="item.val", v-else-if="item.type == 'selectRemote'", value-key, filterable, remote, size="small", :placeholder="item.placeholder", :remote-method="selectRemote", clearable, @focus="selectRemoteFocus(item)", @blur="selectRemoteBlur")
-                el-option(v-for="item in item.list", :key="item.id", :label="item.name", :value="item.platformCode")
-              el-select.full-width(v-model="item.val", v-else-if="item.type == 'selectArea'", value-key, filterable, size="small", :placeholder="item.placeholder", clearable, @focus="selectRemoteFocus(item)", @blur="selectRemoteBlur")
-                el-option(v-for="item in item.list", :key="item.value", :label="item.name", :value="item.value")       
+                el-option(v-for="itm in item.list", :key="itm.id", :label="itm.name", :value="itm[item.selectValue || item.model] || itm['name']")
               template(v-else-if="item.type == 'range'")
                 .row.flex-center
                   .col
@@ -148,7 +146,7 @@ export default {
             if (this.copyItems[i][n].model == 'showUpdate') {
               this.copyItems[i][n].val = '1'
             }
-            if (this.copyItems[i][n].type === 'select') {
+            if (this.copyItems[i][n].type === 'select' && !this.copyItems[i][n].clearable) {
               this.copyItems[i][n].val = this.copyItems[i][n].list[0].value
             }
           }
@@ -158,17 +156,19 @@ export default {
     },
     selectRemoteFocus (item) {
       this.selectActive = item
+      if (item.init) this.selectRemote()
     },
     selectRemoteBlur () {
       this.selectActive = {}
     },
     async selectRemote (val) {
+      console.log('remote val:>>', val)
       const { url, queryKey, list } = this.selectActive
       let params = {
         pageSize: 10,
         uid: this.currentUser.id
       }
-      params[queryKey] = val
+      if (val) params[queryKey] = val
       let me = this
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post', { url: url, params: params })
