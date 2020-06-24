@@ -1,8 +1,8 @@
   <template lang="pug">
   .content
     breadcrumb(:breadItems="breadItems")
-    .pt-15
-      button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
+    //- .pt-15
+    //-   button-group(:btns="btnGroups", @groupBtnClick="groupBtnClick")
     .mt-15
       search-form(:searchFormItems="searchFormItems", @search="searchForm", ref="searchFrom", :pickerDisable="pickerDisable")
     .pt-15

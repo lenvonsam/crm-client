@@ -670,10 +670,12 @@ export default {
     {
       value: '0',
       label: '全部'
-    }, {
+    },
+    {
       value: '1',
       label: '未评估'
-    }, {
+    },
+    {
       value: '2',
       label: '已评估'
     }
@@ -710,16 +712,13 @@ export default {
     { label: '其他原因', value: '其他原因' }
   ],
   // 有无库存
-  hasStorageList: [
-    { label: '无', value: '无' },
-    { label: '有', value: '有' }
-  ],
+  hasStorageList: [{ label: '无', value: '无' }, { label: '有', value: '有' }],
   // 主要运力方式
   mainDeliveryWayList: [
     { label: '自有运力', value: '自有运力' },
     { label: '我司配送', value: '我司配送' },
     { label: '固定三方物流', value: '固定三方物流' },
-    { label: '非固定三方物流', value: '非固定三方物流' },
+    { label: '非固定三方物流', value: '非固定三方物流' }
   ],
   // 物流偏好
   deliveryPreferList1: [
@@ -771,7 +770,7 @@ export default {
       children: [
         {
           value: '金属结构制造',
-          label: '金属结构制造',
+          label: '金属结构制造'
         }
       ]
     },
@@ -781,11 +780,11 @@ export default {
       children: [
         {
           value: '切削工具制造',
-          label: '切削工具制造',
+          label: '切削工具制造'
         },
         {
           value: '其他金属工具制造',
-          label: '其他金属工具制造',
+          label: '其他金属工具制造'
         }
       ]
     },
@@ -795,15 +794,15 @@ export default {
       children: [
         {
           value: '集装箱制造',
-          label: '集装箱制造',
+          label: '集装箱制造'
         },
         {
           value: '金属压力容器制造',
-          label: '金属压力容器制造',
+          label: '金属压力容器制造'
         },
         {
           value: '金属包装容器及材料制造',
-          label: '金属包装容器及材料制造',
+          label: '金属包装容器及材料制造'
         }
       ]
     },
@@ -813,11 +812,11 @@ export default {
       children: [
         {
           value: '发动机及配件制造',
-          label: '发动机及配件制造',
+          label: '发动机及配件制造'
         },
         {
           value: '动力和发电设备制造',
-          label: '动力和发电设备制造',
+          label: '动力和发电设备制造'
         }
       ]
     },
@@ -827,11 +826,11 @@ export default {
       children: [
         {
           value: '加工机床及附件制造',
-          label: '加工机床及附件制造',
+          label: '加工机床及附件制造'
         },
         {
           value: '其他金属加工机械制造',
-          label: '其他金属加工机械制造',
+          label: '其他金属加工机械制造'
         }
       ]
     },
@@ -841,19 +840,19 @@ export default {
       children: [
         {
           value: '起重机制造',
-          label: '起重机制造',
+          label: '起重机制造'
         },
         {
           value: '叉车等搬运设备及机械式停车设备制造',
-          label: '叉车等搬运设备及机械式停车设备制造',
+          label: '叉车等搬运设备及机械式停车设备制造'
         },
         {
           value: '电梯、自动扶梯及升降机制造',
-          label: '电梯、自动扶梯及升降机制造',
+          label: '电梯、自动扶梯及升降机制造'
         },
         {
           value: '客运索道制造',
-          label: '客运索道制造',
+          label: '客运索道制造'
         }
       ]
     },
@@ -863,15 +862,15 @@ export default {
       children: [
         {
           value: '风机、风扇制造',
-          label: '风机、风扇制造',
+          label: '风机、风扇制造'
         },
         {
           value: '制冷、空调设备制造',
-          label: '制冷、空调设备制造',
+          label: '制冷、空调设备制造'
         },
         {
           value: '包装专用设备制造',
-          label: '包装专用设备制造',
+          label: '包装专用设备制造'
         }
       ]
     },
@@ -881,11 +880,11 @@ export default {
       children: [
         {
           value: '紧固件制造',
-          label: '紧固件制造',
+          label: '紧固件制造'
         },
         {
           value: '机械零部件加工',
-          label: '机械零部件加工',
+          label: '机械零部件加工'
         }
       ]
     },
@@ -895,11 +894,11 @@ export default {
       children: [
         {
           value: '汽车车身、挂车制造',
-          label: '汽车车身、挂车制造',
+          label: '汽车车身、挂车制造'
         },
         {
           value: '汽车零部件及配件制造',
-          label: '汽车零部件及配件制造',
+          label: '汽车零部件及配件制造'
         }
       ]
     },
@@ -909,15 +908,15 @@ export default {
       children: [
         {
           value: '高铁车组制造',
-          label: '高铁车组制造',
+          label: '高铁车组制造'
         },
         {
           value: '轨道机车车辆制造',
-          label: '轨道机车车辆制造',
+          label: '轨道机车车辆制造'
         },
         {
           value: '铁路设备、配件制造',
-          label: '铁路设备、配件制造',
+          label: '铁路设备、配件制造'
         }
       ]
     },
@@ -927,15 +926,15 @@ export default {
       children: [
         {
           value: '金属船舶制造',
-          label: '金属船舶制造',
+          label: '金属船舶制造'
         },
         {
           value: '船用配套设备制造',
-          label: '船用配套设备制造',
+          label: '船用配套设备制造'
         },
         {
           value: '海洋工程装备制造',
-          label: '海洋工程装备制造',
+          label: '海洋工程装备制造'
         }
       ]
     },
@@ -945,7 +944,7 @@ export default {
       children: [
         {
           value: '飞机制造',
-          label: '飞机制造',
+          label: '飞机制造'
         }
       ]
     },
@@ -977,45 +976,62 @@ export default {
         {
           title: '销售报表',
           url: '/salesManage/salesReport'
-        }, {
+        },
+        {
           title: '交易跟踪',
           url: '/salesManage/tracking'
-        }, {
+        },
+        {
           title: '产品资源',
           url: '/salesManage/resources'
-        }, {
+        },
+        {
           title: '期货管理',
           url: '/salesManage/futures'
-        }, {
-          title: '业务员提成汇总表',
-          url: '/salesManage/reports/empCommSummary'
-        }, {
-          title: '销售专员提成汇总表',
-          url: '/salesManage/reports/saleCommSummary'
-        }, {
+        },
+        {
           title: '销售绩效提成表',
           url: '/salesManage/reports/salePerformance'
-        }, {
+        },
+        {
+          title: '业务员提成汇总表',
+          url: '/salesManage/reports/empCommSummary'
+        },
+        {
+          title: '销售专员提成汇总表',
+          url: '/salesManage/reports/saleCommSummary'
+        },
+        {
           title: '直发调货明细表',
           url: '/salesManage/reports/deliveryDetail'
-        }, {
+        },
+        {
           title: '高卖明细表',
           url: '/salesManage/reports/highSellDetail'
-        }, {
+        },
+        {
           title: '新客户业务明细表',
           url: '/salesManage/reports/newCustomer'
-        }, {
+        },
+        {
           title: '销售专员新增客户明细表',
           url: '/salesManage/reports/saleNewCustomer'
-        }, {
+        },
+        {
           title: '业务员新增客户明细表',
           url: '/salesManage/reports/empNewCustomer'
-        }, {
+        },
+        {
           title: '销售其他销量',
           url: '/salesManage/reports/saleOtherWeight'
-        }, {
+        },
+        {
           title: '超期未提仓储费',
           url: '/salesManage/reports/overdueFee'
+        },
+        {
+          title: '超期客户',
+          url: '/salesManage/reports/purchaseFrequency'
         }
       ]
     },

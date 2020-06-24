@@ -64,7 +64,7 @@ div
         template(slot-scope="scope")
           template(v-if="!scope.row.edit")
             template(v-for="btn in head.actionBtns")
-              el-button(type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{scope.row.btnLbl ? scope.row.btnLbl : btn.lbl}}
+              el-button(:disabled="rowKey !== '' && btn.type ==='edit'",type="text", v-if="canShowRowBtn(btn.type, scope, btn.lbl)", :class="btn.class ? btn.class : 'default'", @click="handerRowBtn(scope.$index, scope.row, btn.type)") {{scope.row.btnLbl ? scope.row.btnLbl : btn.lbl}}
           template(v-else)
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'save')") 保存
             el-button(type="text", class="default", @click="handerRowBtn(scope.$index, scope.row, 'cancel')") 取消
@@ -99,7 +99,9 @@ export default {
       comboOptions: [],
       acctOptions: [],
       orgOptions: [],
-      isVerify: true
+      isVerify: true,
+      rowKey: '',
+      originRow: {}
     }
   },
   computed: {
@@ -118,10 +120,43 @@ export default {
   watch: {
     'tableValue.tableData': {
       handler (newVal, oldVal) {
-        this.currentData = Object.assign([], newVal)
+        // 判断是否是新增
+        if (this.rowEdit) {
+          let newArr = newVal.filter(item => item.id == null)
+          let editArr = this.currentData.filter(item => item.edit == true)
+          console.log('newArr length:>>', newArr.length, ';eidtArr:>>', editArr.length)
+          if (newArr.length > 0 && editArr.length > 0) {
+            if ((newArr.length != editArr.length) || ((newArr.length === editArr.length) && newArr.length > 1)) this.msgShow(this, '请先保存新增')
+            const data = this.tableValue
+            if (editArr.length == 1) {
+              this.originRow = editArr[0]
+            }
+            if (editArr.length == 2) {
+              const originArr = this.currentData.filter(item => item.edit !== true)
+              originArr.push(editArr[0])
+              this.currentData = originArr
+            }
+            data.tableData = this.currentData
+            // console.log('currentData:>>', JSON.stringify(this.currentData))
+            this.$emit('update:tableValue', data)
+          } else {
+            this.currentData = Object.assign([], newVal)
+            if (newArr.length === 1) {
+              this.rowKey = 'newRow'
+              this.originRow = Object.assign({}, newArr[0])
+            }
+          }
+        } else {
+          this.currentData = Object.assign([], newVal)
+        }
       },
       deep: true
-    }
+    },
+    loading (newVal) {
+      if (newVal) {
+        if (this.rowEdit) this.rowKey = ''
+      }
+    },
     // 'tableValue.tableHead': {
     //   handler (newVal, oldVal) {
     //     console.log('origin head:>>', newVal)
@@ -130,6 +165,10 @@ export default {
     // }
   },
   props: {
+    rowEdit: {
+      type: Boolean,
+      default: false
+    },
     tableValue: {
       type: null,
       default: false
@@ -169,7 +208,7 @@ export default {
     spanMethod ({ row, column, rowIndex, columnIndex }) {
       if (this.tableValue.tableName == 'overdue') {
         if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 ||
-           columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
+          columnIndex === 7 || columnIndex === 8 || columnIndex === 11 || columnIndex === 12 || columnIndex === 13) {
           for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
             let element = this.tableValue.OrderIndexArr[i];
             for (let j = 0; j < element.length; j++) {
@@ -190,7 +229,30 @@ export default {
             }
           }
         }
-      } else {
+      } else if (this.tableValue.tableName == 'overdueHistory') {
+        if (columnIndex === 0 || columnIndex === 1 || columnIndex === 2 || columnIndex === 3 || columnIndex === 4 || columnIndex === 5 ||
+           columnIndex === 7 || columnIndex === 8 || columnIndex === 12 || columnIndex === 13 || columnIndex === 14) {
+          for (let i = 0; i < this.tableValue.OrderIndexArr.length; i++) {
+            let element = this.tableValue.OrderIndexArr[i];
+            for (let j = 0; j < element.length; j++) {
+              let item = element[j];
+              if (rowIndex === item) {
+                if (j === 0) {
+                  return {
+                    rowspan: element.length,
+                    colspan: 1
+                  };
+                } else if (j !== 0) {
+                  return {
+                    rowspan: 0,
+                    colspan: 0
+                  };
+                }
+              }
+            }
+          }
+        }
+      }else {
         if (!this.tableValue.spanMethod || !this.tableValue.tableHead[columnIndex].colspan) return { rowspan: 1, colspan: 1 }
         if (columnIndex === 0) {
           if (row.colspan) {
@@ -285,7 +347,31 @@ export default {
         }
       }
       if (this.isVerify) {
-        this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
+        if (this.rowEdit) {
+          if (btnType === 'edit') {
+            this.rowKey = row.idx + ''
+            this.originRow = Object.assign({}, row)
+            row.edit = true
+            this.currentData[idx] = row
+          } else {
+            this.rowKey = ''
+          }
+          if (btnType === 'cancel') {
+            if (this.originRow.id == null) {
+              this.currentData = this.currentData.filter(item => item.edit !== true)
+              console.log('row id null', this.currentData)
+            } else {
+              this.originRow.edit = false
+              this.currentData[idx] = this.originRow
+            }
+          }
+          if (btnType === 'cancel' || btnType === 'edit') {
+            const data = this.tableValue
+            data.tableData = this.currentData
+            this.$emit('update:tableValue', data)
+          }
+        }
+        if ((!(btnType === 'cancel' || btnType === 'edit') && this.rowEdit) || !this.rowEdit) this.$emit(`tableRow${btnType.substring(0, 1).toUpperCase()}${btnType.substring(1)}`, row)
       }
     },
     handleSelectionChange (rows) {
@@ -400,6 +486,10 @@ export default {
       this.$emit('sort', obj)
     },
     verifyInput (prop, val, lbl) {
+      if (val && val.length > 200) {
+        this.msgShow(this, '不能超过200个字符')
+        this.isVerify = false
+      }
       if (prop == 'phone') {
         if (!this.mobileReg(val)) {
           this.msgShow(this, '手机号码格式错误')

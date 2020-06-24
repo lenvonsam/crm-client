@@ -16,10 +16,14 @@
           .mt-15
             search-form(:searchFormItems="searchFormItems2", @search="areaSearchForm")
           .mt-5
-            basic-table(:tableValue="tableValue2", :currentPage="currentPage2", 
-            :pageSize="pageSize", :total="areaTotalCount", :loading="loading", 
-            @tableRowEdit="areaEvalRowEdit",@tableRowSave="areaEvalRowSave", 
-            @tableRowCancel="rowCancel", @tableRowDefault="rowDefault",@pageChange="tableChange2", v-if="tabName == '2'")  
+            basic-table(:tableValue.sync="tableValue2", 
+            rowEdit,
+            :currentPage="currentPage2", 
+            :pageSize="pageSize",
+            :total="areaTotalCount",
+            :loading="loading", 
+            @tableRowSave="areaEvalRowSave", 
+            @tableRowDefault="rowDefault",@pageChange="tableChange2", v-if="tabName == '2'")  
 </template>
 <script>
 import breadcrumb from '@/components/Breadcrumb.vue'
@@ -48,7 +52,7 @@ export default {
         { label: '评估状态', model: 'showUpdate', type: 'select', placeholder: '请选择评估状态', val: '1', list: [] }]
       ],
       searchFormItems2: [
-        [{ label: '地区', model: 'areaName', type: 'selectArea', placeholder: '', val: '', list: [] },
+        [{ label: '地区', model: 'areaName', type: 'select', placeholder: '', val: '', list: [], filter: true, clearable: true },
         { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', val: '' },
         { label: '业务员', model: 'employeeName', placeholder: '请输入业务员', val: '' }]
       ],
@@ -170,8 +174,7 @@ export default {
         areaName: '',
         dptName: '',
         employeeName: ''
-      },
-      isEdit: false
+      }
     }
   },
   computed: {
@@ -192,7 +195,6 @@ export default {
     this.searchFormItems1[1][1]['list'] = this.propertyMark
     this.searchFormItems1[2][0]['list'] = this.clientStatus
     this.searchFormItems1[2][1]['list'] = this.showUpdateList
-    this.isEdit = false
   },
   mounted () {
     // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
@@ -224,13 +226,12 @@ export default {
   methods: {
     handleClick (tab, event) {
       this.tabName = tab.name
-      this.isEdit = false
       if (this.tabName == '2') {
         this.tableValue2.tableHead.map(item => {
           if (item.prop == 'deliveryStatusInfo') item.selectList = this.logisticsStat
           if (item.prop == 'effectForSale') item.selectList = this.logisticsInflu
         })
-        
+
         this.loadAreaEvalData()
         this.getAreaList()
       } else {
@@ -241,17 +242,6 @@ export default {
       }
       this.$forceUpdate()
     },
-    // changeCheckVal (flag) {
-    //   if (flag === true) {
-    //     this.searchFormItems1[2][1].val = '1'
-    //     this.clientObject.showUpdate = '1'
-    //   } else {
-    //     this.searchFormItems1[2][1].val = '0'
-    //     this.clientObject.showUpdate = '0'
-    //   }
-    //   console.log('changeCheckVal (flag)======>' + this.searchFormItems1[2][1].val)
-    //   console.log('changeCheckVal (flag)======>' + JSON.stringify(this.clientObject))
-    // },
     clientSearchForm (paramsObj) {
       console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
@@ -275,7 +265,6 @@ export default {
     },
     areaSearchForm (paramsObj) {
       console.log('areaSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
-      this.isEdit = false
       this.loading = true
       this.currentPage2 = 1
       this.areaObject.currentPage = this.currentPage2 - 1
@@ -287,33 +276,6 @@ export default {
     },
     clientEvalRowEdit (obj) {
       this.jump('/customManager/customerEvalution/form?type=edit&id=' + obj.id)
-    },
-    areaEvalRowEdit (obj) {
-      console.log('areaEvalRowEdit(obj)======>' + JSON.stringify(obj))
-      if (this.isEdit) {
-        this.msgShow(this, '请先完成操作')
-        return
-      }
-      this.tableHandler(obj)
-      this.linkDateFilter()
-      this.isEdit = true
-    },
-    tableHandler (obj) {
-      let idx = obj.idx
-      this.tableValue2.tableData[idx].edit = !this.tableValue2.tableData[idx].edit
-    },
-    linkDateFilter () {
-      this.snapData = JSON.parse(JSON.stringify(this.tableValue2.tableData))
-      this.snapData.map(item => {
-        item.linkDate = new Date(item.linkDate)
-      })
-    },
-    rowCancel (row) {
-      this.isEdit = false
-      let idx = this.tableValue2.tableData.indexOf(row)
-      this.tableValue2.tableData = this.snapData
-      if (this.tableValue2.tableData.length > idx + 1 || this.tableValue2.tableData.length == idx + 1)
-        this.tableValue2.tableData[idx].edit = false
     },
     rowDefault (obj) {
       const params = {
@@ -339,8 +301,6 @@ export default {
           }
           console.log('保存==》params------->' + JSON.stringify(params) + 'row------->' + JSON.stringify(row))
           this.createOrUpdate(params, 'areaEval')
-          this.isEdit = false
-          // this.tableHandler(row)
         } else {
           this.msgShow(this, '请输入正确的数量！')
         }
