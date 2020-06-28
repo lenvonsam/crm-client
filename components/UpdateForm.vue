@@ -303,7 +303,6 @@ export default {
   },
   methods: {
     initform (newVal) {
-      console.log('initform(newVal)========>' + JSON.stringify(newVal))
       // 数据格式化处理
       if (newVal.obj) {
         this.form = Object.assign(this.form, newVal.obj)
@@ -326,7 +325,6 @@ export default {
           this.form.dataStr = newVal.dataList
           this.i = newVal.dataList.length
         }
-        console.log('this.i======>' + this.i)
         if (newVal.yearSaleList) {
           newVal.yearSaleList.map(item => {
             if (item.billWeight == "undefined" || item.billWeight == null || item.billWeight.trim() == "") {
@@ -348,7 +346,6 @@ export default {
               item.goods3 = '--'
             }
           })
-          console.log('newVal.yearSaleList======>' + JSON.stringify(newVal.yearSaleList))
           this.yearSaleList = newVal.yearSaleList
         }
         if (newVal.obj.yearPercent) {
@@ -438,14 +435,13 @@ export default {
         this.postForm.deliveryPrefer = newVal.obj.deliveryPrefer
         this.postForm.goodsNames = newVal.obj.goodsNames
         this.postForm.cstmPropertyIds = newVal.obj.cstmPropertyIds
-        console.log('initform_this.postForm========>' + JSON.stringify(this.postForm))
+        // console.log('initform_this.postForm========>' + JSON.stringify(this.postForm))
         this.loading = false
       }
     },
     // 根据select流失原因判断原因描述显示与否
     getReasonValue (label) {
       if (label) {
-        console.log('getReasonValue(label)========>' + label)
         this.showReason = this.form.lossReason.toString().trim() === '其他原因' ? true : false
         this.form.lossReason = this.form.lossReason.toString().trim()
         this.postForm.lossReason = this.form.lossReason.toString().trim()
@@ -453,7 +449,6 @@ export default {
     },
     // 根据select客户性质判断有无库存显示与否：客户性质含有“贸易商、终端客户、加工单位”时显示
     getHasStorageValue (label) {
-      console.log('getHasStorageValue(label)========>' + label)
       this.form.cstmPropertyIds = label
       this.postForm.cstmPropertyIds = label.toString()
       if (label.toString().indexOf('贸易商') !== -1 || label.toString().indexOf('终端客户') !== -1 || label.toString().indexOf('加工单位') !== -1) {
@@ -493,7 +488,6 @@ export default {
       }
     },
     yearSaleWeightInput (val) {
-      console.log('yearSaleWeightInput(val)======>', val)
       let numbTest = /^[0-9]+\.?[0-9]*$/
       if (numbTest.test(val)) {
         if (val >= 0) {
@@ -513,18 +507,15 @@ export default {
       }
     },
     getGoodsNameValue (label) {
-      console.log('getGoodsNameValue(label)=====' + label)
       this.form.goodsNames = label.toString()
       this.postForm.goodsNames = label.toString()
     },
     getAreaNameValue (label) {
-      console.log('getAreaNameValue(label)=====' + label)
       this.form.areaName = label
       this.postForm.areaName = label
     },
     // 根据select有无库存判断库存容量显示与否
     getStorageCapacity (label) {
-      console.log('getStorageCapacity(label)========>' + label)
       if (label.toString().trim() === '有') {
         this.showStorageCapacity = true
         this.form.hasStorage = 1
@@ -542,13 +533,13 @@ export default {
         this.msgShow(this, '主营业务最多选择五项')
         this.form.mainBusi = val.slice(0,5)
       } else {
-        console.log(JSON.stringify(val))
+        // console.log(JSON.stringify(val))
         this.form.mainBusi = val
       }
     },
     getBusiScope (val) {
       this.form.busiScope = []
-      console.log(JSON.stringify(val))
+      // console.log(JSON.stringify(val))
       this.form.busiScope = val
     },
     // 根据我司占比数量判断是否显示其他供应商
@@ -563,11 +554,9 @@ export default {
         dl++
         da.push(item)
       })
-      console.log('da=========>' + JSON.stringify(da))
       if (dl === 0) {
         this.i = 0
         this.form.dataStr = []
-        console.log('getOtherProvider(label)========>' + label)
         if (label !== 100) {
           this.showAddMoreBtn = true
           this.showOtherProvider = true
@@ -578,7 +567,6 @@ export default {
         }
       } else {
         this.i = dl
-        console.log('this.form.dataStr=========>' + JSON.stringify(this.form.dataStr))
         this.form.dataStr = da
         if (label === 100) {
           this.i = 0
@@ -593,20 +581,19 @@ export default {
       if (this.i > 1) {
         this.form.dataStr.splice(index, 1)
         this.i = this.i - 1
-        console.log('this.i========>' + this.i)
-        console.log('this.form.dataStr========>' + JSON.stringify(this.form.dataStr))
+        // console.log('this.form.dataStr========>' + JSON.stringify(this.form.dataStr))
         this.postForm.dataStr = JSON.stringify(this.form.dataStr)
       } else {
         this.msgShow(this, '我司占比不足100%时，最少填写一个供应商！')
       }
     },
     removeDomain (domain) {
-      console.log('removeDomain(domain)=====>' + JSON.stringify(domain))
+      // console.log('removeDomain(domain)=====>' + JSON.stringify(domain))
     },
     // 主要运力实现方式选择“我司配送，固定三方物流，非固定物流三方”展示物流偏好
     // 主要运力实现方式选择“固定三方物流”，展示司机名字段
     getDeliveryPrefer (label) {
-      console.log('getDeliveryPrefer(label)========>' + label)
+      // console.log('getDeliveryPrefer(label)========>' + label)
       this.form.deliveryPrefer = ''
       if (label.toString().indexOf('我司配送') !== -1 || label.toString().indexOf('非固定三方物流') !== -1) {
         this.showDeliveryName = false
@@ -779,7 +766,7 @@ export default {
           let { data } = await this.apiStreamPost('/proxy/common/post',
             { url: 'customerManage/evaluation/', params: this.postForm })
           if (data.returnCode === 0) {
-            console.log('data' + JSON.stringify(data))
+            // console.log('data' + JSON.stringify(data))
             this.loading = false
             this.$message({
               message: '更新成功',
@@ -800,12 +787,12 @@ export default {
       this.loading = true
       let url = 'customerManage/evaluation/year/goodsName?erpCode=' + this.erpCode + '&startYear=2017&endYear=2020'
       this.showAllBtnIsEdit = !this.showAllBtnIsEdit
-      console.log('this.showAllBtnIsEdit======>' + JSON.stringify(this.showAllBtnIsEdit))
+      // console.log('this.showAllBtnIsEdit======>' + JSON.stringify(this.showAllBtnIsEdit))
       let { data } = await this.apiStreamPost('/proxy/common/get',
         { url: url })
       if (data.returnCode === 0) {
         if (data.list.length != 0) {
-          console.log('data' + JSON.stringify(data.list))
+          // console.log('data' + JSON.stringify(data.list))
           this.yearSaleList = data.list
           this.loading = false
         } else {
@@ -822,7 +809,7 @@ export default {
         })
       } else {
         ++this.i
-        console.log(this.i)
+        // console.log(this.i)
         this.form.dataStr.push({
           supplyName: '',
           supplyPrefer: ''
@@ -839,7 +826,6 @@ export default {
       if (data.returnCode === 0) {
         this.cstmPropertyIdsList = data.list
       }
-      console.log(JSON.stringify(data))
     },
     async getCity (name) {
       let params = {
@@ -849,7 +835,6 @@ export default {
       }
       let { data } = await this.apiStreamPost('/proxy/common/post',
         { url: 'setting/address/city/list', params: params })
-      console.log(data)
       if (data.returnCode === 0) {
         this.busiScopeList = data.list
       }
