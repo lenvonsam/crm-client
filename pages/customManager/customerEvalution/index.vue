@@ -191,16 +191,15 @@ export default {
   created () {
   },
   beforeMount () {
-    console.log('beforeMount_tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
     this.searchFormItems1[1][1]['list'] = this.propertyMark
     this.searchFormItems1[2][0]['list'] = this.clientStatus
     this.searchFormItems1[2][1]['list'] = this.showUpdateList
   },
   mounted () {
     // console.log('tableValue2.tableHead------>' + JSON.stringify(this.tableValue2.tableHead))
-    // this.searchFormItems1[1][1]['list'] = this.propertyMark
-    // this.searchFormItems1[2][0]['list'] = this.clientStatus
-    // console.log('this.searchFormItems1------>' + JSON.stringify(this.searchFormItems1))
+    this.searchFormItems1[1][1]['val'] = ''
+    this.searchFormItems1[2][0]['val'] = ''
+    this.searchFormItems1[2][1]['val'] = '1'
     this.$nextTick(() => {
       this.clientObject = {
         currentPage: this.currentPage1 - 1,
@@ -235,7 +234,6 @@ export default {
         this.loadAreaEvalData()
         this.getAreaList()
       } else {
-        // debugger
         this.searchFormItems1[1][1]['list'] = this.propertyMark
         this.searchFormItems1[2][0]['list'] = this.clientStatus
         this.searchFormItems1[2][1]['list'] = this.showUpdateList
@@ -243,7 +241,6 @@ export default {
       this.$forceUpdate()
     },
     clientSearchForm (paramsObj) {
-      console.log('clientSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
       this.currentPage1 = 1
       this.clientObject.currentPage = this.currentPage1 - 1
@@ -260,18 +257,17 @@ export default {
           this.clientObject[key] = paramsObj[key].trim()
         }
       })
-      console.log('clientSearchForm_clientObject=====>' + JSON.stringify(this.clientObject))
+      // console.log('入参clientSearchForm_clientObject=====>' + JSON.stringify(this.clientObject))
       this.loadClientEvalData()
     },
     areaSearchForm (paramsObj) {
-      console.log('areaSearchForm (paramsObj)=====>' + JSON.stringify(paramsObj))
       this.loading = true
       this.currentPage2 = 1
       this.areaObject.currentPage = this.currentPage2 - 1
       Object.keys(paramsObj).map(key => {
         this.areaObject[key] = paramsObj[key].trim()
       })
-      console.log('areaObject=====>' + JSON.stringify(this.areaObject))
+      // console.log('入参areaObject_areaObject=====>' + JSON.stringify(this.areaObject))
       this.loadAreaEvalData()
     },
     clientEvalRowEdit (obj) {
@@ -327,7 +323,6 @@ export default {
         console.log('loadClientEvalData_入参----------' + JSON.stringify(this.clientObject))
         let { data } = await this.apiStreamPost('/proxy/common/post',
           { url: 'customerManage/evaluation/list', params: this.clientObject })
-        //console.log('loadClientEvalData_data.list----------' + JSON.stringify(data.list))
         if (data.returnCode === 0) {
           data.list.map(item => {
             item.mark = (item.mark === '1' ? '潜在' : (item.mark === '2' ? '正式' : '公共'))
@@ -341,7 +336,6 @@ export default {
           console.error(data.errMsg)
           this.msgShow(this, data.errMsg)
         }
-        console.log('this.searchFormItems2[0][2].val=====>' + this.searchFormItems2[0][2].val)
         this.searchFormItems2[0][2].val = ''
       } catch (e) {
         console.error(e)
@@ -356,7 +350,6 @@ export default {
       try {
         let { data } = await this.apiStreamPost('/proxy/common/post',
           { url: 'customerManage/evaluation/area/list', params: this.areaObject })
-        //console.log('loadAreaEvalData------------' +JSON.stringify(data))
         if (data.returnCode === 0) {
           this.tableValue2.tableData = data.list
           this.areaTotalCount = data.total
@@ -418,7 +411,6 @@ export default {
             label: item.name
           })
         })
-        //console.log('areaNameList------->' +JSON.stringify(areaNameList))
         this.searchFormItems2[0][0]['list'] = areaNameList
       }
     }
