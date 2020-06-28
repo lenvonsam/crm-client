@@ -198,7 +198,7 @@ export default {
         ],
         [
           { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
-          { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
+          { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode' },
           { label: '业务部门', model: 'dptName', placeholder: '请输入业务部门', type: 'selectDept', list: [], val: '' },
           {            label: '提货状态', model: 'goodsFlag', type: 'select',
             list: [
@@ -223,7 +223,7 @@ export default {
         ],
         [
           { label: '客户', model: 'customer', placeholder: '请输入客户', val: '' },
-          { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName' },
+          { label: '业务员', model: 'empCode', placeholder: '请输入业务员', type: 'selectRemote', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode' },
           {            label: '提货状态', model: 'goodsFlag', type: 'select',
             list: [
               { label: '全部', value: '' },

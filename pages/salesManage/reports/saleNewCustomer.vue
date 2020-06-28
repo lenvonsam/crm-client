@@ -143,12 +143,12 @@ export default {
         })
         searchForm[2] = [{
           label: '业务员', model: 'empCode', type: 'selectRemote',
-          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode'
         }]
       } else if (this.currentUser.dataLevel === '部门') {
         searchForm[1].push({
           label: '业务员', model: 'empCode', type: 'selectRemote',
-          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode'
         })
       }
       return searchForm
@@ -208,6 +208,7 @@ export default {
     },
     searchForm (paramsObj) {
       try {
+        console.log('paramsObj', paramsObj)
         this.loading = true
         const searchValList = []
         Object.keys(paramsObj).forEach(key => {
