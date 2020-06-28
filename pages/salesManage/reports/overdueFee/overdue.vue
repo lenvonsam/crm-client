@@ -113,7 +113,11 @@ export default {
           }, {
             lbl: '待收款',
             type: 'paying'
-          }]
+          }, {
+          lbl: '删除',
+          type: 'delete',
+          class: 'text-red'
+        }]
         }]
       },
       loading: false,
@@ -130,20 +134,20 @@ export default {
       this.searchFormItems[0][2].val = ''
       // this.searchFormItems[1][1].val = ''
       // this.searchFormItems[1][3].val = ''
-      if (this.currentUser.id == 1) {
-        this.tableValue.tableHead[13].actionBtns = [{
-          lbl: '免收',
-          type: 'viodFee',
-          class: 'text-orange'
-        }, {
-          lbl: '待收款',
-          type: 'paying'
-        }, {
-          lbl: '删除',
-          type: 'delete',
-          class: 'text-red'
-        }]
-      }
+      // if (this.currentUser.id == 1) {
+      //   this.tableValue.tableHead[13].actionBtns = [{
+      //     lbl: '免收',
+      //     type: 'viodFee',
+      //     class: 'text-orange'
+      //   }, {
+      //     lbl: '待收款',
+      //     type: 'paying'
+      //   }, {
+      //     lbl: '删除',
+      //     type: 'delete',
+      //     class: 'text-red'
+      //   }]
+      // }
     })
   },
   mounted () {
@@ -270,7 +274,7 @@ export default {
           this.msgShow(this, '备注最多输入50个字')
         } else {
           let params = {}
-          if (this.form.money.toString() == '0.00' || this.form.money.toString() == '0.0' || this.form.money.toString() == '0.' || this.form.money.toString() == '0') {
+          if (this.form.money.toString().trim() == '' || this.form.money.toString() == '0.00' || this.form.money.toString() == '0.0' || this.form.money.toString() == '0.' || this.form.money.toString() == '0') {
             this.msgShow(this, '请输入正确的金额')
             this.form.money = ''
           } else {
