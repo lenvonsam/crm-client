@@ -66,11 +66,6 @@ export default {
           summary: true,
           width: 150
         }, {
-          lbl: '高卖金额',
-          prop: 'gm',
-          summary: true,
-          width: 150
-        }, {
           lbl: '提成金额',
           prop: 'tcje',
           summary: true,
