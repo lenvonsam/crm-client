@@ -90,12 +90,12 @@ export default {
           list: [], val: ''
         }, {
           label: '业务员', model: 'empCode', type: 'selectRemote',
-          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode'
         }])
       } else if (this.currentUser.dataLevel === '部门') {
         searchForm.push([{
           label: '业务员', model: 'empCode', type: 'selectRemote',
-          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName'
+          list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode'
         }])
       }
       return searchForm
