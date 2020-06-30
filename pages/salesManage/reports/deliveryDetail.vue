@@ -213,8 +213,8 @@ export default {
     tabSumFun (sums) {
       sums[5] = this.totalSum.zfBweightSum
       sums[6] = this.totalSum.dhBweightSum
-      sums[7] = this.totalSum.gmSum
-      sums[8] = this.totalSum.tcjeSum
+      // sums[7] = this.totalSum.gmSum
+      sums[7] = this.totalSum.tcjeSum
     }
   }
 }

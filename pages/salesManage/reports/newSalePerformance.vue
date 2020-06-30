@@ -99,12 +99,13 @@ export default {
             { value: '销量', label: '销量' },
             { value: '新客户提成', label: '新客户提成' }
           ], val: '销量'        },
+
+      ],
+      [
         {          label: '方式', model: 'orderType', type: 'select', placeholder: '请选择排序方式', list: [
             { value: 0, label: '正序' },
             { value: 1, label: '倒序' }
           ], val: 0        },
-      ],
-      [
         { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' },
         {          label: '查询方式', model: 'nameType', type: 'select', placeholder: '请选择查询方式', list: [
             { value: 0, label: '模糊查询' },
@@ -119,14 +120,16 @@ export default {
               { value: '销量', label: '销量' },
               { value: '新客户提成', label: '新客户提成' }
             ], val: '销量'          },
+        ],
+        [
           {            label: '方式', model: 'orderType', type: 'select', placeholder: '请选择排序方式', list: [
               { value: 0, label: '正序' },
               { value: 1, label: '倒序' }
             ], val: 0          },
-        ],
-        [
           { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' },
           { label: '部门', model: 'dptName', type: 'selectDept', placeholder: '请选择部门', list: [], val: '' },
+        ],
+        [
           { label: '业务员', model: 'empCode', type: 'selectRemote', placeholder: '请输入业务员', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode' },
           {            label: '查询', model: 'nameType', type: 'select', placeholder: '请选择查询方式', list: [
               { value: 0, label: '模糊查询' },
@@ -141,14 +144,18 @@ export default {
               { value: '销量', label: '销量' },
               { value: '新客户提成', label: '新客户提成' }
             ], val: '销量'          },
+
+        ],
+        [
           {            label: '方式', model: 'orderType', type: 'select', placeholder: '请选择排序方式', list: [
               { value: 0, label: '正序' },
               { value: 1, label: '倒序' }
             ], val: 0          },
-        ],
-        [
           { label: '客户', model: 'customer', placeholder: '请输入客户名称', val: '' },
           { label: '业务员', model: 'empCode', type: 'selectRemote', placeholder: '请输入业务员', list: [], val: '', url: 'setting/acct/queryCombo', queryKey: 'acctName', selectValue: 'platformCode' },
+
+        ],
+        [
           {            label: '查询', model: 'nameType', type: 'select', placeholder: '请选择查询方式', list: [
               { value: 0, label: '模糊查询' },
               { value: 1, label: '精准查询' }
@@ -169,12 +176,17 @@ export default {
       if (obj.customer.trim() == '') {
         delete obj.customer
       }
-      if (obj.empCode.trim() == '') {
-        delete obj.empCode
+      if (obj.empCode) {
+        if (obj.empCode.trim() == '') {
+          delete obj.empCode
+        }
       }
-      if (obj.dptName.trim() == '') {
-        delete obj.dptName
+      if (obj.dptName) {
+        if (obj.dptName.trim() == '') {
+          delete obj.dptName
+        }
       }
+
       this.paramsObj = Object.assign({}, obj)
       this.paramsObj.currentPage = 0
       this.paramsObj.pageSize = 50
