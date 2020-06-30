@@ -993,34 +993,34 @@ export default {
           title: '销售绩效提成表',
           url: '/salesManage/reports/salePerformance'
         },
-        // {
-        //   title: '业务员提成汇总表',
-        //   url: '/salesManage/reports/empCommSummary'
-        // },
-        // {
-        //   title: '销售专员提成汇总表',
-        //   url: '/salesManage/reports/saleCommSummary'
-        // },
+        {
+          title: '业务员提成汇总表',
+          url: '/salesManage/reports/empCommSummary'
+        },
+        {
+          title: '销售专员提成汇总表',
+          url: '/salesManage/reports/saleCommSummary'
+        },
         {
           title: '直发调货明细表',
           url: '/salesManage/reports/deliveryDetail'
         },
-        // {
-        //   title: '高卖明细表',
-        //   url: '/salesManage/reports/highSellDetail'
-        // },
+        {
+          title: '高卖明细表',
+          url: '/salesManage/reports/highSellDetail'
+        },
         {
           title: '新客户业务明细表',
           url: '/salesManage/reports/newCustomer'
         },
-        // {
-        //   title: '销售专员新增客户明细表',
-        //   url: '/salesManage/reports/saleNewCustomer'
-        // },
-        // {
-        //   title: '业务员新增客户明细表',
-        //   url: '/salesManage/reports/empNewCustomer'
-        // },
+        {
+          title: '销售专员新增客户明细表',
+          url: '/salesManage/reports/saleNewCustomer'
+        },
+        {
+          title: '业务员新增客户明细表',
+          url: '/salesManage/reports/empNewCustomer'
+        },
         {
           title: '销售其他销量',
           url: '/salesManage/reports/saleOtherWeight'
@@ -1032,6 +1032,10 @@ export default {
         {
           title: '超期客户',
           url: '/salesManage/reports/purchaseFrequency'
+        },
+        {
+          title: '销售绩效新增客户明细表',
+          url: '/salesManage/reports/newSalePerformance'
         }
       ]
     },

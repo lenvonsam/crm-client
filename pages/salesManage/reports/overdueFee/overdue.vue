@@ -132,27 +132,11 @@ export default {
   beforeMount () {
     this.$nextTick(() => {
       this.searchFormItems[0][2].val = ''
-      // this.searchFormItems[1][1].val = ''
-      // this.searchFormItems[1][3].val = ''
-      // if (this.currentUser.id == 1) {
-      //   this.tableValue.tableHead[13].actionBtns = [{
-      //     lbl: '免收',
-      //     type: 'viodFee',
-      //     class: 'text-orange'
-      //   }, {
-      //     lbl: '待收款',
-      //     type: 'paying'
-      //   }, {
-      //     lbl: '删除',
-      //     type: 'delete',
-      //     class: 'text-red'
-      //   }]
-      // }
     })
   },
   mounted () {
     this.loadData()
-    console.log('searchFormItem:>>', this.searchFormItems)
+    // console.log('searchFormItem:>>', this.searchFormItems)
   },
   computed: {
     ...mapState({
