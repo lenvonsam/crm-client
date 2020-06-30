@@ -1032,6 +1032,10 @@ export default {
         {
           title: '超期客户',
           url: '/salesManage/reports/purchaseFrequency'
+        },
+        {
+          title: '销售绩效新增客户明细表',
+          url: '/salesManage/reports/newSalePerformance'
         }
       ]
     },
