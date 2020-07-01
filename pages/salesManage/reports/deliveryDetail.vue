@@ -66,11 +66,6 @@ export default {
           summary: true,
           width: 150
         }, {
-          lbl: '高卖金额',
-          prop: 'gm',
-          summary: true,
-          width: 150
-        }, {
           lbl: '提成金额',
           prop: 'tcje',
           summary: true,
@@ -218,8 +213,8 @@ export default {
     tabSumFun (sums) {
       sums[5] = this.totalSum.zfBweightSum
       sums[6] = this.totalSum.dhBweightSum
-      sums[7] = this.totalSum.gmSum
-      sums[8] = this.totalSum.tcjeSum
+      // sums[7] = this.totalSum.gmSum
+      sums[7] = this.totalSum.tcjeSum
     }
   }
 }
