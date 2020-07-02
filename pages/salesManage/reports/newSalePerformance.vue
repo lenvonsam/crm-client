@@ -98,8 +98,8 @@ export default {
     }),
     searchFormItems () {
       let searchFrom = [[
-        { label: '开单时间起', model: 'myStart', type: 'month', placeholder: '请选择年月', val: '' },
-        { label: '开单时间止', model: 'myEnd', type: 'month', placeholder: '请选择年月', val: '' },
+        { label: '开单时间起', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: '' },
+        { label: '开单时间止', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: '' },
         {          label: '排序', model: 'orderColumn', type: 'select', placeholder: '请选择排序字段', list: [
             { value: '销量', label: '销量' },
             { value: '新客户提成', label: '新客户提成' }
@@ -119,8 +119,8 @@ export default {
       ]]
       if (this.currentUser.dataLevel === '公司' || this.currentUser.dataLevel === '机构') {
         searchFrom = [[
-          { label: '开单时间起', model: 'myStart', type: 'month', placeholder: '请选择年月', val: '' },
-          { label: '开单时间止', model: 'myEnd', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开单时间起', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开单时间止', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: '' },
           {            label: '排序', model: 'orderColumn', type: 'select', placeholder: '请选择排序字段', list: [
               { value: '销量', label: '销量' },
               { value: '新客户提成', label: '新客户提成' }
@@ -143,8 +143,8 @@ export default {
         ]]
       } else if (this.currentUser.dataLevel === '部门') {
         searchFrom = [[
-          { label: '开单时间起', model: 'myStart', type: 'month', placeholder: '请选择年月', val: '' },
-          { label: '开单时间止', model: 'myEnd', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开单时间起', model: 'nyStart', type: 'month', placeholder: '请选择年月', val: '' },
+          { label: '开单时间止', model: 'nyEnd', type: 'month', placeholder: '请选择年月', val: '' },
           {            label: '排序', model: 'orderColumn', type: 'select', placeholder: '请选择排序字段', list: [
               { value: '销量', label: '销量' },
               { value: '新客户提成', label: '新客户提成' }
@@ -172,11 +172,11 @@ export default {
   },
   methods: {
     searchForm (obj) {
-      if (obj.myStart.trim() == '') {
-        delete obj.myStart
+      if (obj.nyStart.trim() == '') {
+        delete obj.nyStart
       }
-      if (obj.myEnd.trim() == '') {
-        delete obj.myEnd
+      if (obj.nyEnd.trim() == '') {
+        delete obj.nyEnd
       }
       if (obj.customer.trim() == '') {
         delete obj.customer
