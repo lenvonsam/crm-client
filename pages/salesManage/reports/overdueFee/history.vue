@@ -105,7 +105,7 @@ export default {
   beforeMount () {
     this.$nextTick(() => {
       this.searchFormItems[0][2].val = ''
-      // this.searchFormItems[1][1].val = ''
+      this.searchFormItems[1][1].val = ''
       // this.searchFormItems[1][3].val = ''     
     })
   },
